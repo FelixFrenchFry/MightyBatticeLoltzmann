@@ -1,0 +1,9 @@
+[wrap-git]
+url = https://github.com/kokkos/kokkos.git
+revision = 4.6.01
+depth = 1
+method = cmake
+
+[provide]
+kokkoscore = kokkoscore_dep
+kokkosalgorithms = kokkosalgorithms_dep
