@@ -1,11 +1,12 @@
-lib_sources = [  # All source files (excluding headers)
-    'hello.cpp'
-]
+
+lib_sources = [
+    'simulation.cpp',
+    'rendering.cpp']
 
 lib = static_library(
-    'lib',  # Unique name
+    'lib',
     lib_sources,
-    dependencies : [mpi]
+    dependencies : [mpi, spdlog]
 )
 
 lib_incdirs = include_directories('.')

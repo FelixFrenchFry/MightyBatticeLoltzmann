@@ -1,11 +1,8 @@
 
 executable(
-	'main',
+	'simulation_rendering',
 	['main.cpp'],
 	include_directories : [lib_incdirs],
 	link_with : [lib],
-	dependencies : [mpi, spdlog]
+	dependencies : [mpi]
 )
-
-subdir('02')
-subdir('simulation_rendering')

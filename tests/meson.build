@@ -1,7 +1,8 @@
 google_test = dependency('gtest')
 
 test_sources = [
-    'test_hello_world.cpp'
+    'test_hello_world.cpp',
+    'test_test.cpp'
 ]
 
 if mpi.found()

@@ -1,4 +1,4 @@
-#include "hello.h"
+#include "simulation.h"
 #include <iostream>
 #include <filesystem>
 
@@ -7,14 +7,15 @@
 #endif
 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     int rank = 0, size = 1;
 
-    // Below is some MPI code, try compiling with `cmake -DWITH_MPI=ON ..`
+    // below is some MPI code, try compiling with `cmake -DWITH_MPI=ON ...`
 #ifdef WITH_MPI
     MPI_Init(&argc, &argv);
 
-    // Retrieve process infos
+    // retrieve process infos
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 #endif
@@ -22,7 +23,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Hello I am rank " << rank << " of " << size << "\n";
 
     if (rank == 0)
-      hello_world();
+      HelloWorld();
 
     auto input_path = "./simulation_test_input.txt";
 
