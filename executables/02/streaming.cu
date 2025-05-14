@@ -1,5 +1,5 @@
 #include "streaming.cuh"
-#include <cuda_runtime.h>
+#include </usr/local/cuda/include/cuda_runtime.h>
 #include <spdlog/spdlog.h>
 
 

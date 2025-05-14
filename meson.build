@@ -23,6 +23,8 @@ project(
             '-L/usr/local/cuda/lib64', '-lcudart'])]
 )
 
+cuda_include = include_directories('/usr/local/cuda/include')
+
 # addresssanitizer flags for detecting runtime memory errors
 # add_project_arguments('-fsanitize=address', language: ['c', 'cpp', 'cuda'])
 # add_project_link_arguments('-fsanitize=address', language: ['c', 'cpp', 'cuda'])
