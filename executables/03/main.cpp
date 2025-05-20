@@ -1,4 +1,4 @@
-#include "streaming.cuh"
+#include "collision.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
 
@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
     int grid_height =  2000;
 
     // misc
+    float relaxOmega = 1.2f;
+    float restDensity = 1.0f;
     int num_cells = grid_width * grid_height;
     int num_dirs = 9;
 
@@ -43,6 +45,10 @@ int main(int argc, char* argv[])
     Launch_InitializeDistributionFunction_K(
         dvc_distributionFunc, 1.0f, num_cells * num_dirs);
 
+    // launch kernel for initializing the density field
+    Launch_InitializeDensityField_K(
+        dvc_densityField, restDensity, num_cells);
+
     // alternatively, use optimized CUDA function to initialize values to zero
     // cudaMemset(dvc_distributionFunc, 0, num_cells * num_dirs * sizeof(float));
 
@@ -58,12 +64,19 @@ int main(int argc, char* argv[])
             dvc_distributionFunc, dvc_densityField, dvc_velocityField_x,
             dvc_velocityField_y, num_cells);
 
+        // launch kernel for the collision step
+        Launch_CollisionStep_K(
+            dvc_distributionFunc, dvc_densityField, dvc_velocityField_x,
+            dvc_velocityField_y, relaxOmega, num_cells);
+
         // launch kernel for the streaming step
         Launch_StreamingStep_K(
             dvc_distributionFunc, dvc_distributionFunc_next, grid_width,
             grid_height, num_cells);
 
         std::swap(dvc_distributionFunc, dvc_distributionFunc_next);
+
+        SPDLOG_INFO("--- Iteration done. ---");
     }
 
     // free device memory

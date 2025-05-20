@@ -8,5 +8,6 @@ executable(
 )
 
 subdir('02')
+subdir('03')
 subdir('playground')
 subdir('simulation_rendering')
