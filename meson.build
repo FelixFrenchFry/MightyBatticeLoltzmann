@@ -36,9 +36,6 @@ cuda_include = include_directories('/usr/local/cuda/include')
 # detect MPI, but make integration optional
 mpi = dependency('mpi', language: 'cpp', required: false)
 
-# detect and integrate SDL2
-# sdl2 = dependency('sdl2', fallback: ['sdl2', 'sdl2_dep'])
-
 # detect and integrate spdlog
 spdlog = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])
 
