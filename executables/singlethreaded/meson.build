@@ -1,8 +1,8 @@
 
 executable(
-    'serial',
-    ['main.cpp', 'serial.cpp'],
+    'singlethreaded',
+    ['main.cpp', 'collision.cpp', 'density.cpp', 'streaming.cpp', 'velocity.cpp'],
     include_directories : [lib_incdirs],
     link_with : [lib],
-    dependencies : [mpi, spdlog]
+    dependencies : [spdlog]
 )

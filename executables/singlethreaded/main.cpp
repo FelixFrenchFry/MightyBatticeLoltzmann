@@ -1,5 +1,9 @@
-#include "serial.h"
+// single-threaded CPU implementation of the Lattice-Boltzmann method
+
+#include "density.h"
+#include "velocity.h"
 #include <spdlog/spdlog.h>
+#include <vector>
 
 
 
@@ -9,33 +13,42 @@ int main(int argc, char* argv[])
     // [hour:min:sec.ms] [file.cpp:line] [type] [message]
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
 
-    // grid size (number of lattice cells per dimension)
-    int grid_width =    30;
-    int grid_height =   20;
+    // ----- INITIALIZATION OF PARAMETERS AND DATA STRUCTURES -----
 
-    // misc
-    float relaxOmega = 1.2f;
-    float restDensity = 1.0f;
-    int num_cells = grid_width * grid_height;
-    int num_dirs = 9;
+    int N_X = 600;              // grid width
+    int N_Y = 400;              // grid height
+    int N_STEPS = 100;          // number of simulation steps
+    int N_DIR = 9;              // number of velocity directions
+    int N_CELLS = N_X * N_Y;    // number of grid cells
 
-    //  0: ( 0,  0) = rest
-    //  1: ( 1,  0) = east
-    //  2: ( 0,  1) = north
-    //  3: (-1,  0) = west
-    //  4: ( 0, -1) = south
-    //  5: ( 1,  1) = north-east
-    //  6: (-1,  1) = north-west
-    //  7: (-1, -1) = south-west
-    //  8: ( 1, -1) = south-east
+    float omega = 1.2f;         // relaxation factor
+    float rho_0 = 1.0f;         // rest density
+    float u_max = 0.1f;         // max velocity
 
-    // initialize weight and velocity vectors
-    float weights[9] = { 4.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
-                         1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f };
-    int vel_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
-    int vel_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
+    // weight vector, holding lattice weights for each velocity direction
+    std::array<float, 9> w = {
+        4.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
+        1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f };
 
-    // initialize distribution function vectors
-    std::vector<float> dist(num_cells * num_dirs, 1.0f);
-    std::vector<float> dist_next(num_cells * num_dirs, 1.0f);
+    // velocity directions (x and y components separately)
+    std::array<int, 9> c_x = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
+    std::array<int, 9> c_y = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
+
+    // TODO: comment
+    std::vector<float> f(N_CELLS * N_DIR);  // distribution function
+    std::vector<float> v_x(N_CELLS);        // velocity field (x components)
+    std::vector<float> v_y(N_CELLS);        // velocity field (y components)
+    std::vector<float> rho(N_CELLS, rho_0); // density field
+
+    // LBM simulation loop
+    for (size_t step = 0; step < N_STEPS; step++)
+    {
+        ComputeDensityField(f, rho, N_CELLS);
+
+        ComputeVelocityField(f, rho, v_x, v_y, c_x, c_y, N_CELLS);
+
+        SPDLOG_INFO("--- Iteration {} ---", step);
+    }
+
+    return 0;
 }
