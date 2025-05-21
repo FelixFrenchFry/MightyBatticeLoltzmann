@@ -55,6 +55,8 @@ int main(int argc, char* argv[])
 
         ComputeStreaming(f, f_next, c_x, c_y, N_X, N_Y, N_CELLS);
 
+        std::swap(f, f_next);
+
         SPDLOG_INFO("--- Iteration {} ---", step);
     }
 
