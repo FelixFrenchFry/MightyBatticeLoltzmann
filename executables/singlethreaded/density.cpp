@@ -17,9 +17,9 @@ void ComputeDensityField(
 
         // sum up distribution functions from each direction
         #pragma unroll
-        for (int k = 0; k < 9; k++)
+        for (int dir = 0; dir < 9; dir++)
         {
-            sum += f[i * 9 + k];
+            sum += f[i * 9 + dir];
         }
 
         rho[i] = sum;

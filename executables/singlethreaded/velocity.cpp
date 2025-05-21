@@ -6,8 +6,8 @@
 void ComputeVelocityField(
     const std::vector<float>& f,
     const std::vector<float>& rho,
-    std::vector<float>& v_x,
-    std::vector<float>& v_y,
+    std::vector<float>& u_x,
+    std::vector<float>& u_y,
     const std::array<int, 9>& c_x,
     const std::array<int, 9>& c_y,
     const int N_CELLS)
@@ -15,10 +15,10 @@ void ComputeVelocityField(
     for (int i = 0; i < N_CELLS; i++)
     {
         // guard against erroneous densities
-        if (rho[i] <= 0.0f)
+        if (rho[i] <= 0.0f) [[unlikely]]
         {
-            v_x[i] = 0.0f;
-            v_y[i] = 0.0f;
+            u_x[i] = 0.0f;
+            u_y[i] = 0.0f;
             continue;
         }
 
@@ -27,15 +27,15 @@ void ComputeVelocityField(
 
         // sum up distribution functions, weighted for each direction
         #pragma unroll
-        for (int k = 0; k < 9; k++)
+        for (int dir = 0; dir < 9; dir++)
         {
-            const float f_i = f[i * 9 + k];
-            sum_x += f_i * c_x[k];
-            sum_y += f_i * c_y[k];
+            const float f_i = f[i * 9 + dir];
+            sum_x += f_i * c_x[dir];
+            sum_y += f_i * c_y[dir];
         }
 
         // divide by density for final velocity values
-        v_x[i] = sum_x / rho[i];
-        v_y[i] = sum_y / rho[i];
+        u_x[i] = sum_x / rho[i];
+        u_y[i] = sum_y / rho[i];
     }
 }
