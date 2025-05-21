@@ -129,6 +129,9 @@ __global__ void CollisionStep_K(float* dvc_distributionFunc,
                                 const float* dvc_velocityField_y,
                                 float relaxOmega,
                                 int num_cells)
+// TODO: call this kernel function TWICE, first for the velocity field in the x
+// TODO: dimenstion, and then for the velocity field in y dimension for proper
+// TODO: coalesced memory access?
 {
     int index = blockIdx.x * blockDim.x + threadIdx.x;
     if (index >= num_cells) { return; }
@@ -177,6 +180,16 @@ __global__ void StreamingStep_K(const float* dvc_distributionFunc,
 
     // "stream" (shift) distribution function components into each direction
     // (unroll loop into 9 individual instructions, rather than a loop)
+    // TODO: instead of handling 9 channels per thread, set up buffer so that
+    // TODO: all data points belonging to a given channel have subsequent memory
+    // TODO: positions, such that memory access can be coalesced perfectly
+    // TODO: (naive implementation runs 9 different kernel functions?)
+    // TODO: not just the memory reads, but also the writes should work well,
+    // TODO: because all threads that run concurrently write into the same direction,
+    // TODO: which means they all have unqiue target positions and avoid race conditions!!
+
+    // TODO: how large is the overhead for launching a cuda kernel? launching
+    // TODO: the kernel 9 times in a row, each with different configs could be costly
     #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {
