@@ -1,3 +1,4 @@
+#include "exporter.h"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
@@ -53,7 +54,7 @@ int main(int argc, char* argv[])
     // cudaMemset(dvc_distributionFunc, 0, num_cells * num_dirs * sizeof(float));
 
     // run the (incomplete) simulation step for a specified number of iterations
-    for (int step = 0; step < 100; step++)
+    for (int step = 0; step < 200; step++)
     {
         // launch kernel for computing the density field
         Launch_ComputeDensityField_K(
@@ -76,7 +77,13 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_distributionFunc, dvc_distributionFunc_next);
 
-        SPDLOG_INFO("--- Iteration done. ---");
+        if (step % 50 == 0)
+        {
+            ExportScalarField(dvc_densityField, num_cells,
+                "density" + std::to_string(step) + ".bin");
+
+            SPDLOG_INFO("Exported density data.");
+        }
     }
 
     // free device memory
