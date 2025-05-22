@@ -1,11 +1,11 @@
 // single-threaded CPU implementation of the Lattice-Boltzmann method
 
 #include "collision.h"
+#include "conditions.h"
 #include "density.h"
 #include "streaming.h"
 #include "velocity.h"
 #include "output/export.h"
-#include <cmath>
 #include <spdlog/spdlog.h>
 #include <vector>
 
@@ -13,21 +13,28 @@
 
 int main(int argc, char* argv[])
 {
+    // ----- INITIALIZATION OF MISC STUFF -----
+
     // configure spdlog to display error messages like this:
     // [hour:min:sec.ms] [file.cpp:line] [type] [message]
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
+
+    constexpr float PI = 3.14159265f;
 
     // ----- INITIALIZATION OF PARAMETERS AND DATA STRUCTURES -----
 
     int N_X = 60;               // grid width
     int N_Y = 40;               // grid height
-    int N_STEPS = 1;            // number of simulation steps
+    int N_STEPS = 100;          // number of simulation steps
     int N_DIR = 9;              // number of velocity directions
     int N_CELLS = N_X * N_Y;    // number of grid cells
 
-    float omega = 1.2f;         // relaxation factor
-    float rho_0 = 1.0f;         // rest density
-    float u_max = 0.1f;         // max velocity
+    float omega = 1.2f;             // relaxation factor
+    float rho_0 = 1.0f;             // rest density
+    float u_max = 0.1f;             // max velocity
+    float n = 1.0f;                 // number of full sine wave periods
+    float k = (2.0f * PI * n)
+        / static_cast<float>(N_Y);  // wavenumber (frequency)
 
     // weight vector, holding lattice weights for each velocity direction
     std::array<float, 9> w = {
@@ -43,9 +50,13 @@ int main(int argc, char* argv[])
     std::vector<float> f_next(N_CELLS * N_DIR); // updated distribution function
     std::vector<float> u_x(N_CELLS);            // velocity field (x components)
     std::vector<float> u_y(N_CELLS);            // velocity field (y components)
-    std::vector<float> rho(N_CELLS, rho_0);     // density field
+    std::vector<float> rho(N_CELLS);            // density field
 
-    // collect buffer pointers in a struct for easy argument passing
+    // apply initial conditions
+    ApplyShearWaveCondition(f, u_x, u_y, rho, w, c_x,c_y,
+                            rho_0, u_max, k, N_X, N_Y);
+
+    // collect buffer references in a struct for easy argument passing
     SimulationState state;
     state.f = &f;
     state.f_next = &f_next;
@@ -57,7 +68,7 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    for (size_t step = 1; step <= N_STEPS; step++)
+    for (int step = 1; step <= N_STEPS; step++)
     {
         ComputeDensityField(f, rho, N_CELLS);
 
@@ -69,7 +80,10 @@ int main(int argc, char* argv[])
 
         std::swap(f, f_next);
 
-        ExportSimulationData(state, VelocityMagnitude, step, true);
+        SPDLOG_INFO("--- step {} done ---", step);
+
+        // evaluation of the simulation step
+        ExportSimulationData(state, Velocity_X, step, true);
     }
 
     return 0;

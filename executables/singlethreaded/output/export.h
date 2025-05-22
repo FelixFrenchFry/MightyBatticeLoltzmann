@@ -7,6 +7,8 @@
 enum SimulationData
 {
     VelocityMagnitude,
+    Velocity_X,
+    Velocity_Y,
     Density,
 };
 

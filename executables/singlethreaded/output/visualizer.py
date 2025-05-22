@@ -8,11 +8,11 @@ N_Y =   40
 
 step =  1
 
-fileName = f"../../../buildDir/executables/singlethreaded/velocity_magnitude_{step}.bin"
+fileName = f"../../../buildDir/executables/singlethreaded/velocity_x_{step}.bin"
 data = np.fromfile(fileName, dtype=np.float32)
 data = data.reshape((N_Y, N_X))
 
-plt.imshow(data, cmap="inferno")
+plt.imshow(data, origin='lower', cmap="seismic")
 plt.colorbar(label="velocity magnitudes")
 plt.title("MBL simulation step " + str(step))
 plt.xlabel("X")

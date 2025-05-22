@@ -5,7 +5,6 @@
 
 
 
-
 void ExportSimulationData(
     const SimulationState& state,
     const SimulationData type,
@@ -26,6 +25,18 @@ void ExportSimulationData(
 
         ExportScalarField(u_mag,
             "velocity_magnitude_" + std::to_string(step),
+            bin, csv, state.N_X, state.N_Y);
+    }
+    else if (type == Velocity_X)
+    {
+        ExportScalarField(*state.u_x,
+            "velocity_x_" + std::to_string(step),
+            bin, csv, state.N_X, state.N_Y);
+    }
+    else if (type == Velocity_Y)
+    {
+        ExportScalarField(*state.u_y,
+            "velocity_y_" + std::to_string(step),
             bin, csv, state.N_X, state.N_Y);
     }
     else if (type == Density)
