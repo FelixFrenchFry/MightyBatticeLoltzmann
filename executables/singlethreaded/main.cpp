@@ -4,6 +4,8 @@
 #include "density.h"
 #include "streaming.h"
 #include "velocity.h"
+#include "output/export.h"
+#include <cmath>
 #include <spdlog/spdlog.h>
 #include <vector>
 
@@ -17,9 +19,9 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF PARAMETERS AND DATA STRUCTURES -----
 
-    int N_X = 600;              // grid width
-    int N_Y = 400;              // grid height
-    int N_STEPS = 20;           // number of simulation steps
+    int N_X = 60;               // grid width
+    int N_Y = 40;               // grid height
+    int N_STEPS = 10;           // number of simulation steps
     int N_DIR = 9;              // number of velocity directions
     int N_CELLS = N_X * N_Y;    // number of grid cells
 
@@ -45,7 +47,7 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    for (size_t step = 0; step < N_STEPS; step++)
+    for (size_t step = 1; step <= N_STEPS; step++)
     {
         ComputeDensityField(f, rho, N_CELLS);
 
@@ -57,7 +59,23 @@ int main(int argc, char* argv[])
 
         std::swap(f, f_next);
 
-        SPDLOG_INFO("--- Iteration {} ---", step);
+        if (step % 10 == 0)
+        {
+            std::vector<float> buffer(N_CELLS);
+
+            for (int i = 0; i < N_CELLS; i++)
+            {
+                float magnitude = std::sqrt(u_x[i] * u_x[i] + u_y[i] * u_y[i]);
+                magnitude = 5.0f + i;
+                buffer[i] = magnitude;
+            }
+
+            ExportScalarField(buffer,
+                "velocity_magnitudes_" + std::to_string(step),
+                N_X, N_Y);
+
+            SPDLOG_INFO("Exported data from step {}.", step);
+        }
     }
 
     return 0;
