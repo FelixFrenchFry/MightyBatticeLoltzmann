@@ -10,5 +10,5 @@ executable(
 subdir('02')
 subdir('03')
 subdir('playground')
+subdir('primary')
 subdir('singlethreaded')
-subdir('visualization')

@@ -25,11 +25,11 @@ int main(int argc, char* argv[])
 
     int N_X = 60;               // grid width
     int N_Y = 40;               // grid height
-    int N_STEPS = 100;          // number of simulation steps
+    int N_STEPS = 1000;         // number of simulation steps
     int N_DIR = 9;              // number of velocity directions
     int N_CELLS = N_X * N_Y;    // number of grid cells
 
-    float omega = 1.2f;             // relaxation factor
+    float omega = 1.5f;             // relaxation factor
     float rho_0 = 1.0f;             // rest density
     float u_max = 0.1f;             // max velocity
     float n = 1.0f;                 // number of full sine wave periods
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    for (int step = 1; step <= N_STEPS; step++)
+    for (int step = 0; step <= N_STEPS; step++)
     {
         ComputeDensityField(f, rho, N_CELLS);
 
@@ -82,8 +82,11 @@ int main(int argc, char* argv[])
 
         SPDLOG_INFO("--- step {} done ---", step);
 
-        // evaluation of the simulation step
-        ExportSimulationData(state, Velocity_X, step, true);
+        if (step % 100 == 0)
+        {
+            // evaluation of the simulation step
+            ExportSimulationData(state, VelocityMagnitude, step, true);
+        }
     }
 
     return 0;
