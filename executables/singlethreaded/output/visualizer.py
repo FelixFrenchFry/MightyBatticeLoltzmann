@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 N_X =   60
 N_Y =   40
 
-step =  10
+step =  1
 
-fileName = f"../../../buildDir/executables/singlethreaded/velocity_magnitudes_{step}.bin"
+fileName = f"../../../buildDir/executables/singlethreaded/velocity_magnitude_{step}.bin"
 data = np.fromfile(fileName, dtype=np.float32)
 data = data.reshape((N_Y, N_X))
 

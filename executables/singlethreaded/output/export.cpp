@@ -1,50 +1,96 @@
+#include "export.h"
 #include <filesystem>
 #include <fstream>
 #include <spdlog/spdlog.h>
 
 
 
+
+void ExportSimulationData(
+    const SimulationState& state,
+    const SimulationData type,
+    const int step,
+    const bool bin,
+    const bool csv)
+{
+    if (type == VelocityMagnitude)
+    {
+        // convert velocities into velocity magnitudes
+        std::vector<float> u_mag(state.N_X * state.N_Y);
+
+        for (int i = 0; i < state.N_X * state.N_Y; i++)
+        {
+            u_mag[i] = std::sqrt(state.u_x->at(i) * state.u_x->at(i)
+                                 + state.u_y->at(i) * state.u_y->at(i));
+        }
+
+        ExportScalarField(u_mag,
+            "velocity_magnitude_" + std::to_string(step),
+            bin, csv, state.N_X, state.N_Y);
+    }
+    else if (type == Density)
+    {
+        ExportScalarField(*state.rho,
+            "density_" + std::to_string(step),
+            bin, csv, state.N_X, state.N_Y);
+    }
+    else
+    {
+        SPDLOG_ERROR("Unknown simulation data type: " + std::to_string(type));
+    }
+}
+
 void ExportScalarField(
     const std::vector<float>& buffer,
     const std::string& fileName,
+    const bool bin, const bool csv,
     const int N_X, const int N_Y)
 {
-    SPDLOG_INFO("Current working output directory: {}",
-        std::filesystem::current_path().string());
-
     std::streamsize size = buffer.size() * sizeof(float);
 
-    // export data in .csv format
-    std::ofstream file_csv(fileName + ".csv");
-    if (!file_csv)
+    // export data in .bin format
+    if (bin)
     {
-        SPDLOG_ERROR("Could not open output file: {}.csv", fileName);
-        return;
-    }
-
-    for (int y = 0; y < N_Y; y++)
-    {
-        for (int x = 0; x < N_X; x++)
+        std::ofstream file_bin(fileName + ".bin", std::ios::binary);
+        if (!file_bin)
         {
-            int idx = y * N_X + x;
-            file_csv << buffer[idx];
-
-            if (x < N_X - 1) { file_csv << ","; }
+            SPDLOG_ERROR("Could not open output file: {}.bin", fileName);
+            return;
         }
 
-        file_csv << "\n";
+        file_bin.write(reinterpret_cast<const char*>(buffer.data()), size);
+        file_bin.close();
+
+        SPDLOG_INFO("Exported data: {}",
+            std::filesystem::current_path().string() + "/" + fileName + ".bin");
     }
 
-    file_csv.close();
-
-    // export data in .bin format
-    std::ofstream file_bin(fileName + ".bin", std::ios::binary);
-    if (!file_bin)
+    // export data in .csv format
+    if (csv)
     {
-        SPDLOG_ERROR("Could not open output file: {}.bin", fileName);
-        return;
-    }
+        std::ofstream file_csv(fileName + ".csv");
+        if (!file_csv)
+        {
+            SPDLOG_ERROR("Could not open output file: {}.csv", fileName);
+            return;
+        }
 
-    file_bin.write(reinterpret_cast<const char*>(buffer.data()), size);
-    file_bin.close();
+        for (int y = 0; y < N_Y; y++)
+        {
+            for (int x = 0; x < N_X; x++)
+            {
+                int idx = y * N_X + x;
+                file_csv << buffer[idx];
+
+                if (x < N_X - 1) { file_csv << ","; }
+            }
+
+            file_csv << "\n";
+        }
+
+        file_csv.close();
+
+        SPDLOG_INFO("Exported data: {}",
+            std::filesystem::current_path().string() + "/" + fileName + ".csv");
+    }
 }
