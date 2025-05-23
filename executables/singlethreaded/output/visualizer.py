@@ -6,17 +6,17 @@ import matplotlib.pyplot as plt
 N_X =   60
 N_Y =   40
 
-step =  1
+step =  0
 
 fileName = f"../../../buildDir/executables/singlethreaded/velocity_x_{step}.bin"
 data = np.fromfile(fileName, dtype=np.float32)
 data = data.reshape((N_Y, N_X))
 
 plt.imshow(data, origin='lower', cmap="seismic")
-plt.colorbar(label="velocity magnitudes")
+plt.colorbar(label="velocity x")
 plt.title("MBL simulation step " + str(step))
 plt.xlabel("X")
 plt.ylabel("Y")
 
-plt.savefig("velocity_magnitudes_" + str(step) + ".png", dpi=300)
-print("Saved plot to velocity_magnitudes_" + str(step) + ".png")
+plt.savefig("velocity_x_" + str(step) + ".png", dpi=300)
+print("Saved plot to velocity_x_" + str(step) + ".png")

@@ -2,12 +2,11 @@
 
 #include "collision.cuh"
 #include "density.cuh"
+#include "streaming.cuh"
+#include "velocity.cuh"
 #include "output/export.h"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
-
-#include "simulation.cuh"
-#include "velocity.cuh"
 
 
 
@@ -39,23 +38,28 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF DISTRIBUTION FUNCTION DATA STRUCTURES -----
 
-    // host-side array of 9 pointers to device-side distrib function arrays
+    // host-side arrays of 9 pointers to device-side distrib function arrays
     // (used as a host-side handle for the SoA data)
     float* df[9];
+    float* df_next[9];
 
-    // for each direction dir, allocate 1D array of size N_CELLS on the device
-    for (size_t dir = 0; dir < 9; dir++)
+    // for each direction i, allocate 1D array of size N_CELLS on the device
+    for (size_t i = 0; i < 9; i++)
     {
-        cudaMalloc(&df[dir], N_CELLS * sizeof(float));
+        cudaMalloc(&df[i], N_CELLS * sizeof(float));
+        cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
     }
 
-    // device-side array of 9 pointers to device-side distrib function arrays
+    // device-side arrays of 9 pointers to device-side distrib function arrays
     // (used as a device-side handle for the SoA data)
     float** dvc_df;
+    float** dvc_df_next;
     cudaMalloc(&dvc_df, 9 * sizeof(float*));
+    cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
 
-    // copy the contents of the host-side handle to the device-side handle
+    // copy the contents of the host-side handles to the device-side handle
     cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
 
     // ----- INITIALIZATION OF DENSITY AND VELOCITY DATA STRUCTURES -----
 
@@ -73,14 +77,23 @@ int main(int argc, char* argv[])
 
     for (size_t step = 1; step <= N_STEPS; step++)
     {
+        // update densities
         Launch_DensityFieldComputation_temp(
             dvc_df, dvc_rho, N_CELLS);
 
+        // update velocities
         Launch_VelocityFieldComputation_temp(
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, N_CELLS);
 
+        // update df_i values based on densities and velocities
         Launch_CollisionComputation_temp(
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
+
+        // move updated df_i values to neighboring cells
+        Launch_StreamingComputation_temp(
+            dvc_df, dvc_df_next, N_X, N_Y, N_CELLS);
+
+        std::swap(dvc_df, dvc_df_next);
 
         SPDLOG_INFO("--- step {} done ---", step);
     }
@@ -90,103 +103,13 @@ int main(int argc, char* argv[])
     for (size_t i = 0; i < 9; i++)
     {
         cudaFree(df[i]);
+        cudaFree(df_next[i]);
     }
     cudaFree(dvc_df);
+    cudaFree(dvc_df_next);
     cudaFree(dvc_rho);
     cudaFree(dvc_u_x);
     cudaFree(dvc_u_y);
-
-    return 0;
-
-    // -------------------------------------------------------------------------
-
-
-
-
-
-    // -------------------------------------------------------------------------
-
-    // grid size (number of lattice cells per dimension)
-    int grid_width =   300;
-    int grid_height =  200;
-
-    // misc
-    float relaxOmega = 1.2f;
-    float restDensity = 1.0f;
-    int num_cells = grid_width * grid_height;
-    int num_dirs = 9;
-
-    // initialize the velocity vectors sitting on constant memory on the device
-    Initialize();
-
-    // create pointers for current and next distribution function f_i(x,y)
-    // stored as a 1D linear buffer on the device and allocate memory on it
-    float* dvc_distributionFunc =       nullptr;
-    float* dvc_distributionFunc_next =  nullptr;
-
-    cudaMalloc(&dvc_distributionFunc, num_cells * num_dirs * sizeof(float));
-    cudaMalloc(&dvc_distributionFunc_next, num_cells * num_dirs * sizeof(float));
-
-    // create pointers for the density values and velocity vectors stored
-    // on the device and allocate memory on it
-    float* dvc_densityField =           nullptr;
-    float* dvc_velocityField_x =        nullptr;
-    float* dvc_velocityField_y =        nullptr;
-
-    cudaMalloc(&dvc_densityField, num_cells * sizeof(float));
-    cudaMalloc(&dvc_velocityField_x, num_cells * sizeof(float));
-    cudaMalloc(&dvc_velocityField_y, num_cells * sizeof(float));
-
-    // launch kernel for initializing the distribution function
-    Launch_InitializeDistributionFunction_K(
-        dvc_distributionFunc, 1.0f, num_cells * num_dirs);
-
-    // launch kernel for initializing the density field
-    Launch_InitializeDensityField_K(
-        dvc_densityField, restDensity, num_cells);
-
-    // alternatively, use optimized CUDA function to initialize values to zero
-    // cudaMemset(dvc_distributionFunc, 0, num_cells * num_dirs * sizeof(float));
-
-    // run the (incomplete) simulation step for a specified number of iterations
-    for (int step = 0; step < 200; step++)
-    {
-        // launch kernel for computing the density field
-        Launch_ComputeDensityField_K(
-            dvc_distributionFunc, dvc_densityField, num_cells);
-
-        // launch kernel for computing the velocity field
-        Launch_ComputeVelocityField_K(
-            dvc_distributionFunc, dvc_densityField, dvc_velocityField_x,
-            dvc_velocityField_y, num_cells);
-
-        // launch kernel for the collision step
-        Launch_CollisionStep_K(
-            dvc_distributionFunc, dvc_densityField, dvc_velocityField_x,
-            dvc_velocityField_y, relaxOmega, num_cells);
-
-        // launch kernel for the streaming step
-        Launch_StreamingStep_K(
-            dvc_distributionFunc, dvc_distributionFunc_next, grid_width,
-            grid_height, num_cells);
-
-        std::swap(dvc_distributionFunc, dvc_distributionFunc_next);
-
-        if (step % 50 == 0)
-        {
-            ExportScalarField(dvc_densityField, num_cells,
-                "density" + std::to_string(step) + ".bin");
-
-            SPDLOG_INFO("Exported density data.");
-        }
-    }
-
-    // free device memory
-    cudaFree(dvc_distributionFunc);
-    cudaFree(dvc_distributionFunc_next);
-    cudaFree(dvc_densityField);
-    cudaFree(dvc_velocityField_x);
-    cudaFree(dvc_velocityField_y);
 
     return 0;
 }

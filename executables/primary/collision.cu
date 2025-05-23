@@ -89,6 +89,8 @@ void Launch_CollisionComputation_temp(
     const float omega,
     const size_t N_CELLS)
 {
+    InitializeConstants_CK();
+
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
