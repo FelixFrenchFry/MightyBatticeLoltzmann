@@ -41,7 +41,7 @@ void InitializeConstants_SK()
 
 // TODO: only required to stream into 8 directions, because the center stays?
 template <int N_DIR> // specify loop count at compile time for optimizations
-__global__ void ComputeStreaming_K_temp(
+__global__ void ComputeStreaming_K(
     const float* const* __restrict__ dvc_df,
     float* const* __restrict__ dvc_df_next,
     const size_t N_X, const size_t N_Y,
@@ -68,7 +68,7 @@ __global__ void ComputeStreaming_K_temp(
     }
 }
 
-void Launch_StreamingComputation_temp(
+void Launch_StreamingComputation(
     const float* const* dvc_df,
     float* const* dvc_df_next,
     const size_t N_X, const size_t N_Y,
@@ -79,7 +79,7 @@ void Launch_StreamingComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeStreaming_K_temp<9><<<gridSize, blockSize>>>(
+    ComputeStreaming_K<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_df_next, N_X, N_Y, N_CELLS);
 
     // wait for device actions to finish and report potential errors

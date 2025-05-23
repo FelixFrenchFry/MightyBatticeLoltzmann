@@ -3,7 +3,7 @@
 
 
 
-void Launch_VelocityFieldComputation_temp(
+void Launch_VelocityFieldComputation(
     const float* const* dvc_df,
     const float* dvc_rho,
     float* dvc_u_x,

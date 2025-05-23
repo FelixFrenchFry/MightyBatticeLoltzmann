@@ -44,7 +44,7 @@ void InitializeConstants_CK()
 }
 
 template <int N_DIR> // specify loop count at compile time for optimizations
-__global__ void ComputeCollision_K_temp(
+__global__ void ComputeCollision_K(
     float* const* __restrict__ dvc_df,
     const float* __restrict__ dvc_rho,
     const float* __restrict__ dvc_u_x,
@@ -81,7 +81,7 @@ __global__ void ComputeCollision_K_temp(
     }
 }
 
-void Launch_CollisionComputation_temp(
+void Launch_CollisionComputation(
     float* const* dvc_df,
     const float* dvc_rho,
     const float* dvc_u_x,
@@ -94,7 +94,7 @@ void Launch_CollisionComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeCollision_K_temp<9><<<gridSize, blockSize>>>(
+    ComputeCollision_K<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
 
     // wait for device actions to finish and report potential errors

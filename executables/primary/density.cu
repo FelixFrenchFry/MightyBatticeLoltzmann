@@ -7,7 +7,7 @@
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
 template <int N_DIR> // specify loop count at compile time for optimizations
-__global__ void ComputeDensityField_K_temp(
+__global__ void ComputeDensityField_K(
     const float* const* __restrict__ dvc_df,
     float* __restrict__ dvc_rho,
     const size_t N_CELLS)
@@ -28,7 +28,7 @@ __global__ void ComputeDensityField_K_temp(
     dvc_rho[idx] = sum_rho;
 }
 
-void Launch_DensityFieldComputation_temp(
+void Launch_DensityFieldComputation(
     const float* const* dvc_df,
     float* dvc_rho,
     const size_t N_CELLS)
@@ -36,7 +36,7 @@ void Launch_DensityFieldComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeDensityField_K_temp<9><<<gridSize, blockSize>>>(
+    ComputeDensityField_K<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_rho, N_CELLS);
 
     // wait for device actions to finish and report potential errors

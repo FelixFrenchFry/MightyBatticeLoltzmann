@@ -3,7 +3,7 @@
 
 
 
-void Launch_DensityFieldComputation_temp(
+void Launch_DensityFieldComputation(
     const float* const* dvc_df,
     float* rho,
     const size_t N_CELLS);

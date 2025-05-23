@@ -3,7 +3,7 @@
 
 
 
-void Launch_CollisionComputation_temp(
+void Launch_CollisionComputation(
     float* const* dvc_df,
     const float* dvc_rho,
     const float* dvc_u_x,
