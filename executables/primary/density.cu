@@ -6,6 +6,7 @@
 
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
+template <int N_DIR> // specify loop count at compile time for optimizations
 __global__ void ComputeDensityField_K_temp(
     const float* const* __restrict__ dvc_df,
     float* __restrict__ dvc_rho,
@@ -16,12 +17,12 @@ __global__ void ComputeDensityField_K_temp(
 
     float sum_rho = 0.0f;
 
-    // sum over distribution function values in each direction
+    // sum over distribution function values in each direction i
     // (SoA layout for coalesced memory access across threads)
     #pragma unroll
-    for (int dir = 0; dir < 9; dir++)
+    for (int i = 0; i < N_DIR; i++)
     {
-        sum_rho += dvc_df[dir][idx];
+        sum_rho += dvc_df[i][idx];
     }
 
     dvc_rho[idx] = sum_rho;
@@ -35,7 +36,7 @@ void Launch_DensityFieldComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeDensityField_K_temp<<<gridSize, blockSize>>>(
+    ComputeDensityField_K_temp<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_rho, N_CELLS);
 
     // wait for device actions to finish and report potential errors
@@ -45,6 +46,7 @@ void Launch_DensityFieldComputation_temp(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA density kernel error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA density kernel error: {}",
+            cudaGetErrorString(err));
     }
 }

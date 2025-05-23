@@ -41,6 +41,7 @@ void InitializeConstants_VK()
 
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
+template <int N_DIR> // specify loop count at compile time for optimizations
 __global__ void ComputeVelocityField_K_temp(
     const float* const* __restrict__ dvc_df,
     const float* __restrict__ dvc_rho,
@@ -68,7 +69,7 @@ __global__ void ComputeVelocityField_K_temp(
     // sum over distribution function values, weighted by each direction i
     // (SoA layout for coalesced memory access across threads)
     #pragma unroll
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < N_DIR; i++)
     {
         float f_i = dvc_df[i][idx];
         sum_x += f_i * dvc_vk_c_x[i];
@@ -92,7 +93,7 @@ void Launch_VelocityFieldComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeVelocityField_K_temp<<<gridSize, blockSize>>>(
+    ComputeVelocityField_K_temp<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, N_CELLS);
 
     // wait for device actions to finish and report potential errors

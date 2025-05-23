@@ -43,6 +43,7 @@ void InitializeConstants_CK()
     constantsInitialized_CK = true;
 }
 
+template <int N_DIR> // specify loop count at compile time for optimizations
 __global__ void ComputeCollision_K_temp(
     float* const* __restrict__ dvc_df,
     const float* __restrict__ dvc_rho,
@@ -61,7 +62,7 @@ __global__ void ComputeCollision_K_temp(
     float u_sq = u_x * u_x + u_y * u_y;
 
     #pragma unroll
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < N_DIR; i++)
     {
         // temp variables for better readability (and less loads from memory)
         float c_x = static_cast<float>(dvc_ck_c_x[i]);
@@ -91,7 +92,7 @@ void Launch_CollisionComputation_temp(
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
-    ComputeCollision_K_temp<<<gridSize, blockSize>>>(
+    ComputeCollision_K_temp<9><<<gridSize, blockSize>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
 
     // wait for device actions to finish and report potential errors
