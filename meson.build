@@ -4,7 +4,7 @@ project(
     ['c', 'cpp', 'cuda'],
     version : '0.1',
     default_options : [
-        'cpp_std=c++17', # use C++20 instead?
+        'cpp_std=c++17', # TODO: use C++20 instead?
         'cuda_std=c++17',
         'warning_level=3',
         # compile specifically for each CUDA architecture

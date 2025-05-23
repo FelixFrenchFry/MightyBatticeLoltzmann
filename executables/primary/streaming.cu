@@ -50,14 +50,14 @@ __global__ void ComputeStreaming_K(
     size_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // coordinates of the source cell
+    // determine coordinates of the source cell handled by this thread
     int src_x = idx % N_X;
     int src_y = idx / N_X;
 
     #pragma unroll
     for (int i = 0; i < N_DIR; i++)
     {
-        // coordinates and index within the SoA of the target cell
+        // determine coordinates and index within the SoA of the target cell
         // (with respect to periodic boundary conditions)
         int dst_x = (src_x + dvc_sk_c_x[i] + N_X) % N_X;
         int dst_y = (src_y + dvc_sk_c_y[i] + N_Y) % N_Y;

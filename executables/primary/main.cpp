@@ -2,13 +2,12 @@
 
 #include "collision.cuh"
 #include "density.cuh"
+#include "initialization.cuh"
+#include "output/export.h"
 #include "streaming.cuh"
 #include "velocity.cuh"
-#include "output/export.h"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
-
-
 
 int main(int argc, char* argv[])
 {
@@ -23,8 +22,9 @@ int main(int argc, char* argv[])
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
-    size_t N_X =        60;
-    size_t N_Y =        40;
+    // (15,000 * 10,000 cells use ~12GB of VRAM)
+    size_t N_X =        150;
+    size_t N_Y =        100;
     size_t N_STEPS =    3;
     size_t N_CELLS = N_X * N_Y;
 
@@ -75,23 +75,28 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
+    Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
+        u_max, k, N_X, N_Y, N_CELLS);
+
     for (size_t step = 1; step <= N_STEPS; step++)
     {
         // update densities
-        Launch_DensityFieldComputation_temp(
+        Launch_DensityFieldComputation(
             dvc_df, dvc_rho, N_CELLS);
 
         // update velocities
-        Launch_VelocityFieldComputation_temp(
+        Launch_VelocityFieldComputation(
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, N_CELLS);
 
         // update df_i values based on densities and velocities
-        Launch_CollisionComputation_temp(
+        Launch_CollisionComputation(
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
 
         // move updated df_i values to neighboring cells
-        Launch_StreamingComputation_temp(
+        Launch_StreamingComputation(
             dvc_df, dvc_df_next, N_X, N_Y, N_CELLS);
+
+        // TODO: compare performance of fused collision + streaming kernel
 
         std::swap(dvc_df, dvc_df_next);
 
