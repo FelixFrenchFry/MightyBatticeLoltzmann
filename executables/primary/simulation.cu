@@ -141,7 +141,7 @@ __global__ void CollisionStep_K(float* dvc_distributionFunc,
     float u_y = dvc_velocityField_y[index];
     float u_squ = u_x * u_x + u_y * u_y;
 
-#pragma unroll
+    #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {
         // get direction vector and weight with proper notation

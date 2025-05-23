@@ -1,11 +1,13 @@
 // primary, optimized CUDA implementation of the Lattice-Boltzmann method
 
+#include "collision.cuh"
 #include "density.cuh"
 #include "output/export.h"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
 
 #include "simulation.cuh"
+#include "velocity.cuh"
 
 
 
@@ -24,7 +26,7 @@ int main(int argc, char* argv[])
     // grid width, height, number of simulation steps, number of grid cells
     size_t N_X =        60;
     size_t N_Y =        40;
-    size_t N_STEPS =    100;
+    size_t N_STEPS =    3;
     size_t N_CELLS = N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -69,9 +71,18 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    for (size_t step = 0; step <= N_STEPS; step++)
+    for (size_t step = 1; step <= N_STEPS; step++)
     {
-        // TODO
+        Launch_DensityFieldComputation_temp(
+            dvc_df, dvc_rho, N_CELLS);
+
+        Launch_VelocityFieldComputation_temp(
+            dvc_df, dvc_rho, dvc_u_x, dvc_u_y, N_CELLS);
+
+        Launch_CollisionComputation_temp(
+            dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
+
+        SPDLOG_INFO("--- step {} done ---", step);
     }
 
     // ----- CLEANUP -----
@@ -84,6 +95,8 @@ int main(int argc, char* argv[])
     cudaFree(dvc_rho);
     cudaFree(dvc_u_x);
     cudaFree(dvc_u_y);
+
+    return 0;
 
     // -------------------------------------------------------------------------
 
