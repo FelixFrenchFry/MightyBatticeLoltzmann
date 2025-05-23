@@ -1,8 +1,43 @@
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
+#include <stdio.h>
 
 
+
+// load velocity direction vectors into constant memory
+// (fast, global, read-only lookup table identical for all threads)
+// TODO: figure out how to safely use same constant memory across all .cu files
+__constant__ int dvc_vk_c_x[9];
+__constant__ int dvc_vk_c_y[9];
+bool constantsInitialized_VK = false;
+
+void InitializeConstants_VK()
+{
+    // one-time initialization guard
+    if (constantsInitialized_VK) { return; }
+
+    //  0: ( 0,  0) = rest
+    //  1: ( 1,  0) = east
+    //  2: ( 0,  1) = north
+    //  3: (-1,  0) = west
+    //  4: ( 0, -1) = south
+    //  5: ( 1,  1) = north-east
+    //  6: (-1,  1) = north-west
+    //  7: (-1, -1) = south-west
+    //  8: ( 1, -1) = south-east
+
+    // initialize velocity direction vectors on the host
+    int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
+    int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
+
+    // copy them into constant memory on the device
+    cudaMemcpyToSymbol(dvc_vk_c_x, c_x, 9 * sizeof(int));
+    cudaMemcpyToSymbol(dvc_vk_c_y, c_y, 9 * sizeof(int));
+
+    cudaDeviceSynchronize();
+    constantsInitialized_VK = true;
+}
 
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
@@ -17,10 +52,10 @@ __global__ void ComputeVelocityField_K_temp(
     if (idx >= N_CELLS) { return; }
 
     // store density in temp variable to avoid multiple loads from memory
-    float local_rho = dvc_rho[idx];
+    float rho = dvc_rho[idx];
 
     // exit thread to avoid division by zero or erroneous values
-    if (local_rho <= 0.0f)
+    if (rho <= 0.0f)
     {
         dvc_u_x[idx] = 0.0f;
         dvc_u_y[idx] = 0.0f;
@@ -30,19 +65,19 @@ __global__ void ComputeVelocityField_K_temp(
     float sum_x = 0.0f;
     float sum_y = 0.0f;
 
-    // sum over distribution function values, weighted by each direction
+    // sum over distribution function values, weighted by each direction i
     // (SoA layout for coalesced memory access across threads)
     #pragma unroll
-    for (int dir = 0; dir < 9; dir++)
+    for (int i = 0; i < 9; i++)
     {
-        float f_i = dvc_df[idx][dir];
-        sum_x += f_i * dvc_c_x[dir];
-        sum_y += f_i * dvc_c_y[dir];
+        float f_i = dvc_df[i][idx];
+        sum_x += f_i * dvc_vk_c_x[i];
+        sum_y += f_i * dvc_vk_c_y[i];
     }
 
     // divide sums by density to obtain final velocities
-    dvc_u_x[idx] = sum_x / local_rho;
-    dvc_u_y[idx] = sum_y / local_rho;
+    dvc_u_x[idx] = sum_x / rho;
+    dvc_u_y[idx] = sum_y / rho;
 }
 
 void Launch_VelocityFieldComputation_temp(
@@ -52,6 +87,8 @@ void Launch_VelocityFieldComputation_temp(
     float* dvc_u_y,
     const size_t N_CELLS)
 {
+    InitializeConstants_VK();
+
     const int blockSize = 256;
     const int gridSize = (N_CELLS + blockSize - 1) / blockSize;
 
@@ -65,6 +102,7 @@ void Launch_VelocityFieldComputation_temp(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA velocity kernel error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA velocity kernel error: {}",
+            cudaGetErrorString(err));
     }
 }
