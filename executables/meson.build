@@ -9,6 +9,7 @@ executable(
 
 subdir('02')
 subdir('03')
+subdir('legacy')
 subdir('playground')
 subdir('primary')
 subdir('singlethreaded')
