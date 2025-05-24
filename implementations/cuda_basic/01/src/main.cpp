@@ -1,11 +1,10 @@
-// legacy CUDA implementation of the Lattice-Boltzmann method
+// CUDA implementation of the Lattice-Boltzmann method with basic data
+// structures and kernels
 
+#include "../tools/export.h"
 #include "simulation.cuh"
-#include "output/export.h"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
-
-
 
 int main(int argc, char* argv[])
 {
@@ -14,8 +13,9 @@ int main(int argc, char* argv[])
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
 
     // grid size (number of lattice cells per dimension)
-    int grid_width =   300;
-    int grid_height =  200;
+    int grid_width =   15000;
+    int grid_height =  10000;
+    int step_count =   10000;
 
     // misc
     float relaxOmega = 1.2f;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     // cudaMemset(dvc_distributionFunc, 0, num_cells * num_dirs * sizeof(float));
 
     // run the (incomplete) simulation step for a specified number of iterations
-    for (int step = 0; step < 200; step++)
+    for (int step = 0; step < step_count; step++)
     {
         // launch kernel for computing the density field
         Launch_ComputeDensityField_K(
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
             ExportScalarField(dvc_densityField, num_cells,
                 "density" + std::to_string(step) + ".bin");
 
-            SPDLOG_INFO("Exported density data.");
+            //SPDLOG_INFO("Exported density data.");
         }
 
         SPDLOG_INFO("--- step {} done ---", step);

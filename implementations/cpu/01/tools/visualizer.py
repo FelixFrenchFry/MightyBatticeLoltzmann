@@ -8,7 +8,7 @@ N_Y =   40
 
 step =  0
 
-fileName = f"../../../buildDir/executables/singlethreaded/velocity_x_{step}.bin"
+fileName = f"../../../buildDir/implementations/cpu/01/tools/velocity_x_{step}.bin"
 data = np.fromfile(fileName, dtype=np.float32)
 data = data.reshape((N_Y, N_X))
 

@@ -1,11 +1,11 @@
 // single-threaded CPU implementation of the Lattice-Boltzmann method
 
+#include "../src/streaming.h"
+#include "../src/velocity.h"
+#include "../tools/export.h"
 #include "collision.h"
 #include "conditions.h"
 #include "density.h"
-#include "streaming.h"
-#include "velocity.h"
-#include "output/export.h"
 #include <spdlog/spdlog.h>
 #include <vector>
 
@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF PARAMETERS AND DATA STRUCTURES -----
 
-    int N_X = 60;               // grid width
-    int N_Y = 40;               // grid height
+    int N_X = 150;              // grid width
+    int N_Y = 100;              // grid height
     int N_STEPS = 1000;         // number of simulation steps
     int N_DIR = 9;              // number of velocity directions
     int N_CELLS = N_X * N_Y;    // number of grid cells
@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
         if (step % 100 == 0)
         {
             // evaluation of the simulation step
-            ExportSimulationData(state, VelocityMagnitude, step, true);
+            //ExportSimulationData(state, VelocityMagnitude, step, true);
         }
     }
 

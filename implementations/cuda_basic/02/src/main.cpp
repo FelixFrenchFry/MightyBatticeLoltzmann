@@ -1,13 +1,16 @@
-// primary, optimized CUDA implementation of the Lattice-Boltzmann method
+// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
+// accesses and other minor optimizations
 
+#include "../src/streaming.cuh"
+#include "../src/velocity.cuh"
+#include "../tools/export.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
-#include "output/export.h"
-#include "streaming.cuh"
-#include "velocity.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
+
+
 
 int main(int argc, char* argv[])
 {
@@ -23,9 +26,9 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (15,000 * 10,000 cells use ~12GB of VRAM)
-    size_t N_X =        150;
-    size_t N_Y =        100;
-    size_t N_STEPS =    3;
+    size_t N_X =        15000;
+    size_t N_Y =        10000;
+    size_t N_STEPS =    10000;
     size_t N_CELLS = N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
