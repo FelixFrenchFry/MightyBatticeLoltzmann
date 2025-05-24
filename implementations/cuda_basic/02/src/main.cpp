@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     // (15,000 * 10,000 cells use ~12GB of VRAM)
     size_t N_X =        15000;
     size_t N_Y =        10000;
-    size_t N_STEPS =    10000;
+    size_t N_STEPS =    3;
     size_t N_CELLS = N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,

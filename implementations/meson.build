@@ -1,11 +1,11 @@
+# subdirectory overview
 
-executable(
-    'main',
-    ['main.cpp'],
-    include_directories : [lib_incdirs],
-    link_with : [lib],
+lib = static_library(
+    'lib',
     dependencies : [mpi, spdlog]
 )
+
+lib_incdirs = include_directories('.')
 
 subdir('cpu')
 subdir('cuda_basic')
