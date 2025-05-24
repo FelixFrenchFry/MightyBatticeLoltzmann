@@ -46,6 +46,5 @@ else
     message('MPI not found, disabling MPI support')
 endif
 
-subdir('src')
 subdir('implementations')
 subdir('tests')
