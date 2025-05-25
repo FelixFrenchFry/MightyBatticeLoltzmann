@@ -53,8 +53,18 @@ __global__ void ComputeVelocityField_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // store density in temp variable to avoid multiple loads from memory
-    float rho = dvc_rho[idx];
+    // declare and populate df_i in shared memory tile like df_tile[i][thread]
+    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        df_tile[i][threadIdx.x] = dvc_df[i][idx];
+    }
+    // wait for data to be loaded
+    __syncthreads();
+
+    // load temp variable into read-only cache and multiple loads
+    float rho = __ldg(&dvc_rho[idx]);
 
     // exit thread to avoid division by zero or erroneous values
     if (rho <= 0.0f)
@@ -72,9 +82,10 @@ __global__ void ComputeVelocityField_K(
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        float f_i = dvc_df[i][idx];
-        sum_x += f_i * dvc_vk_c_x[i];
-        sum_y += f_i * dvc_vk_c_y[i];
+        // load data from shared memory tile with local index
+        float df_i = df_tile[i][threadIdx.x];
+        sum_x += df_i * dvc_vk_c_x[i];
+        sum_y += df_i * dvc_vk_c_y[i];
     }
 
     // divide sums by density to obtain final velocities

@@ -1,11 +1,10 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, uint32_t instead of size_t and TODO...
+// accesses, shared memory tiling, uint32_t instead of size_t and TODO...
 
 #include "../src/streaming.cuh"
 #include "../src/velocity.cuh"
 #include "../tools/export.h"
 #include "collision.cuh"
-#include "config.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
@@ -25,8 +24,8 @@ int main(int argc, char* argv[])
     constexpr float PI = 3.14159265f;
 
     // TODO: check important hardware properties
-    cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, 0);
+    cudaDeviceProp props{};
+    cudaGetDeviceProperties(&props, 0);
 
     // ----- INITIALIZATION OF PARAMETERS -----
 
@@ -34,7 +33,7 @@ int main(int argc, char* argv[])
     // (15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,

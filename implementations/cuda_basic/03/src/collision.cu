@@ -56,15 +56,14 @@ __global__ void ComputeCollision_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // TODO: does this increase performance?
-    // preload f_i from global into shared memory
-    __shared__ float f_tile[N_DIR][N_BLOCKSIZE];
+    // declare and populate df_i in shared memory tile like df_tile[i][thread]
+    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        f_tile[i][threadIdx.x] = dvc_df[i][idx];
+        df_tile[i][threadIdx.x] = dvc_df[i][idx];
     }
-    // ensure all threads have loaded data
+    // wait for data to be loaded
     __syncthreads();
 
     // load temp variables into read-only cache and multiple loads
@@ -76,33 +75,21 @@ __global__ void ComputeCollision_K(
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        // temp variables for better readability (and less loads from memory)
+        // temp variables for better readability
         float c_x = static_cast<float>(dvc_ck_c_x[i]);
         float c_y = static_cast<float>(dvc_ck_c_y[i]);
         float w = dvc_ck_w[i];
 
         // dot product of c_i * u (velocity directions times local velocity)
         float cu = c_x * u_x + c_y * u_y;
+        float cu2 = cu * cu;
 
         // compute equilibrium distribution f_eq_i for current direction i
-        float f_eq_i = w * rho
-            * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
+        float f_eq_i = w * rho * (1.0f + 3.0f * cu + 4.5f * cu2 - 1.5f * u_sq);
 
         // relax distribution function towards equilibrium
-        //float f_i = dvc_df[i][idx];
-        //dvc_df[i][idx] = f_i + omega * (f_eq_i - f_i);
-
-        float f_i = f_tile[i][threadIdx.x];
-        f_tile[i][threadIdx.x] = f_i + omega * (f_eq_i - f_i);
-    }
-
-    __syncthreads();
-
-    // write back to global memory
-    #pragma unroll
-    for (uint32_t i = 0; i < N_DIR; i++)
-    {
-        dvc_df[i][idx] = f_tile[i][threadIdx.x];
+        float f_i = df_tile[i][threadIdx.x];
+        dvc_df[i][idx] = f_i + omega * (f_eq_i - f_i);
     }
 }
 

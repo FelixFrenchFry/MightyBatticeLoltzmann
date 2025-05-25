@@ -51,6 +51,16 @@ __global__ void ComputeStreaming_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
+    // declare and populate df_i in shared memory tile like df_tile[i][thread]
+    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        df_tile[i][threadIdx.x] = dvc_df[i][idx];
+    }
+    // wait for data to be loaded
+    __syncthreads();
+
     // determine coordinates of the source cell handled by this thread
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
@@ -65,7 +75,7 @@ __global__ void ComputeStreaming_K(
         uint32_t dst_idx = dst_y * N_X + dst_x;
 
         // stream distribution function value df_i to neighbor in direction i
-        dvc_df_next[i][dst_idx] = dvc_df[i][idx];
+        dvc_df_next[i][dst_idx] = df_tile[i][threadIdx.x];
     }
 }
 

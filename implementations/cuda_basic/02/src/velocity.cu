@@ -71,9 +71,9 @@ __global__ void ComputeVelocityField_K(
     #pragma unroll
     for (int i = 0; i < N_DIR; i++)
     {
-        float f_i = dvc_df[i][idx];
-        sum_x += f_i * dvc_vk_c_x[i];
-        sum_y += f_i * dvc_vk_c_y[i];
+        float df_i = dvc_df[i][idx];
+        sum_x += df_i * dvc_vk_c_x[i];
+        sum_y += df_i * dvc_vk_c_y[i];
     }
 
     // divide sums by density to obtain final velocities

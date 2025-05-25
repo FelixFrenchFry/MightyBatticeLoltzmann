@@ -16,15 +16,14 @@ __global__ void ComputeDensityField_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // TODO: does this increase performance?
-    // load values from global to shared memory
-    __shared__ float tile[N_DIR][N_BLOCKSIZE];
+    // declare and populate df_i in shared memory tile like df_tile[i][thread]
+    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        tile[i][threadIdx.x] = dvc_df[i][idx];
+        df_tile[i][threadIdx.x] = dvc_df[i][idx];
     }
-    // ensure all threads have loaded data
+    // wait for data to be loaded
     __syncthreads();
 
     float sum_rho = 0.0f;
@@ -34,7 +33,8 @@ __global__ void ComputeDensityField_K(
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        sum_rho += dvc_df[i][idx];
+        // load data from shared memory tile with local index
+        sum_rho += df_tile[i][threadIdx.x];
     }
 
     dvc_rho[idx] = sum_rho;
