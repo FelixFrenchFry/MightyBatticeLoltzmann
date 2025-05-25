@@ -112,6 +112,8 @@ __global__ void ComputeFullyFusedOperations_K(
     // divide sums by density to obtain final velocities
     u_x /= rho;
     u_y /= rho;
+    dvc_u_x[idx] = u_x;
+    dvc_u_y[idx] = u_y;
 
     // ----- COLLISION AND STREAMING COMPUTATION -----
 
@@ -123,33 +125,28 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    #pragma unroll 8 // limit register pressure
+    #pragma unroll 8 // limit unroll for lower register pressure
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        // temp variables for better readability
-        float c_x = static_cast<float>(dvc_c_x[i]);
-        float c_y = static_cast<float>(dvc_c_y[i]);
-        float w = dvc_w[i];
-
         // dot product of c_i * u (velocity directions times local velocity)
-        float cu = c_x * u_x + c_y * u_y;
-        float cu2 = cu * cu;
+        float cu = static_cast<float>(dvc_c_x[i]) * u_x
+                 + static_cast<float>(dvc_c_y[i]) * u_y;
 
         // compute equilibrium distribution f_eq_i for current direction i
-        float f_eq_i = w * rho * (1.0f + 3.0f * cu + 4.5f * cu2 - 1.5f * u_sq);
+        float f_eq_i = dvc_w[i] * rho
+                     * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
         // relax distribution function towards equilibrium
-        float f_i = df_tile[i][threadIdx.x];
-        float f_i_new = f_i + omega * (f_eq_i - f_i);
+        // TODO: bug in this optimized computation?
+        float f_new_i = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
 
         // determine coordinates and index within the SoA of the target cell
         // (with respect to periodic boundary conditions)
-        uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
-        uint32_t dst_y = (src_y + dvc_c_y[i] + N_Y) % N_Y;
-        uint32_t dst_idx = dst_y * N_X + dst_x;
+        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
+                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
 
         // stream distribution function value df_i to neighbor in direction i
-        dvc_df_next[i][dst_idx] = f_i_new;
+        dvc_df_next[i][dst_idx] = f_new_i;
     }
 }
 
