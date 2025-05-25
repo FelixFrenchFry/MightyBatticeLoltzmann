@@ -37,3 +37,26 @@ executable(
     link_with : [lib],
     dependencies : [spdlog]
 )
+
+executable(
+    'cuda_basic_04',
+    ['04/src/main.cpp',
+     '04/src/collision_streaming.cu',
+     '04/src/density_velocity.cu',
+     '04/src/initialization.cu',
+     '04/tools/export.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)
+
+executable(
+    'cuda_basic_05',
+    ['05/src/main.cpp',
+     '05/src/fullyfused.cu',
+     '05/src/initialization.cu',
+     '05/tools/export.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)

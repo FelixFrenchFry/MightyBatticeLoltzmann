@@ -51,6 +51,7 @@ __global__ void ComputeStreaming_K(
     if (idx >= N_CELLS) { return; }
 
     // determine coordinates of the source cell handled by this thread
+    // TODO: bug in coordinate computation?
     int src_x = idx % N_X;
     int src_y = idx / N_X;
 

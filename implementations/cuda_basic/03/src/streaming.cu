@@ -62,6 +62,7 @@ __global__ void ComputeStreaming_K(
     __syncthreads();
 
     // determine coordinates of the source cell handled by this thread
+    // TODO: bug in coordinate computation?
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 

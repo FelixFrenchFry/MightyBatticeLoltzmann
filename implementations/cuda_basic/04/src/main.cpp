@@ -1,15 +1,14 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, shared memory tiling, and uint32_t instead of size_t
+// accesses, shared memory tiling, and fused density+velocity /
+// collision+streaming kernels
 
-#include "../src/streaming.cuh"
-#include "../src/velocity.cuh"
 #include "../tools/export.h"
-#include "collision.cuh"
-#include "density.cuh"
+#include "collision_streaming.cuh"
+#include "density_velocity.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
-#include <spdlog/spdlog.h>
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 
 
@@ -88,21 +87,15 @@ int main(int argc, char* argv[])
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
-        // update densities
-        Launch_DensityFieldComputation(
-            dvc_df, dvc_rho, N_CELLS);
-
-        // update velocities
-        Launch_VelocityFieldComputation(
+        // update densities and velocities using a fused kernel
+        Launch_DensityAndVelocityFieldComputation(
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, N_CELLS);
 
-        // update df_i values based on densities and velocities
-        Launch_CollisionComputation(
-            dvc_df, dvc_rho, dvc_u_x, dvc_u_y, omega, N_CELLS);
-
-        // move updated df_i values to neighboring cells
-        Launch_StreamingComputation(
-            dvc_df, dvc_df_next, N_X, N_Y, N_CELLS);
+        // update df_i values based on densities and velocities and move
+        // them to neighboring cells using a fused kernel
+        Launch_CollisionAndStreamingComputation(
+            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            N_CELLS);
 
         std::swap(dvc_df, dvc_df_next);
 
