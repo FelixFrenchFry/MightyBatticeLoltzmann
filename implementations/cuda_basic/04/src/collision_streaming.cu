@@ -135,7 +135,7 @@ void Launch_CollisionAndStreamingComputation(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA collision/streaming kernel error: {}",
-            cudaGetErrorString(err));
+        SPDLOG_ERROR("Kernel '{}' failed at line {}: {}",
+                     __func__, __LINE__, cudaGetErrorString(err));
     }
 }
