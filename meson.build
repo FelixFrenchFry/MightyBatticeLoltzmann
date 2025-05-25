@@ -33,8 +33,21 @@ cuda_include = include_directories('/usr/local/cuda/include')
 # make sure to add 'kokkoscore' to the dependencies in your subdirectories
 # kokkoscore = dependency('kokkoscore')
 
-# detect MPI, but make integration optional
-mpi = dependency('mpi', language: 'cpp', required: false)
+# detect and integrate NCCL
+#nccl = dependency('nccl', required: true)
+
+nccl = declare_dependency(
+    include_directories: include_directories('/usr/include'),
+    link_args: ['-lnccl']
+)
+
+# detect and integrate MPI
+#mpi = dependency('mpi', required: true)
+
+mpi = declare_dependency(
+    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
+    link_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:link').stdout().strip().split()
+)
 
 # detect and integrate spdlog
 spdlog = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])

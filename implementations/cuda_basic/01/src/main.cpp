@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     // grid size (number of lattice cells per dimension)
     int grid_width =   15000;
     int grid_height =  10000;
-    int step_count =   10000;
+    int step_count =   1000;
 
     // misc
     float relaxOmega = 1.2f;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     // cudaMemset(dvc_distributionFunc, 0, num_cells * num_dirs * sizeof(float));
 
     // run the (incomplete) simulation step for a specified number of iterations
-    for (int step = 0; step < step_count; step++)
+    for (int step = 1; step <= step_count; step++)
     {
         // launch kernel for computing the density field
         Launch_ComputeDensityField_K(
@@ -87,7 +87,10 @@ int main(int argc, char* argv[])
             //SPDLOG_INFO("Exported density data.");
         }
 
-        SPDLOG_INFO("--- step {} done ---", step);
+        if (step == 1 || step % 100 == 0)
+        {
+            SPDLOG_INFO("--- step {} done ---", step);
+        }
     }
 
     // free device memory

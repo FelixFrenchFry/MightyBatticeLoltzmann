@@ -1,4 +1,3 @@
-#include "simulation.h"
 #include <iostream>
 #include <filesystem>
 
@@ -24,7 +23,7 @@ int main(int argc, char *argv[])
     std::cout << "Hello I am rank " << rank << " of " << size << "\n";
 
     if (rank == 0)
-      HelloWorld();
+      std::cout << "I am the master process\n";
 
     auto input_path = "./simulation_test_input.txt";
 
