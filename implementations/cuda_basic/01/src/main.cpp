@@ -1,5 +1,5 @@
 // CUDA implementation of the Lattice-Boltzmann method with basic data
-// structures and kernels
+// structures and kernels, high cache hit rate for kernels looping over data
 
 #include "../tools/export.h"
 #include "simulation.cuh"
@@ -87,7 +87,7 @@ int main(int argc, char* argv[])
             //SPDLOG_INFO("Exported density data.");
         }
 
-        if (step == 1 || step % 100 == 0)
+        if (step == 1 || step % 1000 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
         }

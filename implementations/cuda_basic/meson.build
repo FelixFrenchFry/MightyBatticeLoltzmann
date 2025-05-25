@@ -23,3 +23,17 @@ executable(
     link_with : [lib],
     dependencies : [spdlog]
 )
+
+executable(
+    'cuda_basic_03',
+    ['03/src/main.cpp',
+     '03/src/collision.cu',
+     '03/src/density.cu',
+     '03/src/initialization.cu',
+     '03/src/streaming.cu',
+     '03/src/velocity.cu',
+     '03/tools/export.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)

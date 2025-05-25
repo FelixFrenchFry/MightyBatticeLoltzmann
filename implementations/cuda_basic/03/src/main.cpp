@@ -1,14 +1,16 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, restricted kernel argument pointers, and templated kernel launches
+// accesses, uint32_t instead of size_t and TODO...
 
 #include "../src/streaming.cuh"
 #include "../src/velocity.cuh"
 #include "../tools/export.h"
 #include "collision.cuh"
+#include "config.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
+#include <iostream>
 
 
 
@@ -22,14 +24,18 @@ int main(int argc, char* argv[])
 
     constexpr float PI = 3.14159265f;
 
+    // TODO: check important hardware properties
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0);
+
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
     // (15,000 * 10,000 cells use ~12GB of VRAM)
-    size_t N_X =        15000;
-    size_t N_Y =        10000;
-    size_t N_STEPS =    1;
-    size_t N_CELLS = N_X * N_Y;
+    uint32_t N_X =      15000;
+    uint32_t N_Y =      10000;
+    uint32_t N_STEPS =  1;
+    uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency)
@@ -47,7 +53,7 @@ int main(int argc, char* argv[])
     float* df_next[9];
 
     // for each direction i, allocate 1D array of size N_CELLS on the device
-    for (size_t i = 0; i < 9; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         cudaMalloc(&df[i], N_CELLS * sizeof(float));
         cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
@@ -81,7 +87,7 @@ int main(int argc, char* argv[])
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);
 
-    for (size_t step = 1; step <= N_STEPS; step++)
+    for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // update densities
         Launch_DensityFieldComputation(
@@ -103,7 +109,7 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 1000 == 0)
+        if (step == 1 || step % 100 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
         }
@@ -111,7 +117,7 @@ int main(int argc, char* argv[])
 
     // ----- CLEANUP -----
 
-    for (size_t i = 0; i < 9; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         cudaFree(df[i]);
         cudaFree(df_next[i]);
