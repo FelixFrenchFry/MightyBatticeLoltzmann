@@ -45,10 +45,10 @@ void InitializeConstants_IK()
 
 template <int N_DIR> // specify loop count at compile time for optimizations
 __global__ void ApplyShearWaveCondition_K(
-    float* const* dvc_df,
-    float* dvc_rho,
-    float* dvc_u_x,
-    float* dvc_u_y,
+    float* const* __restrict__ dvc_df,
+    float* __restrict__ dvc_rho,
+    float* __restrict__ dvc_u_x,
+    float* __restrict__ dvc_u_y,
     const float rho_0,
     const float u_max,
     const float k,
@@ -59,7 +59,6 @@ __global__ void ApplyShearWaveCondition_K(
     if (idx >= N_CELLS) { return; }
 
     // determine coordinates of the cell handled by this thread
-    int x = idx % N_X;
     int y = idx / N_X;
 
     // compute sinusoidal x-velocity from the shear wave configuration
