@@ -42,12 +42,25 @@ void InitializeConstants()
     constantsInitialized = true;
 }
 
+__device__ __forceinline__ float& get_df_component(DF_Vec& vec, int i)
+{
+    if (i >= 1 && i <= 4) {
+        return reinterpret_cast<float*>(&vec.df_1_to_4)[i - 1];
+    } else if (i >= 5 && i <= 8) {
+        return reinterpret_cast<float*>(&vec.df_5_to_8)[i - 5];
+    }
+    // Should never happen; undefined for i == 0
+    asm("trap;");
+    return reinterpret_cast<float*>(&vec.df_1_to_4)[0]; // fallback
+}
+
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
-    const DF_Vec* __restrict__ dvc_df,
-    DF_Vec* __restrict__ dvc_df_next,
+    const DF_Vec* __restrict__ dvc_df_1_to_8,
+    DF_Vec* __restrict__ dvc_df_next_1_to_8,
+    float* __restrict__ dvc_df_0,
     float* __restrict__ dvc_rho,
     float* __restrict__ dvc_u_x,
     float* __restrict__ dvc_u_y,
@@ -62,19 +75,19 @@ __global__ void ComputeFullyFusedOperations_K(
     __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
 
     // vectorized load of first batch of 4 values into shared memory
-    df_tile[0][threadIdx.x] = dvc_df[idx].df_0_to_3.x;
-    df_tile[1][threadIdx.x] = dvc_df[idx].df_0_to_3.y;
-    df_tile[2][threadIdx.x] = dvc_df[idx].df_0_to_3.z;
-    df_tile[3][threadIdx.x] = dvc_df[idx].df_0_to_3.w;
+    df_tile[1][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.x;
+    df_tile[2][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.y;
+    df_tile[3][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.z;
+    df_tile[4][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.w;
 
     // vectorized load of second batch of 4 values into shared memory
-    df_tile[4][threadIdx.x] = dvc_df[idx].df_4_to_7.x;
-    df_tile[5][threadIdx.x] = dvc_df[idx].df_4_to_7.y;
-    df_tile[6][threadIdx.x] = dvc_df[idx].df_4_to_7.z;
-    df_tile[7][threadIdx.x] = dvc_df[idx].df_4_to_7.w;
+    df_tile[5][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.x;
+    df_tile[6][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.y;
+    df_tile[7][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.z;
+    df_tile[8][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.w;
 
-    // default load of last value into shared memory
-    df_tile[8][threadIdx.x] = dvc_df[idx].df_8;
+    // separate non-vectorized laod of the center value
+    df_tile[0][threadIdx.x] = dvc_df_0[idx];
 
     // wait for data to be fully loaded
     __syncthreads();
@@ -136,11 +149,8 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    // declare struct for results (new df values to be streamed to neighbors)
-    float df_new[9];
-
-    #pragma unroll 8 // TODO: limit unroll for lower register pressure
-    for (uint32_t i = 0; i < N_DIR; i++)
+    #pragma unroll // TODO: limit unroll for lower register pressure
+    for (uint32_t i = 1; i < N_DIR; i++)
     {
         // dot product of c_i * u (velocity directions times local velocity)
         float cu = static_cast<float>(dvc_c_x[i]) * u_x
@@ -152,29 +162,28 @@ __global__ void ComputeFullyFusedOperations_K(
 
         // relax distribution function towards equilibrium
         // TODO: bug in this optimized computation?
-        df_new[i] = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
+        float f_new_i = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
+
+        // determine coordinates and index within the SoA of the target cell
+        // (with respect to periodic boundary conditions)
+        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
+                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
+
+        // stream distribution function value df_i to neighbor in direction i
+        // TODO: bug bug bug
+        get_df_component(dvc_df_next_1_to_8[dst_idx], i) = f_new_i;
     }
 
-    // store results into aligned struct for vectorized memory accesses
-    DF_Vec result;
-    result.df_0_to_3 = make_float4(df_new[0], df_new[1], df_new[2], df_new[3]);
-    result.df_4_to_7 = make_float4(df_new[4], df_new[5], df_new[6], df_new[7]);
-    result.df_8 = df_new[8];
-
-    // determine coordinates and index within the SoA of the target cell
-    // (with respect to periodic boundary conditions)
-    uint32_t dst_x = (src_x + N_X) % N_X;
-    uint32_t dst_y = (src_y + N_Y) % N_Y;
-    uint32_t dst_idx = dst_y * N_X + dst_x;
-
-    // stream distribution function values df_i to neighbor in directions i
-    // (vectorized memory write to global memory)
-    dvc_df_next[dst_idx] = result;
+    // separate update of the center value in different data structure
+    float f_eq_0 = (4.0f/9.0f) * rho * (1.0f - 1.5f * u_sq);
+    float f_eq_new_0 = df_tile[0][threadIdx.x] * (1 - omega) + omega * f_eq_0;
+    dvc_df_0[idx] = f_eq_new_0;
 }
 
 void Launch_FullyFusedOperationsComputation(
-    const DF_Vec* dvc_df,
-    DF_Vec* dvc_df_next,
+    const DF_Vec* dvc_df_1_to_8,
+    DF_Vec* dvc_df_next_1_to_8,
+    float* dvc_df_0,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,
@@ -187,8 +196,8 @@ void Launch_FullyFusedOperationsComputation(
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-        N_CELLS);
+        dvc_df_1_to_8, dvc_df_next_1_to_8, dvc_df_0, dvc_rho, dvc_u_x, dvc_u_y,
+        omega, N_X, N_Y, N_CELLS);
 
     // wait for device actions to finish and report potential errors
     cudaDeviceSynchronize();
@@ -197,7 +206,7 @@ void Launch_FullyFusedOperationsComputation(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("Kernel '{}' failed at line {}: {}",
-                     __func__, __LINE__, cudaGetErrorString(err));
+        SPDLOG_ERROR("Kernel '{}' failed: {}",
+            __func__, cudaGetErrorString(err));
     }
 }

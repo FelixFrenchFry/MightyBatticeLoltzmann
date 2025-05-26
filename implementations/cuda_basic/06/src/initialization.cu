@@ -46,7 +46,8 @@ void InitializeConstants_IK()
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ApplyShearWaveCondition_K(
-    DF_Vec* __restrict__ dvc_df,
+    DF_Vec* __restrict__ dvc_df_1_to_8,
+    float* __restrict__ dvc_df_0,
     float* __restrict__ dvc_rho,
     float* __restrict__ dvc_u_x,
     float* __restrict__ dvc_u_y,
@@ -71,12 +72,11 @@ __global__ void ApplyShearWaveCondition_K(
     dvc_u_x[idx] = u_x_val;
     dvc_u_y[idx] = 0.0f;
 
-    // declare struct for results (equilibrium values)
     float f_eq[9];
 
     // initialize distribution function values according to an equilibrium
     #pragma unroll
-    for (uint32_t i = 0; i < N_DIR; i++)
+    for (uint32_t i = 1; i < N_DIR; i++)
     {
         // dot product of c_i * u (velocity directions times local velocity)
         // (+ dvc_ik_c_y[i] * 0.0f omitted)
@@ -87,18 +87,22 @@ __global__ void ApplyShearWaveCondition_K(
             * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
     }
 
-    // store results into aligned struct for vectorized memory accesses
-    DF_Vec result;
-    result.df_0_to_3 = make_float4(f_eq[0], f_eq[1], f_eq[2], f_eq[3]);
-    result.df_4_to_7 = make_float4(f_eq[4], f_eq[5], f_eq[6], f_eq[7]);
-    result.df_8 = f_eq[8];
+    // compute center value
+    f_eq[0] = (4.0f / 9.0f) * rho_0 * (1.0f - 1.5f * u_sq);
 
-    // vectorized memory write to global memory
-    dvc_df[idx] = result;
+    // write df[1..8] into vectorized struct in global memory
+    dvc_df_1_to_8[idx] = DF_Vec{
+        make_float4(f_eq[1], f_eq[2], f_eq[3], f_eq[4]),
+        make_float4(f_eq[5], f_eq[6], f_eq[7], f_eq[8])
+    };
+
+    // separate write of the center value in different data structure
+    dvc_df_0[idx] = f_eq[0];
 }
 
 void Launch_ApplyShearWaveCondition_K(
-    DF_Vec* dvc_df,
+    DF_Vec* dvc_df_1_to_8,
+    float* dvc_df_0,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,
@@ -113,7 +117,8 @@ void Launch_ApplyShearWaveCondition_K(
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     ApplyShearWaveCondition_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, k, N_X, N_Y, N_CELLS);
+        dvc_df_1_to_8, dvc_df_0, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, k,
+        N_X, N_Y, N_CELLS);
 
     // wait for device actions to finish and report potential errors
     cudaDeviceSynchronize();

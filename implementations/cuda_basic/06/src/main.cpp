@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     // (15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      10000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1000;
+    uint32_t N_STEPS =  1;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // required for float4 vectorized memory accesses
@@ -52,13 +52,21 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF DISTRIBUTION FUNCTION DATA STRUCTURES -----
 
-    DF_Vec* dvc_df;
-    DF_Vec* dvc_df_next;
+    DF_Vec* dvc_df_1_to_8;
+    DF_Vec* dvc_df_next_1_to_8;
 
-    cudaMalloc(&dvc_df, N_CELLS * sizeof(DF_Vec));
-    cudaMalloc(&dvc_df_next, N_CELLS * sizeof(DF_Vec));
+    cudaMalloc(&dvc_df_1_to_8, 8 * sizeof(DF_Vec));
+    cudaMalloc(&dvc_df_next_1_to_8, 8 * sizeof(DF_Vec));
 
-    assert(reinterpret_cast<uintptr_t>(dvc_df) % alignof(float4) == 0);
+    assert(reinterpret_cast<uintptr_t>(dvc_df_1_to_8) % alignof(float4) == 0);
+    assert(reinterpret_cast<uintptr_t>(dvc_df_next_1_to_8) % alignof(float4) == 0);
+
+    // pointer to the device-side center direction
+    // (separate from the struct to avoid dummy values required for alignment)
+    // TODO: is double buffering required for the streaming step?
+    float* dvc_df_0;
+
+    cudaMalloc(&dvc_df_0, N_CELLS * sizeof(float));
 
     // ----- INITIALIZATION OF DENSITY AND VELOCITY DATA STRUCTURES -----
 
@@ -74,8 +82,8 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
-        u_max, k, N_X, N_Y, N_CELLS);
+    Launch_ApplyShearWaveCondition_K(dvc_df_1_to_8, dvc_df_0, dvc_rho, dvc_u_x,
+        dvc_u_y, rho_0, u_max, k, N_X, N_Y, N_CELLS);
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
@@ -83,10 +91,10 @@ int main(int argc, char* argv[])
         // densities and velocities and move them to neighboring cells using
         // a fully fused kernel performing all core operations in one
         Launch_FullyFusedOperationsComputation(
-            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS);
+            dvc_df_1_to_8, dvc_df_next_1_to_8, dvc_df_0, dvc_rho, dvc_u_x,
+            dvc_u_y, omega, N_X, N_Y, N_CELLS);
 
-        std::swap(dvc_df, dvc_df_next);
+        std::swap(dvc_df_1_to_8, dvc_df_next_1_to_8);
 
         if (step == 1 || step % 100 == 0)
         {
@@ -96,8 +104,9 @@ int main(int argc, char* argv[])
 
     // ----- CLEANUP -----
 
-    cudaFree(dvc_df);
-    cudaFree(dvc_df_next);
+    cudaFree(dvc_df_1_to_8);
+    cudaFree(dvc_df_next_1_to_8);
+    cudaFree(dvc_df_0);
     cudaFree(dvc_rho);
     cudaFree(dvc_u_x);
     cudaFree(dvc_u_y);
