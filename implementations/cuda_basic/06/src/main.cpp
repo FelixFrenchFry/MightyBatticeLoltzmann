@@ -2,7 +2,7 @@
 // - coalesced memory
 // - shared memory tiling
 // - fully fused density/velocity/collision/streaming kernel
-// - vectorized memory accesses
+// - vectorized memory accesses (SLOWER THAN 05 IMPLEMENTATION!)
 
 #include "../tools/export.h"
 #include "config.cuh"
@@ -33,12 +33,13 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      15000;
+    uint32_t N_X =      10000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // required for float4 vectorized memory accesses
+    static_assert(N_VECSIZE == 4);
     assert(N_CELLS % N_VECSIZE == 0);
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -51,29 +52,13 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF DISTRIBUTION FUNCTION DATA STRUCTURES -----
 
-    // host-side arrays of 9 pointers to device-side distrib function arrays
-    // (used as a host-side handle for the SoA data)
-    float* df[9];
-    float* df_next[9];
+    DF_Vec* dvc_df;
+    DF_Vec* dvc_df_next;
 
-    // for each direction i, allocate 1D array of size N_CELLS on the device
-    // (256-byte aligned memory assured)
-    for (uint32_t i = 0; i < 9; i++)
-    {
-        cudaMalloc(&df[i], N_CELLS * sizeof(float));
-        cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
-    }
+    cudaMalloc(&dvc_df, N_CELLS * sizeof(DF_Vec));
+    cudaMalloc(&dvc_df_next, N_CELLS * sizeof(DF_Vec));
 
-    // device-side arrays of 9 pointers to device-side distrib function arrays
-    // (used as a device-side handle for the SoA data)
-    float** dvc_df;
-    float** dvc_df_next;
-    cudaMalloc(&dvc_df, 9 * sizeof(float*));
-    cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
-
-    // copy the contents of the host-side handles to the device-side handle
-    cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    assert(reinterpret_cast<uintptr_t>(dvc_df) % alignof(float4) == 0);
 
     // ----- INITIALIZATION OF DENSITY AND VELOCITY DATA STRUCTURES -----
 
@@ -111,11 +96,6 @@ int main(int argc, char* argv[])
 
     // ----- CLEANUP -----
 
-    for (uint32_t i = 0; i < 9; i++)
-    {
-        cudaFree(df[i]);
-        cudaFree(df_next[i]);
-    }
     cudaFree(dvc_df);
     cudaFree(dvc_df_next);
     cudaFree(dvc_rho);

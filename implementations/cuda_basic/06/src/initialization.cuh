@@ -4,7 +4,7 @@
 
 
 void Launch_ApplyShearWaveCondition_K(
-    float* const* dvc_df,
+    DF_Vec* dvc_df,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,

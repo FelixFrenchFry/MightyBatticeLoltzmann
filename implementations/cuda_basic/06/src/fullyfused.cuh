@@ -1,11 +1,12 @@
 #pragma once
+#include "config.cuh"
 #include <cstdint>
 
 
 
 void Launch_FullyFusedOperationsComputation(
-    const float* const* dvc_df,
-    float* const* dvc_df_next,
+    const DF_Vec* dvc_df,
+    DF_Vec* dvc_df_next,
     float* rho,
     float* dvc_u_x,
     float* dvc_u_y,

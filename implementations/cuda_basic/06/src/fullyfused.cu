@@ -46,8 +46,8 @@ void InitializeConstants()
 // (reduces memory access and instructions, but increases register pressure!)
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
-    const float* const* __restrict__ dvc_df,
-    float* const* __restrict__ dvc_df_next,
+    const DF_Vec* __restrict__ dvc_df,
+    DF_Vec* __restrict__ dvc_df_next,
     float* __restrict__ dvc_rho,
     float* __restrict__ dvc_u_x,
     float* __restrict__ dvc_u_y,
@@ -60,11 +60,22 @@ __global__ void ComputeFullyFusedOperations_K(
 
     // declare and populate df_i in shared memory tile like df_tile[i][thread]
     __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
-    #pragma unroll
-    for (uint32_t i = 0; i < N_DIR; i++)
-    {
-        df_tile[i][threadIdx.x] = dvc_df[i][idx];
-    }
+
+    // vectorized load of first batch of 4 values into shared memory
+    df_tile[0][threadIdx.x] = dvc_df[idx].df_0_to_3.x;
+    df_tile[1][threadIdx.x] = dvc_df[idx].df_0_to_3.y;
+    df_tile[2][threadIdx.x] = dvc_df[idx].df_0_to_3.z;
+    df_tile[3][threadIdx.x] = dvc_df[idx].df_0_to_3.w;
+
+    // vectorized load of second batch of 4 values into shared memory
+    df_tile[4][threadIdx.x] = dvc_df[idx].df_4_to_7.x;
+    df_tile[5][threadIdx.x] = dvc_df[idx].df_4_to_7.y;
+    df_tile[6][threadIdx.x] = dvc_df[idx].df_4_to_7.z;
+    df_tile[7][threadIdx.x] = dvc_df[idx].df_4_to_7.w;
+
+    // default load of last value into shared memory
+    df_tile[8][threadIdx.x] = dvc_df[idx].df_8;
+
     // wait for data to be fully loaded
     __syncthreads();
 
@@ -125,7 +136,10 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    #pragma unroll 8 // limit unroll for lower register pressure
+    // declare struct for results (new df values to be streamed to neighbors)
+    float df_new[9];
+
+    #pragma unroll 8 // TODO: limit unroll for lower register pressure
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // dot product of c_i * u (velocity directions times local velocity)
@@ -138,21 +152,29 @@ __global__ void ComputeFullyFusedOperations_K(
 
         // relax distribution function towards equilibrium
         // TODO: bug in this optimized computation?
-        float f_new_i = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
-
-        // determine coordinates and index within the SoA of the target cell
-        // (with respect to periodic boundary conditions)
-        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
-
-        // stream distribution function value df_i to neighbor in direction i
-        dvc_df_next[i][dst_idx] = f_new_i;
+        df_new[i] = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
     }
+
+    // store results into aligned struct for vectorized memory accesses
+    DF_Vec result;
+    result.df_0_to_3 = make_float4(df_new[0], df_new[1], df_new[2], df_new[3]);
+    result.df_4_to_7 = make_float4(df_new[4], df_new[5], df_new[6], df_new[7]);
+    result.df_8 = df_new[8];
+
+    // determine coordinates and index within the SoA of the target cell
+    // (with respect to periodic boundary conditions)
+    uint32_t dst_x = (src_x + N_X) % N_X;
+    uint32_t dst_y = (src_y + N_Y) % N_Y;
+    uint32_t dst_idx = dst_y * N_X + dst_x;
+
+    // stream distribution function values df_i to neighbor in directions i
+    // (vectorized memory write to global memory)
+    dvc_df_next[dst_idx] = result;
 }
 
 void Launch_FullyFusedOperationsComputation(
-    const float* const* dvc_df,
-    float* const* dvc_df_next,
+    const DF_Vec* dvc_df,
+    DF_Vec* dvc_df_next,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,

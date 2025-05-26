@@ -46,10 +46,10 @@ void InitializeConstants_IK()
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ApplyShearWaveCondition_K(
-    float* const* dvc_df,
-    float* dvc_rho,
-    float* dvc_u_x,
-    float* dvc_u_y,
+    DF_Vec* __restrict__ dvc_df,
+    float* __restrict__ dvc_rho,
+    float* __restrict__ dvc_u_x,
+    float* __restrict__ dvc_u_y,
     const float rho_0,
     const float u_max,
     const float k,
@@ -60,7 +60,6 @@ __global__ void ApplyShearWaveCondition_K(
     if (idx >= N_CELLS) { return; }
 
     // determine coordinates of the cell handled by this thread
-    uint32_t x = idx % N_X;
     uint32_t y = idx / N_X;
 
     // compute sinusoidal x-velocity from the shear wave configuration
@@ -72,23 +71,34 @@ __global__ void ApplyShearWaveCondition_K(
     dvc_u_x[idx] = u_x_val;
     dvc_u_y[idx] = 0.0f;
 
+    // declare struct for results (equilibrium values)
+    float f_eq[9];
+
     // initialize distribution function values according to an equilibrium
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // dot product of c_i * u (velocity directions times local velocity)
-        float cu = dvc_ik_c_x[i] * u_x_val + dvc_ik_c_y[i] * 0.0f;
+        // (+ dvc_ik_c_y[i] * 0.0f omitted)
+        float cu = static_cast<float>(dvc_ik_c_x[i]) * u_x_val;
 
         // compute equilibrium distribution f_eq_i for current direction i
-        float f_eq_i = dvc_ik_w[i] * rho_0
+        f_eq[i] = dvc_ik_w[i] * rho_0
             * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
-
-        dvc_df[i][idx] = f_eq_i;
     }
+
+    // store results into aligned struct for vectorized memory accesses
+    DF_Vec result;
+    result.df_0_to_3 = make_float4(f_eq[0], f_eq[1], f_eq[2], f_eq[3]);
+    result.df_4_to_7 = make_float4(f_eq[4], f_eq[5], f_eq[6], f_eq[7]);
+    result.df_8 = f_eq[8];
+
+    // vectorized memory write to global memory
+    dvc_df[idx] = result;
 }
 
 void Launch_ApplyShearWaveCondition_K(
-    float* const* dvc_df,
+    DF_Vec* dvc_df,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,
