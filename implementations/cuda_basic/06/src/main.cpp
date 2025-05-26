@@ -1,8 +1,11 @@
-// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, shared memory tiling, and a fully fused
-// density+velocity+collision+streaming kernel with reduced register usage
+// CUDA implementation of Lattice-Boltzmann using optimization strategies:
+// - coalesced memory
+// - shared memory tiling
+// - fully fused density/velocity/collision/streaming kernel
+// - vectorized memory accesses
 
 #include "../tools/export.h"
+#include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
@@ -35,6 +38,9 @@ int main(int argc, char* argv[])
     uint32_t N_STEPS =  1;
     uint32_t N_CELLS =  N_X * N_Y;
 
+    // required for float4 vectorized memory accesses
+    assert(N_CELLS % N_VECSIZE == 0);
+
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency)
     float omega = 1.2f;
@@ -51,6 +57,7 @@ int main(int argc, char* argv[])
     float* df_next[9];
 
     // for each direction i, allocate 1D array of size N_CELLS on the device
+    // (256-byte aligned memory assured)
     for (uint32_t i = 0; i < 9; i++)
     {
         cudaMalloc(&df[i], N_CELLS * sizeof(float));
