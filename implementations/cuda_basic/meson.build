@@ -71,3 +71,14 @@ executable(
     link_with : [lib],
     dependencies : [spdlog]
 )
+
+executable(
+    'cuda_basic_07',
+    ['07/src/main.cpp',
+     '07/src/fullyfused.cu',
+     '07/src/initialization.cu',
+     '07/tools/export.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)

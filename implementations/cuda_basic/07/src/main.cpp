@@ -1,6 +1,7 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
 // accesses, shared memory tiling, and a fully fused
-// density+velocity+collision+streaming kernel with reduced register usage
+// density+velocity+collision+streaming kernel with reduced register usage,
+// and explicitly unrolled loops to incorporate optimized computations
 
 #include "../tools/export.h"
 #include "fullyfused.cuh"
