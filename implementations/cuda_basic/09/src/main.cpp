@@ -1,6 +1,9 @@
-// CUDA implementation of the Lattice-Boltzmann method with fully fused
-// density/velocity/collision/streaming kernel with reduced register usage,
-// and streaming via pulling data from neighbors instead of pushing to it
+// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
+// accesses, shared memory tiling, a fully fused
+// streaming/density/velocity/collision kernel,
+// streaming via pulling data from neighbors instead of pushing to it,
+// tiled 2D shared memory layout with 1-layer halo cells,
+// and fused streaming/density/velocity loop
 
 #include "../tools/export.h"
 #include "fullyfused.cuh"
@@ -29,7 +32,7 @@ int main(int argc, char* argv[])
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
-    // (15,000 * 10,000 cells use ~12GB of VRAM)
+    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
     uint32_t N_STEPS =  1;

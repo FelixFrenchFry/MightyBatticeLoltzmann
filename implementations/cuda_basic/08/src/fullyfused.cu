@@ -75,8 +75,8 @@ __global__ void ComputeFullyFusedOperations_K(
     {
         // compute coordinates of the source neighbor in direction i,
         // from which to pull the df_i value
-        int src_x = static_cast<int>(dst_x) - dvc_c_x[i];
-        int src_y = static_cast<int>(dst_y) - dvc_c_y[i];
+        uint32_t src_x = static_cast<int>(dst_x) - dvc_c_x[i];
+        uint32_t src_y = static_cast<int>(dst_y) - dvc_c_y[i];
 
         // apply periodic boundary conditions
         src_x = (src_x + N_X) % N_X;
