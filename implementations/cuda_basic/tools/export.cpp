@@ -20,13 +20,20 @@ std::string SimulationDataToString(const SimulationData type)
     }
 }
 
+std::string FormatStepSuffix(uint32_t step, uint32_t width = 6)
+{
+    std::ostringstream oss;
+    oss << "_" << std::setw(width) << std::setfill('0') << step;
+    return oss.str();
+}
+
 void ExportScalarFieldFromDevice(
     const float* dvc_buffer,
     const SimulationData type,
     const std::string& outputDirName,
     const std::string& versionDirName,
     const std::string& subDirName,
-    const std::string& suffixName,
+    const uint32_t suffixNum,
     const uint32_t N_X, const uint32_t N_Y,
     const bool bin, const bool csv)
 {
@@ -51,7 +58,7 @@ void ExportScalarFieldFromDevice(
     fs::create_directories(outputPath);
 
     std::string typeName = SimulationDataToString(type);
-    std::string fileBase = typeName + suffixName;
+    std::string fileBase = typeName + FormatStepSuffix(suffixNum);
     fs::path filePathBase = outputPath / fileBase;
 
     std::streamsize size = buffer.size() * sizeof(float);
@@ -106,7 +113,7 @@ void ExportSimulationData(
     const SimulationData type,
     const std::string& versionDirName,
     const std::string& subDirName,
-    const std::string& suffixName,
+    const uint32_t suffixNum,
     const bool bin, const bool csv)
 {
     const float* dvc_buffer = nullptr;
@@ -148,7 +155,7 @@ void ExportSimulationData(
 
     // launch the export using the export-type-dependent arguments
     ExportScalarFieldFromDevice(dvc_buffer, type, context.outputDirName,
-        versionDirName, subDirName, suffixName, context.N_X, context.N_Y, bin, csv);
+        versionDirName, subDirName, suffixNum, context.N_X, context.N_Y, bin, csv);
 
     if (dvc_u_mag != nullptr) { cudaFree(dvc_u_mag); }
 }

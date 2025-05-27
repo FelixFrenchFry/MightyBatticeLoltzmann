@@ -31,7 +31,7 @@ void ExportScalarFieldFromDevice(
     const std::string& outputDirName,
     const std::string& versionDirName,
     const std::string& subDirName,
-    const std::string& suffixName,
+    const uint32_t suffixNum,
     const uint32_t N_X, const uint32_t N_Y,
     const bool bin, const bool csv);
 
@@ -40,5 +40,5 @@ void ExportSimulationData(
     const SimulationData type,
     const std::string& versionDirName,
     const std::string& subDirName,
-    const std::string& suffixName,
+    const uint32_t suffixNum,
     const bool bin = true, const bool csv = false);
