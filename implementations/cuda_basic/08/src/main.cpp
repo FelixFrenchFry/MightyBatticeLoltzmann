@@ -1,11 +1,9 @@
-// CUDA implementation of Lattice-Boltzmann using optimization strategies:
-// - coalesced memory
-// - shared memory tiling
-// - fully fused density/velocity/collision/streaming kernel
-// - vectorized memory accesses
+// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
+// accesses, shared memory tiling, and a fully fused
+// density+velocity+collision+streaming kernel with reduced register usage,
+// and streaming via pulling data from neighbors instead of pushing to it
 
 #include "../tools/export.h"
-#include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
@@ -38,10 +36,6 @@ int main(int argc, char* argv[])
     uint32_t N_STEPS =  1;
     uint32_t N_CELLS =  N_X * N_Y;
 
-    // required for float4 vectorized memory accesses
-    static_assert(N_VECSIZE == 4);
-    assert(N_CELLS % N_VECSIZE == 0);
-
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency)
     float omega = 1.2f;
@@ -52,21 +46,28 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF DISTRIBUTION FUNCTION DATA STRUCTURES -----
 
-    DF_Vec* dvc_df_1_to_8;
-    DF_Vec* dvc_df_next_1_to_8;
+    // host-side arrays of 9 pointers to device-side distrib function arrays
+    // (used as a host-side handle for the SoA data)
+    float* df[9];
+    float* df_next[9];
 
-    cudaMalloc(&dvc_df_1_to_8, N_CELLS * sizeof(DF_Vec));
-    cudaMalloc(&dvc_df_next_1_to_8, N_CELLS * sizeof(DF_Vec));
+    // for each direction i, allocate 1D array of size N_CELLS on the device
+    for (uint32_t i = 0; i < 9; i++)
+    {
+        cudaMalloc(&df[i], N_CELLS * sizeof(float));
+        cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
+    }
 
-    assert(reinterpret_cast<uintptr_t>(dvc_df_1_to_8) % alignof(float4) == 0);
-    assert(reinterpret_cast<uintptr_t>(dvc_df_next_1_to_8) % alignof(float4) == 0);
+    // device-side arrays of 9 pointers to device-side distrib function arrays
+    // (used as a device-side handle for the SoA data)
+    float** dvc_df;
+    float** dvc_df_next;
+    cudaMalloc(&dvc_df, 9 * sizeof(float*));
+    cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
 
-    // pointer to the device-side center direction
-    // (separate from the struct to avoid dummy values required for alignment)
-    // TODO: is double buffering required for the streaming step?
-    float* dvc_df_0;
-
-    cudaMalloc(&dvc_df_0, N_CELLS * sizeof(float));
+    // copy the contents of the host-side handles to the device-side handle
+    cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
 
     // ----- INITIALIZATION OF DENSITY AND VELOCITY DATA STRUCTURES -----
 
@@ -82,8 +83,8 @@ int main(int argc, char* argv[])
 
     // ----- LBM SIMULATION LOOP -----
 
-    Launch_ApplyShearWaveCondition_K(dvc_df_1_to_8, dvc_df_0, dvc_rho, dvc_u_x,
-        dvc_u_y, rho_0, u_max, k, N_X, N_Y, N_CELLS);
+    Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
+        u_max, k, N_X, N_Y, N_CELLS);
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
@@ -91,10 +92,10 @@ int main(int argc, char* argv[])
         // densities and velocities and move them to neighboring cells using
         // a fully fused kernel performing all core operations in one
         Launch_FullyFusedOperationsComputation(
-            dvc_df_1_to_8, dvc_df_next_1_to_8, dvc_df_0, dvc_rho, dvc_u_x,
-            dvc_u_y, omega, N_X, N_Y, N_CELLS);
+            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            N_CELLS);
 
-        std::swap(dvc_df_1_to_8, dvc_df_next_1_to_8);
+        std::swap(dvc_df, dvc_df_next);
 
         if (step == 1 || step % 100 == 0)
         {
@@ -104,9 +105,13 @@ int main(int argc, char* argv[])
 
     // ----- CLEANUP -----
 
-    cudaFree(dvc_df_1_to_8);
-    cudaFree(dvc_df_next_1_to_8);
-    cudaFree(dvc_df_0);
+    for (uint32_t i = 0; i < 9; i++)
+    {
+        cudaFree(df[i]);
+        cudaFree(df_next[i]);
+    }
+    cudaFree(dvc_df);
+    cudaFree(dvc_df_next);
     cudaFree(dvc_rho);
     cudaFree(dvc_u_x);
     cudaFree(dvc_u_y);

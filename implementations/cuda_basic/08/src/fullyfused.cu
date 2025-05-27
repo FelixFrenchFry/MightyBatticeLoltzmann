@@ -42,19 +42,12 @@ void InitializeConstants()
     constantsInitialized = true;
 }
 
-__device__ __forceinline__ float& get_df_component(DF_Vec& vec, int i)
-{
-    float* p = reinterpret_cast<float*>(&vec);
-    return p[i - 1];
-}
-
 // __restriced__ tells compiler there is no overlap among the data pointed to
 // (reduces memory access and instructions, but increases register pressure!)
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
-    const DF_Vec* __restrict__ dvc_df_1_to_8,
-    DF_Vec* __restrict__ dvc_df_next_1_to_8,
-    float* __restrict__ dvc_df_0,
+    const float* const* __restrict__ dvc_df,
+    float* const* __restrict__ dvc_df_next,
     float* __restrict__ dvc_rho,
     float* __restrict__ dvc_u_x,
     float* __restrict__ dvc_u_y,
@@ -65,42 +58,48 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // declare and populate df_i in shared memory tile like df_tile[i][thread]
-    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
+    // ----- STREAMING COMPUTATION (PULL) -----
 
-    // vectorized load of first batch of 4 values into shared memory
-    df_tile[1][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.x;
-    df_tile[2][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.y;
-    df_tile[3][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.z;
-    df_tile[4][threadIdx.x] = dvc_df_1_to_8[idx].df_1_to_4.w;
+    // determine coordinates of this thread's own cell
+    // (destination of the df_i values pulled from the neighbors)
+    uint32_t dst_x = idx % N_X;
+    uint32_t dst_y = idx / N_X;
 
-    // vectorized load of second batch of 4 values into shared memory
-    df_tile[5][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.x;
-    df_tile[6][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.y;
-    df_tile[7][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.z;
-    df_tile[8][threadIdx.x] = dvc_df_1_to_8[idx].df_5_to_8.w;
+    // temp storage of df_i values pulled from neighbors
+    // TODO: use shared memory for this?
+    float df[9];
 
-    // separate non-vectorized laod of the center value
-    df_tile[0][threadIdx.x] = dvc_df_0[idx];
-
-    // wait for data to be fully loaded
-    __syncthreads();
-
-    // ----- DENSITY COMPUTATION -----
-
-    // used initially as sum and later as final velocities in computations
-    float rho = 0.0f;
-
-    // sum over distribution function values in each direction i
-    // (SoA layout for coalesced memory access across threads)
+    // pull df_i values from each neighbor in direction i
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        // load data from shared memory tile with local index
-        rho += df_tile[i][threadIdx.x];
+        // compute coordinates of the source neighbor in direction i,
+        // from which to pull the df_i value
+        int src_x = static_cast<int>(dst_x) - dvc_c_x[i];
+        int src_y = static_cast<int>(dst_y) - dvc_c_y[i];
+
+        // apply periodic boundary conditions
+        src_x = (src_x + N_X) % N_X;
+        src_y = (src_y + N_Y) % N_Y;
+        uint32_t src_idx = src_y * N_X + src_x;
+
+        // pull df_i from the neighbor in direction i
+        // (is memory access coalesced with neighboring threads?)
+        // TODO: store this in shared memory instead of relying on registers?
+        df[i] = dvc_df[i][src_idx];
     }
 
-    dvc_rho[idx] = rho;
+    // ----- DENSITY COMPUTATION -----
+
+    // used initially as sum and later as final density in computations
+    float rho = 0.0f;
+
+    // sum over df_i values to compute density
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        rho += df[i];
+    }
 
     // ----- VELOCITY COMPUTATION -----
 
@@ -116,68 +115,53 @@ __global__ void ComputeFullyFusedOperations_K(
     float u_x = 0.0f;
     float u_y = 0.0f;
 
-    // sum over distribution function values, weighted by each direction i
-    // (SoA layout for coalesced memory access across threads)
+    // sum over df_i values, weighted in each direction to compute velocity
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        // load data from shared memory tile with local index
-        float df_i = df_tile[i][threadIdx.x];
-        u_x += df_i * dvc_c_x[i];
-        u_y += df_i * dvc_c_y[i];
+        u_x += df[i] * dvc_c_x[i];
+        u_y += df[i] * dvc_c_y[i];
     }
 
     // divide sums by density to obtain final velocities
     u_x /= rho;
     u_y /= rho;
-    dvc_u_x[idx] = u_x;
-    dvc_u_y[idx] = u_y;
 
-    // ----- COLLISION AND STREAMING COMPUTATION -----
+    // ----- COLLISION COMPUTATION -----
 
-    // load temp variables into read-only cache and multiple loads
+    // pre-compute squared velocity of this thread's cell
     float u_sq = u_x * u_x + u_y * u_y;
 
-    // determine coordinates of the source cell handled by this thread
-    // TODO: bug in coordinate computation?
-    uint32_t src_x = idx % N_X;
-    uint32_t src_y = idx / N_X;
-
-    #pragma unroll // TODO: limit unroll for lower register pressure
-    for (uint32_t i = 1; i < N_DIR; i++)
+    // update df_i values by relaxation towards equilibrium
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
     {
         // dot product of c_i * u (velocity directions times local velocity)
         float cu = static_cast<float>(dvc_c_x[i]) * u_x
                  + static_cast<float>(dvc_c_y[i]) * u_y;
 
-        // compute equilibrium distribution f_eq_i for current direction i
+        // compute equilibrium distribution f_eq_i for direction i
         float f_eq_i = dvc_w[i] * rho
                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
         // relax distribution function towards equilibrium
-        // TODO: bug in this optimized computation?
-        float f_new_i = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
+        float f_new_i = df[i] * (1 - omega) + omega * f_eq_i;
 
-        // determine coordinates and index within the SoA of the target cell
-        // (with respect to periodic boundary conditions)
-        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
-
-        // stream distribution function value df_i to neighbor in direction i
-        // TODO: bug bug bug
-        get_df_component(dvc_df_next_1_to_8[dst_idx], i) = f_new_i;
+        // update df value of this thread's cell in global memory
+        dvc_df_next[i][idx] = f_new_i;
     }
 
-    // separate update of the center value in different data structure
-    float f_eq_0 = (4.0f/9.0f) * rho * (1.0f - 1.5f * u_sq);
-    float f_eq_new_0 = df_tile[0][threadIdx.x] * (1 - omega) + omega * f_eq_0;
-    dvc_df_0[idx] = f_eq_new_0;
+    // ----- MISC -----
+
+    // write back updated values to global memory
+    dvc_rho[idx] = rho;
+    dvc_u_x[idx] = u_x;
+    dvc_u_y[idx] = u_y;
 }
 
 void Launch_FullyFusedOperationsComputation(
-    const DF_Vec* dvc_df_1_to_8,
-    DF_Vec* dvc_df_next_1_to_8,
-    float* dvc_df_0,
+    const float* const* dvc_df,
+    float* const* dvc_df_next,
     float* dvc_rho,
     float* dvc_u_x,
     float* dvc_u_y,
@@ -190,8 +174,8 @@ void Launch_FullyFusedOperationsComputation(
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df_1_to_8, dvc_df_next_1_to_8, dvc_df_0, dvc_rho, dvc_u_x, dvc_u_y,
-        omega, N_X, N_Y, N_CELLS);
+        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+        N_CELLS);
 
     // wait for device actions to finish and report potential errors
     cudaDeviceSynchronize();
@@ -201,6 +185,6 @@ void Launch_FullyFusedOperationsComputation(
     if (err != cudaSuccess)
     {
         SPDLOG_ERROR("Kernel '{}' failed: {}",
-            __func__, cudaGetErrorString(err));
+                     __func__, cudaGetErrorString(err));
     }
 }
