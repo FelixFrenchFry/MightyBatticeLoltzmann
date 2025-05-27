@@ -2,7 +2,8 @@
 // accesses, shared memory tiling, and a fully fused
 // density+velocity+collision+streaming kernel with reduced register usage
 
-#include "../tools/export.h"
+#include "../../tools/export.h"
+#include "../../tools/helper.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
@@ -30,9 +31,9 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      15000;
-    uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_X =      150;
+    uint32_t N_Y =      100;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -65,6 +66,7 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
 
     // copy the contents of the host-side handles to the device-side handle
+    // (apparently CUDA does not support directly passing an array of pointers)
     cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
 
@@ -79,6 +81,16 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_rho, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
+
+    // collect buffers and other data for export context
+    SimulationExportContext context;
+    context.dvc_df = dvc_df;
+    context.dvc_df_next = dvc_df_next;
+    context.dvc_rho = dvc_rho;
+    context.dvc_u_x = dvc_u_x;
+    context.dvc_u_y = dvc_u_y;
+    context.N_X = N_X;
+    context.N_Y = N_Y;
 
     // ----- LBM SIMULATION LOOP -----
 
@@ -99,6 +111,12 @@ int main(int argc, char* argv[])
         if (step == 1 || step % 100 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
+
+            ExportSimulationData(context,
+                VelocityMagnitude,
+                "05",
+                "A",
+                std::to_string(step));
         }
     }
 
