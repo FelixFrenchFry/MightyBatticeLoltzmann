@@ -3,7 +3,7 @@
 // density+velocity+collision+streaming kernel with reduced register usage,
 // and explicitly unrolled loops to incorporate optimized computations
 
-#include "../tools/export.h"
+#include "../../tools/export.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>

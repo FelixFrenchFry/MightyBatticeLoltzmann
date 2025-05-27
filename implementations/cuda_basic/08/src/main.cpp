@@ -2,7 +2,7 @@
 // density/velocity/collision/streaming kernel with reduced register usage,
 // and streaming via pulling data from neighbors instead of pushing to it
 
-#include "../tools/export.h"
+#include "../../tools/export.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>

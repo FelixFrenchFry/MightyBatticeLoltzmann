@@ -3,7 +3,7 @@
 
 #include "../src/streaming.cuh"
 #include "../src/velocity.cuh"
-#include "../tools/export.h"
+#include "../../tools/export.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"

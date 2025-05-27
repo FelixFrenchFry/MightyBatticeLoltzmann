@@ -1,10 +1,12 @@
 // CUDA implementation of the Lattice-Boltzmann method with basic data
 // structures and kernels, high cache hit rate for kernels looping over data
 
-#include "../tools/export.h"
+#include "../../tools/export.h"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
+
+
 
 int main(int argc, char* argv[])
 {
@@ -81,8 +83,8 @@ int main(int argc, char* argv[])
 
         if (step % 50 == 0 && false)
         {
-            ExportScalarField(dvc_densityField, num_cells,
-                "density" + std::to_string(step) + ".bin");
+            // TODO: fix this
+            //ExportSimulationData();
 
             //SPDLOG_INFO("Exported density data.");
         }

@@ -4,7 +4,7 @@
 // - fully fused density/velocity/collision/streaming kernel
 // - vectorized memory accesses
 
-#include "../tools/export.h"
+#include "../../tools/export.h"
 #include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
