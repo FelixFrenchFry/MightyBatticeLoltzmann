@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      150;
-    uint32_t N_Y =      100;
+    uint32_t N_X =      15000;
+    uint32_t N_Y =      10000;
     uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
@@ -111,7 +111,11 @@ int main(int argc, char* argv[])
         if (step == 1 || step % 100 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
+        }
 
+        // export data (CAREFUL: huge file sizes)
+        if (false && step % 100 == 0)
+        {
             ExportSimulationData(context,
                 VelocityMagnitude,
                 "05",
