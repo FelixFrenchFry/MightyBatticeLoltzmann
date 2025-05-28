@@ -42,12 +42,11 @@ nccl = declare_dependency(
 )
 
 # detect and integrate MPI
-#mpi = dependency('mpi', required: true)
+mpi = dependency('mpi', required: true)
 
-mpi = declare_dependency(
-    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
-    link_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:link').stdout().strip().split()
-)
+#mpi = declare_dependency(
+#    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
+#    link_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:link').stdout().strip().split())
 
 # detect and integrate spdlog
 spdlog = dependency('spdlog', fallback: ['spdlog', 'spdlog_dep'])

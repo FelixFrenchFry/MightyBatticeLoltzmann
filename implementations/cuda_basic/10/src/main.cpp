@@ -1,6 +1,7 @@
-// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, shared memory tiling, and a fully fused
-// density+velocity+collision+streaming kernel with reduced register usage
+// CUDA implementation of Lattice-Boltzmann using optimization strategies:
+// - coalesced memory reads
+// - shared memory tiles for df values
+// - fully fused density/velocity/collision/streaming kernel (push)
 
 #include "../../tools/export.h"
 #include "fullyfused.cuh"
@@ -29,10 +30,10 @@ int main(int argc, char* argv[])
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
-    // (15,000 * 10,000 cells use ~12GB of VRAM)
+    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  10000;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -45,27 +46,26 @@ int main(int argc, char* argv[])
 
     // ----- INITIALIZATION OF DISTRIBUTION FUNCTION DATA STRUCTURES -----
 
-    // host-side arrays of 9 pointers to device-side distrib function arrays
-    // (used as a host-side handle for the SoA data)
+    // host-side arrays of 9 pointers to device-side df arrays
     float* df[9];
     float* df_next[9];
 
-    // for each direction i, allocate 1D array of size N_CELLS on the device
+    // for each dir i, allocate 1D array of size N_CELLS on the device
     for (uint32_t i = 0; i < 9; i++)
     {
         cudaMalloc(&df[i], N_CELLS * sizeof(float));
         cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
     }
 
-    // device-side arrays of 9 pointers to device-side distrib function arrays
+    // device-side arrays of 9 pointers to device-side df arrays
     // (used as a device-side handle for the SoA data)
     float** dvc_df;
     float** dvc_df_next;
     cudaMalloc(&dvc_df, 9 * sizeof(float*));
     cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
 
-    // copy the contents of the host-side handles to the device-side handle
-    // (apparently CUDA does not support directly passing an array of pointers)
+    // copy the contents of the host-side handles to the device-side handles
+    // (because apparently CUDA does not support directly passing an array of pointers)
     cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
 
@@ -99,8 +99,7 @@ int main(int argc, char* argv[])
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // update densities and velocities, update df_i values based on
-        // densities and velocities and move them to neighboring cells using
-        // a fully fused kernel performing all core operations in one
+        // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
             dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_CELLS);
