@@ -76,8 +76,7 @@ void ExportScalarFieldFromDevice(
         file_bin.write(reinterpret_cast<const char*>(buffer.data()), size);
         file_bin.close();
 
-        SPDLOG_INFO("Exported data: {}",
-            fs::absolute(filePathBase.string() + ".bin").string());
+        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".csv");
     }
 
     // ----- EXPORT CSV -----
@@ -103,8 +102,7 @@ void ExportScalarFieldFromDevice(
 
         file_csv.close();
 
-        SPDLOG_INFO("Exported data: {}",
-            fs::absolute(filePathBase.string() + ".csv").string());
+        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".csv");
     }
 }
 
