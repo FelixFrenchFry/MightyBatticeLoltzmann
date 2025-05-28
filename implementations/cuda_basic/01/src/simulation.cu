@@ -76,8 +76,6 @@ __global__ void ComputeDensityField_K(const float* dvc_distributionFunc,
     float densitySum = 0.0f;
     int base_index = index * 9;
 
-    // sum over distribution function values in each direction
-    // (unroll loop into 9 individual instructions, rather than a loop)
     #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {
@@ -110,8 +108,6 @@ __global__ void ComputeVelocityField_K(const float* dvc_distributionFunc,
     float velocitySum_y = 0.0f;
     int base_index = index * 9;
 
-    // sum over distribution function values, weighted by each direction
-    // (unroll loop into 9 individual instructions, rather than a loop)
     #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {
@@ -141,6 +137,7 @@ __global__ void CollisionStep_K(float* dvc_distributionFunc,
     float u_y = dvc_velocityField_y[index];
     float u_squ = u_x * u_x + u_y * u_y;
 
+    // "collision" updates df values based on the density and velocity vals
     #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {
@@ -176,7 +173,6 @@ __global__ void StreamingStep_K(const float* dvc_distributionFunc,
     int base_index = index * 9;
 
     // "stream" (shift) distribution function components into each direction
-    // (unroll loop into 9 individual instructions, rather than a loop)
     #pragma unroll
     for (int dir = 0; dir < 9; dir++)
     {

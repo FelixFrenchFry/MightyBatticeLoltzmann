@@ -3,12 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-N_X =   60
-N_Y =   40
+N_X =   150
+N_Y =   100
 
 step =  0
 
-fileName = f"../../../buildDir/implementations/cpu/01/tools/velocity_x_{step}.bin"
+fileName = f"../../../buildDir/implementations/cpu/01/output/velocity_x_{step}.bin"
 data = np.fromfile(fileName, dtype=np.float32)
 data = data.reshape((N_Y, N_X))
 

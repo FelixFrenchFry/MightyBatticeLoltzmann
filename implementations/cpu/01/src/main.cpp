@@ -85,7 +85,7 @@ int main(int argc, char* argv[])
         if (step % 100 == 0)
         {
             // evaluation of the simulation step
-            //ExportSimulationData(state, VelocityMagnitude, step, true);
+            ExportSimulationData(state, VelocityMagnitude, step, true);
         }
     }
 
