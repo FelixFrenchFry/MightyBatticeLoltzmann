@@ -2,7 +2,6 @@
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
-#include <stdio.h>
 
 
 

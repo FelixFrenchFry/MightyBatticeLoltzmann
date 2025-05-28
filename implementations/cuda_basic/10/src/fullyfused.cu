@@ -42,8 +42,6 @@ void InitializeConstants()
     constantsInitialized = true;
 }
 
-// TODO: fuse density/velocity loops to reduce register pressure?
-// TODO: dont use shared because the data is not
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
     const float* const* __restrict__ dvc_df,
@@ -58,64 +56,35 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    // declare and populate df_i in a block-specific tile of shared memory
-    __shared__ float df_tile[N_DIR][N_BLOCKSIZE];
-    #pragma unroll
-    for (uint32_t i = 0; i < N_DIR; i++)
-    {
-        df_tile[i][threadIdx.x] = dvc_df[i][idx];
-    }
-    __syncthreads();
-
-    // ----- DENSITY COMPUTATION -----
-
-    // density := sum over df values in each dir i
+    // used for summing stuff up and computing collision
     float rho = 0.0f;
-    #pragma unroll
-    for (uint32_t i = 0; i < N_DIR; i++)
-    {
-        rho += df_tile[i][threadIdx.x];
-    }
-
-    // ----- VELOCITY COMPUTATION -----
-
-    // exit thread to avoid division by zero or erroneous values
-    if (rho <= 0.0f)
-    {
-        dvc_rho[idx] = 0.0f;
-        dvc_u_x[idx] = 0.0f;
-        dvc_u_y[idx] = 0.0f;
-        return;
-    }
-
-    // velocity := sum over df values, weighted by each dir i
     float u_x = 0.0f;
     float u_y = 0.0f;
+
+    // density := sum over df values in each dir i
+    // velocity := sum over df values, weighted by each dir i
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        float df_i = df_tile[i][threadIdx.x];
+        float df_i = dvc_df[i][idx];
+        rho += df_i;
         u_x += df_i * dvc_c_x[i];
         u_y += df_i * dvc_c_y[i];
     }
 
-    // divide sums by density to obtain final velocities
+    // exit thread to avoid division by zero or erroneous values
+    if (rho <= 0.0f) { return; }
+
+    // finalize velocities
     u_x /= rho;
     u_y /= rho;
-
-    // write updated field data back to global memory
-    dvc_rho[idx] = rho;
-    dvc_u_x[idx] = u_x;
-    dvc_u_y[idx] = u_y;
-
-    // ----- COLLISION AND STREAMING COMPUTATION -----
 
     // pre-compute squared velocity and cell coordinates for this thread
     float u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    #pragma unroll 8 // limit unroll for lower register pressure
+    #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
@@ -126,7 +95,7 @@ __global__ void ComputeFullyFusedOperations_K(
 
         // relax df towards equilibrium
         // TODO: bug in this optimized computation?
-        float f_new_i = df_tile[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
+        float f_new_i = dvc_df[i][idx] * (1 - omega) + omega * f_eq_i;
 
         // determine index of the destination cell within the SoA
         // (with respect to periodic boundary conditions)

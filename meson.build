@@ -17,10 +17,7 @@ project(
             '-gencode', 'arch=compute_89,code=sm_89', # RTX 40s
             '-gencode', 'arch=compute_90,code=sm_90', # H100, H200
             '-gencode', 'arch=compute_100,code=sm_100', # B200, GB200
-            '-gencode', 'arch=compute_120,code=sm_120']), # RTX 50s
-        # specify location of used CUDA libraries
-        'link_args=' + ' '.join([
-            '-L/usr/local/cuda/lib64', '-lcudart'])]
+            '-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
 )
 
 cuda_include = include_directories('/usr/local/cuda/include')
@@ -42,7 +39,7 @@ nccl = declare_dependency(
 )
 
 # detect and integrate MPI
-mpi = dependency('mpi', required: true)
+mpi = dependency('mpi', required: false)
 
 #mpi = declare_dependency(
 #    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
