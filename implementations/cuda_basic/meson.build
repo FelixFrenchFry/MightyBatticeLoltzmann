@@ -125,3 +125,15 @@ executable(
     link_with : [lib],
     dependencies : [spdlog]
 )
+
+executable(
+    'cuda_basic_11',
+    ['11/src/main.cpp',
+     '11/src/fullyfused.cu',
+     '11/src/initialization.cu',
+     'tools/export.cpp',
+     'tools/helper.cu'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)
