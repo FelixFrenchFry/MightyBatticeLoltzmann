@@ -1,6 +1,5 @@
 // CUDA implementation of Lattice-Boltzmann using optimization strategies:
-// - coalesced memory reads TODO: AND coalesced memory writes
-// - TODO: two different kernels, adjusted for the respective df data structure
+// - coalesced memory reads on a 1D flattened array for df values
 // - shared memory tiles for df values
 // - fully fused density/velocity/collision/streaming kernel (push)
 // - no global write-back of density and velocity values
