@@ -5,6 +5,7 @@
 // - no global write-back of density and velocity values
 
 #include "../../tools/export.h"
+#include "../../tools/utilities.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
@@ -20,11 +21,6 @@ int main(int argc, char* argv[])
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
 
     constexpr float PI = 3.14159265f;
-
-    // TODO: check important hardware properties
-    cudaDeviceProp props{};
-    cudaGetDeviceProperties(&props, 0);
-    SPDLOG_INFO("GPU: {} (CC: {})", props.name, props.major * 10 + props.minor);
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
@@ -83,6 +79,9 @@ int main(int argc, char* argv[])
     context.dvc_u_y = dvc_u_y;
     context.N_X = N_X;
     context.N_Y = N_Y;
+
+    DisplayDeviceModel();
+    DisplayDeviceMemoryUsage();
 
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);

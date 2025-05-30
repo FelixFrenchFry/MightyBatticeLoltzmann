@@ -5,7 +5,8 @@ executable(
     ['01/src/main.cpp',
      '01/src/simulation.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -20,7 +21,8 @@ executable(
      '02/src/streaming.cu',
      '02/src/velocity.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -35,7 +37,8 @@ executable(
      '03/src/streaming.cu',
      '03/src/velocity.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -48,7 +51,8 @@ executable(
      '04/src/density_velocity.cu',
      '04/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -60,7 +64,8 @@ executable(
      '05/src/fullyfused.cu',
      '05/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -72,7 +77,8 @@ executable(
      '06/src/fullyfused.cu',
      '06/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -84,7 +90,8 @@ executable(
      '07/src/fullyfused.cu',
      '07/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -96,7 +103,8 @@ executable(
      '08/src/fullyfused.cu',
      '08/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -108,7 +116,8 @@ executable(
      '09/src/fullyfused.cu',
      '09/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -120,7 +129,8 @@ executable(
      '10/src/fullyfused.cu',
      '10/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
@@ -132,7 +142,21 @@ executable(
      '11/src/fullyfused.cu',
      '11/src/initialization.cu',
      'tools/export.cpp',
-     'tools/helper.cu'],
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)
+
+executable(
+    'cuda_basic_12',
+    ['12/src/main.cpp',
+     '12/src/fullyfused.cu',
+     '12/src/initialization.cu',
+     'tools/export.cpp',
+     'tools/helper.cu',
+     'tools/utilities.cpp'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
     dependencies : [spdlog]
