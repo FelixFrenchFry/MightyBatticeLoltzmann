@@ -64,7 +64,7 @@ __global__ void ApplyShearWaveCondition_K(
     float u_x_val = u_max * sinf(k * static_cast<float>(y));
     float u_sq = u_x_val * u_x_val;
 
-    // set initial values of different fields
+    // set initial values of the fields
     dvc_rho[idx] = rho_0;
     dvc_u_x[idx] = u_x_val;
     dvc_u_y[idx] = 0.0f;
@@ -77,7 +77,7 @@ __global__ void ApplyShearWaveCondition_K(
         float f_eq_i = dvc_ik_w[i] * rho_0
             * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
-        // set initial value
+        // set initial df values
         dvc_df[i][idx] = f_eq_i;
     }
 }
@@ -99,6 +99,57 @@ void Launch_ApplyShearWaveCondition_K(
 
     ApplyShearWaveCondition_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, k, N_X, N_Y, N_CELLS);
+
+    // wait for GPU to finish operations
+    cudaDeviceSynchronize();
+
+    // debugging helper
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess)
+    {
+        SPDLOG_ERROR("CUDA kernel failed: {}", cudaGetErrorString(err));
+    }
+}
+
+template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
+__global__ void ApplyLidDrivenCavityCondition_K(
+    float* const* __restrict__ dvc_df,
+    float* __restrict__ dvc_rho,
+    float* __restrict__ dvc_u_x,
+    float* __restrict__ dvc_u_y,
+    const float rho_0,
+    const uint32_t N_CELLS)
+{
+    uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= N_CELLS) { return; }
+
+    // set initial values of the fields
+    dvc_rho[idx] = rho_0;
+    dvc_u_x[idx] = 0.0f;
+    dvc_u_y[idx] = 0.0f;
+
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        // set initial df values
+        dvc_df[i][idx] = dvc_ik_w[i] * rho_0;
+    }
+}
+
+void Launch_ApplyLidDrivenCavityCondition_K(
+    float* const* dvc_df,
+    float* dvc_rho,
+    float* dvc_u_x,
+    float* dvc_u_y,
+    const float rho_0,
+    const uint32_t N_CELLS)
+{
+    InitializeConstants_IK();
+
+    const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
+
+    ApplyLidDrivenCavityCondition_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+        dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, N_CELLS);
 
     // wait for GPU to finish operations
     cudaDeviceSynchronize();

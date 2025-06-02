@@ -5,9 +5,11 @@
 
 
 
-// load velocity direction and weight vectors into constant memory
+// load opposite direction vectors for bounce-back, velocity direction vectors,
+// and weight vectors into constant memory
 // (fast, global, read-only lookup table identical for all threads)
 // TODO: figure out how to safely use same constant memory across all .cu files
+__constant__ int dvc_opp_dir[9];
 __constant__ int dvc_c_x[9];
 __constant__ int dvc_c_y[9];
 __constant__ float dvc_w[9];
@@ -27,13 +29,15 @@ void InitializeConstants()
     //  7: (-1, -1) = south-west
     //  8: ( 1, -1) = south-east
 
-    // initialize velocity direction and weight vectors on the host
+    // initialize opposite direction, velocity direction, and weight vectors
+    int opp_dir[9] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
     float w[9] = { 4.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f, 1.0f/9.0f,
                    1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f, 1.0f/36.0f };
 
     // copy them into constant memory on the device
+    cudaMemcpyToSymbol(dvc_opp_dir, opp_dir, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_x, c_x, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_y, c_y, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_w, w, 9 * sizeof(float));
@@ -48,7 +52,6 @@ __device__ __forceinline__ uint32_t ComputeDensityAndVelocity_K(
     uint32_t idx,
     float& rho, float& u_x, float& u_y)
 {
-    // used for summing stuff up and computing collision
     rho = 0.0f;
     u_x = 0.0f;
     u_y = 0.0f;
@@ -77,6 +80,56 @@ __device__ __forceinline__ void ComputeNeighborIndex_PeriodicBoundary_K(
             + ((src_x + dvc_c_x[i] + N_X) % N_X);
 }
 
+__device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
+    uint32_t src_x, uint32_t src_y,
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t i,
+    uint32_t& dst_idx,
+    uint32_t& dst_i)
+{
+    // check if directed into a wall
+    if ((dvc_c_x[i] == -1 && src_x == 0) ||        // into left wall
+        (dvc_c_x[i] ==  1 && src_x == N_X - 1) ||  // into right wall
+        (dvc_c_y[i] == -1 && src_y == 0) ||        // into bottom wall
+        (dvc_c_y[i] ==  1 && src_y == N_Y - 1))    // into top wall
+    {
+        // same cell but opposite direction because of bounce-back
+        dst_idx = src_y * N_X + src_x;
+        dst_i = dvc_opp_dir[i];
+    }
+    else
+    {
+        // normal neighbor in direction i
+        dst_idx = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
+        dst_i = i;
+    }
+}
+
+__device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLess_K(
+    uint32_t src_x, uint32_t src_y,
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t i,
+    uint32_t& dst_idx,
+    uint32_t& dst_i)
+{
+    // branch-less computation of: 1 if bounce-back, else 0
+    int bounce =
+        ((dvc_c_x[i] == -1) && (src_x == 0)) |
+        ((dvc_c_x[i] ==  1) && (src_x == N_X - 1)) |
+        ((dvc_c_y[i] == -1) && (src_y == 0)) |
+        ((dvc_c_y[i] ==  1) && (src_y == N_Y - 1));
+
+    // branch-less computation of destination index
+    uint32_t idx_normal = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
+    uint32_t idx_bounce = src_y * N_X + src_x;
+    dst_idx = bounce * idx_bounce + (1 - bounce) * idx_normal;
+
+    // branch-less computation of destination direction
+    uint32_t i_normal = i;
+    uint32_t i_bounce = dvc_opp_dir[i];
+    dst_i = bounce * i_bounce + (1 - bounce) * i_normal;
+}
+
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
     const float* const* __restrict__ dvc_df,
@@ -86,7 +139,10 @@ __global__ void ComputeFullyFusedOperations_K(
     float* __restrict__ dvc_u_y,
     const float omega,
     const uint32_t N_X, const uint32_t N_Y,
-    const uint32_t N_CELLS)
+    const uint32_t N_CELLS,
+    const bool write_rho,
+    const bool write_u_x,
+    const bool write_u_y)
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
@@ -102,6 +158,11 @@ __global__ void ComputeFullyFusedOperations_K(
     // finalize velocities
     u_x /= rho;
     u_y /= rho;
+
+    // write back final field values only if requested
+    if (write_rho) { dvc_rho[idx] = rho; }
+    if (write_u_x) { dvc_u_x[idx] = u_x; }
+    if (write_u_y) { dvc_u_y[idx] = u_y; }
 
     // pre-compute squared velocity and cell coordinates for this thread
     float u_sq = u_x * u_x + u_y * u_y;
@@ -121,12 +182,13 @@ __global__ void ComputeFullyFusedOperations_K(
         float f_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
-        uint32_t dst_idx;
-        ComputeNeighborIndex_PeriodicBoundary_K(
-            src_x, src_y, N_X, N_Y, i, dst_idx);
+        uint32_t dst_idx, dst_i;
+        ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
+            src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
-        // stream df value df_i to the neighbor in dir i (on the double buffer)
-        dvc_df_next[i][dst_idx] = f_new_i;
+        // stream df value df_i to the neighbor in dir i
+        // (direction i gets reversed in case of bounce-back)
+        dvc_df_next[dst_i][dst_idx] = f_new_i;
     }
 }
 
@@ -138,15 +200,18 @@ void Launch_FullyFusedOperationsComputation(
     float* dvc_u_y,
     const float omega,
     const uint32_t N_X, const uint32_t N_Y,
-    const uint32_t N_CELLS)
+    const uint32_t N_CELLS,
+    const bool write_rho,
+    const bool write_u_x,
+    const bool write_u_y)
 {
     InitializeConstants();
 
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-        N_CELLS);
+        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y, N_CELLS,
+        write_rho, write_u_x, write_u_y);
 
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
