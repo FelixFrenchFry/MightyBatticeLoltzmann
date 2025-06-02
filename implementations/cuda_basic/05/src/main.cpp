@@ -2,7 +2,7 @@
 // accesses, shared memory tiling, and a fully fused
 // density+velocity+collision+streaming kernel with reduced register usage
 
-#include "../../tools/export.h"
+#include "../../tools/data_export.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>

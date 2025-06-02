@@ -1,7 +1,7 @@
 // CUDA implementation of the Lattice-Boltzmann method with basic data
 // structures and kernels, high cache hit rate for kernels looping over data
 
-#include "../../tools/export.h"
+#include "../../tools/data_export.h"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>

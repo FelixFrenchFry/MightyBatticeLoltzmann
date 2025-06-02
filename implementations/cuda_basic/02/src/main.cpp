@@ -1,16 +1,14 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
 // accesses, restricted kernel argument pointers, and templated kernel launches
 
+#include "../../tools/data_export.h"
 #include "../src/streaming.cuh"
 #include "../src/velocity.cuh"
-#include "../../tools/export.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
-
-
 
 int main(int argc, char* argv[])
 {

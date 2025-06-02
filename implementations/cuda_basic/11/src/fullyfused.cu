@@ -80,6 +80,8 @@ __global__ void ComputeFullyFusedOperations_K(
     u_x /= rho;
     u_y /= rho;
 
+    // TODO: write-back of final density and velocity values necessary?
+
     // pre-compute squared velocity and cell coordinates for this thread
     float u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;

@@ -2,7 +2,7 @@
 // accesses, shared memory tiling, and fused density+velocity /
 // collision+streaming kernels
 
-#include "../../tools/export.h"
+#include "../../tools/data_export.h"
 #include "collision_streaming.cuh"
 #include "density_velocity.cuh"
 #include "initialization.cuh"

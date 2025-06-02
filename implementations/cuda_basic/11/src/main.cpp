@@ -4,7 +4,7 @@
 // - fully fused density/velocity/collision/streaming kernel (push)
 // - no global write-back of density and velocity values
 
-#include "../../tools/export.h"
+#include "../../tools/data_export.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>

@@ -1,5 +1,5 @@
 #include "config.cuh"
-#include "helper.cuh"
+#include "data_processing.cuh"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>

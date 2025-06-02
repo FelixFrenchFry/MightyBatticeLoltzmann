@@ -1,17 +1,15 @@
 // CUDA implementation of the Lattice-Boltzmann method with coalesced memory
 // accesses, shared memory tiling, and uint32_t instead of size_t
 
+#include "../../tools/data_export.h"
 #include "../src/streaming.cuh"
 #include "../src/velocity.cuh"
-#include "../../tools/export.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
-#include <spdlog/spdlog.h>
 #include <iostream>
-
-
+#include <spdlog/spdlog.h>
 
 int main(int argc, char* argv[])
 {

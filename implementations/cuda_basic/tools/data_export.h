@@ -17,12 +17,14 @@ struct SimulationExportContext
     uint32_t N_X = 0;
     uint32_t N_Y = 0;
 
-    // device pointers
+    // pointers to simulation data on the device
+    // (temp-array for temp storage of data derived from it)
     const float* const* dvc_df = nullptr;
     const float* const* dvc_df_next = nullptr;
     const float* dvc_rho = nullptr;
     const float* dvc_u_x = nullptr;
     const float* dvc_u_y = nullptr;
+    float* dvc_temp = nullptr;
 };
 
 void ExportScalarFieldFromDevice(

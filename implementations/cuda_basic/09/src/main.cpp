@@ -5,7 +5,7 @@
 // tiled 2D shared memory layout with 1-layer halo cells,
 // and fused streaming/density/velocity loop
 
-#include "../../tools/export.h"
+#include "../../tools/data_export.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
