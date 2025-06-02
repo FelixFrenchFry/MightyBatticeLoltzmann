@@ -122,14 +122,17 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
         ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
 
     // branch-less computation of destination index
+    // TODO: reduce register usage
+    /*
     uint32_t idx_normal = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
     uint32_t idx_bounce = src_y * N_X + src_x;
     dst_idx = bounce * idx_bounce + (1 - bounce) * idx_normal;
+    */
+    dst_idx = bounce * (src_y * N_X + src_x)
+            + (1 - bounce) * ((src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]));
 
     // branch-less computation of destination direction
-    uint32_t i_normal = i;
-    uint32_t i_bounce = dvc_opp_dir[i];
-    dst_i = bounce * i_bounce + (1 - bounce) * i_normal;
+    dst_i = bounce * dvc_opp_dir[i] + (1 - bounce) * i;
 }
 
 __device__ __forceinline__ void InjectLidVelocity_Conditional_K(
