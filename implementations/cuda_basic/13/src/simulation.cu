@@ -112,12 +112,14 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
     uint32_t& dst_idx,
     uint32_t& dst_i)
 {
-    // branch-less computation of: 1 if bounce-back, else 0
+    // TODO: this increases register pressure by too much
+
+    // branch-less bit-wise computation of: 1 if bounce-back, else 0
     int bounce =
-        ((dvc_c_x[i] == -1) && (src_x == 0)) |
-        ((dvc_c_x[i] ==  1) && (src_x == N_X - 1)) |
-        ((dvc_c_y[i] == -1) && (src_y == 0)) |
-        ((dvc_c_y[i] ==  1) && (src_y == N_Y - 1));
+        ((dvc_c_x[i] == -1) & (src_x == 0)) |
+        ((dvc_c_x[i] ==  1) & (src_x == N_X - 1)) |
+        ((dvc_c_y[i] == -1) & (src_y == 0)) |
+        ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
 
     // branch-less computation of destination index
     uint32_t idx_normal = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
@@ -130,6 +132,37 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
     dst_i = bounce * i_bounce + (1 - bounce) * i_normal;
 }
 
+__device__ __forceinline__ void InjectLidVelocity_Conditional_K(
+    uint32_t src_y,
+    uint32_t N_Y,
+    float rho,
+    float omega,
+    float u_lid,
+    uint32_t i,
+    float& f_new_i)
+{
+    // check if directed into top wall
+    if (dvc_c_y[i] == 1 && src_y == N_Y - 1)
+    {
+        f_new_i -= 6.0f * omega * rho * dvc_c_x[i] * u_lid;
+    }
+}
+
+__device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
+    uint32_t src_y,
+    uint32_t N_Y,
+    float rho,
+    float omega,
+    float u_lid,
+    uint32_t i,
+    float& f_new_i)
+{
+    // branch-less lid velocity injection via boolean mask
+    int top_bounce = ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
+    f_new_i -= top_bounce * 6.0f * dvc_w[i] * rho
+             * static_cast<float>(dvc_c_x[i]) * u_lid;
+}
+
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
     const float* const* __restrict__ dvc_df,
@@ -138,6 +171,7 @@ __global__ void ComputeFullyFusedOperations_K(
     float* __restrict__ dvc_u_x,
     float* __restrict__ dvc_u_y,
     const float omega,
+    const float u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS,
     const bool write_rho,
@@ -186,6 +220,10 @@ __global__ void ComputeFullyFusedOperations_K(
         ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
+        // inject lid velocity if directed into top wall
+        InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i,
+            f_new_i);
+
         // stream df value df_i to the neighbor in dir i
         // (direction i gets reversed in case of bounce-back)
         dvc_df_next[dst_i][dst_idx] = f_new_i;
@@ -199,6 +237,7 @@ void Launch_FullyFusedOperationsComputation(
     float* dvc_u_x,
     float* dvc_u_y,
     const float omega,
+    const float u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS,
     const bool write_rho,
@@ -210,8 +249,8 @@ void Launch_FullyFusedOperationsComputation(
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y, N_CELLS,
-        write_rho, write_u_x, write_u_y);
+        dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
+        N_CELLS, write_rho, write_u_x, write_u_y);
 
     // wait for GPU to finish operations
     cudaDeviceSynchronize();

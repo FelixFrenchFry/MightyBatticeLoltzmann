@@ -28,16 +28,22 @@ int main(int argc, char* argv[])
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1000;
+    uint32_t N_STEPS =  1;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
-    // wavenumber (frequency)
-    float omega = 1.2f;
+    // wavenumber (frequency), lid velocity
+    float omega = 1.7f;
     float rho_0 = 1.0f;
     float u_max = 0.1f;
     float n = 1.0f;
     float k = (2.0f * PI * n) / static_cast<float>(N_Y);
+    float u_lid = 0.1f;
+
+    // data export settings
+    bool write_rho =    true;
+    bool write_u_x =    true;
+    bool write_u_y =    true;
 
     // host-side arrays of 9 pointers to device-side df arrays
     float* df[9];
@@ -96,8 +102,8 @@ int main(int argc, char* argv[])
         // compute densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
-            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS);
+            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid,
+            N_X, N_Y, N_CELLS, write_rho, write_u_x, write_u_y);
 
         std::swap(dvc_df, dvc_df_next);
 
