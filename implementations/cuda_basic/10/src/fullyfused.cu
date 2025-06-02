@@ -79,6 +79,11 @@ __global__ void ComputeFullyFusedOperations_K(
     u_x /= rho;
     u_y /= rho;
 
+    // write final field values back to global memory
+    dvc_rho[idx] = rho;
+    dvc_u_x[idx] = u_x;
+    dvc_u_y[idx] = u_y;
+
     // pre-compute squared velocity and cell coordinates for this thread
     float u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;
@@ -94,8 +99,7 @@ __global__ void ComputeFullyFusedOperations_K(
                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
         // relax df towards equilibrium
-        // TODO: bug in this optimized computation?
-        float f_new_i = dvc_df[i][idx] * (1 - omega) + omega * f_eq_i;
+        float f_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
         // determine index of the destination cell within the SoA
         // (with respect to periodic boundary conditions)

@@ -37,15 +37,14 @@ float* Launch_ComputeVelocityMagnitude_K(
     ComputeVelocityMagnitude_K<<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_u_x, dvc_u_y, dvc_u_mag, N_CELLS);
 
-    // wait for device actions to finish and report potential errors
+    // wait for GPU to finish operations
     cudaDeviceSynchronize();
 
     // debugging helper
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("Kernel '{}' failed at line {}: {}",
-                     __func__, __LINE__, cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA kernel failed: {}", cudaGetErrorString(err));
 
         cudaFree(dvc_u_mag);
         return nullptr;
