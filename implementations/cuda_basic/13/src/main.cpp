@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    float omega = 1.2f;
+    float omega = 1.7f;
     float rho_0 = 1.0f;
     float u_max = 0.1f;
     float n = 3.0f;
@@ -124,18 +124,18 @@ int main(int argc, char* argv[])
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (true && (step == 1 || step % 10000 == 0))
+        if (true && (step == 1 || step % 50000 == 0))
         {
             ExportSimulationData(context,
                 Velocity_X,
                 "13",
-                "F",
+                "G",
                 step);
 
             ExportSimulationData(context,
                 Velocity_Y,
                 "13",
-                "F",
+                "G",
                 step);
         }
     }

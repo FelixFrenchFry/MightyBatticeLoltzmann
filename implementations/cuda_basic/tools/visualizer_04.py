@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # TODO: use quiverplot or streamplot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  100000
+step =  1000000
 N_X =   10000
 N_Y =   10000
 
