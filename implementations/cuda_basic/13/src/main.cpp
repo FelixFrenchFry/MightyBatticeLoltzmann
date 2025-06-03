@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      15000;
+    uint32_t N_X =      10000;
     uint32_t N_Y =      10000;
     uint32_t N_STEPS =  1000000;
     uint32_t N_CELLS =  N_X * N_Y;
@@ -36,18 +36,18 @@ int main(int argc, char* argv[])
     float omega = 1.2f;
     float rho_0 = 1.0f;
     float u_max = 0.1f;
-    float n = 10.0f;
+    float n = 3.0f;
     float k = (2.0f * PI * n) / static_cast<float>(N_Y);
     float u_lid = 0.1f;
 
     // data export settings
-    bool write_rho =    true;
+    bool write_rho =    false;
     bool write_u_x =    true;
     bool write_u_y =    true;
 
     // simulation settings
-    bool shear_wave_decay =     true;
-    bool lid_driven_cavity =    false;
+    bool shear_wave_decay =     false;
+    bool lid_driven_cavity =    true;
 
     // host-side arrays of 9 pointers to device-side df arrays
     float* df[9];
@@ -124,12 +124,18 @@ int main(int argc, char* argv[])
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (true && (step == 1 || step % 100000 == 0))
+        if (true && (step == 1 || step % 10000 == 0))
         {
             ExportSimulationData(context,
                 Velocity_X,
                 "13",
-                "D",
+                "F",
+                step);
+
+            ExportSimulationData(context,
+                Velocity_Y,
+                "13",
+                "F",
                 step);
         }
     }
