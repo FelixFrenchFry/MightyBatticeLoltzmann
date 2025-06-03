@@ -1,5 +1,5 @@
-// CUDA implementation of Lattice-Boltzmann using optimization strategies:
-// - coalesced memory reads
+// CUDA implementation of Lattice-Boltzmann with notable properties:
+// - coalesced memory accesses of df values
 // - shared memory tiles for df values
 // - fully fused density/velocity/collision/streaming kernel (push)
 // - no global write-back of density and velocity values

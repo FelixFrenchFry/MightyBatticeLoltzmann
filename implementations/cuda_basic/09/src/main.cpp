@@ -1,15 +1,15 @@
-// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, shared memory tiling, a fully fused
-// streaming/density/velocity/collision kernel,
-// streaming via pulling data from neighbors instead of pushing to it,
-// tiled 2D shared memory layout with 1-layer halo cells,
-// and fused streaming/density/velocity loop
+// CUDA implementation of Lattice-Boltzmann with notable properties:
+// - coalesced memory accesses of df values
+// - shared memory tiling for df values with 1-layer halo cells (TODO: unfinished, bugs)
+// - fully fused kernel for density/velocity/collision/streaming operations
+// - streaming step via pulling df values from neighbors (instead of pushing)
 
 #include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
+#include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 
@@ -88,6 +88,8 @@ int main(int argc, char* argv[])
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);
 
+    auto start_time = std::chrono::steady_clock::now();
+
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // update densities and velocities, update df_i values based on
@@ -104,6 +106,9 @@ int main(int argc, char* argv[])
             SPDLOG_INFO("--- step {} done ---", step);
         }
     }
+
+    auto end_time = std::chrono::steady_clock::now();
+    DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
 
     // ----- CLEANUP -----
 

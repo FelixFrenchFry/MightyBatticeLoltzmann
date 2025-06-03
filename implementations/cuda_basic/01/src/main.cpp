@@ -1,5 +1,6 @@
-// CUDA implementation of the Lattice-Boltzmann method with basic data
-// structures and kernels, high cache hit rate for kernels looping over data
+// CUDA implementation of Lattice-Boltzmann with notable properties:
+// - sequential, non-coalesced memory reads per thread for high cache hit rates
+// - separate kernels for density, velocity, collision, streaming operations
 
 #include "../../tools/data_export.h"
 #include "simulation.cuh"

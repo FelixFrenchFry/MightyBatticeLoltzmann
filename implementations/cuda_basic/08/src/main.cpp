@@ -1,12 +1,14 @@
-// CUDA implementation of the Lattice-Boltzmann method with fully fused
-// density/velocity/collision/streaming kernel with reduced register usage,
-// and streaming via pulling data from neighbors instead of pushing to it
+// CUDA implementation of Lattice-Boltzmann with notable properties:
+// - coalesced memory accesses of df values
+// - fully fused kernel for density/velocity/collision/streaming operations
+// - streaming step via pulling df values from neighbors (instead of pushing)
 
 #include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
+#include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 
@@ -29,7 +31,7 @@ int main(int argc, char* argv[])
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
-    // (15,000 * 10,000 cells use ~12GB of VRAM)
+    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
     uint32_t N_STEPS =  1;
@@ -85,6 +87,8 @@ int main(int argc, char* argv[])
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);
 
+    auto start_time = std::chrono::steady_clock::now();
+
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // update densities and velocities, update df_i values based on
@@ -101,6 +105,9 @@ int main(int argc, char* argv[])
             SPDLOG_INFO("--- step {} done ---", step);
         }
     }
+
+    auto end_time = std::chrono::steady_clock::now();
+    DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
 
     // ----- CLEANUP -----
 

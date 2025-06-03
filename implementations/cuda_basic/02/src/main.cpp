@@ -1,14 +1,20 @@
-// CUDA implementation of the Lattice-Boltzmann method with coalesced memory
-// accesses, restricted kernel argument pointers, and templated kernel launches
+// CUDA implementation of Lattice-Boltzmann with notable properties:
+// - coalesced memory accesses of df values
+// - separate kernels for density, velocity, collision, streaming operations
+// - separate file for each kernel and its launcher
+// - introduction of __restricted__ pointers and templated kernel arguments
 
 #include "../../tools/data_export.h"
-#include "../src/streaming.cuh"
-#include "../src/velocity.cuh"
+#include "../../tools/utilities.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"
+#include "streaming.cuh"
+#include "velocity.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
+
+
 
 int main(int argc, char* argv[])
 {
@@ -20,10 +26,15 @@ int main(int argc, char* argv[])
 
     constexpr float PI = 3.14159265f;
 
+    // TODO: check important hardware properties
+    cudaDeviceProp props{};
+    cudaGetDeviceProperties(&props, 0);
+    SPDLOG_INFO("GPU: {} (CC: {})", props.name, props.major * 10 + props.minor);
+
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
-    // (15,000 * 10,000 cells use ~12GB of VRAM)
+    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     size_t N_X =        15000;
     size_t N_Y =        10000;
     size_t N_STEPS =    1;
@@ -79,6 +90,8 @@ int main(int argc, char* argv[])
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);
 
+    auto start_time = std::chrono::steady_clock::now();
+
     for (size_t step = 1; step <= N_STEPS; step++)
     {
         // update densities
@@ -106,6 +119,9 @@ int main(int argc, char* argv[])
             SPDLOG_INFO("--- step {} done ---", step);
         }
     }
+
+    auto end_time = std::chrono::steady_clock::now();
+    DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
 
     // ----- CLEANUP -----
 

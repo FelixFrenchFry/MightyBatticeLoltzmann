@@ -1,14 +1,15 @@
-// CUDA implementation of Lattice-Boltzmann using optimization strategies:
+// CUDA implementation of Lattice-Boltzmann with notable properties:
 // - sequential, non-coalesced memory reads per thread for high cache hit rates
-// - shared memory tiles for df values
-// - fully fused density/velocity/collision/streaming kernel (push)
-// - no global write-back of density and velocity values
+// - shared memory tiling for df values
+// - fully fused kernel for density/velocity/collision/streaming operations
+// - no write-back to global memory of density and velocity values
 
 #include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
+#include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 
@@ -58,6 +59,8 @@ int main(int argc, char* argv[])
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
         u_max, k, N_X, N_Y, N_CELLS);
 
+    auto start_time = std::chrono::steady_clock::now();
+
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // update densities and velocities, update df_i values based on
@@ -73,6 +76,9 @@ int main(int argc, char* argv[])
             SPDLOG_INFO("--- step {} done ---", step);
         }
     }
+
+    auto end_time = std::chrono::steady_clock::now();
+    DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
 
     cudaFree(dvc_df);
     cudaFree(dvc_df_next);
