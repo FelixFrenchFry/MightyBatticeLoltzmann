@@ -1,0 +1,5 @@
+// benchmarking
+ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
+ncu --section "Occupancy" --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
+ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
+ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
