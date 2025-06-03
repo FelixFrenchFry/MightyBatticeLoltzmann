@@ -35,7 +35,7 @@ __global__ void ComputeFullyFusedOperations_K(
         df_tile[i][threadIdx.x] = dvc_df[i][idx];
     }
     // wait for data to be fully loaded
-    //__syncthreads();
+    __syncthreads();
 
     // ----- DENSITY COMPUTATION (MANUALLY UNROLLED) -----
 
