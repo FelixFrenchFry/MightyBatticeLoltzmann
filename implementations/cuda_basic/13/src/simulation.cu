@@ -72,12 +72,14 @@ __device__ __forceinline__ void ComputeNeighborIndex_PeriodicBoundary_K(
     uint32_t src_x, uint32_t src_y,
     uint32_t N_X, uint32_t N_Y,
     uint32_t i,
-    uint32_t& dst_idx)
+    uint32_t& dst_idx,
+    uint32_t& dst_i)
 {
     // determine index of the destination neihbor cell
     // (with respect to periodic boundary conditions)
     dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
             + ((src_x + dvc_c_x[i] + N_X) % N_X);
+    dst_i = i;
 }
 
 __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
@@ -220,12 +222,12 @@ __global__ void ComputeFullyFusedOperations_K(
 
         // inlined sub-kernel for the neighbor index
         uint32_t dst_idx, dst_i;
-        ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
+        ComputeNeighborIndex_PeriodicBoundary_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
-        InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i,
-            f_new_i);
+        //InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i,
+        //    f_new_i);
 
         // stream df value df_i to the neighbor in dir i
         // (direction i gets reversed in case of bounce-back)

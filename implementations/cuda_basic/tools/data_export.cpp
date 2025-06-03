@@ -20,7 +20,7 @@ std::string SimulationDataToString(const SimulationData type)
     }
 }
 
-std::string FormatStepSuffix(uint32_t step, uint32_t width = 6)
+std::string FormatStepSuffix(uint32_t step, uint32_t width = 9)
 {
     std::ostringstream oss;
     oss << "_" << std::setw(width) << std::setfill('0') << step;
@@ -76,7 +76,7 @@ void ExportScalarFieldFromDevice(
         file_bin.write(reinterpret_cast<const char*>(buffer.data()), size);
         file_bin.close();
 
-        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".csv");
+        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".bin");
     }
 
     // ----- EXPORT CSV -----

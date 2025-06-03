@@ -1,0 +1,5 @@
+13:
+[14:49:43.625] [utilities.cpp:42] [info] Total execution time:      1662.564 sec
+[14:49:43.625] [utilities.cpp:43] [info] Step execution time:       16.635 ms
+[14:49:43.625] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/100000]
+[14:49:43.625] [utilities.cpp:45] [info] BLUPS:                     9.022

@@ -28,15 +28,15 @@ int main(int argc, char* argv[])
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  1000000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    float omega = 1.7f;
+    float omega = 1.2f;
     float rho_0 = 1.0f;
     float u_max = 0.1f;
-    float n = 1.0f;
+    float n = 10.0f;
     float k = (2.0f * PI * n) / static_cast<float>(N_Y);
     float u_lid = 0.1f;
 
@@ -44,6 +44,10 @@ int main(int argc, char* argv[])
     bool write_rho =    true;
     bool write_u_x =    true;
     bool write_u_y =    true;
+
+    // simulation settings
+    bool shear_wave_decay =     true;
+    bool lid_driven_cavity =    false;
 
     // host-side arrays of 9 pointers to device-side df arrays
     float* df[9];
@@ -91,11 +95,18 @@ int main(int argc, char* argv[])
     DisplayDeviceModel();
     DisplayDeviceMemoryUsage();
 
-    //Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,
-    //    u_max, k, N_X, N_Y, N_CELLS);
+    if (shear_wave_decay)
+    {
+        Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y,
+            rho_0,u_max, k, N_X, N_Y, N_CELLS);
+    }
+    else if (lid_driven_cavity)
+    {
+        Launch_ApplyLidDrivenCavityCondition_K(dvc_df, dvc_rho, dvc_u_x,
+            dvc_u_y, rho_0, N_CELLS);
+    }
 
-    Launch_ApplyLidDrivenCavityCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y,
-        rho_0, N_CELLS);
+    auto start_time = std::chrono::steady_clock::now();
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
@@ -107,21 +118,24 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 100 == 0)
+        if (step == 1 || step % 1000 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (false && (step == 1 || step % 1000 == 0))
+        if (true && (step == 1 || step % 100000 == 0))
         {
             ExportSimulationData(context,
-                VelocityMagnitude,
-                "05",
-                "A",
+                Velocity_X,
+                "13",
+                "D",
                 step);
         }
     }
+
+    auto end_time = std::chrono::steady_clock::now();
+    DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
 
     // cleanup
     for (uint32_t i = 0; i < 9; i++)
