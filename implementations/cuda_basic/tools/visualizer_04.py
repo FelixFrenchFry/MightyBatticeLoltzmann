@@ -8,16 +8,16 @@ import matplotlib.pyplot as plt
 # TODO: use quiverplot or streamplot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  1000000
-N_X =   10000
-N_Y =   10000
+step =  1600000
+N_X =   3000
+N_Y =   3000
 
 # output path config
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
 versionDirName =    "13"
-subDirName =        "F"
+subDirName =        "H"
 
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"

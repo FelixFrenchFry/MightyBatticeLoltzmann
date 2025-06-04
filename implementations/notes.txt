@@ -15,3 +15,9 @@
 [23:18:49.125] [utilities.cpp:43] [info] Step execution time:       10.896 ms
 [23:18:49.125] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/10000/1000000]
 [23:18:49.125] [utilities.cpp:45] [info] BLUPS:                     9.178
+
+// cuda_basic_13 - 5070 Ti - lid driven cavity:
+[02:19:28.548] [utilities.cpp:42] [info] Total execution time:      10529.806 sec
+[02:19:28.548] [utilities.cpp:43] [info] Step execution time:       10.530 ms
+[02:19:28.548] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/10000/1000000]
+[02:19:28.548] [utilities.cpp:45] [info] BLUPS:                     9.497
