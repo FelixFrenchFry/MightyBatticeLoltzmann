@@ -10,15 +10,16 @@ import matplotlib.pyplot as plt
 #steps = [1, 25000, 50000, 75000, 100000, 125000, 150000, 175000, 200000,
 #         225000, 250000, 275000, 300000, 325000, 350000, 375000, 400000]
 #steps = [1, 1000, 2000, 3000, 4000, 5000, 6000]
-steps = [1, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
-N_X =   15000
-N_Y =   10000
+#steps = [1, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
+steps = [1, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000]
+N_X =   10000
+N_Y =   15000
 
 # output path config
 dataType =          "velocity_x"
 outputDirName =     "output"
 versionDirName =    "13"
-subDirName =        "D"
+subDirName =        "L"
 
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
@@ -38,7 +39,7 @@ for step in steps:
     profiles.append(u_x_y)
 
 # plot decay over time
-plt.figure(figsize=(8, 4))
+plt.figure(figsize=(8, 8))
 for i, profile in enumerate(profiles):
     label = f"Step {steps[i]}"
     plt.plot(profile, label=label)

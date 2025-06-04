@@ -9,15 +9,16 @@ import matplotlib.pyplot as plt
 # simulation config
 #steps = [1, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000]
 #steps = [1, 1000, 2000, 3000, 4000, 5000, 6000]
-steps = [1, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
-N_X =   15000
-N_Y =   10000
+#steps = [1, 100000, 200000, 300000, 400000, 500000, 600000, 700000, 800000, 900000, 1000000]
+steps = [1, 5000, 10000, 15000, 20000, 25000, 30000, 35000, 40000, 45000, 50000]
+N_X =   10000
+N_Y =   15000
 
 # output path config
 dataType =          "velocity_x"
 outputDirName =     "output"
 versionDirName =    "13"
-subDirName =        "D"
+subDirName =        "L"
 
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
@@ -47,7 +48,7 @@ for i, step in enumerate(steps):
     data = all_data[i]
 
     # plot settings
-    plt.figure(figsize=(8, 4))
+    plt.figure(figsize=(8, 8))
     plt.imshow(data, origin='lower', cmap="seismic", vmin=u_min, vmax=u_max)
     plt.colorbar(label="velocity x")
     plt.title(f"X-velocity field (u_x) at {step}")
