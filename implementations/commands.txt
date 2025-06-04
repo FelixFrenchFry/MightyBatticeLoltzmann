@@ -3,3 +3,7 @@ ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./cuda_
 ncu --section "Occupancy" --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
 ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
 ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./cuda_basic_XY
+
+// building
+meson setup buildDir --wipe --buildtype=debug
+ninja -C buildDir implementations/cuda_basic/cuda_basic_XY

@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      1000;
+    uint32_t N_X =      3000;
     uint32_t N_Y =      1000;
     uint32_t N_STEPS =  3000000;
     uint32_t N_CELLS =  N_X * N_Y;
@@ -124,18 +124,18 @@ int main(int argc, char* argv[])
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (true && (step == 1 || step % 100000 == 0))
+        if (true && (step == 1 || step % 500000 == 0))
         {
             ExportSimulationData(context,
                 Velocity_X,
                 "13",
-                "I",
+                "J",
                 step);
 
             ExportSimulationData(context,
                 Velocity_Y,
                 "13",
-                "I",
+                "J",
                 step);
         }
     }
