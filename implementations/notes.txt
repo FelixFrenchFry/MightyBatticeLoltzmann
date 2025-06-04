@@ -1,47 +1,155 @@
-// cuda_basic_13 - 5070 Ti - shear wave decay:
+====================================================================================================
+5070 Ti x1
+====================================================================================================
+// cuda_basic_13 - shear wave decay:
 [14:49:43.625] [utilities.cpp:42] [info] Total execution time:      1662.564 sec
 [14:49:43.625] [utilities.cpp:43] [info] Step execution time:       16.635 ms
 [14:49:43.625] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/100000]
 [14:49:43.625] [utilities.cpp:45] [info] BLUPS:                     9.022
 
-// cuda_basic_13 - 5070 Ti - shear wave decay:
+// cuda_basic_13 - shear wave decay:
 [19:53:28.491] [utilities.cpp:42] [info] Total execution time:      17178.827 sec
 [19:53:28.491] [utilities.cpp:43] [info] Step execution time:       17.188 ms
 [19:53:28.491] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/1000000]
 [19:53:28.491] [utilities.cpp:45] [info] BLUPS:                     8.731
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [23:18:49.125] [utilities.cpp:42] [info] Total execution time:      10895.866 sec
 [23:18:49.125] [utilities.cpp:43] [info] Step execution time:       10.896 ms
 [23:18:49.125] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/10000/1000000]
 [23:18:49.125] [utilities.cpp:45] [info] BLUPS:                     9.178
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [02:19:28.548] [utilities.cpp:42] [info] Total execution time:      10529.806 sec
 [02:19:28.548] [utilities.cpp:43] [info] Step execution time:       10.530 ms
 [02:19:28.548] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/10000/1000000]
 [02:19:28.548] [utilities.cpp:45] [info] BLUPS:                     9.497
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [06:42:10.976] [utilities.cpp:42] [info] Total execution time:      387.959 sec
 [06:42:10.976] [utilities.cpp:43] [info] Step execution time:       0.129 ms
 [06:42:10.976] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [1000/1000/3000000]
 [06:42:10.976] [utilities.cpp:45] [info] BLUPS:                     7.733
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [07:02:21.441] [utilities.cpp:42] [info] Total execution time:      1019.489 sec
 [07:02:21.441] [utilities.cpp:43] [info] Step execution time:       0.340 ms
 [07:02:21.441] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [3000/1000/3000000]
 [07:02:21.441] [utilities.cpp:45] [info] BLUPS:                     8.828
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [07:26:00.897] [utilities.cpp:42] [info] Total execution time:      674.625 sec
 [07:26:00.897] [utilities.cpp:43] [info] Step execution time:       0.337 ms
 [07:26:00.897] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [3000/1000/2000000]
 [07:26:00.897] [utilities.cpp:45] [info] BLUPS:                     8.894
 
-// cuda_basic_13 - 5070 Ti - lid driven cavity:
+// cuda_basic_13 - lid driven cavity:
 [07:40:41.310] [utilities.cpp:42] [info] Total execution time:      690.616 sec
 [07:40:41.310] [utilities.cpp:43] [info] Step execution time:       0.345 ms
 [07:40:41.310] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [1000/3000/2000000]
 [07:40:41.310] [utilities.cpp:45] [info] BLUPS:                     8.688
+
+====================================================================================================
+A100 x1
+====================================================================================================
+// cuda_basic_13 - shear wave decay:
+[12:26:15.978] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[12:26:15.978] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 12.212 / 67.039 GB
+[12:27:41.333] [utilities.cpp:42] [info] Total execution time:      85.350 sec
+[12:27:41.333] [utilities.cpp:43] [info] Step execution time:       8.535 ms
+[12:27:41.333] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/10000]
+[12:27:41.333] [utilities.cpp:45] [info] BLUPS:                     17.575
+
+// cuda_basic_13 - shear wave decay:
+[12:07:05.486] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[12:07:05.486] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 23.943 / 55.309 GB
+[12:09:55.962] [utilities.cpp:42] [info] Total execution time:      170.468 sec
+[12:09:55.962] [utilities.cpp:43] [info] Step execution time:       17.047 ms
+[12:09:55.962] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/10000/10000]
+[12:09:55.962] [utilities.cpp:45] [info] BLUPS:                     17.599
+
+// cuda_basic_13 - shear wave decay:
+[12:24:09.536] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[12:24:09.536] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 63.031 / 16.221 GB
+[12:24:58.528] [utilities.cpp:42] [info] Total execution time:      48.970 sec
+[12:24:58.528] [utilities.cpp:43] [info] Step execution time:       48.970 ms
+[12:24:58.528] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [40000/20000/1000]
+[12:24:58.528] [utilities.cpp:45] [info] BLUPS:                     16.337
+
+// cuda_basic_13 - shear wave decay:
+[12:12:00.797] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[12:12:00.797] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 47.404 / 31.848 GB
+[12:17:43.883] [utilities.cpp:42] [info] Total execution time:      343.070 sec
+[12:17:43.883] [utilities.cpp:43] [info] Step execution time:       34.307 ms
+[12:17:43.883] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/20000/10000]
+[12:17:43.883] [utilities.cpp:45] [info] BLUPS:                     17.489
+
+// ncu --section "Occupancy" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Block Limit SM                        block           32
+    Block Limit Registers                 block            4
+    Block Limit Shared Mem                block           32
+    Block Limit Warps                     block            8
+    Theoretical Active Warps per SM        warp           32
+    Theoretical Occupancy                     %           50
+    Achieved Occupancy                        %        43.13
+    Achieved Active Warps Per SM           warp        27.60
+    ------------------------------- ----------- ------------
+
+// ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- -------------
+    Metric Name             Metric Unit  Metric Value
+    ----------------------- ----------- -------------
+    DRAM Frequency                  Ghz          1.51
+    SM Frequency                    Ghz          1.06
+    Elapsed Cycles                cycle    36,505,618
+    Memory Throughput                 %         72.37
+    DRAM Throughput                   %         72.37
+    Duration                         ms         34.28
+    L1/TEX Cache Throughput           %         33.86
+    L2 Cache Throughput               %         79.60
+    SM Active Cycles              cycle 36,439,870.47
+    Compute (SM) Throughput           %         55.10
+    ----------------------- ----------- -------------
+
+// ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Memory Workload Analysis
+    --------------------------- ----------- ------------
+    Metric Name                 Metric Unit Metric Value
+    --------------------------- ----------- ------------
+    Memory Throughput               Tbyte/s         1.39
+    Mem Busy                              %        38.82
+    Max Bandwidth                         %        71.80
+    L1/TEX Hit Rate                       %        44.32
+    L2 Compression Success Rate           %            0
+    L2 Compression Ratio                               0
+    L2 Hit Rate                           %        69.13
+    Mem Pipes Busy                        %        22.69
+    --------------------------- ----------- ------------
+// ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Command line profiler metrics
+    ---------------------------- --------------- ------------
+    Metric Name                      Metric Unit Metric Value
+    ---------------------------- --------------- ------------
+    launch__registers_per_thread register/thread           56
+    ---------------------------- --------------- ------------
+
+// cuda_basic_13 - shear wave decay:
+[14:05:33.999] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[14:05:33.999] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 63.031 / 16.221 GB
+[14:28:04.001] [utilities.cpp:42] [info] Total execution time:      1349.980 sec
+[14:28:04.001] [utilities.cpp:43] [info] Step execution time:       44.999 ms
+[14:28:04.001] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/80000/30000]
+[14:28:04.001] [utilities.cpp:45] [info] BLUPS:                     17.778
+
+====================================================================================================
+H100 x1
+====================================================================================================
