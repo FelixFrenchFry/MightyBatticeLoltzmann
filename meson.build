@@ -10,8 +10,10 @@ project(
         'cuda_args=' + ' '.join([
             '--std=c++17',
             '-ccbin', '/usr/bin/g++',
+            '-gencode', 'arch=compute_61,code=sm_61', # RTX 10s
+            '-gencode', 'arch=compute_70,code=sm_70', # V100
             '-gencode', 'arch=compute_75,code=sm_75', # RTX 20s
-            '-gencode', 'arch=compute_80,code=sm_80', # A30, A100
+            '-gencode', 'arch=compute_80,code=sm_80', # A100, A30
             '-gencode', 'arch=compute_86,code=sm_86', # A40, RTX 30s
             '-gencode', 'arch=compute_89,code=sm_89', # RTX 40s
             '-gencode', 'arch=compute_90,code=sm_90', # H100, H200
