@@ -84,7 +84,6 @@ A100 x1
 [12:17:43.883] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/20000/10000]
 [12:17:43.883] [utilities.cpp:45] [info] BLUPS:                     17.489
 
-// ncu --section "Occupancy" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
 void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
     Section: Occupancy
     ------------------------------- ----------- ------------
@@ -100,7 +99,6 @@ void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *,
     Achieved Active Warps Per SM           warp        27.60
     ------------------------------- ----------- ------------
 
-// ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
 void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
     Section: GPU Speed Of Light Throughput
     ----------------------- ----------- -------------
@@ -118,7 +116,6 @@ void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *,
     Compute (SM) Throughput           %         55.10
     ----------------------- ----------- -------------
 
-// ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
 void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
     Section: Memory Workload Analysis
     --------------------------- ----------- ------------
@@ -133,7 +130,7 @@ void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *,
     L2 Hit Rate                           %        69.13
     Mem Pipes Busy                        %        22.69
     --------------------------- ----------- ------------
-// ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_13
+
 void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (2343750, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
     Section: Command line profiler metrics
     ---------------------------- --------------- ------------
@@ -150,6 +147,184 @@ void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *,
 [14:28:04.001] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [10000/80000/30000]
 [14:28:04.001] [utilities.cpp:45] [info] BLUPS:                     17.778
 
+// cuda_basic_13 - shear wave decay:
+[14:44:32.822] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[14:44:32.822] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 12.212 / 67.039 GB
+[14:45:54.816] [utilities.cpp:42] [info] Total execution time:      81.989 sec
+[14:45:54.816] [utilities.cpp:43] [info] Step execution time:       8.199 ms
+[14:45:54.816] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/10000]
+[14:45:54.816] [utilities.cpp:45] [info] BLUPS:                     18.295
+
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Block Limit SM                        block           32
+    Block Limit Registers                 block            4
+    Block Limit Shared Mem                block           32
+    Block Limit Warps                     block            8
+    Theoretical Active Warps per SM        warp           32
+    Theoretical Occupancy                     %           50
+    Achieved Occupancy                        %        43.21
+    Achieved Active Warps Per SM           warp        27.65
+    ------------------------------- ----------- ------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- ------------
+    Metric Name             Metric Unit Metric Value
+    ----------------------- ----------- ------------
+    DRAM Frequency                  Ghz         1.51
+    SM Frequency                    Ghz         1.06
+    Elapsed Cycles                cycle    8,976,908
+    Memory Throughput                 %        73.52
+    DRAM Throughput                   %        73.52
+    Duration                         ms         8.43
+    L1/TEX Cache Throughput           %        34.36
+    L2 Cache Throughput               %        80.28
+    SM Active Cycles              cycle 8,972,018.38
+    Compute (SM) Throughput           %        55.89
+    ----------------------- ----------- ------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Memory Workload Analysis
+    --------------------------- ----------- ------------
+    Metric Name                 Metric Unit Metric Value
+    --------------------------- ----------- ------------
+    Memory Throughput               Tbyte/s         1.41
+    Mem Busy                              %        39.48
+    Max Bandwidth                         %        72.91
+    L1/TEX Hit Rate                       %        44.14
+    L2 Compression Success Rate           %            0
+    L2 Compression Ratio                               0
+    L2 Hit Rate                           %        69.16
+    Mem Pipes Busy                        %        23.05
+    --------------------------- ----------- ------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const float *const *, float *const *, float *, float *, float *, float, float, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Command line profiler metrics
+    ---------------------------- --------------- ------------
+    Metric Name                      Metric Unit Metric Value
+    ---------------------------- --------------- ------------
+    launch__registers_per_thread register/thread           56
+    ---------------------------- --------------- ------------
+
+// cuda_basic_14 - shear wave decay:
+[14:40:00.154] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[14:40:00.156] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 23.943 / 55.309 GB
+[14:42:39.538] [utilities.cpp:42] [info] Total execution time:      159.373 sec
+[14:42:39.538] [utilities.cpp:43] [info] Step execution time:       15.937 ms
+[14:42:39.538] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/10000]
+[14:42:39.538] [utilities.cpp:45] [info] BLUPS:                     9.412
+
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Block Limit SM                        block           32
+    Block Limit Registers                 block            4
+    Block Limit Shared Mem                block           32
+    Block Limit Warps                     block            8
+    Theoretical Active Warps per SM        warp           32
+    Theoretical Occupancy                     %           50
+    Achieved Occupancy                        %        44.09
+    Achieved Active Warps Per SM           warp        28.22
+    ------------------------------- ----------- ------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- -------------
+    Metric Name             Metric Unit  Metric Value
+    ----------------------- ----------- -------------
+    DRAM Frequency                  Ghz          1.51
+    SM Frequency                    Ghz          1.06
+    Elapsed Cycles                cycle    17,228,554
+    Memory Throughput                 %         77.76
+    DRAM Throughput                   %         77.76
+    Duration                         ms         16.18
+    L1/TEX Cache Throughput           %         29.80
+    L2 Cache Throughput               %         79.35
+    SM Active Cycles              cycle 17,219,461.74
+    Compute (SM) Throughput           %         33.73
+    ----------------------- ----------- -------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Memory Workload Analysis
+    --------------------------- ----------- ------------
+    Metric Name                 Metric Unit Metric Value
+    --------------------------- ----------- ------------
+    Memory Throughput               Tbyte/s         1.51
+    Mem Busy                              %        43.55
+    Max Bandwidth                         %        77.84
+    L1/TEX Hit Rate                       %        24.85
+    L2 Compression Success Rate           %            0
+    L2 Compression Ratio                               0
+    L2 Hit Rate                           %        69.52
+    Mem Pipes Busy                        %        12.12
+    --------------------------- ----------- ------------
+
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (585938, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 8.0
+    Section: Command line profiler metrics
+    ---------------------------- --------------- ------------
+    Metric Name                      Metric Unit Metric Value
+    ---------------------------- --------------- ------------
+    launch__registers_per_thread register/thread           56
+    ---------------------------- --------------- ------------
+
+// cuda_basic_14 - lid driven cavity:
+[15:08:58.012] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[15:08:58.012] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 23.943 / 55.309 GB
+[15:09:14.049] [utilities.cpp:42] [info] Total execution time:      16.029 sec
+[15:09:14.049] [utilities.cpp:43] [info] Step execution time:       16.029 ms
+[15:09:14.049] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/1000]
+[15:09:14.049] [utilities.cpp:45] [info] BLUPS:                     9.358
+
+// cuda_basic_14 - shear wave decay:
+[14:59:17.987] [utilities.cpp:10] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[14:59:17.987] [utilities.cpp:23] [info] Memory usage [total/used/free]: 79.252 / 47.404 / 31.848 GB
+[15:04:38.096] [utilities.cpp:42] [info] Total execution time:      320.091 sec
+[15:04:38.096] [utilities.cpp:43] [info] Step execution time:       32.009 ms
+[15:04:38.096] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/10000/10000]
+[15:04:38.096] [utilities.cpp:45] [info] BLUPS:                     9.372
+
 ====================================================================================================
 H100 x1
 ====================================================================================================
+
+// cuda_basic_14 - lid driven cavity:
+[15:31:08.559] [utilities.cpp:10] [info] GPU: NVIDIA H100 (CC: 90)
+[15:31:08.559] [utilities.cpp:23] [info] Memory usage [total/used/free]: 93.096 / 47.505 / 45.592 GB
+[15:35:08.496] [utilities.cpp:42] [info] Total execution time:      239.925 sec
+[15:35:08.496] [utilities.cpp:43] [info] Step execution time:       23.992 ms
+[15:35:08.496] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/10000/10000]
+[15:35:08.496] [utilities.cpp:45] [info] BLUPS:                     12.504
+
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (1171875, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 9.0
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Max Active Clusters                 cluster            0
+    Max Cluster Size                      block            8
+    Overall GPU Occupancy                     %            0
+    Cluster Occupancy                         %            0
+    Block Limit Barriers                  block           32
+    Block Limit SM                        block           32
+    Block Limit Registers                 block            4
+    Block Limit Shared Mem                block           32
+    Block Limit Warps                     block            8
+    Theoretical Active Warps per SM        warp           32
+    Theoretical Occupancy                     %           50
+    Achieved Occupancy                        %        42.73
+    Achieved Active Warps Per SM           warp        27.35
+    ------------------------------- ----------- ------------
+
+// cuda_basic_14 - lid driven cavity:
+[15:36:50.354] [utilities.cpp:10] [info] GPU: NVIDIA H100 (CC: 90)
+[15:36:50.354] [utilities.cpp:23] [info] Memory usage [total/used/free]: 93.096 / 85.034 / 8.062 GB
+[15:37:34.262] [utilities.cpp:42] [info] Total execution time:      43.886 sec
+[15:37:34.262] [utilities.cpp:43] [info] Step execution time:       43.886 ms
+[15:37:34.262] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [30000/18000/1000]
+[15:37:34.262] [utilities.cpp:45] [info] BLUPS:                     12.305

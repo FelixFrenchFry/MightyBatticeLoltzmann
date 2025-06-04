@@ -1,10 +1,11 @@
 // benchmarking
-ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
 ncu --section "Occupancy" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
+ncu --section SpeedOfLight --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
 ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
 ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
 
 // building
+module load toolkit/nvidia-hpc-sdk/25.1
 export CC=gcc
 export CXX=g++
 meson setup buildDir --wipe --buildtype=debug
