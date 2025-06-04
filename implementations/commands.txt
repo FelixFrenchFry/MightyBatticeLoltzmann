@@ -7,3 +7,4 @@ ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOpera
 // building
 meson setup buildDir --wipe --buildtype=debug
 ninja -C buildDir implementations/cuda_basic/cuda_basic_XY
+./buildDir/implementations/cuda_basic/cuda_basic_13

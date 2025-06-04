@@ -9,20 +9,20 @@ project(
         # potentially used to run the executable
         'cuda_args=' + ' '.join([
             '--std=c++17',
-            '-ccbin', '/usr/bin/g++-12',
+            '-ccbin', '/usr/bin/g++',
             '-gencode', 'arch=compute_75,code=sm_75', # RTX 20s
             '-gencode', 'arch=compute_80,code=sm_80', # A30, A100
             '-gencode', 'arch=compute_86,code=sm_86', # A40, RTX 30s
             '-gencode', 'arch=compute_89,code=sm_89', # RTX 40s
-            '-gencode', 'arch=compute_90,code=sm_90'])] # H100, H200
-            #'-gencode', 'arch=compute_100,code=sm_100', # B200, GB200
-            #'-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
+            '-gencode', 'arch=compute_90,code=sm_90', # H100, H200
+            '-gencode', 'arch=compute_100,code=sm_100', # B200, GB200
+            '-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
 )
 
 add_project_arguments('--std=c++17', language: ['cpp', 'cuda'])
 
-#cuda_include = include_directories('/usr/local/cuda/include')
-cuda_include = dependency('cuda', required: true)
+cuda_include = include_directories('/usr/local/cuda/include')
+#cuda_include = include_directories('/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/include')
 
 # addresssanitizer flags for detecting runtime memory errors
 # add_project_arguments('-fsanitize=address', language: ['c', 'cpp', 'cuda'])
