@@ -33,3 +33,15 @@
 [07:02:21.441] [utilities.cpp:43] [info] Step execution time:       0.340 ms
 [07:02:21.441] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [3000/1000/3000000]
 [07:02:21.441] [utilities.cpp:45] [info] BLUPS:                     8.828
+
+// cuda_basic_13 - 5070 Ti - lid driven cavity:
+[07:26:00.897] [utilities.cpp:42] [info] Total execution time:      674.625 sec
+[07:26:00.897] [utilities.cpp:43] [info] Step execution time:       0.337 ms
+[07:26:00.897] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [3000/1000/2000000]
+[07:26:00.897] [utilities.cpp:45] [info] BLUPS:                     8.894
+
+// cuda_basic_13 - 5070 Ti - lid driven cavity:
+[07:40:41.310] [utilities.cpp:42] [info] Total execution time:      690.616 sec
+[07:40:41.310] [utilities.cpp:43] [info] Step execution time:       0.345 ms
+[07:40:41.310] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [1000/3000/2000000]
+[07:40:41.310] [utilities.cpp:45] [info] BLUPS:                     8.688
