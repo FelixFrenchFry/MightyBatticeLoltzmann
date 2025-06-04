@@ -321,6 +321,23 @@ void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const 
     Achieved Active Warps Per SM           warp        27.35
     ------------------------------- ----------- ------------
 
+void ComputeFullyFusedOperations_K<9, 256>(const double *const *, double *const *, double *, double *, double *, double, double, unsigned int, unsigned int, unsigned int, bool, bool, bool) (1171875, 1, 1)x(256, 1, 1), Context 1, Stream 7, Device 0, CC 9.0
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ----------- -------------
+    Metric Name             Metric Unit  Metric Value
+    ----------------------- ----------- -------------
+    DRAM Frequency                  Ghz          1.59
+    SM Frequency                    Ghz          1.62
+    Elapsed Cycles                cycle    38,852,241
+    Memory Throughput                 %         82.97
+    DRAM Throughput                   %         82.97
+    Duration                         ms         23.98
+    L1/TEX Cache Throughput           %         22.10
+    L2 Cache Throughput               %         54.62
+    SM Active Cycles              cycle 38,814,933.80
+    Compute (SM) Throughput           %         32.90
+    ----------------------- ----------- -------------
+
 // cuda_basic_14 - lid driven cavity:
 [15:36:50.354] [utilities.cpp:10] [info] GPU: NVIDIA H100 (CC: 90)
 [15:36:50.354] [utilities.cpp:23] [info] Memory usage [total/used/free]: 93.096 / 85.034 / 8.062 GB
