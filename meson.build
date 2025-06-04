@@ -4,12 +4,11 @@ project(
     ['c', 'cpp', 'cuda'],
     version : '0.1',
     default_options : [
-        'cpp_std=c++17', # TODO: use C++20 instead?
-        'cuda_std=c++17',
         'warning_level=3',
         # compile specifically for each CUDA architecture
         # potentially used to run the executable
         'cuda_args=' + ' '.join([
+            '--std=c++17',
             '-ccbin', '/usr/bin/g++-12',
             '-gencode', 'arch=compute_75,code=sm_75', # RTX 20s
             '-gencode', 'arch=compute_80,code=sm_80', # A30, A100
@@ -19,6 +18,8 @@ project(
             '-gencode', 'arch=compute_100,code=sm_100', # B200, GB200
             '-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
 )
+
+add_project_arguments('--std=c++17', language: ['cpp', 'cuda'])
 
 cuda_include = include_directories('/usr/local/cuda/include')
 
