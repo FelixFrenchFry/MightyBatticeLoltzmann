@@ -5,6 +5,7 @@
 // - no global write-back of density and velocity values
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
+// - double precision distribution function, density, velocity values
 
 #include "../../tools/data_export.h"
 #include "../../tools/utilities.h"
@@ -22,23 +23,23 @@ int main(int argc, char* argv[])
     // [hour:min:sec.ms] [file.cpp:line] [type] [message]
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
 
-    constexpr float PI = 3.14159265f;
+    constexpr double PI = 3.141592653589793;
 
     // grid width, height, number of simulation steps, number of grid cells
-    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
+    // (168 bytes per cell -> 15,000 * 5,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  10000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    float omega = 1.2f;
-    float rho_0 = 1.0f;
-    float u_max = 0.1f;
-    float n = 3.0f;
-    float k = (2.0f * PI * n) / static_cast<float>(N_Y);
-    float u_lid = 0.1f;
+    double omega = 1.2;
+    double rho_0 = 1.0;
+    double u_max = 0.1;
+    double n = 3.0;
+    double k = (2.0 * PI * n) / static_cast<double>(N_Y);
+    double u_lid = 0.1;
 
     // data export settings
     bool write_rho =    false;
@@ -50,40 +51,41 @@ int main(int argc, char* argv[])
     bool lid_driven_cavity =    false;
 
     // host-side arrays of 9 pointers to device-side df arrays
-    float* df[9];
-    float* df_next[9];
+    double* df[9];
+    double* df_next[9];
 
     // for each dir i, allocate 1D array of size N_CELLS on the device
     for (uint32_t i = 0; i < 9; i++)
     {
-        cudaMalloc(&df[i], N_CELLS * sizeof(float));
-        cudaMalloc(&df_next[i], N_CELLS * sizeof(float));
+        cudaMalloc(&df[i], N_CELLS * sizeof(double));
+        cudaMalloc(&df_next[i], N_CELLS * sizeof(double));
     }
 
     // device-side arrays of 9 pointers to device-side df arrays
     // (used as a device-side handle for the SoA data)
-    float** dvc_df;
-    float** dvc_df_next;
-    cudaMalloc(&dvc_df, 9 * sizeof(float*));
-    cudaMalloc(&dvc_df_next, 9 * sizeof(float*));
+    double** dvc_df;
+    double** dvc_df_next;
+    cudaMalloc(&dvc_df, 9 * sizeof(double*));
+    cudaMalloc(&dvc_df_next, 9 * sizeof(double*));
 
     // copy the contents of the host-side handles to the device-side handles
     // (because apparently CUDA does not support directly passing an array of pointers)
-    cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df, df, 9 * sizeof(double*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(double*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
-    float* dvc_rho;
-    float* dvc_u_x;
-    float* dvc_u_y;
+    double* dvc_rho;
+    double* dvc_u_x;
+    double* dvc_u_y;
 
     // for each array, allocate memory of size N_CELLS on the device
-    cudaMalloc(&dvc_rho, N_CELLS * sizeof(float));
-    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
-    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
+    cudaMalloc(&dvc_rho, N_CELLS * sizeof(double));
+    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(double));
+    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(double));
 
     // collect buffers and other data for export context
     SimulationExportContext context;
+    /* TODO: switch to double
     context.dvc_df = dvc_df;
     context.dvc_df_next = dvc_df_next;
     context.dvc_rho = dvc_rho;
@@ -91,6 +93,7 @@ int main(int argc, char* argv[])
     context.dvc_u_y = dvc_u_y;
     context.N_X = N_X;
     context.N_Y = N_Y;
+    */
 
     DisplayDeviceModel();
     DisplayDeviceMemoryUsage();
@@ -118,13 +121,13 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 1000 == 0)
+        if (step == 1 || step % 100 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (true && (step == 1 || step % 5000 == 0))
+        if (false && (step == 1 || step % 5000 == 0))
         {
             ExportSimulationData(context,
                 Velocity_X,

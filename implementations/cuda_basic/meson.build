@@ -175,3 +175,16 @@ executable(
     link_with : [lib],
     dependencies : [spdlog]
 )
+
+executable(
+    'cuda_basic_14',
+    ['14/src/main.cpp',
+     '14/src/simulation.cu',
+     '14/src/initialization.cu',
+     'tools/data_export.cpp',
+     'tools/data_processing.cu',
+     'tools/utilities.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog]
+)
