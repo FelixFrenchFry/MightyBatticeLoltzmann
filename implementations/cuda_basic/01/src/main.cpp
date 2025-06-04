@@ -2,7 +2,7 @@
 // - sequential, non-coalesced memory reads per thread for high cache hit rates
 // - separate kernels for density, velocity, collision, streaming operations
 
-#include "../../tools/data_export.h"
+#include "../../tools_fp32/data_export.h"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>

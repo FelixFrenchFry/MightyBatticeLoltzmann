@@ -7,8 +7,8 @@
 // - lid-driven cavity with bounce-back boundary conditions
 // - double precision distribution function, density, velocity values
 
-#include "../../tools/data_export.h"
-#include "../../tools/utilities.h"
+#include "../../tools_fp64/data_export.h"
+#include "../../tools_fp64/utilities.h"
 #include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>

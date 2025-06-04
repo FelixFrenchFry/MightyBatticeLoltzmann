@@ -6,8 +6,8 @@
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
 
-#include "../../tools/data_export.h"
-#include "../../tools/utilities.h"
+#include "../../tools_fp32/data_export.h"
+#include "../../tools_fp32/utilities.h"
 #include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>

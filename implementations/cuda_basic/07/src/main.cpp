@@ -4,8 +4,8 @@
 // - fully fused kernel for density/velocity/collision/streaming operations
 // - explicitly unrolled loops, combined with manually optimized computations
 
-#include "../../tools/data_export.h"
-#include "../../tools/utilities.h"
+#include "../../tools_fp32/data_export.h"
+#include "../../tools_fp32/utilities.h"
 #include "config.cuh"
 #include "fullyfused.cuh"
 #include "initialization.cuh"

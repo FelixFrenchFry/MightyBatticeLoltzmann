@@ -3,8 +3,8 @@
 // - shared memory tiling for df values
 // - fully fused kernel for density/velocity/collision/streaming operations
 
-#include "../../tools/data_export.h"
-#include "../../tools/utilities.h"
+#include "../../tools_fp32/data_export.h"
+#include "../../tools_fp32/utilities.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
