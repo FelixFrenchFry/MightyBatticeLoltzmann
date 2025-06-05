@@ -5,9 +5,14 @@ ncu --section "MemoryWorkloadAnalysis" --kernel-name "ComputeFullyFusedOperation
 ncu --metrics launch__registers_per_thread --kernel-name "ComputeFullyFusedOperations_K" ./buildDir/implementations/cuda_basic/cuda_basic_XY
 
 // building
+sinfo_t_idle
+salloc --partition=dev_gpu_a100_il --gpus-per-node=1 --time=30
+module avail
 module load toolkit/nvidia-hpc-sdk/25.1
 export CC=gcc
 export CXX=g++
-meson setup buildDir --wipe --buildtype=debug
+
+meson setup buildDir --wipe --buildtype=release
+vim implementations/cuda_basic/XY/src/main.cpp
 ninja -C buildDir implementations/cuda_basic/cuda_basic_XY
-./buildDir/implementations/cuda_basic/cuda_basic_13
+./buildDir/implementations/cuda_basic/cuda_basic_XY
