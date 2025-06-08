@@ -1,23 +1,24 @@
 #pragma once
+#include "../../tools/config.cuh"
 #include <cstdint>
 
 
 
 void Launch_ApplyShearWaveCondition_K(
-    double* const* dvc_df,
-    double* dvc_rho,
-    double* dvc_u_x,
-    double* dvc_u_y,
-    const double rho_0,
-    const double u_max,
-    const double k,
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
+    const FP u_max,
+    const FP k,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS);
 
 void Launch_ApplyLidDrivenCavityCondition_K(
-    double* const* dvc_df,
-    double* dvc_rho,
-    double* dvc_u_x,
-    double* dvc_u_y,
-    const double rho_0,
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
     const uint32_t N_CELLS);

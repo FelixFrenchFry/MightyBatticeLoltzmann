@@ -3,8 +3,9 @@
 // - shared memory tiling for various values
 // - fused kernels for density/velocity and collision/streaming operations
 
-#include "../../tools_fp32/data_export.h"
-#include "../../tools_fp32/utilities.h"
+#include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "collision_streaming.cuh"
 #include "density_velocity.cuh"
 #include "initialization.cuh"

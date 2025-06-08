@@ -4,15 +4,26 @@
 // - shared memory tiling for df values
 // - fully fused kernel for density/velocity/collision/streaming operations
 
-#include "../../tools_fp32/data_export.h"
-#include "../../tools_fp32/utilities.h"
-#include "config.cuh"
+#include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "fullyfused.cuh"
 #include "initialization.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
 
 
+
+constexpr uint32_t N_VECSIZE = 4;
+
+// aligned struct for AoSoA distribution function layout for float4 access
+// (restricted to 8 out of 9 directions to avoid dummy values for alignment)
+struct alignas(8) DF_Vec
+{
+    float4 df_1_to_4;   // df[1,...,4]
+    float4 df_5_to_8;   // df[5,...,8]
+};
+static_assert(sizeof(DF_Vec) == 32);
 
 int main(int argc, char* argv[])
 {

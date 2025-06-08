@@ -1,4 +1,5 @@
 #pragma once
+#include "config.cuh"
 #include <string>
 
 
@@ -19,16 +20,16 @@ struct SimulationExportContext
 
     // pointers to simulation data on the device
     // (temp-array for temp storage of data derived from it)
-    const double* const* dvc_df = nullptr;
-    const double* const* dvc_df_next = nullptr;
-    const double* dvc_rho = nullptr;
-    const double* dvc_u_x = nullptr;
-    const double* dvc_u_y = nullptr;
-    double* dvc_temp = nullptr;
+    const FP* const* dvc_df = nullptr;
+    const FP* const* dvc_df_next = nullptr;
+    const FP* dvc_rho = nullptr;
+    const FP* dvc_u_x = nullptr;
+    const FP* dvc_u_y = nullptr;
+    FP* dvc_temp = nullptr;
 };
 
 void ExportScalarFieldFromDevice(
-    const double* dvc_buffer,
+    const FP* dvc_buffer,
     const SimulationData type,
     const std::string& outputDirName,
     const std::string& versionDirName,

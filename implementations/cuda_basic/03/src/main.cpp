@@ -5,8 +5,9 @@
 // - separate file for each kernel and its launcher
 // - usage of uint32_t instead of size_t for lower register pressure
 
-#include "../../tools_fp32/data_export.h"
-#include "../../tools_fp32/utilities.h"
+#include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"

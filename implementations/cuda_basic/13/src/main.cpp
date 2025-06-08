@@ -6,8 +6,9 @@
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
 
-#include "../../tools_fp32/data_export.h"
-#include "../../tools_fp32/utilities.h"
+#include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
@@ -124,7 +125,7 @@ int main(int argc, char* argv[])
         }
 
         // export data (CAREFUL: huge file sizes)
-        if (true && (step == 1 || step % 5000 == 0))
+        if (false && (step == 1 || step % 5000 == 0))
         {
             ExportSimulationData(context,
                 Velocity_X,

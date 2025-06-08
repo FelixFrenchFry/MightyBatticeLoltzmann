@@ -1,3 +1,4 @@
+#include "config.cuh"
 #include "data_export.h"
 #include "data_processing.cuh"
 #include <cuda_runtime.h>
@@ -28,7 +29,7 @@ std::string FormatStepSuffix(uint32_t step, uint32_t width = 9)
 }
 
 void ExportScalarFieldFromDevice(
-    const double* dvc_buffer,
+    const FP* dvc_buffer,
     const SimulationData type,
     const std::string& outputDirName,
     const std::string& versionDirName,
@@ -38,12 +39,12 @@ void ExportScalarFieldFromDevice(
     const bool bin, const bool csv)
 {
     const uint32_t N_CELLS = N_X * N_Y;
-    std::vector<double> buffer(N_CELLS);
+    std::vector<FP> buffer(N_CELLS);
 
     // ----- COPY DEVICE DATA TO HOST -----
 
     cudaError_t err = cudaMemcpy(buffer.data(), dvc_buffer,
-        N_CELLS * sizeof(double), cudaMemcpyDeviceToHost);
+        N_CELLS * sizeof(FP), cudaMemcpyDeviceToHost);
     if (err != cudaSuccess)
     {
         SPDLOG_ERROR("CUDA memory copy failed in {}: {}",
@@ -61,7 +62,7 @@ void ExportScalarFieldFromDevice(
     std::string fileBase = typeName + FormatStepSuffix(suffixNum);
     fs::path filePathBase = outputPath / fileBase;
 
-    std::streamsize size = buffer.size() * sizeof(double);
+    std::streamsize size = buffer.size() * sizeof(FP);
 
     // ----- EXPORT BINARY -----
     if (bin)
@@ -89,11 +90,11 @@ void ExportScalarFieldFromDevice(
             return;
         }
 
-        for (int y = 0; y < N_Y; y++)
+        for (uint32_t y = 0; y < N_Y; y++)
         {
-            for (int x = 0; x < N_X; x++)
+            for (uint32_t x = 0; x < N_X; x++)
             {
-                int idx = y * N_X + x;
+                uint32_t idx = y * N_X + x;
                 file_csv << buffer[idx];
                 if (x < N_X - 1) { file_csv << ","; }
             }
@@ -114,8 +115,8 @@ void ExportSimulationData(
     const uint32_t suffixNum,
     const bool bin, const bool csv)
 {
-    const double* dvc_buffer = nullptr;
-    double* dvc_u_mag = nullptr;
+    const FP* dvc_buffer = nullptr;
+    FP* dvc_u_mag = nullptr;
 
     switch (type)
     {

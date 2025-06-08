@@ -2,7 +2,8 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-
+import sys
+FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 
 # TODO: use quiverplot or streamplot?
@@ -29,8 +30,8 @@ def get_file_path(data: str, step: int) -> str:
         f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
 # load velocity field
-u_x = np.fromfile(get_file_path(dataType_A, step), dtype=np.float32).reshape((N_Y, N_X))
-u_y = np.fromfile(get_file_path(dataType_B, step), dtype=np.float32).reshape((N_Y, N_X))
+u_x = np.fromfile(get_file_path(dataType_A, step), dtype=FP).reshape((N_Y, N_X))
+u_y = np.fromfile(get_file_path(dataType_B, step), dtype=FP).reshape((N_Y, N_X))
 
 # downsample resolution
 stride = 20

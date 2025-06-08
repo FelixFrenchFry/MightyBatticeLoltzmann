@@ -2,6 +2,8 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 
 
@@ -32,7 +34,7 @@ def get_file_path(step: int) -> str:
 # find global u_min / u_max across all steps
 all_data = []
 for step in steps:
-    data = np.fromfile(get_file_path(step), dtype=np.float32).reshape((N_Y, N_X))
+    data = np.fromfile(get_file_path(step), dtype=FP).reshape((N_Y, N_X))
     all_data.append(data)
 
 all_data = np.stack(all_data)

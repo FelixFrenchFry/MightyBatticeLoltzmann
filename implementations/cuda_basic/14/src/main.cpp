@@ -5,10 +5,11 @@
 // - no global write-back of density and velocity values
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
-// - double precision distribution function, density, velocity values
+// - fp32/fp64 precision switch at compile-time for df, density, velocity values
 
-#include "../../tools_fp64/data_export.h"
-#include "../../tools_fp64/utilities.h"
+#include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
@@ -23,10 +24,8 @@ int main(int argc, char* argv[])
     // [hour:min:sec.ms] [file.cpp:line] [type] [message]
     spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
 
-    constexpr double PI = 3.141592653589793;
-
     // grid width, height, number of simulation steps, number of grid cells
-    // (168 bytes per cell -> 15,000 * 5,000 cells use ~12GB of VRAM)
+    // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
     uint32_t N_STEPS =  10000;
@@ -34,12 +33,12 @@ int main(int argc, char* argv[])
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    double omega = 1.2;
-    double rho_0 = 1.0;
-    double u_max = 0.1;
-    double n = 3.0;
-    double k = (2.0 * PI * n) / static_cast<double>(N_Y);
-    double u_lid = 0.1;
+    FP omega = 1.2;
+    FP rho_0 = 1.0;
+    FP u_max = 0.1;
+    FP n = 3.0;
+    FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y);
+    FP u_lid = 0.1;
 
     // data export settings
     bool write_rho =    false;
@@ -51,41 +50,40 @@ int main(int argc, char* argv[])
     bool lid_driven_cavity =    false;
 
     // host-side arrays of 9 pointers to device-side df arrays
-    double* df[9];
-    double* df_next[9];
+    FP* df[9];
+    FP* df_next[9];
 
     // for each dir i, allocate 1D array of size N_CELLS on the device
     for (uint32_t i = 0; i < 9; i++)
     {
-        cudaMalloc(&df[i], N_CELLS * sizeof(double));
-        cudaMalloc(&df_next[i], N_CELLS * sizeof(double));
+        cudaMalloc(&df[i], N_CELLS * sizeof(FP));
+        cudaMalloc(&df_next[i], N_CELLS * sizeof(FP));
     }
 
     // device-side arrays of 9 pointers to device-side df arrays
     // (used as a device-side handle for the SoA data)
-    double** dvc_df;
-    double** dvc_df_next;
-    cudaMalloc(&dvc_df, 9 * sizeof(double*));
-    cudaMalloc(&dvc_df_next, 9 * sizeof(double*));
+    FP** dvc_df;
+    FP** dvc_df_next;
+    cudaMalloc(&dvc_df, 9 * sizeof(FP*));
+    cudaMalloc(&dvc_df_next, 9 * sizeof(FP*));
 
     // copy the contents of the host-side handles to the device-side handles
     // (because apparently CUDA does not support directly passing an array of pointers)
-    cudaMemcpy(dvc_df, df, 9 * sizeof(double*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(double*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df, df, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
-    double* dvc_rho;
-    double* dvc_u_x;
-    double* dvc_u_y;
+    FP* dvc_rho;
+    FP* dvc_u_x;
+    FP* dvc_u_y;
 
     // for each array, allocate memory of size N_CELLS on the device
-    cudaMalloc(&dvc_rho, N_CELLS * sizeof(double));
-    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(double));
-    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(double));
+    cudaMalloc(&dvc_rho, N_CELLS * sizeof(FP));
+    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(FP));
+    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(FP));
 
     // collect buffers and other data for export context
     SimulationExportContext context;
-    /* TODO: switch to double
     context.dvc_df = dvc_df;
     context.dvc_df_next = dvc_df_next;
     context.dvc_rho = dvc_rho;
@@ -93,7 +91,6 @@ int main(int argc, char* argv[])
     context.dvc_u_y = dvc_u_y;
     context.N_X = N_X;
     context.N_Y = N_Y;
-    */
 
     DisplayDeviceModel();
     DisplayDeviceMemoryUsage();
@@ -121,7 +118,7 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 100 == 0)
+        if (step == 1 || step % 1000 == 0)
         {
             SPDLOG_INFO("--- step {} done ---", step);
         }

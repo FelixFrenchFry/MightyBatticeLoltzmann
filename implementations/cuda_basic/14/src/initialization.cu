@@ -1,4 +1,4 @@
-#include "config.cuh"
+#include "../../tools/config.cuh"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
@@ -10,7 +10,7 @@
 // TODO: figure out how to safely use same constant memory across all .cu files
 __constant__ int dvc_ik_c_x[9];
 __constant__ int dvc_ik_c_y[9];
-__constant__ double dvc_ik_w[9];
+__constant__ FP dvc_ik_w[9];
 bool constantsInitialized_IK = false;
 
 void InitializeConstants_IK()
@@ -30,13 +30,13 @@ void InitializeConstants_IK()
     // initialize velocity direction and weight vectors on the host
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
-    double w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
-                    1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
+    FP w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
+                1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
 
     // copy them into constant memory on the device
     cudaMemcpyToSymbol(dvc_ik_c_x, c_x, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_ik_c_y, c_y, 9 * sizeof(int));
-    cudaMemcpyToSymbol(dvc_ik_w, w, 9 * sizeof(double));
+    cudaMemcpyToSymbol(dvc_ik_w, w, 9 * sizeof(FP));
 
     cudaDeviceSynchronize();
     constantsInitialized_IK = true;
@@ -44,13 +44,13 @@ void InitializeConstants_IK()
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ApplyShearWaveCondition_K(
-    double* const* __restrict__ dvc_df,
-    double* __restrict__ dvc_rho,
-    double* __restrict__ dvc_u_x,
-    double* __restrict__ dvc_u_y,
-    const double rho_0,
-    const double u_max,
-    const double k,
+    FP* const* __restrict__ dvc_df,
+    FP* __restrict__ dvc_rho,
+    FP* __restrict__ dvc_u_x,
+    FP* __restrict__ dvc_u_y,
+    const FP rho_0,
+    const FP u_max,
+    const FP k,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS)
 {
@@ -61,21 +61,22 @@ __global__ void ApplyShearWaveCondition_K(
     uint32_t y = idx / N_X;
 
     // compute sinusoidal x-velocity from the shear wave configuration
-    double u_x_val = u_max * sin(k * static_cast<double>(y));
-    double u_sq = u_x_val * u_x_val;
+    FP u_x_val = u_max * FP_SIN(k * static_cast<FP>(y));
+    FP u_sq = u_x_val * u_x_val;
 
     // set initial values of the fields
     dvc_rho[idx] = rho_0;
     dvc_u_x[idx] = u_x_val;
-    dvc_u_y[idx] = 0.0;
+    dvc_u_y[idx] = FP_CONST(0.0);
 
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
-        double cu = dvc_ik_c_x[i] * u_x_val + dvc_ik_c_y[i] * 0.0;
-        double f_eq_i = dvc_ik_w[i] * rho_0
-                      * (1.0 + 3.0 * cu + 4.5 * cu * cu - 1.5 * u_sq);
+        FP cu = dvc_ik_c_x[i] * u_x_val + dvc_ik_c_y[i] * FP_CONST(0.0);
+        FP f_eq_i = dvc_ik_w[i] * rho_0
+                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
 
         // set initial df values
         dvc_df[i][idx] = f_eq_i;
@@ -83,13 +84,13 @@ __global__ void ApplyShearWaveCondition_K(
 }
 
 void Launch_ApplyShearWaveCondition_K(
-    double* const* dvc_df,
-    double* dvc_rho,
-    double* dvc_u_x,
-    double* dvc_u_y,
-    const double rho_0,
-    const double u_max,
-    const double k,
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
+    const FP u_max,
+    const FP k,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS)
 {
@@ -113,11 +114,11 @@ void Launch_ApplyShearWaveCondition_K(
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ApplyLidDrivenCavityCondition_K(
-    double* const* __restrict__ dvc_df,
-    double* __restrict__ dvc_rho,
-    double* __restrict__ dvc_u_x,
-    double* __restrict__ dvc_u_y,
-    const double rho_0,
+    FP* const* __restrict__ dvc_df,
+    FP* __restrict__ dvc_rho,
+    FP* __restrict__ dvc_u_x,
+    FP* __restrict__ dvc_u_y,
+    const FP rho_0,
     const uint32_t N_CELLS)
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
@@ -125,8 +126,8 @@ __global__ void ApplyLidDrivenCavityCondition_K(
 
     // set initial values of the fields
     dvc_rho[idx] = rho_0;
-    dvc_u_x[idx] = 0.0;
-    dvc_u_y[idx] = 0.0;
+    dvc_u_x[idx] = FP_CONST(0.0);
+    dvc_u_y[idx] = FP_CONST(0.0);
 
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
@@ -137,11 +138,11 @@ __global__ void ApplyLidDrivenCavityCondition_K(
 }
 
 void Launch_ApplyLidDrivenCavityCondition_K(
-    double* const* dvc_df,
-    double* dvc_rho,
-    double* dvc_u_x,
-    double* dvc_u_y,
-    const double rho_0,
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
     const uint32_t N_CELLS)
 {
     InitializeConstants_IK();

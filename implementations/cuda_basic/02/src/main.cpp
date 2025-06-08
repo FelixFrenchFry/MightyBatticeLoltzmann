@@ -4,8 +4,8 @@
 // - separate file for each kernel and its launcher
 // - introduction of __restricted__ pointers and templated kernel arguments
 
-#include "../../tools_fp32/data_export.h"
-#include "../../tools_fp32/utilities.h"
+#include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "collision.cuh"
 #include "density.cuh"
 #include "initialization.cuh"

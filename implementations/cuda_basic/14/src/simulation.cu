@@ -1,4 +1,4 @@
-#include "config.cuh"
+#include "../../tools/config.cuh"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
@@ -12,7 +12,7 @@
 __constant__ int dvc_opp_dir[9];
 __constant__ int dvc_c_x[9];
 __constant__ int dvc_c_y[9];
-__constant__ double dvc_w[9];
+__constant__ FP dvc_w[9];
 bool constantsInitialized = false;
 
 void InitializeConstants()
@@ -33,14 +33,14 @@ void InitializeConstants()
     int opp_dir[9] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
-    double w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
-                    1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
+    FP w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
+                1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
 
     // copy them into constant memory on the device
     cudaMemcpyToSymbol(dvc_opp_dir, opp_dir, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_x, c_x, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_y, c_y, 9 * sizeof(int));
-    cudaMemcpyToSymbol(dvc_w, w, 9 * sizeof(double));
+    cudaMemcpyToSymbol(dvc_w, w, 9 * sizeof(FP));
 
     cudaDeviceSynchronize();
     constantsInitialized = true;
@@ -48,20 +48,20 @@ void InitializeConstants()
 
 template <uint32_t N_DIR>
 __device__ __forceinline__ uint32_t ComputeDensityAndVelocity_K(
-    const double* const* __restrict__ dvc_df,
+    const FP* const* __restrict__ dvc_df,
     uint32_t idx,
-    double& rho, double& u_x, double& u_y)
+    FP& rho, FP& u_x, FP& u_y)
 {
-    rho = 0.0;
-    u_x = 0.0;
-    u_y = 0.0;
+    rho = FP_CONST(0.0);
+    u_x = FP_CONST(0.0);
+    u_y = FP_CONST(0.0);
 
     // density := sum over df values in each dir i
     // velocity := sum over df values, weighted by each dir i
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        double df_i = dvc_df[i][idx];
+        FP df_i = dvc_df[i][idx];
         rho += df_i;
         u_x += df_i * dvc_c_x[i];
         u_y += df_i * dvc_c_y[i];
@@ -140,43 +140,43 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
 __device__ __forceinline__ void InjectLidVelocity_Conditional_K(
     uint32_t src_y,
     uint32_t N_Y,
-    double rho,
-    double omega,
-    double u_lid,
+    FP rho,
+    FP omega,
+    FP u_lid,
     uint32_t i,
-    double& f_new_i)
+    FP& f_new_i)
 {
     // check if directed into top wall
     if (dvc_c_y[i] == 1 && src_y == N_Y - 1)
     {
-        f_new_i -= 6.0 * omega * rho * dvc_c_x[i] * u_lid;
+        f_new_i -= FP_CONST(6.0) * omega * rho * dvc_c_x[i] * u_lid;
     }
 }
 
 __device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
     uint32_t src_y,
     uint32_t N_Y,
-    double rho,
-    double omega,
-    double u_lid,
+    FP rho,
+    FP omega,
+    FP u_lid,
     uint32_t i,
-    double& f_new_i)
+    FP& f_new_i)
 {
     // branch-less lid velocity injection via boolean mask
     int top_bounce = ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
-    f_new_i -= top_bounce * 6.0 * dvc_w[i] * rho
-             * static_cast<double>(dvc_c_x[i]) * u_lid;
+    f_new_i -= top_bounce * FP_CONST(6.0) * dvc_w[i] * rho
+             * static_cast<FP>(dvc_c_x[i]) * u_lid;
 }
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void ComputeFullyFusedOperations_K(
-    const double* const* __restrict__ dvc_df,
-    double* const* __restrict__ dvc_df_next,
-    double* __restrict__ dvc_rho,
-    double* __restrict__ dvc_u_x,
-    double* __restrict__ dvc_u_y,
-    const double omega,
-    const double u_lid,
+    const FP* const* __restrict__ dvc_df,
+    FP* const* __restrict__ dvc_df_next,
+    FP* __restrict__ dvc_rho,
+    FP* __restrict__ dvc_u_x,
+    FP* __restrict__ dvc_u_y,
+    const FP omega,
+    const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS,
     const bool write_rho,
@@ -187,12 +187,12 @@ __global__ void ComputeFullyFusedOperations_K(
     if (idx >= N_CELLS) { return; }
 
     // inlined sub-kernel for the density and velocity
-    double rho, u_x, u_y;
+    FP rho, u_x, u_y;
     ComputeDensityAndVelocity_K<N_DIR>(
         dvc_df, idx, rho, u_x, u_y);
 
     // exit thread to avoid division by zero or erroneous values
-    if (rho <= 0.0) { return; }
+    if (rho <= FP_CONST(0.0)) { return; }
 
     // finalize velocities
     u_x /= rho;
@@ -204,7 +204,7 @@ __global__ void ComputeFullyFusedOperations_K(
     if (write_u_y) { dvc_u_y[idx] = u_y; }
 
     // pre-compute squared velocity and cell coordinates for this thread
-    double u_sq = u_x * u_x + u_y * u_y;
+    FP u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
@@ -212,13 +212,14 @@ __global__ void ComputeFullyFusedOperations_K(
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
-        double cu = static_cast<double>(dvc_c_x[i]) * u_x
-                  + static_cast<double>(dvc_c_y[i]) * u_y;
-        double f_eq_i = dvc_w[i] * rho
-                     * (1.0 + 3.0 * cu + 4.5 * cu * cu - 1.5 * u_sq);
+        FP cu = static_cast<FP>(dvc_c_x[i]) * u_x
+              + static_cast<FP>(dvc_c_y[i]) * u_y;
+        FP f_eq_i = dvc_w[i] * rho
+                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
-        double f_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
+        FP f_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
         uint32_t dst_idx, dst_i;
@@ -236,13 +237,13 @@ __global__ void ComputeFullyFusedOperations_K(
 }
 
 void Launch_FullyFusedOperationsComputation(
-    const double* const* dvc_df,
-    double* const* dvc_df_next,
-    double* dvc_rho,
-    double* dvc_u_x,
-    double* dvc_u_y,
-    const double omega,
-    const double u_lid,
+    const FP* const* dvc_df,
+    FP* const* dvc_df_next,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP omega,
+    const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS,
     const bool write_rho,
