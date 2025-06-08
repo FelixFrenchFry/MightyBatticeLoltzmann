@@ -7,7 +7,7 @@
 // - lid-driven cavity with bounce-back boundary conditions
 // - fp32/fp64 precision switch at compile-time for df, density, velocity values
 // - int and fp versions of the directions vectors to avoid casting
-// - TODO: reduce register pressure and optimize for register spills
+// - pull-style streaming, instead of push
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
