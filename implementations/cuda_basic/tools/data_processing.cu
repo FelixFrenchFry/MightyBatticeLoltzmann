@@ -8,22 +8,22 @@
 
 
 __global__ void ComputeVelocityMagnitude_K(
-    const float* __restrict__ u_x,
-    const float* __restrict__ u_y,
-    float* __restrict__ u_mag,
+    const FP* __restrict__ u_x,
+    const FP* __restrict__ u_y,
+    FP* __restrict__ u_mag,
     const uint32_t N_CELLS)
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) return;
 
-    float ux = u_x[idx];
-    float uy = u_y[idx];
-    u_mag[idx] = sqrtf(ux * ux + uy * uy);
+    FP ux = u_x[idx];
+    FP uy = u_y[idx];
+    u_mag[idx] = FP_SQRT(ux * ux + uy * uy);
 }
 
-float* Launch_ComputeVelocityMagnitude_K(
-    const float* dvc_u_x,
-    const float* dvc_u_y,
+FP* Launch_ComputeVelocityMagnitude_K(
+    const FP* dvc_u_x,
+    const FP* dvc_u_y,
     const uint32_t N_X,
     const uint32_t N_Y)
 {
@@ -31,8 +31,8 @@ float* Launch_ComputeVelocityMagnitude_K(
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
     // allocate device memory for the velocity magnitudes
-    float* dvc_u_mag = nullptr;
-    cudaMalloc(&dvc_u_mag, N_CELLS * sizeof(float));
+    FP* dvc_u_mag = nullptr;
+    cudaMalloc(&dvc_u_mag, N_CELLS * sizeof(FP));
 
     ComputeVelocityMagnitude_K<<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_u_x, dvc_u_y, dvc_u_mag, N_CELLS);
