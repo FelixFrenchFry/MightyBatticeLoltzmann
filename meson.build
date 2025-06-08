@@ -11,7 +11,7 @@ project(
             '--std=c++17',
             '-ccbin', '/usr/bin/g++',
             '--ptxas-options=-v',
-            '--maxrregcount=200',
+            '--maxrregcount=240',
             '-gencode', 'arch=compute_61,code=sm_61', # RTX 10s
             '-gencode', 'arch=compute_70,code=sm_70', # V100
             '-gencode', 'arch=compute_75,code=sm_75', # RTX 20s
