@@ -58,8 +58,6 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
-    __shared__ float smem_df[N_DIR][N_BLOCKSIZE];
-
     // ----- STREAMING COMPUTATION (PULL) -----
 
     // determine coordinates of this thread's own cell
@@ -69,7 +67,7 @@ __global__ void ComputeFullyFusedOperations_K(
 
     // temp storage of df_i values pulled from neighbors
     // TODO: use shared memory for this?
-    //float df[9];
+    float df[9];
 
     // pull df_i values from each neighbor in direction i
     #pragma unroll
@@ -88,24 +86,19 @@ __global__ void ComputeFullyFusedOperations_K(
         // pull df_i from the neighbor in direction i
         // (is memory access coalesced with neighboring threads?)
         // TODO: store this in shared memory instead of relying on registers?
-        smem_df[i][threadIdx.x] = dvc_df[i][src_idx];
+        df[i] = dvc_df[i][src_idx];
     }
 
     // ----- DENSITY COMPUTATION -----
 
     // used initially as sum and later as final density in computations
     float rho = 0.0f;
-    float u_x = 0.0f;
-    float u_y = 0.0f;
 
     // sum over df_i values to compute density
     #pragma unroll
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        float df_i = smem_df[i][threadIdx.x];
-        rho += df_i;
-        u_x += df_i * dvc_c_x[i];
-        u_y += df_i * dvc_c_y[i];
+        rho += df[i];
     }
 
     // ----- VELOCITY COMPUTATION -----
@@ -118,16 +111,21 @@ __global__ void ComputeFullyFusedOperations_K(
         return;
     }
 
+    // used initially as sums and later as final velocities in computations
+    float u_x = 0.0f;
+    float u_y = 0.0f;
+
+    // sum over df_i values, weighted in each direction to compute velocity
+    #pragma unroll
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        u_x += df[i] * dvc_c_x[i];
+        u_y += df[i] * dvc_c_y[i];
+    }
+
     // divide sums by density to obtain final velocities
     u_x /= rho;
     u_y /= rho;
-
-    // ----- MISC -----
-
-    // write back updated values to global memory
-    //dvc_rho[idx] = rho;
-    dvc_u_x[idx] = u_x;
-    dvc_u_y[idx] = u_y;
 
     // ----- COLLISION COMPUTATION -----
 
@@ -147,11 +145,18 @@ __global__ void ComputeFullyFusedOperations_K(
                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
         // relax distribution function towards equilibrium
-        float f_new_i = smem_df[i][threadIdx.x] * (1 - omega) + omega * f_eq_i;
+        float f_new_i = df[i] * (1 - omega) + omega * f_eq_i;
 
         // update df value of this thread's cell in global memory
         dvc_df_next[i][idx] = f_new_i;
     }
+
+    // ----- MISC -----
+
+    // write back updated values to global memory
+    dvc_rho[idx] = rho;
+    dvc_u_x[idx] = u_x;
+    dvc_u_y[idx] = u_y;
 }
 
 void Launch_FullyFusedOperationsComputation(

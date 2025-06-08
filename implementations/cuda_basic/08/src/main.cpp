@@ -23,18 +23,13 @@ int main(int argc, char* argv[])
 
     constexpr float PI = 3.14159265f;
 
-    // TODO: check important hardware properties
-    cudaDeviceProp props{};
-    cudaGetDeviceProperties(&props, 0);
-    SPDLOG_INFO("GPU: {} (CC: {})", props.name, props.major * 10 + props.minor);
-
     // ----- INITIALIZATION OF PARAMETERS -----
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  10000;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -81,6 +76,9 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_rho, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
+
+    DisplayDeviceModel();
+    DisplayDeviceMemoryUsage();
 
     // ----- LBM SIMULATION LOOP -----
 
