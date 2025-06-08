@@ -13,8 +13,8 @@
 int main(int argc, char* argv[])
 {
     // configure spdlog to display error messages like this:
-    // [hour:min:sec.ms] [file.cpp:line] [type] [message]
-    spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
+    // [year-month-day hour:min:sec] [type] [message]
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
     // grid size (number of lattice cells per dimension)
     int grid_width =   15000;

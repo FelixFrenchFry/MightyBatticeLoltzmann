@@ -22,8 +22,8 @@
 int main(int argc, char* argv[])
 {
     // configure spdlog to display error messages like this:
-    // [hour:min:sec.ms] [file.cpp:line] [type] [message]
-    spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
+    // [year-month-day hour:min:sec] [type] [message]
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)

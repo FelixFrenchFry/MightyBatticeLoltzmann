@@ -21,8 +21,8 @@ int main(int argc, char* argv[])
     // ----- INITIALIZATION OF MISC STUFF -----
 
     // configure spdlog to display error messages like this:
-    // [hour:min:sec.ms] [file.cpp:line] [type] [message]
-    spdlog::set_pattern("[%T.%e] [%s:%#] [%^%l%$] %v");
+    // [year-month-day hour:min:sec] [type] [message]
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
     constexpr float PI = 3.14159265f;
 
