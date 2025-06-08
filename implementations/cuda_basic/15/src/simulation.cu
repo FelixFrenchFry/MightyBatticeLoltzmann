@@ -12,6 +12,8 @@
 __constant__ int dvc_opp_dir[9];
 __constant__ int dvc_c_x[9];
 __constant__ int dvc_c_y[9];
+__constant__ FP dvc_fp_c_x[9];
+__constant__ FP dvc_fp_c_y[9];
 __constant__ FP dvc_w[9];
 bool constantsInitialized = false;
 
@@ -33,6 +35,8 @@ void InitializeConstants()
     int opp_dir[9] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
+    FP fp_c_x[9] = { 0.0,  1.0,  0.0, -1.0,  0.0,  1.0, -1.0, -1.0,  1.0 };
+    FP fp_c_y[9] = { 0.0,  0.0,  1.0,  0.0, -1.0,  1.0,  1.0, -1.0, -1.0 };
     FP w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
                 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
 
@@ -40,6 +44,8 @@ void InitializeConstants()
     cudaMemcpyToSymbol(dvc_opp_dir, opp_dir, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_x, c_x, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_y, c_y, 9 * sizeof(int));
+    cudaMemcpyToSymbol(dvc_fp_c_x, fp_c_x, 9 * sizeof(FP));
+    cudaMemcpyToSymbol(dvc_fp_c_y, fp_c_y, 9 * sizeof(FP));
     cudaMemcpyToSymbol(dvc_w, w, 9 * sizeof(FP));
 
     cudaDeviceSynchronize();
@@ -63,8 +69,8 @@ __device__ __forceinline__ uint32_t ComputeDensityAndVelocity_K(
     {
         FP df_i = dvc_df[i][idx];
         rho += df_i;
-        u_x += df_i * dvc_c_x[i];
-        u_y += df_i * dvc_c_y[i];
+        u_x += df_i * dvc_fp_c_x[i];
+        u_y += df_i * dvc_fp_c_y[i];
     }
 }
 
@@ -149,7 +155,7 @@ __device__ __forceinline__ void InjectLidVelocity_Conditional_K(
     // check if directed into top wall
     if (dvc_c_y[i] == 1 && src_y == N_Y - 1)
     {
-        f_new_i -= FP_CONST(6.0) * omega * rho * dvc_c_x[i] * u_lid;
+        f_new_i -= FP_CONST(6.0) * omega * rho * dvc_fp_c_x[i] * u_lid;
     }
 }
 
@@ -165,7 +171,7 @@ __device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
     // branch-less lid velocity injection via boolean mask
     int top_bounce = ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
     f_new_i -= top_bounce * FP_CONST(6.0) * dvc_w[i] * rho
-             * static_cast<FP>(dvc_c_x[i]) * u_lid;
+             * dvc_fp_c_x[i] * u_lid;
 }
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
@@ -185,8 +191,6 @@ __global__ void ComputeFullyFusedOperations_K(
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
-
-    //__shared__ FP shared_temp[N_BLOCKSIZE];
 
     // inlined sub-kernel for the density and velocity
     FP rho, u_x, u_y;
@@ -214,8 +218,7 @@ __global__ void ComputeFullyFusedOperations_K(
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
-        FP cu = static_cast<FP>(dvc_c_x[i]) * u_x
-              + static_cast<FP>(dvc_c_y[i]) * u_y;
+        FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
         FP f_eq_i = dvc_w[i] * rho
                   * (FP_CONST(1.0) + FP_CONST(3.0) * cu
                   + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);

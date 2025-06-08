@@ -7,6 +7,12 @@
 [14:49:43.625] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/100000]
 [14:49:43.625] [utilities.cpp:45] [info] BLUPS:                     9.022
 
+// cuda_basic_15 - shear wave decay:
+[15:12:40.278] [utilities.cpp:42] [info] Total execution time:      1340.476 sec
+[15:12:40.278] [utilities.cpp:43] [info] Step execution time:       13.405 ms
+[15:12:40.278] [utilities.cpp:44] [info] Simulation size [X/Y/N]:   [15000/10000/100000]
+[15:12:40.278] [utilities.cpp:45] [info] BLUPS:                     11.190
+
 // cuda_basic_13 - shear wave decay:
 [19:53:28.491] [utilities.cpp:42] [info] Total execution time:      17178.827 sec
 [19:53:28.491] [utilities.cpp:43] [info] Step execution time:       17.188 ms

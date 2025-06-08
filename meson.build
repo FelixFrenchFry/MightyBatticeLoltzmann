@@ -11,7 +11,7 @@ project(
             '--std=c++17',
             '-ccbin', '/usr/bin/g++',
             '--ptxas-options=-v',
-            '--maxrregcount=40',
+            '--maxrregcount=200',
             '-gencode', 'arch=compute_61,code=sm_61', # RTX 10s
             '-gencode', 'arch=compute_70,code=sm_70', # V100
             '-gencode', 'arch=compute_75,code=sm_75', # RTX 20s
@@ -23,7 +23,7 @@ project(
             '-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
 )
 
-add_project_arguments('-DUSE_FP64', '--std=c++17', language: ['cpp', 'cuda'])
+add_project_arguments('-DUSE_FP32', '--std=c++17', language: ['cpp', 'cuda'])
 
 cuda_include = include_directories('/usr/local/cuda/include')
 #cuda_include = include_directories('/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/include')
