@@ -163,7 +163,8 @@ __device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
     FP& f_new_i)
 {
     // branch-less lid velocity injection via boolean mask
-    int top_bounce = ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
+    int top_bounce = ((dvc_c_y[i] == 1) & (src_y == N_Y - 1));
+
     f_new_i -= top_bounce * FP_CONST(6.0) * dvc_w[i] * rho
              * static_cast<FP>(dvc_c_x[i]) * u_lid;
 }
@@ -261,7 +262,14 @@ void Launch_FullyFusedOperationsComputation(
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
 
-    // debugging helper
+    if (!kernelAttributesDisplayed)
+    {
+        DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
+            fmt::format("ComputeFullyFusedOperations_K<{}, {}>", N_DIR, N_BLOCKSIZE));
+
+        kernelAttributesDisplayed = true;
+    }
+
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {

@@ -131,7 +131,14 @@ void Launch_FullyFusedOperationsComputation(
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
 
-    // debugging helper
+    if (!kernelAttributesDisplayed)
+    {
+        DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
+            fmt::format("ComputeFullyFusedOperations_K<{}, {}>", N_DIR, N_BLOCKSIZE));
+
+        kernelAttributesDisplayed = true;
+    }
+
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {

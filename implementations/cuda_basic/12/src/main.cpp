@@ -80,10 +80,7 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df_flat, dvc_df_next_flat);
 
-        if (step == 1 || step % 100 == 0)
-        {
-            SPDLOG_INFO("--- step {} done ---", step);
-        }
+        DisplayProgressBar(step, N_STEPS);
 
         // export data (CAREFUL: huge file sizes)
         if (false && (step == 1 || step % 1000 == 0))

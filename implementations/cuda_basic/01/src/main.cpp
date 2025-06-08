@@ -3,6 +3,7 @@
 // - separate kernels for density, velocity, collision, streaming operations
 
 #include "../../tools/data_export.h"
+#include "../../tools/utilities.h"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
@@ -90,10 +91,7 @@ int main(int argc, char* argv[])
             //SPDLOG_INFO("Exported density data.");
         }
 
-        if (step == 1 || step % 1000 == 0)
-        {
-            SPDLOG_INFO("--- step {} done ---", step);
-        }
+        DisplayProgressBar(step, step_count);
     }
 
     // free device memory

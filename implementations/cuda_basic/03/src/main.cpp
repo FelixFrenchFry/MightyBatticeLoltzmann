@@ -114,10 +114,7 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 100 == 0)
-        {
-            SPDLOG_INFO("--- step {} done ---", step);
-        }
+        DisplayProgressBar(step, N_STEPS);
     }
 
     auto end_time = std::chrono::steady_clock::now();

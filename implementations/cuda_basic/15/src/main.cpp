@@ -1,6 +1,5 @@
 // CUDA implementation of Lattice-Boltzmann with notable properties:
 // - coalesced memory accesses of df values
-// - shared memory tiling for df values
 // - fully fused density/velocity/collision/streaming kernel (push)
 // - no global write-back of density and velocity values
 // - inlined sub-kernels for modularity (no performance impact)
@@ -120,10 +119,7 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
-        if (step == 1 || step % 1000 == 0)
-        {
-            SPDLOG_INFO("--- step {} done ---", step);
-        }
+        DisplayProgressBar(step, N_STEPS);
 
         // export data (CAREFUL: huge file sizes)
         if (false && (step == 1 || step % 5000 == 0))

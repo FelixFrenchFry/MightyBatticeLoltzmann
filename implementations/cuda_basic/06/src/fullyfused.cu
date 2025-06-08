@@ -196,11 +196,18 @@ void Launch_FullyFusedOperationsComputation(
     // wait for device actions to finish and report potential errors
     cudaDeviceSynchronize();
 
-    // debugging helper
+    if (!kernelAttributesDisplayed)
+    {
+        DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
+            fmt::format("ComputeFullyFusedOperations_K<{}, {}>", N_DIR, N_BLOCKSIZE));
+
+        kernelAttributesDisplayed = true;
+    }
+
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
         SPDLOG_ERROR("Kernel '{}' failed: {}",
-            __func__, cudaGetErrorString(err));
+                     __func__, cudaGetErrorString(err));
     }
 }
