@@ -1,6 +1,5 @@
 // CUDA implementation of Lattice-Boltzmann with notable properties:
 // - coalesced memory accesses on 1D flattened array of df values
-// - shared memory tiling for df values
 // - fully fused kernel for density/velocity/collision/streaming operations
 // - no write-back to global memory of density and velocity values
 
