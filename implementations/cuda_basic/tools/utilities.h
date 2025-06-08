@@ -1,4 +1,5 @@
 #pragma once
+#include "config.cuh"
 #include <chrono>
 
 
