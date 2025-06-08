@@ -4,7 +4,7 @@ project(
     ['c', 'cpp', 'cuda'],
     version : '0.1',
     default_options : [
-        'warning_level=3',
+        'warning_level=2',
         # compile specifically for each CUDA architecture
         # potentially used to run the executable
         'cuda_args=' + ' '.join([
