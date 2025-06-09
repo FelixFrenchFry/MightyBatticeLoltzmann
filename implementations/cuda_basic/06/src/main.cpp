@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
         // a fully fused kernel performing all core operations in one
         Launch_FullyFusedOperationsComputation(
             dvc_df_1_to_8, dvc_df_next_1_to_8, dvc_df_0, dvc_rho, dvc_u_x,
-            dvc_u_y, omega, N_X, N_Y, N_CELLS);
+            dvc_u_y, omega, N_X, N_Y, N_STEPS, N_CELLS);
 
         std::swap(dvc_df_1_to_8, dvc_df_next_1_to_8);
 

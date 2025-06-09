@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
         // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
             dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS);
+            N_STEPS, N_CELLS);
 
         std::swap(dvc_df, dvc_df_next);
 

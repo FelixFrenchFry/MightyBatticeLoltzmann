@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
         // update densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
-            dvc_df_flat, dvc_df_next_flat, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS);
+            dvc_df_flat, dvc_df_next_flat, dvc_rho, dvc_u_x, dvc_u_y, omega,
+            N_X, N_Y, N_STEPS, N_CELLS);
 
         std::swap(dvc_df_flat, dvc_df_next_flat);
 

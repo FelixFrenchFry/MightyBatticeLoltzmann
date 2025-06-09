@@ -27,8 +27,8 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      15000;
-    uint32_t N_Y =      10000;
+    uint32_t N_X =      1000;
+    uint32_t N_Y =      1000;
     uint32_t N_STEPS =  10000;
     uint32_t N_CELLS =  N_X * N_Y;
 
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
         // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
             dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid,
-            N_X, N_Y, N_CELLS, write_rho, write_u_x, write_u_y);
+            N_X, N_Y, N_STEPS, N_CELLS, write_rho, write_u_x, write_u_y);
 
         std::swap(dvc_df, dvc_df_next);
 

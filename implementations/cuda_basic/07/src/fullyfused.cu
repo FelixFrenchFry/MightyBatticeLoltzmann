@@ -196,6 +196,7 @@ void Launch_FullyFusedOperationsComputation(
     float* dvc_u_y,
     const float omega,
     const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t N_STEPS,
     const uint32_t N_CELLS)
 {
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
@@ -211,7 +212,7 @@ void Launch_FullyFusedOperationsComputation(
     {
         DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
             fmt::format("ComputeFullyFusedOperations_K"),
-            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_CELLS);
+            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_STEPS);
 
         kernelAttributesDisplayed = true;
     }

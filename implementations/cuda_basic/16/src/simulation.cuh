@@ -13,6 +13,7 @@ void Launch_FullyFusedOperationsComputation(
     const FP omega,
     const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t N_STEPS,
     const uint32_t N_CELLS,
     const bool write_rho = false,
     const bool write_u_x = false,
