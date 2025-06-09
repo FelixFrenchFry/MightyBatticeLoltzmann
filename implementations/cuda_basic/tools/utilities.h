@@ -17,13 +17,21 @@ void inline DisplayProgressBar(
     uint32_t position = static_cast<int>(50 * progress);
 
     std::cout << "\r[";
+
     for (uint32_t i = 0; i < 50; i++)
     {
         if (i < position)       { std::cout << "="; }
         else if (i == position) { std::cout << ">"; }
         else                    { std::cout << " "; }
     }
-    std::cout << "] " << std::fixed << std::setprecision(1) << (progress * 100.0f) << " % (step " << step << "/" << N_STEPS << ")";
+
+    // RGB color for progress percentage
+    std::cout << "] \033[38;2;255;40;50m"
+              << std::fixed << std::setprecision(1)
+              << (progress * 100.0f) << " %"
+              << "\033[0m"
+              << " (step " << step << "/" << N_STEPS << ")";
+
     std::cout.flush();
 
     if (step == N_STEPS) { std::cout << "\n" << std::endl; }
@@ -85,10 +93,8 @@ void inline DisplayKernelAttributes(KernelT kernel, const std::string& kernel_na
         return;
     }
 
-    SPDLOG_INFO("------------------------------------------------------------");
     SPDLOG_INFO("Kernel attributes for:     {}", kernel_name);
     SPDLOG_INFO("Registers per thread:      {}", attr.numRegs);
     SPDLOG_INFO("Shared memory per block:   {} bytes", attr.sharedSizeBytes);
-    SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
-    SPDLOG_INFO("Constant memory total:     {} bytes\n", attr.constSizeBytes);
+    SPDLOG_INFO("Local memory per thread:   {} bytes\n", attr.localSizeBytes);
 }
