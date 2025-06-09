@@ -118,6 +118,18 @@ FP64 ///////////////////////////////////////////////////////////////////////////
 [info] Step execution time:       43.814 ms
 [info] BLUPS:                     1.712
 
+// NO LOOP UNROLLING!
+[2025-06-09 15:55:07] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.826 / 2.094 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 7500 / 10000 / 10000 ]
+[info] Total execution time:      413.810 sec
+[info] Step execution time:       41.381 ms
+[info] BLUPS:                     1.812
+
 ==========================================================================================
 A100 x1 / cuda_basic_17 / FP64 / reg limit 240 / lid driven cavity
 ==========================================================================================

@@ -175,7 +175,7 @@ __global__ void ComputeFullyFusedOperations_K(
 
     // load df values into block-wise tiles of shared shared memory
     // TODO: add 1-layer halo cells?
-    //__shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
+    __shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
 
     // used for summing stuff up and computing collision
     FP rho = FP_CONST(0.0);
@@ -185,13 +185,12 @@ __global__ void ComputeFullyFusedOperations_K(
     // populate shared memory tiles and compute sums in one loop
     // density := sum over df values in each dir i
     // velocity := sum over df values, weighted by each dir i
-    //#pragma unroll TODO
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        FP df_i = dvc_df[i][idx];
-        rho += df_i;
-        u_x += df_i * dvc_fp_c_x[i];
-        u_y += df_i * dvc_fp_c_y[i];
+        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        rho += tile_df[i][threadIdx.x];
+        u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
+        u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];
     }
 
     // exit thread to avoid division by zero or erroneous values
@@ -211,7 +210,6 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    //#pragma unroll TODO
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
@@ -221,8 +219,8 @@ __global__ void ComputeFullyFusedOperations_K(
                   + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
-        FP f_new_i = dvc_df[i][idx] - omega
-                   * (dvc_df[i][idx] - f_eq_i);
+        FP f_new_i = tile_df[i][threadIdx.x] - omega
+                   * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
         uint32_t dst_idx, dst_i;
