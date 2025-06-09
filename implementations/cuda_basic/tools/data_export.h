@@ -45,3 +45,25 @@ void ExportSimulationData(
     const std::string& subDirName,
     const uint32_t suffixNum,
     const bool bin = true, const bool csv = false);
+
+void SelectWriteBackData(
+    const uint32_t step,
+    const uint32_t export_interval,
+    bool export_rho,
+    bool export_u_x,
+    bool export_u_y,
+    bool export_u_mag,
+    bool& write_rho,
+    bool& write_u_x,
+    bool& write_u_y);
+
+void ExportSelectedData(
+    const SimulationExportContext context,
+    const std::string export_name,
+    const std::string export_num,
+    const uint32_t step,
+    const uint32_t export_interval,
+    bool export_rho,
+    bool export_u_x,
+    bool export_u_y,
+    bool export_u_mag);

@@ -1,13 +1,13 @@
 // CUDA implementation of Lattice-Boltzmann with notable properties:
 // - coalesced memory accesses of df values
-// - shared memory tiles for df values
+// - shared memory tiling for df values
 // - fully fused density/velocity/collision/streaming kernel (push)
-// - conditional global write-back of density and velocity values
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
 // - fp32/fp64 precision switch at compile-time for df, density, velocity values
 // - int and fp versions of the directions vectors to avoid casting
-// - pull-style streaming, instead of push
+// - removed loop unrolling hint to reduce register pressure
+// - export interval synced global write-back of density and velocity values
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -42,13 +42,17 @@ int main(int argc, char* argv[])
     FP u_lid = 0.1;
 
     // data export settings
-    bool write_rho =    false;
-    bool write_u_x =    true;
-    bool write_u_y =    true;
+    uint32_t export_interval = 10000;
+    std::string export_name = "A";
+    std::string export_num = "18";
+    bool export_rho =   false;
+    bool export_u_x =   false;
+    bool export_u_y =   false;
+    bool export_u_mag = false;
 
     // simulation settings
-    bool shear_wave_decay =     true;
-    bool lid_driven_cavity =    false;
+    bool shear_wave_decay =     false;
+    bool lid_driven_cavity =    true;
 
     // host-side arrays of 9 pointers to device-side df arrays
     FP* df[9];
@@ -101,7 +105,7 @@ int main(int argc, char* argv[])
         Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y,
             rho_0,u_max, k, N_X, N_Y, N_CELLS);
     }
-    else if (lid_driven_cavity)
+    if (lid_driven_cavity)
     {
         Launch_ApplyLidDrivenCavityCondition_K(dvc_df, dvc_rho, dvc_u_x,
             dvc_u_y, rho_0, N_CELLS);
@@ -111,6 +115,14 @@ int main(int argc, char* argv[])
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
+        // decide which data needs global write-backs due to exports
+        bool write_rho = false;
+        bool write_u_x = false;
+        bool write_u_y = false;
+
+        SelectWriteBackData(step, export_interval, export_rho, export_u_x,
+            export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
+
         // compute densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
         Launch_FullyFusedOperationsComputation(
@@ -119,23 +131,11 @@ int main(int argc, char* argv[])
 
         std::swap(dvc_df, dvc_df_next);
 
+        // export actual data from the arrays that have been written back to
+        ExportSelectedData(context, export_name, export_num, step,
+            export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
+
         DisplayProgressBar(step, N_STEPS);
-
-        // export data (CAREFUL: huge file sizes)
-        if (false && (step == 1 || step % 5000 == 0))
-        {
-            ExportSimulationData(context,
-                Velocity_X,
-                "13",
-                "M",
-                step);
-
-            ExportSimulationData(context,
-                Velocity_Y,
-                "13",
-                "M",
-                step);
-        }
     }
 
     auto end_time = std::chrono::steady_clock::now();

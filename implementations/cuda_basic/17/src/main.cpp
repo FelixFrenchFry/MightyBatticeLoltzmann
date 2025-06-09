@@ -2,7 +2,7 @@
 // - coalesced memory accesses of df values
 // - shared memory tiling for df values
 // - fully fused density/velocity/collision/streaming kernel (push)
-// - no global write-back of density and velocity values
+// - conditional global write-back of density and velocity values
 // - inlined sub-kernels for modularity (no performance impact)
 // - lid-driven cavity with bounce-back boundary conditions
 // - fp32/fp64 precision switch at compile-time for df, density, velocity values

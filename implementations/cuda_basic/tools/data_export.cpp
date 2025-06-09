@@ -77,7 +77,7 @@ void ExportScalarFieldFromDevice(
         file_bin.write(reinterpret_cast<const char*>(buffer.data()), size);
         file_bin.close();
 
-        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".bin");
+        //SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".bin");
     }
 
     // ----- EXPORT CSV -----
@@ -103,7 +103,7 @@ void ExportScalarFieldFromDevice(
 
         file_csv.close();
 
-        SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".csv");
+        //SPDLOG_INFO("Exported data: (...)/{}", filePathBase.string() + ".csv");
     }
 }
 
@@ -157,4 +157,74 @@ void ExportSimulationData(
         versionDirName, subDirName, suffixNum, context.N_X, context.N_Y, bin, csv);
 
     if (dvc_u_mag != nullptr) { cudaFree(dvc_u_mag); }
+}
+
+void SelectWriteBackData(
+    const uint32_t step,
+    const uint32_t export_interval,
+    bool export_rho,
+    bool export_u_x,
+    bool export_u_y,
+    bool export_u_mag,
+    bool& write_rho,
+    bool& write_u_x,
+    bool& write_u_y)
+{
+    if (step == 1 || step % export_interval == 0)
+    {
+        if (export_rho)                 { write_rho = true; }
+        if (export_u_x || export_u_mag) { write_u_x = true; }
+        if (export_u_y || export_u_mag) { write_u_y = true; }
+    }
+}
+
+void ExportSelectedData(
+    const SimulationExportContext context,
+    const std::string export_name,
+    const std::string export_num,
+    const uint32_t step,
+    const uint32_t export_interval,
+    bool export_rho,
+    bool export_u_x,
+    bool export_u_y,
+    bool export_u_mag)
+{
+    if (step == 1 || step % export_interval == 0)
+    {
+        if (export_rho)
+        {
+            ExportSimulationData(context,
+                Density,
+                export_num,
+                export_name,
+                step);
+        }
+
+        if (export_u_x)
+        {
+            ExportSimulationData(context,
+                Velocity_X,
+                export_num,
+                export_name,
+                step);
+        }
+
+        if (export_u_y)
+        {
+            ExportSimulationData(context,
+                Velocity_Y,
+                export_num,
+                export_name,
+                step);
+        }
+
+        if (export_u_mag)
+        {
+            ExportSimulationData(context,
+                VelocityMagnitude,
+                export_num,
+                export_name,
+                step);
+        }
+    }
 }
