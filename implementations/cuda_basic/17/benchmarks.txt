@@ -130,6 +130,30 @@ FP64 ///////////////////////////////////////////////////////////////////////////
 [info] Step execution time:       41.381 ms
 [info] BLUPS:                     1.812
 
+// NO LOOP UNROLLING! DOUBLE BRANCHLESS BOUNDARY HANDLING!
+[2025-06-09 16:22:03] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.841 / 2.080 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 7500 / 10000 / 10000 ]
+[info] Total execution time:      432.884 sec
+[info] Step execution time:       43.288 ms
+[info] BLUPS:                     1.733
+
+// NO LOOP UNROLLING! DOUBLE CONDITIONAL BOUNDARY HANDLING!
+[2025-06-09 16:37:37] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.816 / 2.105 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 7500 / 10000 / 10000 ]
+[info] Total execution time:      370.516 sec
+[info] Step execution time:       37.052 ms
+[info] BLUPS:                     2.024
+
 ==========================================================================================
 A100 x1 / cuda_basic_17 / FP64 / reg limit 240 / lid driven cavity
 ==========================================================================================
@@ -168,6 +192,31 @@ A100 x1 / cuda_basic_17 / FP64 / reg limit 240 / lid driven cavity
     Achieved Active Warps Per SM           warp        37.61
     ------------------------------- ----------- ------------
 
+// NO LOOP UNROLLING!
+[2025-06-09 16:08:04] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 23.943 / 55.309 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
+[info] Registers per thread:      34
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
+[info] Total execution time:      155.704 sec
+[info] Step execution time:       15.570 ms
+[info] BLUPS:                     9.634
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Block Limit SM                        block           32
+    Block Limit Registers                 block            6
+    Block Limit Shared Mem                block            6
+    Block Limit Warps                     block            8
+    Theoretical Active Warps per SM        warp           48
+    Theoretical Occupancy                     %           75
+    Achieved Occupancy                        %        69.43
+    Achieved Active Warps Per SM           warp        44.44
+    ------------------------------- ----------- ------------
+
 [2025-06-09 14:42:09] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
 [info] Memory usage GB [total/used/free]: [ 79.252 / 70.865 / 8.387 ]
 [info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 1757813 / 256 ]
@@ -178,6 +227,18 @@ A100 x1 / cuda_basic_17 / FP64 / reg limit 240 / lid driven cavity
 [info] Total execution time:      465.181 sec
 [info] Step execution time:       46.518 ms
 [info] BLUPS:                     9.674
+
+// NO LOOP UNROLLING!
+[2025-06-09 16:12:45] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 70.865 / 8.387 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 1757813 / 256 ]
+[info] Registers per thread:      34
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 45000 / 10000 / 10000 ]
+[info] Total execution time:      468.930 sec
+[info] Step execution time:       46.893 ms
+[info] BLUPS:                     9.596
 
 ==========================================================================================
 A100 x1 / cuda_basic_17 / FP64 / reg limit 40 / lid driven cavity
