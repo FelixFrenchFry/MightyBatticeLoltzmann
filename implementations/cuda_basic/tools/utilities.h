@@ -40,10 +40,11 @@ void inline DisplayProgressBar(
 // GPU model and CUDA compute capability version
 void inline DisplayDeviceModel()
 {
+    std::cout << std::endl;
+
     cudaDeviceProp props{};
     cudaGetDeviceProperties(&props, 0);
-    SPDLOG_INFO("GPU: {} (CC: {})",
-    props.name, props.major * 10 + props.minor);
+    SPDLOG_INFO("GPU: {} (CC: {})", props.name, props.major * 10 + props.minor);
 }
 
 // GPU memory usage (Gibibytes -> 1 GB = 2^30 bytes = 1,073,741,824 bytes)
@@ -56,7 +57,7 @@ void inline DisplayDeviceMemoryUsage()
     double mem_free = static_cast<double>(bytes_free)  / (1 << 30);
     double mem_used  = mem_total - mem_free;
 
-    SPDLOG_INFO("Memory usage [total/used/free]: {:.3f} / {:.3f} / {:.3f} GB",
+    SPDLOG_INFO("Memory usage in GB [total/used/free]: [ {:.3f} / {:.3f} / {:.3f} ]",
         mem_total, mem_used, mem_free);
 }
 
@@ -76,7 +77,7 @@ void inline DisplayPerformanceStats(
 
     SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
     SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
-    SPDLOG_INFO("Simulation size [X/Y/N]:   [{}/{}/{}]", N_X, N_Y, N_STEPS);
+    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]", N_X, N_Y, N_STEPS);
     SPDLOG_INFO("BLUPS:                     {:.3f}", blups);
 }
 
