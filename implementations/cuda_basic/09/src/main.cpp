@@ -7,8 +7,8 @@
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
 #include "../../tools/utilities.h"
-#include "fullyfused.cuh"
 #include "initialization.cuh"
+#include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <spdlog/spdlog.h>
 
