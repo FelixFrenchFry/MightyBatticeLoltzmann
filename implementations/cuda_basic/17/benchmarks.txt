@@ -240,6 +240,30 @@ A100 x1 / cuda_basic_17 / FP64 / reg limit 240 / lid driven cavity
 [info] Step execution time:       46.893 ms
 [info] BLUPS:                     9.596
 
+// NO LOOP UNROLLING! DOUBLE BRANCHLESS BOUNDARY HANDLING!
+[2025-06-09 16:58:03] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 70.865 / 8.387 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 1757813 / 256 ]
+[info] Registers per thread:      48
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 45000 / 10000 / 10000 ]
+[info] Total execution time:      467.601 sec
+[info] Step execution time:       46.760 ms
+[info] BLUPS:                     9.624
+
+// NO LOOP UNROLLING! DOUBLE CONDITIONAL BOUNDARY HANDLING!
+[2025-06-09 16:49:06] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 70.865 / 8.387 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 1757813 / 256 ]
+[info] Registers per thread:      34
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 45000 / 10000 / 10000 ]
+[info] Total execution time:      469.054 sec
+[info] Step execution time:       46.905 ms
+[info] BLUPS:                     9.594
+
 ==========================================================================================
 A100 x1 / cuda_basic_17 / FP64 / reg limit 40 / lid driven cavity
 ==========================================================================================

@@ -1,4 +1,5 @@
 #include "../../tools/config.cuh"
+#include "../../tools/utilities.h"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
@@ -14,6 +15,7 @@ __constant__ int dvc_c_x[9];
 __constant__ int dvc_c_y[9];
 __constant__ FP dvc_w[9];
 bool constantsInitialized = false;
+bool kernelAttributesDisplayed = false;
 
 void InitializeConstants()
 {

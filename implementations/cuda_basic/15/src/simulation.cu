@@ -1,4 +1,5 @@
 #include "../../tools/config.cuh"
+#include "../../tools/utilities.h"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>
@@ -16,6 +17,7 @@ __constant__ FP dvc_fp_c_x[9];
 __constant__ FP dvc_fp_c_y[9];
 __constant__ FP dvc_w[9];
 bool constantsInitialized = false;
+bool kernelAttributesDisplayed = false;
 
 void InitializeConstants()
 {
@@ -229,12 +231,12 @@ __global__ void ComputeFullyFusedOperations_K(
 
         // inlined sub-kernel for the neighbor index
         uint32_t dst_idx, dst_i;
-        ComputeNeighborIndex_PeriodicBoundary_K(
+        ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
-        //InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i,
-        //    f_new_i);
+        InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i,
+            f_new_i);
 
         // stream df value df_i to the neighbor in dir i
         // (direction i gets reversed in case of bounce-back)

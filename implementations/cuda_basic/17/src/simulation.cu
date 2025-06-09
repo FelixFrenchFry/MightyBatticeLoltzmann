@@ -16,8 +16,8 @@ __constant__ int dvc_c_y[9];
 __constant__ FP dvc_fp_c_x[9];
 __constant__ FP dvc_fp_c_y[9];
 __constant__ FP dvc_w[9];
-bool constantsInitialized =        false;
-bool kernelAttributesDisplayed =   false;
+bool constantsInitialized = false;
+bool kernelAttributesDisplayed = false;
 
 void InitializeConstants()
 {
@@ -93,6 +93,7 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_Conditio
     }
 }
 
+// TODO: reduce register usage
 __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLess_K(
     uint32_t src_x, uint32_t src_y,
     uint32_t N_X, uint32_t N_Y,
@@ -100,8 +101,6 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
     uint32_t& dst_idx,
     uint32_t& dst_i)
 {
-    // TODO: this increases register pressure by too much
-
     // branch-less bit-wise computation of: 1 if bounce-back, else 0
     int bounce =
         ((dvc_c_x[i] == -1) & (src_x == 0)) |
@@ -110,12 +109,6 @@ __device__ __forceinline__ void ComputeNeighborIndex_BounceBackBoundary_BranchLe
         ((dvc_c_y[i] ==  1) & (src_y == N_Y - 1));
 
     // branch-less computation of destination index
-    // TODO: reduce register usage
-    /*
-    uint32_t idx_normal = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
-    uint32_t idx_bounce = src_y * N_X + src_x;
-    dst_idx = bounce * idx_bounce + (1 - bounce) * idx_normal;
-    */
     dst_idx = bounce * (src_y * N_X + src_x)
             + (1 - bounce) * ((src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]));
 
@@ -223,11 +216,13 @@ __global__ void ComputeFullyFusedOperations_K(
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
+        // TODO: switch to branch-less sub-kernel
         uint32_t dst_idx, dst_i;
         ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
+        // TODO: switch to branch-less sub-kernel
         InjectLidVelocity_Conditional_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
 
         // stream df value df_i to the neighbor in dir i

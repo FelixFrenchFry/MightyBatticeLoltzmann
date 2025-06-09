@@ -1,4 +1,5 @@
 #include "../../tools/config.cuh"
+#include "../../tools/utilities.h"
 #include <cuda_runtime.h>
 #include <cstddef>
 #include <spdlog/spdlog.h>

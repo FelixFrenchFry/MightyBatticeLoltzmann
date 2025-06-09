@@ -15,7 +15,6 @@
 #include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
-#include <iostream>
 #include <spdlog/spdlog.h>
 
 
@@ -30,7 +29,7 @@ int main(int argc, char* argv[])
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  10000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
