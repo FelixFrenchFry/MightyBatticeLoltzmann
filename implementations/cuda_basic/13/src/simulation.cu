@@ -264,7 +264,8 @@ void Launch_FullyFusedOperationsComputation(
     if (!kernelAttributesDisplayed)
     {
         DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
-            fmt::format("ComputeFullyFusedOperations_K<{}, {}>", N_DIR, N_BLOCKSIZE));
+            fmt::format("ComputeFullyFusedOperations_K"),
+            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_CELLS);
 
         kernelAttributesDisplayed = true;
     }

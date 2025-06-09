@@ -1,38 +1,38 @@
 ====================================================================================================
 5070 Ti x1 / cuda_basic_17 / FP32 / reg limit 240 / lid driven cavity
 ====================================================================================================
-[2025-06-09 12:01:32] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
-[info] Memory usage in GB [total/used/free]: [ 15.920 / 13.865 / 2.055 ]
-[info] Kernel attributes for:     ComputeFullyFusedOperations_K<9, 256>
-[info] Registers per thread:      32
-[info] Shared memory per block:   9216 bytes
-[info] Local memory per thread:   0 bytes
-[info] Total execution time:      166.614 sec
-[info] Step execution time:       16.661 ms
-[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
-[info] BLUPS:                     9.003
-
 [2025-06-09 12:21:14] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
-[info] Memory usage in GB [total/used/free]: [ 15.920 / 13.847 / 2.074 ]
+[info] Memory usage [total/used/free]: [ 15.920 / 13.847 / 2.074 ]
 [info] Kernel attributes for:     ComputeFullyFusedOperations_K<9, 256>
 [info] Registers per thread:      32
 [info] Shared memory per block:   9216 bytes
 [info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
 [info] Total execution time:      164.478 sec
 [info] Step execution time:       16.448 ms
-[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
 [info] BLUPS:                     9.120
 
 ====================================================================================================
 A100 x1 / cuda_basic_17 / FP32 / reg limit 240 / lid driven cavity
 ====================================================================================================
-[2025-06-09 12:16:52] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
-[info] Memory usage in GB [total/used/free]: [ 79.252 / 47.404 / 31.848 ]
+[2025-06-09 12:46:42] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage [total/used/free]: [ 79.252 / 12.212 / 67.039 ]
 [info] Kernel attributes for:     ComputeFullyFusedOperations_K<9, 256>
 [info] Registers per thread:      32
 [info] Shared memory per block:   9216 bytes
 [info] Local memory per thread:   0 bytes
-[info] Total execution time:      316.271 sec
-[info] Step execution time:       31.627 ms
-[info] Simulation size [X/Y/N]:   [ 30000 / 20000 / 10000 ]
-[info] BLUPS:                     18.971
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
+[info] Total execution time:      79.956 sec
+[info] Step execution time:       7.996 ms
+[info] BLUPS:                     18.760
+
+[2025-06-09 12:49:14] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage [total/used/free]: [ 79.252 / 63.031 / 16.221 ]
+[info] Kernel attributes for:     ComputeFullyFusedOperations_K<9, 256>
+[info] Registers per thread:      32
+[info] Shared memory per block:   9216 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 90000 / 10000 / 10000 ]
+[info] Total execution time:      476.391 sec
+[info] Step execution time:       47.639 ms
+[info] BLUPS:                     18.892

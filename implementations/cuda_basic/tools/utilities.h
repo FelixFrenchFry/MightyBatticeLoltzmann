@@ -57,7 +57,7 @@ void inline DisplayDeviceMemoryUsage()
     double mem_free = static_cast<double>(bytes_free)  / (1 << 30);
     double mem_used  = mem_total - mem_free;
 
-    SPDLOG_INFO("Memory usage in GB [total/used/free]: [ {:.3f} / {:.3f} / {:.3f} ]",
+    SPDLOG_INFO("Memory usage GB [total/used/free]: [ {:.3f} / {:.3f} / {:.3f} ]",
         mem_total, mem_used, mem_free);
 }
 
@@ -77,13 +77,17 @@ void inline DisplayPerformanceStats(
 
     SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
     SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
-    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]", N_X, N_Y, N_STEPS);
     SPDLOG_INFO("BLUPS:                     {:.3f}", blups);
 }
 
 // header-only display of CUDA kernel attributes
 template <typename KernelT>
-void inline DisplayKernelAttributes(KernelT kernel, const std::string& kernel_name)
+void inline DisplayKernelAttributes(
+    KernelT kernel,
+    const std::string& kernel_name,
+    uint32_t N_GRIDSIZE, uint32_t N_BLOCKSIZE,
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t N_STEPS)
 {
     cudaFuncAttributes attr;
     cudaError_t err = cudaFuncGetAttributes(&attr, kernel);
@@ -94,8 +98,11 @@ void inline DisplayKernelAttributes(KernelT kernel, const std::string& kernel_na
         return;
     }
 
-    SPDLOG_INFO("Kernel attributes for:     {}", kernel_name);
+    SPDLOG_INFO("Kernel [name/grid/block]:  [ {} / {} / {} ]",
+        kernel_name, N_GRIDSIZE, N_BLOCKSIZE);
     SPDLOG_INFO("Registers per thread:      {}", attr.numRegs);
     SPDLOG_INFO("Shared memory per block:   {} bytes", attr.sharedSizeBytes);
-    SPDLOG_INFO("Local memory per thread:   {} bytes\n", attr.localSizeBytes);
+    SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
+    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]\n",
+        N_X, N_Y, N_STEPS);
 }
