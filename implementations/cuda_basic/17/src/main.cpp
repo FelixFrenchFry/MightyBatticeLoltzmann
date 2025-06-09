@@ -7,6 +7,7 @@
 // - lid-driven cavity with bounce-back boundary conditions
 // - fp32/fp64 precision switch at compile-time for df, density, velocity values
 // - int and fp versions of the directions vectors to avoid casting
+// - removed loop unrolling hint to reduce register pressure
 // - TODO: reduce register pressure and optimize for register spills
 
 #include "../../tools/config.cuh"
@@ -27,8 +28,8 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      1000;
-    uint32_t N_Y =      1000;
+    uint32_t N_X =      15000;
+    uint32_t N_Y =      10000;
     uint32_t N_STEPS =  10000;
     uint32_t N_CELLS =  N_X * N_Y;
 
