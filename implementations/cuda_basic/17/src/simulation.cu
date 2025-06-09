@@ -216,14 +216,14 @@ __global__ void ComputeFullyFusedOperations_K(
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
-        // TODO: switch to branch-less sub-kernel
+        // TODO: conditional or branch-less sub-kernel for A100/H100 ?
         uint32_t dst_idx, dst_i;
-        ComputeNeighborIndex_BounceBackBoundary_Conditional_K(
+        ComputeNeighborIndex_BounceBackBoundary_BranchLess_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
-        // TODO: switch to branch-less sub-kernel
-        InjectLidVelocity_Conditional_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
+        // TODO: conditional or branch-less sub-kernel for A100/H100 ?
+        InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
 
         // stream df value df_i to the neighbor in dir i
         // (direction i gets reversed in case of bounce-back)
