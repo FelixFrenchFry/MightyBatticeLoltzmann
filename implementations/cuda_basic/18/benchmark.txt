@@ -1,0 +1,73 @@
+FP32 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+==========================================================================================
+5070 Ti x1 / cuda_basic_18 / FP32 / reg limit 240 / lid driven cavity
+==========================================================================================
+[2025-06-10 11:03:04] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.731 / 2.189 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
+[info] Registers per thread:      32
+[info] Shared memory per block:   9216 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
+[info] Total execution time:      141.470 sec
+[info] Step execution time:       14.147 ms
+[info] BLUPS:                     10.603
+
+[2025-06-09 20:40:52] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.706 / 2.214 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
+[info] Registers per thread:      32
+[info] Shared memory per block:   9216 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 1000000 ]
+[info] Total execution time:      14202.008 sec
+[info] Step execution time:       14.202 ms
+[info] BLUPS:                     10.562
+
+
+
+FP64 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+==========================================================================================
+5070 Ti x1 / cuda_basic_18 / FP64 / reg limit 240 / lid driven cavity
+==========================================================================================
+[2025-06-10 11:06:34] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.697 / 2.224 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 7500 / 10000 / 10000 ]
+[info] Total execution time:      407.099 sec
+[info] Step execution time:       40.710 ms
+[info] BLUPS:                     1.842
+
+==========================================================================================
+A100 x1 / cuda_basic_18 / FP64 / reg limit 240 / lid driven cavity
+==========================================================================================
+[2025-06-09 20:18:41] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 23.943 / 55.309 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
+[info] Registers per thread:      48
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
+[info] Total execution time:      136.465 sec
+[info] Step execution time:       13.646 ms
+[info] BLUPS:                     10.992
+
+[2025-06-09 20:21:25] [info] GPU: NVIDIA A100 80GB PCIe (CC: 80)
+[info] Memory usage GB [total/used/free]: [ 79.252 / 70.865 / 8.387 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 1757813 / 256 ]
+[info] Registers per thread:      48
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 45000 / 10000 / 10000 ]
+[info] Total execution time:      410.841 sec
+[info] Step execution time:       41.084 ms
+[info] BLUPS:                     10.953

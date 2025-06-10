@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-    int rank = 0, size = 1;
+    int rank = 0, size = 5;
 
     // below is some MPI code, try compiling with `cmake -DWITH_MPI=ON ...`
 #ifdef WITH_MPI
@@ -23,12 +23,12 @@ int main(int argc, char *argv[])
     std::cout << "Hello I am rank " << rank << " of " << size << "\n";
 
     if (rank == 0)
-      std::cout << "I am the master process\n";
+        std::cout << "I am the master process\n";
 
     auto input_path = "./simulation_test_input.txt";
 
     if (not std::filesystem::exists(input_path))
-      std::cerr << "warning: could not find input file " << input_path << "\n";
+        std::cerr << "warning: could not find input file " << input_path << "\n";
 
 #ifdef WITH_MPI
     MPI_Finalize();

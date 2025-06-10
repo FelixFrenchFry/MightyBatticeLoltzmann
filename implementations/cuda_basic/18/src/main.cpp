@@ -27,32 +27,32 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    uint32_t N_X =      15000;
-    uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  10000;
-    uint32_t N_CELLS =  N_X * N_Y;
+    constexpr uint32_t N_X =      7500;
+    constexpr uint32_t N_Y =      10000;
+    constexpr uint32_t N_STEPS =  10000;
+    constexpr uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    FP omega = 1.2;
-    FP rho_0 = 1.0;
-    FP u_max = 0.1;
-    FP n = 3.0;
-    FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y);
-    FP u_lid = 0.1;
+    constexpr FP omega = 1.2;
+    constexpr FP rho_0 = 1.0;
+    constexpr FP u_max = 0.1;
+    constexpr FP n = 3.0;
+    constexpr FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y);
+    constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 10000;
+    uint32_t export_interval = 1000;
     std::string export_name = "A";
     std::string export_num = "18";
-    bool export_rho =   false;
-    bool export_u_x =   false;
-    bool export_u_y =   false;
-    bool export_u_mag = false;
+    constexpr bool export_rho =   false;
+    constexpr bool export_u_x =   false;
+    constexpr bool export_u_y =   false;
+    constexpr bool export_u_mag = false;
 
     // simulation settings
-    bool shear_wave_decay =     false;
-    bool lid_driven_cavity =    true;
+    constexpr bool shear_wave_decay =     false;
+    constexpr bool lid_driven_cavity =    true;
 
     // host-side arrays of 9 pointers to device-side df arrays
     FP* df[9];

@@ -175,7 +175,7 @@ __global__ void ComputeFullyFusedOperations_K(
     FP u_x = FP_CONST(0.0);
     FP u_y = FP_CONST(0.0);
 
-    // populate shared memory tiles and compute sums in one loop
+    // populate shared memory tiles and compute sums in the same loop
     // density := sum over df values in each dir i
     // velocity := sum over df values, weighted by each dir i
     for (uint32_t i = 0; i < N_DIR; i++)
@@ -216,13 +216,13 @@ __global__ void ComputeFullyFusedOperations_K(
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
-        // TODO: conditional or branch-less sub-kernel for A100/H100 ?
+        // TODO: conditional or branch-less sub-kernel better for A100/H100 ?
         uint32_t dst_idx, dst_i;
         ComputeNeighborIndex_BounceBackBoundary_BranchLess_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
-        // TODO: conditional or branch-less sub-kernel for A100/H100 ?
+        // TODO: conditional or branch-less sub-kernel better for A100/H100 ?
         InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
 
         // stream df value df_i to the neighbor in dir i
