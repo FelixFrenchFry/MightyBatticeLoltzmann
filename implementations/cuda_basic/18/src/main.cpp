@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    constexpr uint32_t N_X =      7500;
+    constexpr uint32_t N_X =      15000;
     constexpr uint32_t N_Y =      10000;
     constexpr uint32_t N_STEPS =  10000;
     constexpr uint32_t N_CELLS =  N_X * N_Y;

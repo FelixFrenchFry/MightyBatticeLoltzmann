@@ -28,24 +28,8 @@ add_project_arguments('-DUSE_FP32', '--std=c++17', language: ['cpp', 'cuda'])
 cuda_include = include_directories('/usr/local/cuda/include')
 #cuda_include = include_directories('/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/include')
 
-# addresssanitizer flags for detecting runtime memory errors
-# add_project_arguments('-fsanitize=address', language: ['c', 'cpp', 'cuda'])
-# add_project_link_arguments('-fsanitize=address', language: ['c', 'cpp', 'cuda'])
-
-# optional dependency: Kokkos C++ performance portability library
-# make sure to add 'kokkoscore' to the dependencies in your subdirectories
-# kokkoscore = dependency('kokkoscore')
-
-# detect and integrate NCCL
-#nccl = dependency('nccl', required: true)
-
-nccl = declare_dependency(
-    include_directories: include_directories('/usr/include'),
-    link_args: ['-lnccl']
-)
-
 # detect and integrate MPI
-#mpi = dependency('mpi', required: false)
+#mpi = dependency('mpi')
 
 mpi = declare_dependency(
     compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),

@@ -1,38 +1,38 @@
-#include <iostream>
+#include <cuda_runtime.h>
 #include <filesystem>
-
-#ifdef WITH_MPI
 #include <mpi.h>
-#endif
+#include <spdlog/spdlog.h>
 
 
 
 int main(int argc, char *argv[])
 {
-    int rank = 0, size = 5;
+    // configure spdlog to display error messages like this:
+    // [year-month-day hour:min:sec] [type] [message]
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
-    // below is some MPI code, try compiling with `cmake -DWITH_MPI=ON ...`
-#ifdef WITH_MPI
     MPI_Init(&argc, &argv);
 
-    // retrieve process infos
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &size);
-#endif
+    // get the total number of processes
+    int world_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    std::cout << "Hello I am rank " << rank << " of " << size << "\n";
+    // get the rank of this process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    if (rank == 0)
-        std::cout << "I am the master process\n";
+    // print message from each rank
+    SPDLOG_INFO("Hello from process {} of {}", world_rank, world_size);
+    if (world_rank == 0) { SPDLOG_INFO("I am the master process btw..."); }
 
-    auto input_path = "./simulation_test_input.txt";
+    auto inputPath = "./simulation_test_input.txt";
 
-    if (not std::filesystem::exists(input_path))
-        std::cerr << "warning: could not find input file " << input_path << "\n";
+    if (world_rank == 0 && not std::filesystem::exists(inputPath))
+    {
+        SPDLOG_WARN("Could not find input file {}", inputPath);
+    }
 
-#ifdef WITH_MPI
     MPI_Finalize();
-#endif
 
     return 0;
 }
