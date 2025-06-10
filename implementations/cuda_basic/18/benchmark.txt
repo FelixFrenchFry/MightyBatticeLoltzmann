@@ -5,27 +5,27 @@ FP32 ///////////////////////////////////////////////////////////////////////////
 ==========================================================================================
 5070 Ti x1 / cuda_basic_18 / FP32 / reg limit 240 / lid driven cavity
 ==========================================================================================
-[2025-06-10 11:03:04] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
-[info] Memory usage GB [total/used/free]: [ 15.920 / 13.731 / 2.189 ]
+[2025-06-10 15:16:51] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 1.431 / 14.489 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 3907 / 256 ]
+[info] Registers per thread:      32
+[info] Shared memory per block:   9216 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 1000 / 1000 / 10000 ]
+[info] Total execution time:      1.097 sec
+[info] Step execution time:       0.110 ms
+[info] BLUPS:                     9.115
+
+[2025-06-10 15:09:48] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 13.899 / 2.022 ]
 [info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
 [info] Registers per thread:      32
 [info] Shared memory per block:   9216 bytes
 [info] Local memory per thread:   0 bytes
 [info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 10000 ]
-[info] Total execution time:      141.470 sec
-[info] Step execution time:       14.147 ms
-[info] BLUPS:                     10.603
-
-[2025-06-09 20:40:52] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
-[info] Memory usage GB [total/used/free]: [ 15.920 / 13.706 / 2.214 ]
-[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 585938 / 256 ]
-[info] Registers per thread:      32
-[info] Shared memory per block:   9216 bytes
-[info] Local memory per thread:   0 bytes
-[info] Simulation size [X/Y/N]:   [ 15000 / 10000 / 1000000 ]
-[info] Total execution time:      14202.008 sec
-[info] Step execution time:       14.202 ms
-[info] BLUPS:                     10.562
+[info] Total execution time:      134.756 sec
+[info] Step execution time:       13.476 ms
+[info] BLUPS:                     11.131
 
 
 
@@ -36,6 +36,17 @@ FP64 ///////////////////////////////////////////////////////////////////////////
 ==========================================================================================
 5070 Ti x1 / cuda_basic_18 / FP64 / reg limit 240 / lid driven cavity
 ==========================================================================================
+[2025-06-10 15:15:16] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 1.513 / 14.407 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 3907 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 1000 / 1000 / 10000 ]
+[info] Total execution time:      5.476 sec
+[info] Step execution time:       0.548 ms
+[info] BLUPS:                     1.826
+
 [2025-06-10 11:06:34] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
 [info] Memory usage GB [total/used/free]: [ 15.920 / 13.697 / 2.224 ]
 [info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]
