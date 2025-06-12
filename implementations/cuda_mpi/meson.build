@@ -2,8 +2,9 @@
 
 executable(
     'cuda_mpi_01',
-    ['01/src/main.cpp'],
+    ['01/src/main.cpp',
+     '01/src/simulation.cu'],
     include_directories : [lib_incdirs, cuda_include],
     link_with : [lib],
-    dependencies : [spdlog, mpi]
+    dependencies : [spdlog, cuda, mpi]
 )

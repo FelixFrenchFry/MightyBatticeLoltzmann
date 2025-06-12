@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <mpi.h>
 
 
 
@@ -10,12 +11,14 @@
     #define FP_SQRT sqrt
     #define FP_SIN sin
     #define FP_PI 3.14159265358979323846
+    #define FP_MPI_TYPE MPI_DOUBLE
 #else
     #define FP float
     #define FP_CONST(x) x##f
     #define FP_SQRT sqrtf
     #define FP_SIN sinf
     #define FP_PI 3.14159265358979323846f
+    #define FP_MPI_TYPE MPI_FLOAT
 #endif
 
 
