@@ -188,8 +188,9 @@ int main(int argc, char *argv[])
         for (uint32_t i = 0; i < 9; i++)
         {
             // this rank sends its top halo layer
+            // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Isend(
-                dvc_df_halo_top[i],     // pointer to source buffer
+                df_halo_top[i],     // pointer to source buffer
                 N_X,                    // number of entries
                 FP_MPI_TYPE,            // data type
                 RANK_ABOVE,             // destination rank
@@ -200,8 +201,9 @@ int main(int argc, char *argv[])
             // rank above receives bottom layer
             // (one row is overwritten, from index (N_Y-1) * N_X to N_Y * N_X)
             // TODO: off by one error?
+            // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Irecv(
-                dvc_df_next[i] + (N_Y - 1) * N_X,
+                df_next[i] + (N_Y - 1) * N_X,
                 N_X,
                 FP_MPI_TYPE,
                 RANK_ABOVE,
@@ -209,7 +211,9 @@ int main(int argc, char *argv[])
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
 
+            /*
             // this rank sends its bottom halo layer
+            // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Isend(
                 dvc_df_halo_bottom[i],
                 N_X,
@@ -222,6 +226,7 @@ int main(int argc, char *argv[])
             // rank below receives top layer
             // (one row is overwritten, from index 0 to N_X)
             // TODO: off by one error?
+            // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Irecv(
                 dvc_df_next[i],
                 N_X,
@@ -230,6 +235,7 @@ int main(int argc, char *argv[])
                 i + 9,
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
+                */
         }
 
         // wait for all MPI halo exchanges to finish
