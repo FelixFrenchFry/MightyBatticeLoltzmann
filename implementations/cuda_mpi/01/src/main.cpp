@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      150;
-    constexpr uint32_t N_Y_TOTAL =      100;
-    constexpr uint32_t N_STEPS =        1;
+    constexpr uint32_t N_X_TOTAL =      15000;
+    constexpr uint32_t N_Y_TOTAL =      10000;
+    constexpr uint32_t N_STEPS =        10000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -211,11 +211,10 @@ int main(int argc, char *argv[])
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
 
-            /*
             // this rank sends its bottom halo layer
             // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Isend(
-                dvc_df_halo_bottom[i],
+                df_halo_bottom[i],
                 N_X,
                 FP_MPI_TYPE,
                 RANK_BELOW,
@@ -228,14 +227,13 @@ int main(int argc, char *argv[])
             // TODO: off by one error?
             // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Irecv(
-                dvc_df_next[i],
+                df_next[i],
                 N_X,
                 FP_MPI_TYPE,
                 RANK_BELOW,
                 i + 9,
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
-                */
         }
 
         // wait for all MPI halo exchanges to finish
@@ -249,7 +247,8 @@ int main(int argc, char *argv[])
     if (RANK == 0)
     {
         auto end_time = std::chrono::steady_clock::now();
-        DisplayPerformanceStats(start_time, end_time, N_X, N_Y, N_STEPS);
+        // TODO: add additional metrics that are interesting for this use case
+        DisplayPerformanceStats(start_time, end_time, N_X, N_Y_TOTAL, N_STEPS);
     }
 
     // =========================================================================

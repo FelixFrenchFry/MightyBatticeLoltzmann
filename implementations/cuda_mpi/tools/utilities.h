@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <spdlog/spdlog.h>
+#include <unistd.h>
 
 
 
@@ -12,28 +13,36 @@ void inline DisplayProgressBar(
     const uint32_t step,
     const uint32_t N_STEPS)
 {
+    static int last_shown_percent = -1;
+
     float progress = static_cast<float>(step) / N_STEPS;
+    int percent = static_cast<int>(progress * 100.0f);
+    int rounded_percent = (percent / 10) * 10;
+
+    bool isTTY = isatty(fileno(stderr));
+
+    // for non-interactive terminals, only print progress every 10%
+    if (!isTTY && rounded_percent == last_shown_percent && step != N_STEPS) { return; }
+
+    last_shown_percent = rounded_percent;
+
     uint32_t position = static_cast<int>(50 * progress);
 
-    std::cout << "\r[";
-
-    for (uint32_t i = 0; i < 50; i++)
-    {
-        if (i < position)       { std::cout << "="; }
-        else if (i == position) { std::cout << ">"; }
-        else                    { std::cout << " "; }
+    std::cerr << (isTTY ? "\r[" : "[");
+    for (uint32_t i = 0; i < 50; i++) {
+        if (i < position)       std::cerr << "=";
+        else if (i == position) std::cerr << ">";
+        else                    std::cerr << " ";
     }
 
-    // RGB color for progress percentage
-    std::cout << "] \033[38;2;255;40;50m"
+    std::cerr << "] \033[38;2;255;40;50m"
               << std::fixed << std::setprecision(2)
               << (progress * 100.0f) << " %"
               << "\033[0m"
               << " (step " << step << "/" << N_STEPS << ")";
 
-    std::cout.flush();
-
-    if (step == N_STEPS) { std::cout << "\n" << std::endl; }
+    if (step == N_STEPS || !isTTY)  { std::cerr << std::endl; }
+    else                            { std::cerr << std::flush; }
 }
 
 // GPU model and CUDA compute capability version
@@ -74,6 +83,7 @@ void inline DisplayPerformanceStats(
 
     double blups = static_cast<double>(total_updates) / (execution_time * 1e9);
 
+    std::cerr << std::endl;
     SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
     SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
     SPDLOG_INFO("BLUPS:                     {:.3f}", blups);
