@@ -18,7 +18,7 @@ project(
             '-gencode', 'arch=compute_80,code=sm_80', # A100, A30
             '-gencode', 'arch=compute_86,code=sm_86', # A40, RTX 30s
             '-gencode', 'arch=compute_89,code=sm_89', # RTX 40s
-            '-gencode', 'arch=compute_90,code=sm_90'])] # H100, H200
+            '-gencode', 'arch=compute_90,code=sm_90', # H100, H200
 	        #'-gencode', 'arch=compute_100,code=sm_100', # B200, GB200
 	        #'-gencode', 'arch=compute_120,code=sm_120'])] # RTX 50s
 )
