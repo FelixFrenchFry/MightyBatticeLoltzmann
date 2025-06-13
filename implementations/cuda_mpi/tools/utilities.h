@@ -28,21 +28,23 @@ void inline DisplayProgressBar(
 
     uint32_t position = static_cast<int>(50 * progress);
 
-    std::cerr << (isTTY ? "\r[" : "[");
+    std::cout << (isTTY ? "\r[" : "[");
     for (uint32_t i = 0; i < 50; i++) {
-        if (i < position)       std::cerr << "=";
-        else if (i == position) std::cerr << ">";
-        else                    std::cerr << " ";
+        if (i < position)       std::cout << "=";
+        else if (i == position) std::cout << ">";
+        else                    std::cout << " ";
     }
 
-    std::cerr << "] \033[38;2;255;40;50m"
+    // RGB color for progress percentage
+    std::cout << "] \033[38;2;255;40;50m"
               << std::fixed << std::setprecision(2)
               << (progress * 100.0f) << " %"
               << "\033[0m"
               << " (step " << step << "/" << N_STEPS << ")";
 
-    if (step == N_STEPS || !isTTY)  { std::cerr << std::endl; }
-    else                            { std::cerr << std::flush; }
+    if (step == N_STEPS)    { std::cout << "\n" << std::endl; }
+    else if (!isTTY)        { std::cout << std::endl; }
+    else                    { std::cout << std::flush; }
 }
 
 // GPU model and CUDA compute capability version
@@ -96,7 +98,9 @@ void inline DisplayKernelAttributes(
     const std::string& kernel_name,
     uint32_t N_GRIDSIZE, uint32_t N_BLOCKSIZE,
     uint32_t N_X, uint32_t N_Y,
-    uint32_t N_STEPS)
+    uint32_t N_X_TOTAL, uint32_t N_Y_TOTAL,
+    uint32_t N_STEPS,
+    uint32_t N_PROCESSES)
 {
     cudaFuncAttributes attr;
     cudaError_t err = cudaFuncGetAttributes(&attr, kernel);
@@ -112,6 +116,10 @@ void inline DisplayKernelAttributes(
     SPDLOG_INFO("Registers per thread:      {}", attr.numRegs);
     SPDLOG_INFO("Shared memory per block:   {} bytes", attr.sharedSizeBytes);
     SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
-    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]\n",
-        N_X, N_Y, N_STEPS);
+    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]",
+        N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+    SPDLOG_INFO("Sub-domain sizes [X/Y/N]:  [ {} / {} / {} ] x {}",
+        N_X, N_Y, N_STEPS, N_PROCESSES);
+    SPDLOG_INFO("Halo cells per sub-domain: {:.2f} %\n",
+            (2 * N_X * 100.0f) / (N_X * N_Y));
 }
