@@ -19,6 +19,7 @@ void Launch_FullyFusedLatticeUpdate_Push(
     const uint32_t Y_START, const uint32_t Y_END,
     const uint32_t N_STEPS,
     const uint32_t N_CELLS,
+    const uint32_t N_PROCESSES,
     const int RANK,
     const bool shear_wave_decay = true,
     const bool lid_driven_cavity = false,

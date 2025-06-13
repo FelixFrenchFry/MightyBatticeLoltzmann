@@ -365,6 +365,7 @@ void Launch_FullyFusedLatticeUpdate_Push(
     const uint32_t Y_START, const uint32_t Y_END,
     const uint32_t N_STEPS,
     const uint32_t N_CELLS,
+    const uint32_t N_PROCESSES,
     const int RANK,
     const bool shear_wave_decay,
     const bool lid_driven_cavity,
@@ -405,13 +406,13 @@ void Launch_FullyFusedLatticeUpdate_Push(
         {
             DisplayKernelAttributes(FullyFusedLatticeUpdate_ShearWaveDecay_Push_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FullyFusedLatticeUpdate_ShearWaveDecay_Push_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FullyFusedLatticeUpdate_LidDrivenCavity_Push_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FullyFusedLatticeUpdate_LidDrivenCavity_Push_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
 
         kernelAttributesDisplayed = true;

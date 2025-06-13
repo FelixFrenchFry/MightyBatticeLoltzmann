@@ -4,6 +4,7 @@
 
 #include "../../tools/config.cuh"
 #include "../../tools/utilities.h"
+#include "initialization.cuh"
 #include "simulation.cuh"
 #include <cuda_runtime.h>
 #include <filesystem>
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     // simulation domain width, height, and number of cells before decomposition
     constexpr uint32_t N_X_TOTAL =      15000;
     constexpr uint32_t N_Y_TOTAL =      10000;
-    constexpr uint32_t N_STEPS =        10000;
+    constexpr uint32_t N_STEPS =        1000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -139,26 +140,24 @@ int main(int argc, char *argv[])
 
     // TODO: device and memory usage infos
 
-    // TODO: initial conditions
+    if (shear_wave_decay)
+    {
+        Launch_ApplyInitialCondition_ShearWaveDecay_K(dvc_df, dvc_rho, dvc_u_x,
+            dvc_u_y, rho_0,u_max, k, N_X, N_Y, Y_START, N_CELLS);
+    }
+    if (lid_driven_cavity)
+    {
+        Launch_ApplyInitialCondition_LidDrivenCavity_K(dvc_df, dvc_rho, dvc_u_x,
+            dvc_u_y, rho_0, N_CELLS);
+    }
 
-    // print info message from each rank
-    std::string hello = fmt::format("Process {} of {}",
-        RANK, N_PROCESSES);
-
-    SPDLOG_INFO(hello);
-
+    /* TODO
     auto inputPath = "./simulation_test_input.txt";
-
     if (RANK == 0 && not std::filesystem::exists(inputPath))
     {
         SPDLOG_WARN("Could not find input file {}", inputPath);
     }
-
-    if (RANK == 0)
-    {
-        SPDLOG_INFO("Halo cells per sub-domain: {:.2f} %",
-            (2 * N_X_TOTAL * 100.0f) / (N_X_TOTAL * N_Y));
-    }
+    */
 
     // =========================================================================
     // main simulation loop
@@ -177,7 +176,7 @@ int main(int argc, char *argv[])
         Launch_FullyFusedLatticeUpdate_Push(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, RANK,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, N_PROCESSES, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // track requests for synchronization (4 per direction)

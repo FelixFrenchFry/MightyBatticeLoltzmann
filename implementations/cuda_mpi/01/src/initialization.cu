@@ -43,7 +43,7 @@ void InitializeConstants_IK()
 }
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
-__global__ void ApplyShearWaveCondition_K(
+__global__ void ApplyInitialCondition_ShearWaveDecay_K(
     FP* const* __restrict__ dvc_df,
     FP* __restrict__ dvc_rho,
     FP* __restrict__ dvc_u_x,
@@ -52,16 +52,17 @@ __global__ void ApplyShearWaveCondition_K(
     const FP u_max,
     const FP k,
     const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t Y_START,
     const uint32_t N_CELLS)
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS) { return; }
 
     // y-coordinate of the cell handled by this thread
-    uint32_t y = idx / N_X;
+    uint32_t y_global = (idx / N_X) + Y_START;
 
     // compute sinusoidal x-velocity from the shear wave configuration
-    FP u_x_val = u_max * FP_SIN(k * static_cast<FP>(y));
+    FP u_x_val = u_max * FP_SIN(k * static_cast<FP>(y_global));
     FP u_sq = u_x_val * u_x_val;
 
     // set initial values of the fields
@@ -82,7 +83,7 @@ __global__ void ApplyShearWaveCondition_K(
     }
 }
 
-void Launch_ApplyShearWaveCondition_K(
+void Launch_ApplyInitialCondition_ShearWaveDecay_K(
     FP* const* dvc_df,
     FP* dvc_rho,
     FP* dvc_u_x,
@@ -91,14 +92,15 @@ void Launch_ApplyShearWaveCondition_K(
     const FP u_max,
     const FP k,
     const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t Y_START,
     const uint32_t N_CELLS)
 {
     InitializeConstants_IK();
 
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    ApplyShearWaveCondition_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
-        dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, k, N_X, N_Y, N_CELLS);
+    ApplyInitialCondition_ShearWaveDecay_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+        dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, k, N_X, N_Y, Y_START, N_CELLS);
 
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
@@ -112,7 +114,7 @@ void Launch_ApplyShearWaveCondition_K(
 }
 
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
-__global__ void ApplyLidDrivenCavityCondition_K(
+__global__ void ApplyInitialCondition_LidDrivenCavity_K(
     FP* const* __restrict__ dvc_df,
     FP* __restrict__ dvc_rho,
     FP* __restrict__ dvc_u_x,
@@ -135,7 +137,7 @@ __global__ void ApplyLidDrivenCavityCondition_K(
     }
 }
 
-void Launch_ApplyLidDrivenCavityCondition_K(
+void Launch_ApplyInitialCondition_LidDrivenCavity_K(
     FP* const* dvc_df,
     FP* dvc_rho,
     FP* dvc_u_x,
@@ -147,7 +149,7 @@ void Launch_ApplyLidDrivenCavityCondition_K(
 
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    ApplyLidDrivenCavityCondition_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+    ApplyInitialCondition_LidDrivenCavity_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, N_CELLS);
 
     // wait for GPU to finish operations
