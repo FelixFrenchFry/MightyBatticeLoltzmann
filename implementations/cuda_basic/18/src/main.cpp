@@ -27,14 +27,14 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    constexpr uint32_t N_X =      36000;
-    constexpr uint32_t N_Y =      16000;
-    constexpr uint32_t N_STEPS =  4000000;
+    constexpr uint32_t N_X =      8000;
+    constexpr uint32_t N_Y =      18000;
+    constexpr uint32_t N_STEPS =  10000000;
     constexpr uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.7;
+    constexpr FP omega = 1.5;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
     constexpr FP n = 3.0;
@@ -42,8 +42,8 @@ int main(int argc, char* argv[])
     constexpr FP u_lid = 0.2;
 
     // data export settings
-    uint32_t export_interval = 400000;
-    std::string export_name = "A";
+    uint32_t export_interval = 100000;
+    std::string export_name = "D";
     std::string export_num = "18";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;

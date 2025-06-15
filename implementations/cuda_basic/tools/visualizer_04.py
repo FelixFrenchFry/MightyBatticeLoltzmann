@@ -9,16 +9,18 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 # TODO: use quiverplot or streamplot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  200000
-N_X =   9000
-N_Y =   4000
+step =  5800000
+N_X =   8000
+N_Y =   18000
+omega = 1.5
+u_lid = 0.2
 
 # output path config
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
 versionDirName =    "18"
-subDirName =        "B"
+subDirName =        "D"
 
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
@@ -26,7 +28,7 @@ def format_step_suffix(step: int, width: int = 9) -> str:
 # data import file path
 def get_file_path(data: str, step: int) -> str:
     return (
-        f"../../../buildDir/implementations/cuda_basic/exported/"
+        f"../../../exported/"
         f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
 # load velocity field
@@ -46,11 +48,11 @@ X, Y = np.meshgrid(x, y)
 # plot settings
 outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
-plt.figure(figsize=(9, 5))
+plt.figure(figsize=(6, 9))
 speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
 plt.streamplot(X, Y, u_x_ds, u_y_ds, density=2.5, linewidth=1.25, arrowsize=1.0, color=speed, cmap='inferno')
 plt.colorbar(label="Velocity magnitude")
-plt.title(f"Streamlines at step {step}")
+plt.title(f"Streamlines at step {step}, omega {omega}, u_lid {u_lid}")
 plt.xlabel("X")
 plt.ylabel("Y")
 plt.axis("equal")

@@ -28,7 +28,7 @@ def format_step_suffix(step: int, width: int = 9) -> str:
 # data import file path
 def get_file_path(step: int) -> str:
     return (
-        f"../../../buildDir/implementations/cuda_basic/exported/"
+        f"../../../exported/"
         f"{versionDirName}/{subDirName}/{dataType}{format_step_suffix(step)}.bin")
 
 # find global u_min / u_max across all steps
