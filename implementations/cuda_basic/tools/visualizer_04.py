@@ -9,18 +9,18 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 # TODO: use quiverplot or streamplot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  5800000
-N_X =   8000
-N_Y =   18000
-omega = 1.5
-u_lid = 0.2
+step =  1
+N_X =   10000
+N_Y =   10000
+omega = 1.7
+u_lid = 0.1
 
 # output path config
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
 versionDirName =    "18"
-subDirName =        "D"
+subDirName =        "E"
 
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
