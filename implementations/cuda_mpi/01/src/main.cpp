@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      300;
-    constexpr uint32_t N_Y_TOTAL =      300;
-    constexpr uint32_t N_STEPS =        1000;
+    constexpr uint32_t N_X_TOTAL =      60;
+    constexpr uint32_t N_Y_TOTAL =      40;
+    constexpr uint32_t N_STEPS =        100;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -34,13 +34,13 @@ int main(int argc, char *argv[])
     constexpr FP omega = 1.2;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
-    constexpr FP n = 3.0;
+    constexpr FP n = 2.0;
     constexpr FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y_TOTAL);
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 100;
-    std::string export_name = "A";
+    uint32_t export_interval = 20;
+    std::string export_name = "B";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     constexpr bool export_u_mag = false;
 
     // simulation settings
-    constexpr bool shear_wave_decay =     false;
-    constexpr bool lid_driven_cavity =    true;
+    constexpr bool shear_wave_decay =     true;
+    constexpr bool lid_driven_cavity =    false;
 
     // =========================================================================
     // domain decomposition and MPI stuff

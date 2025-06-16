@@ -81,8 +81,8 @@ void ExportScalarFieldFromMPIDevices(
 
     MPI_File_close(&mpiFile);
 
-    SPDLOG_INFO("Rank {} -> wrote {} at offset y={} ({}x{})",
-                RANK, filename.string(), Y_START, N_X, N_Y);
+    //SPDLOG_INFO("Rank {} -> wrote {} at offset y={} ({}x{})",
+    //            RANK, filename.string(), Y_START, N_X, N_Y);
 }
 
 void ExportSimulationData(

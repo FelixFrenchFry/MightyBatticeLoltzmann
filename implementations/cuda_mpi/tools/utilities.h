@@ -104,7 +104,7 @@ void inline DisplayPerformanceStats(
     std::cerr << std::endl;
     SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
     SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
-    SPDLOG_INFO("BLUPS:                     {:.3f}", blups);
+    SPDLOG_INFO("BLUPS:                     {:.3f}\n", blups);
 }
 
 // header-only display of CUDA kernel attributes
