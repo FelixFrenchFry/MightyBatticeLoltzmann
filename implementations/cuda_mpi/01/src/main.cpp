@@ -3,6 +3,7 @@
 // TODO: description
 
 #include "../../tools/config.cuh"
+#include "../../tools/data_export.h"
 #include "../../tools/utilities.h"
 #include "initialization.cuh"
 #include "simulation.cuh"
@@ -23,8 +24,8 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      1500;
-    constexpr uint32_t N_Y_TOTAL =      1000;
+    constexpr uint32_t N_X_TOTAL =      300;
+    constexpr uint32_t N_Y_TOTAL =      300;
     constexpr uint32_t N_STEPS =        1000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
@@ -37,11 +38,18 @@ int main(int argc, char *argv[])
     constexpr FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y_TOTAL);
     constexpr FP u_lid = 0.1;
 
-    // TODO: data export settings
+    // data export settings
+    uint32_t export_interval = 100;
+    std::string export_name = "A";
+    std::string export_num = "01";
+    constexpr bool export_rho =   false;
+    constexpr bool export_u_x =   true;
+    constexpr bool export_u_y =   true;
+    constexpr bool export_u_mag = false;
 
     // simulation settings
-    constexpr bool shear_wave_decay =     true;
-    constexpr bool lid_driven_cavity =    false;
+    constexpr bool shear_wave_decay =     false;
+    constexpr bool lid_driven_cavity =    true;
 
     // =========================================================================
     // domain decomposition and MPI stuff
@@ -136,7 +144,21 @@ int main(int argc, char *argv[])
     // =========================================================================
     // device info and initialization
     // =========================================================================
-    // TODO: collect buffers and other data for export context
+    // collect buffers and other data for export context
+    SimulationExportContext context;
+    context.dvc_df = dvc_df;
+    context.dvc_df_next = dvc_df_next;
+    context.dvc_rho = dvc_rho;
+    context.dvc_u_x = dvc_u_x;
+    context.dvc_u_y = dvc_u_y;
+    context.COMM = MPI_COMM_WORLD;
+    context.N_X = N_X;
+    context.N_Y = N_Y;
+    context.N_X_TOTAL = N_X_TOTAL;
+    context.N_Y_TOTAL = N_Y_TOTAL;
+    context.Y_START = Y_START;
+    context.N_CELLS = N_CELLS;
+    context.RANK = RANK;
 
     // TODO: device and memory usage infos
 
@@ -170,6 +192,9 @@ int main(int argc, char *argv[])
         bool write_rho = false;
         bool write_u_x = false;
         bool write_u_y = false;
+
+        SelectWriteBackData(step, export_interval, export_rho, export_u_x,
+            export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
 
         // compute densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
@@ -239,6 +264,10 @@ int main(int argc, char *argv[])
         MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
 
         std::swap(dvc_df, dvc_df_next);
+
+        // export actual data from the arrays that have been written back to
+        ExportSelectedData(context, export_name, export_num, step,
+            export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
         if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
