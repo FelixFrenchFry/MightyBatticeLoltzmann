@@ -7,14 +7,19 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 
 
-# TODO: use quiverplot or streamplot?
+# TODO: use quiver plot or stream plot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  8500000
-N_X =   3000
-N_Y =   3000
+N_X =   10000
+N_Y =   10000
 omega = 1.7
 u_lid = 0.1
+
+# step config
+step_start =    1
+step_end =      3000000
+step_stride =   100000
+steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
 dataType_A =        "velocity_x"
@@ -23,6 +28,7 @@ outputDirName =     "output"
 versionDirName =    "18"
 subDirName =        "E"
 
+# formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
 
@@ -32,40 +38,48 @@ def get_file_path(data: str, step: int) -> str:
         f"../../../exported/"
         f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
-# load velocity field
-u_x = np.fromfile(get_file_path(dataType_A, step), dtype=FP).reshape((N_Y, N_X))
-u_y = np.fromfile(get_file_path(dataType_B, step), dtype=FP).reshape((N_Y, N_X))
-
-# downsample resolution
-stride = 20
-u_x_ds = u_x[::stride, ::stride]
-u_y_ds = u_y[::stride, ::stride]
-
-# create meshgrid for plotting
-x = np.linspace(0, N_X, u_x_ds.shape[1], endpoint=False)
-y = np.linspace(0, N_Y, u_x_ds.shape[0], endpoint=False)
-X, Y = np.meshgrid(x, y)
-
-# plot settings
+# misc
 outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
-plt.figure(figsize=(6, 5))
-speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
-plt.streamplot(X, Y, u_x_ds, u_y_ds, density=2.5, linewidth=1.25, arrowsize=1.0, color=speed, cmap='inferno')
-plt.colorbar(label="Velocity magnitude")
-plt.title(f"Streamlines at step {step}, omega {omega}, u_lid {u_lid}")
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.axis("equal")
-plt.grid(True)
+stride_plot = 20
 
-# force complete axis annotation
-plt.xlim(0, N_X)
-plt.ylim(0, N_Y)
-plt.margins(0)
+for step in steps:
+    try:
+        # load velocity data
+        u_x = np.fromfile(get_file_path(dataType_A, step), dtype=FP).reshape((N_Y, N_X))
+        u_y = np.fromfile(get_file_path(dataType_B, step), dtype=FP).reshape((N_Y, N_X))
 
-# save plot
-outputPath = f"{outputDir}/streamlines{format_step_suffix(step)}.png"
-plt.savefig(outputPath, dpi=300)
-plt.close()
-print(f"Saved streamplot: {outputPath}")
+        # downsample data
+        u_x_ds = u_x[::stride_plot, ::stride_plot]
+        u_y_ds = u_y[::stride_plot, ::stride_plot]
+
+        # create meshgrid
+        x = np.linspace(0, N_X, u_x_ds.shape[1], endpoint=False)
+        y = np.linspace(0, N_Y, u_x_ds.shape[0], endpoint=False)
+        X, Y = np.meshgrid(x, y)
+
+        # plot
+        fig, ax = plt.subplots(figsize=(6, 5))
+        speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
+        strm = ax.streamplot(
+            X, Y, u_x_ds, u_y_ds,
+            density=2.5, linewidth=1.25, arrowsize=1.0,
+            color=speed, cmap='inferno')
+        fig.colorbar(strm.lines, ax=ax, label="Velocity magnitude")
+        ax.set_title(f"Streamlines at step {step}, omega {omega}, u_lid {u_lid}")
+        ax.set_xlabel("X")
+        ax.set_ylabel("Y")
+        ax.set_xlim(0, N_X)
+        ax.set_ylim(0, N_Y)
+        ax.set_aspect("equal")
+        ax.grid(True)
+        ax.margins(0)
+
+        # save as png
+        outputPath = f"{outputDir}/streamlines{format_step_suffix(step)}.png"
+        plt.savefig(outputPath, dpi=300)
+        plt.close()
+        print(f"✅  Saved plot: {outputPath}")
+
+    except Exception as e:
+        print(f"⚠️ Failed for step {step}: {e}")
