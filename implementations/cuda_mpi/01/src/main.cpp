@@ -23,8 +23,8 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      15000;
-    constexpr uint32_t N_Y_TOTAL =      10000;
+    constexpr uint32_t N_X_TOTAL =      1500;
+    constexpr uint32_t N_Y_TOTAL =      1000;
     constexpr uint32_t N_STEPS =        1000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 

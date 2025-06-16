@@ -17,34 +17,39 @@ void inline DisplayProgressBar(
 
     float progress = static_cast<float>(step) / N_STEPS;
     int percent = static_cast<int>(progress * 100.0f);
-    int rounded_percent = (percent / 10) * 10;
 
     bool isTTY = isatty(fileno(stderr));
 
-    // for non-interactive terminals, only print progress every 10%
-    if (!isTTY && rounded_percent == last_shown_percent && step != N_STEPS) { return; }
+    // for non-interactive terminals, only print progress if percent changed
+    if (!isTTY && percent == last_shown_percent && step != N_STEPS) { return; }
 
-    last_shown_percent = rounded_percent;
+    last_shown_percent = percent;
 
     uint32_t position = static_cast<int>(50 * progress);
 
     std::cout << (isTTY ? "\r[" : "[");
-    for (uint32_t i = 0; i < 50; i++) {
+
+    for (uint32_t i = 0; i < 50; i++)
+    {
         if (i < position)       std::cout << "=";
         else if (i == position) std::cout << ">";
         else                    std::cout << " ";
     }
 
-    // RGB color for progress percentage
+    // RGB color for percentage
     std::cout << "] \033[38;2;255;40;50m"
               << std::fixed << std::setprecision(2)
               << (progress * 100.0f) << " %"
               << "\033[0m"
               << " (step " << step << "/" << N_STEPS << ")";
 
-    if (step == N_STEPS)    { std::cout << "\n" << std::endl; }
-    else if (!isTTY)        { std::cout << std::endl; }
-    else                    { std::cout << std::flush; }
+    if (step == N_STEPS)
+    {
+        if (isTTY) { std::cout << std::endl; }
+        std::cout << "\n" << std::endl;
+    }
+    else if (!isTTY) { std::cout << std::endl; }
+    else { std::cout << std::flush; }
 }
 
 // GPU model and CUDA compute capability version

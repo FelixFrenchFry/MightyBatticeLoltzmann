@@ -240,6 +240,17 @@ FP64 ///////////////////////////////////////////////////////////////////////////
 [info] Step execution time:       4.761 ms
 [info] BLUPS:                     1.890
 
+[2025-06-15 11:42:07] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
+[info] Memory usage GB [total/used/free]: [ 15.920 / 2.785 / 13.136 ]
+[info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 35157 / 256 ]
+[info] Registers per thread:      38
+[info] Shared memory per block:   18432 bytes
+[info] Local memory per thread:   0 bytes
+[info] Simulation size [X/Y/N]:   [ 3000 / 3000 / 10000000 ]
+[info] Total execution time:      49365.376 sec
+[info] Step execution time:       4.937 ms
+[info] BLUPS:                     1.823
+
 [2025-06-10 11:06:34] [info] GPU: NVIDIA GeForce RTX 5070 Ti (CC: 120)
 [info] Memory usage GB [total/used/free]: [ 15.920 / 13.697 / 2.224 ]
 [info] Kernel [name/grid/block]:  [ ComputeFullyFusedOperations_K / 292969 / 256 ]

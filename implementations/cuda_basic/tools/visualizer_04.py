@@ -6,12 +6,13 @@ import sys
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 
+
 # TODO: use quiverplot or streamplot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-step =  1
-N_X =   10000
-N_Y =   10000
+step =  8500000
+N_X =   3000
+N_Y =   3000
 omega = 1.7
 u_lid = 0.1
 
@@ -48,7 +49,7 @@ X, Y = np.meshgrid(x, y)
 # plot settings
 outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
-plt.figure(figsize=(6, 9))
+plt.figure(figsize=(6, 5))
 speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
 plt.streamplot(X, Y, u_x_ds, u_y_ds, density=2.5, linewidth=1.25, arrowsize=1.0, color=speed, cmap='inferno')
 plt.colorbar(label="Velocity magnitude")
@@ -57,6 +58,11 @@ plt.xlabel("X")
 plt.ylabel("Y")
 plt.axis("equal")
 plt.grid(True)
+
+# force complete axis annotation
+plt.xlim(0, N_X)
+plt.ylim(0, N_Y)
+plt.margins(0)
 
 # save plot
 outputPath = f"{outputDir}/streamlines{format_step_suffix(step)}.png"
