@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      60;
-    constexpr uint32_t N_Y_TOTAL =      40;
-    constexpr uint32_t N_STEPS =        200;
+    constexpr uint32_t N_X_TOTAL =      1000;
+    constexpr uint32_t N_Y_TOTAL =      1000;
+    constexpr uint32_t N_STEPS =        10000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 50;
-    std::string export_name = "A";
+    uint32_t export_interval = 5000;
+    std::string export_name = "C";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     constexpr bool export_u_mag = false;
 
     // simulation settings
-    constexpr bool shear_wave_decay =     true;
-    constexpr bool lid_driven_cavity =    false;
+    constexpr bool shear_wave_decay =     false;
+    constexpr bool lid_driven_cavity =    true;
 
     // =========================================================================
     // domain decomposition and MPI stuff
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
                allInfo.data(), sizeof(GPUInfo),
                MPI_BYTE, 0, MPI_COMM_WORLD);
 
-    DisplayDeviceInfos(allInfo, RANK);
+    DisplayDeviceInfos(allInfo, N_X, N_Y, RANK);
 
     if (shear_wave_decay)
     {
@@ -277,6 +277,7 @@ int main(int argc, char *argv[])
         */
 
         // TODO: send/receive halo layers into dvc_df_next while computing?
+        // TODO: no exchange between top and bottom rank for lid driven cavity?
         for (uint32_t i = 0; i < 3; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}

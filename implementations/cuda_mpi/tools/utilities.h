@@ -70,23 +70,22 @@ inline GPUInfo GetDeviceInfos(
 
 inline void DisplayDeviceInfos(
     const std::vector<GPUInfo>& allInfo,
+    uint32_t N_X, uint32_t N_Y,
     int RANK)
 {
-    // TODO: add local domain size
-
     if (RANK == 0)
     {
-        printf("\n%-5s %-9s %-28s %-3s %-4s %-4s %-9s %-9s %-8s %-8s\n",
-               "Rank", "Node", "GPU Name", "#", "CC", "SMs",
-               "ShMem/SM", "Total GB", "Used GB", "Free GB");
-        printf("---------------------------------------------------------"
-                     "---------------------------------------------------------\n");
+        printf("\n%-5s %-10s %-30s %-3s %-4s %-4s %-9s %-9s %-8s %-8s %-6s %-6s\n",
+               "Rank", "Node", "GPU Name", "#", "CC", "SMs", "ShMem/SM",
+               "Total GB", "Used GB", "Free GB", "Sub-X", "Sub-Y");
+        printf("--------------------------------------------------------"
+                     "--------------------------------------------------------\n");
         for (const auto& info : allInfo)
         {
-            printf("%-5d %-9s %-28s %-3d %-4d %-4d %-9lu %-9.3f %-8.3f %-8.3f\n",
+            printf("%-5d %-10s %-30s %-3d %-4d %-4d %-9lu %-9.3f %-8.3f %-8.3f %-6d %-6d\n",
                    info.RANK, info.name_host, info.name_device, info.RANK_LOCAL,
                    info.cc, info.sm_count, info.shared_mem_per_sm,
-                   info.mem_total, info.mem_used, info.mem_free);
+                   info.mem_total, info.mem_used, info.mem_free, N_X, N_Y);
         }
         printf("\n");
     }
@@ -119,8 +118,6 @@ inline void DisplayKernelAttributes(
     SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
     SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]",
         N_X_TOTAL, N_Y_TOTAL, N_STEPS);
-    SPDLOG_INFO("Sub-domain sizes [X/Y/N]:  [ {} / {} / {} ] x {}",
-        N_X, N_Y, N_STEPS, N_PROCESSES);
     SPDLOG_INFO("Halo cells per sub-domain: {:.2f} %\n",
             (2 * N_X * 100.0f) / (N_X * N_Y));
 }

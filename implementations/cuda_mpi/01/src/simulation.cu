@@ -228,7 +228,7 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // determine x-coordinate of the streaming destination cell
         // (with respect to periodic boundary conditions and halo cells)
         uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
-        int dst_y_raw = src_y + dvc_c_y[i];
+        int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
         // TODO: split this whole thing into 3 separate for loops to avoid branching?
         // check if streaming destination is outside of the process domain
@@ -249,7 +249,7 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         }
         else // within domain -> stream to regular neighbor in regular df arrays
         {
-            dvc_df_next[i][(src_y + dvc_c_y[i]) * N_X + dst_x] = f_new_i;
+            dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
         }
 
         /*
@@ -341,6 +341,11 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
         // determine coordinates and direction of the streaming destination cell
         // (with respect to bounce-back boundary conditions and halo cells)
         // check if streaming is directed into a wall (bounce-back)
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
         if ((dvc_c_x[i] == -1 && src_x == 0) ||                  // into left wall
             (dvc_c_x[i] ==  1 && src_x == N_X - 1) ||            // into right wall
             (dvc_c_y[i] == -1 && src_y_global == 0) ||           // into bottom wall
@@ -358,20 +363,20 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
         }
         else // (might be outside of the process domain)
         {
-            uint32_t dst_x_raw = src_x + dvc_c_x[i];
-            uint32_t dst_y_raw = src_y + dvc_c_y[i];
+            int dst_x_raw = src_x + dvc_c_x[i]; // possibly < 0
+            int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
             // TODO: FIX THIS BY USING INTS INSTEAD OF UNSIGNED INTS FOR THE DIRECTIONS CHECKS
             // check if streaming destination is outside of the process domain
-            if (dst_y_raw < 0) // below, but no wall -> stream into bottom halo
+            if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
             {
                 dvc_df_halo_bottom[i][dst_x_raw] = f_new_i;
             }
-            else if (dst_y_raw >= N_Y) // above, but no wall -> stream into top halo
+            else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
             {
                 dvc_df_halo_top[i][dst_x_raw] = f_new_i;
             }
-            else // within -> stream to regular neighbor in regular df arrays
+            else // within domain -> stream to regular neighbor in regular df arrays
             {
                 dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
             }
