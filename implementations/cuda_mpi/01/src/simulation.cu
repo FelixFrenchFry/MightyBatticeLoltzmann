@@ -237,12 +237,12 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        if (dst_y_raw < 0) // y-destination below domain -> stream into bottom halo
+        if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
         {
             // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
             dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
         }
-        else if (dst_y_raw >= N_Y) // y-destination above domain -> stream into top halo
+        else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
         {
             // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
             dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;

@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 10;
+    uint32_t export_interval = 50;
     std::string export_name = "A";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
@@ -255,6 +255,7 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
+        /*
         if (RANK == 0 && step % 10 == 0)
         {
             FP* host_debug = new FP[N_X];
@@ -273,71 +274,96 @@ int main(int argc, char *argv[])
 
             delete[] host_debug;
         }
+        */
 
-        for (uint32_t i = 0; i < 3; i++)
-        {
-            int dir_top = dir_map_halo_top[i];       // {2,5,6}
-            int dir_bottom = dir_map_halo_bottom[i]; // {4,7,8}
-
-            // top halo buffer -> wrap to bottom ghost row
-            cudaMemcpy(
-                df_next[dir_top],              // dest = bottom row (row 0)
-                df_halo_top[i],                // src = top halo buffer
-                N_X * sizeof(FP),
-                cudaMemcpyDeviceToDevice);
-
-            // bottom halo buffer -> wrap to top ghost row
-            cudaMemcpy(
-                df_next[dir_bottom] + (N_Y - 1) * N_X,  // dest = top row
-                df_halo_bottom[i],                      // src = bottom halo buffer
-                N_X * sizeof(FP),
-                cudaMemcpyDeviceToDevice);
-        }
-
-        cudaDeviceSynchronize();
-
-        /*
         bool is_periodic = (SIZE == 1);
-
         for (uint32_t i = 0; i < 3; i++)
         {
-            int dir_top = dir_map_halo_top[i];       // {2, 5, 6}
-            int dir_bottom = dir_map_halo_bottom[i]; // {4, 7, 8}
+            int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
+            int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
 
-            if (is_periodic)
+            if (!is_periodic) // single rank
             {
-                // top halo: wrap to bottom row
-                MPI_Sendrecv(
-                    df_halo_top[i], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
-                    df_next[dir_top], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
-                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                // for each of the 3 top directions, do these halo exchanges:
 
-                // bottom halo: wrap to top row
-                MPI_Sendrecv(
-                    df_halo_bottom[i], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
-                    df_next[dir_bottom] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
-                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                // send top halo buffer to the rank above (itself)
+                MPI_Isend(
+                    df_halo_top[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK, dir_top,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // receive that top halo buffer back into the own bottom row
+                // (overwrite entries from 0 to N_X)
+                // TODO: off-by-one error?
+                MPI_Irecv(
+                    df_next[dir_top],
+                    N_X, FP_MPI_TYPE,
+                    RANK, dir_top,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // for each of the 3 bottom directions, do these halo exchanges:
+
+                // send bottom halo buffer to the rank below (itself)
+                MPI_Isend(
+                    df_halo_bottom[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK, dir_bottom + 3,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // receive that bottom halo buffer back into the own top row
+                // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
+                // TODO: off-by-one error?
+                MPI_Irecv(
+                    df_next[dir_bottom] + (N_Y - 1) * N_X,
+                    N_X, FP_MPI_TYPE,
+                    RANK, dir_bottom + 3,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+            }
+            else // multiple ranks
+            {
+                // for each of the 3 top directions, do these halo exchanges:
+
+                // send top halo buffer to the rank above
+                MPI_Isend(
+                    df_halo_top[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK_ABOVE, dir_top,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // receive the top halo from the rank above into the top row
+                // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
+                // TODO: should it not be received into the bottom row instead?
+                MPI_Irecv(
+                    df_next[dir_top],
+                    N_X, FP_MPI_TYPE,
+                    RANK_ABOVE, dir_top,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // for each of the 3 bottom directions, do these halo exchanges:
+
+                // send bottom halo buffer to the rank below
+                MPI_Isend(
+                    df_halo_bottom[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK_BELOW, dir_bottom + 3,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
+
+                // receive the bottom halo from the rank below into the bottom row
+                // (overwrite entries from 0 to N_X)
+                // TODO: should it not be received into the top row instead?
+                MPI_Irecv(
+                    df_next[dir_bottom] + (N_Y - 1) * N_X,
+                    N_X, FP_MPI_TYPE,
+                    RANK_BELOW, dir_bottom + 3,
+                    MPI_COMM_WORLD, &requests[req_idx++]);
 
                 SPDLOG_INFO("A");
             }
-            else
-            {
-                // top halo: receive from above into top row
-                MPI_Sendrecv(
-                    df_halo_top[i], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
-                    df_next[dir_top] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
-                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-                // bottom halo: receive from below into bottom row
-                MPI_Sendrecv(
-                    df_halo_bottom[i], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
-                    df_next[dir_bottom], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
-                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-                SPDLOG_INFO("B");
-            }
         }
-        */
+
+        // === Complete all halo transfers ===
+        MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
 
         /*
         // TODO: send/receive halo layers into dvc_df_next while computing?
@@ -405,6 +431,7 @@ int main(int argc, char *argv[])
         MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
         */
 
+        /*
         if (RANK == 0 && step % 10 == 0)
         {
             FP* host_debug = new FP[N_X];
@@ -417,6 +444,7 @@ int main(int argc, char *argv[])
 
             delete[] host_debug;
         }
+        */
 
         std::swap(dvc_df, dvc_df_next);
 
