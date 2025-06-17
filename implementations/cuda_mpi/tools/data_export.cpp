@@ -125,7 +125,7 @@ void ExportSimulationData(
         context.N_X, context.N_Y, context.N_X_TOTAL, context.N_Y_TOTAL,
         context.Y_START, context.N_CELLS, context.RANK);
 
-    if (dvc_u_mag != nullptr) { cudaFree(dvc_u_mag); }
+    //if (dvc_u_mag != nullptr) { cudaFree(dvc_u_mag); }
 }
 
 void SelectWriteBackData(

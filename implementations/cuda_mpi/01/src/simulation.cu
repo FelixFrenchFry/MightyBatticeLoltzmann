@@ -23,6 +23,12 @@ void InitializeConstants()
 {
     if (constantsInitialized) { return; }
 
+    // ---------
+    // | 6 2 5 |
+    // | 3 0 1 |
+    // | 7 4 8 |
+    // ---------
+
     //  0: ( 0,  0) = rest
     //  1: ( 1,  0) = east
     //  2: ( 0,  1) = north
@@ -199,7 +205,6 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
     FP u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
-    uint32_t src_y_global = src_y + Y_START;
 
     for (uint32_t i = 0; i < N_DIR; i++)
     {
@@ -214,23 +219,35 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // TODO: inlined sub-kernel for the neighbor index
-        // determine coordinates of the streaming destination cell
+        // determine x-coordinate of the streaming destination cell
         // (with respect to periodic boundary conditions and halo cells)
         uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
-        uint32_t dst_y_raw = src_y + dvc_c_y[i]; // might not be within domain -> no %
 
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+
+        // TODO: split this whole thing into 3 separate for loops to avoid branching?
         // check if streaming destination is outside of the process domain
-        if (dst_y_raw < 0) // below -> stream into bottom halo
+        if (src_y == 0) // bottom cell layer
         {
-            dvc_df_halo_bottom[i][dst_x] = f_new_i;
+            if (i == 4 || i == 7 || i == 8) // dir down -> stream into bottom halo
+            {
+                dvc_df_halo_bottom[i][dst_x] = f_new_i;
+            }
         }
-        else if (dst_y_raw >= N_Y) // above -> stream into top halo
+        else if (src_y == N_Y - 1) // top cell layer
         {
-            dvc_df_halo_top[i][dst_x] = f_new_i;
+            if (i == 2 || i == 5 || i == 6) // dir up -> stream into top halo
+            {
+                dvc_df_halo_top[i][dst_x] = f_new_i;
+            }
         }
         else // within -> stream to regular neighbor in regular df arrays
         {
-            dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
+            dvc_df_next[i][(src_y + dvc_c_y[i]) * N_X + dst_x] = f_new_i;
         }
     }
 }
@@ -298,6 +315,7 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
     uint32_t src_y = idx / N_X;
     uint32_t src_y_global = src_y + Y_START;
 
+    // TODO: check for signed math using uint32_t -> incorrect results!!!
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i

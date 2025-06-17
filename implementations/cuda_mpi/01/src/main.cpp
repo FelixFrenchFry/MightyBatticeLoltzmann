@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     // simulation domain width, height, and number of cells before decomposition
     constexpr uint32_t N_X_TOTAL =      60;
     constexpr uint32_t N_Y_TOTAL =      40;
-    constexpr uint32_t N_STEPS =        100;
+    constexpr uint32_t N_STEPS =        200;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 20;
+    uint32_t export_interval = 10;
     std::string export_name = "B";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
@@ -57,13 +57,22 @@ int main(int argc, char *argv[])
     MPI_Init(&argc, &argv);
 
     // get the total number of processes and the rank of this process
-    int N_PROCESSES, RANK;
-    MPI_Comm_size(MPI_COMM_WORLD, &N_PROCESSES);
+    int SIZE, RANK;
+    MPI_Comm_size(MPI_COMM_WORLD, &SIZE);
     MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
 
+    // split by node
+    MPI_Comm NODE_COMM;
+    MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &NODE_COMM);
+
+    int SIZE_LOCAL, RANK_LOCAL;
+    MPI_Comm_size(NODE_COMM, &SIZE_LOCAL);
+    MPI_Comm_rank(NODE_COMM, &RANK_LOCAL);
+
+    // pick GPU by local rank
     int N_GPUS_PER_NODE;
     cudaGetDeviceCount(&N_GPUS_PER_NODE);
-    cudaSetDevice(RANK % N_GPUS_PER_NODE);
+    cudaSetDevice(RANK_LOCAL % N_GPUS_PER_NODE);
 
     // domain specification of this process
     // rank 0: owns rows        0   to    (Y/p) - 1
@@ -71,23 +80,32 @@ int main(int argc, char *argv[])
     // rank 2: owns rows   (2Y/p)   to   (3Y/p) - 1
     // rank 3: ...
     const uint32_t N_X =        N_X_TOTAL;
-    const uint32_t N_Y =        N_Y_TOTAL / N_PROCESSES;
+    const uint32_t N_Y =        N_Y_TOTAL / SIZE;
     const uint32_t Y_START =    N_Y * RANK;
     const uint32_t Y_END =      Y_START + N_Y - 1;
     const uint32_t N_CELLS =    N_X * N_Y;
-    const int RANK_ABOVE =      (RANK + 1) % N_PROCESSES;
-    const int RANK_BELOW =      (RANK - 1 + N_PROCESSES) % N_PROCESSES;
+    const int RANK_ABOVE =      (RANK + 1) % SIZE;
+    const int RANK_BELOW =      (RANK - 1 + SIZE) % SIZE;
 
-    if (N_Y_TOTAL % N_PROCESSES != 0)
+    if (N_Y_TOTAL % SIZE != 0)
     {
         if (RANK == 0)
         {
             SPDLOG_ERROR("Total Y must be divisible by number of processes ({} % {} != 0)",
-                N_Y_TOTAL, N_PROCESSES);
+                N_Y_TOTAL, SIZE);
 
             // stops all processes
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
+    }
+
+    if (RANK_LOCAL >= N_GPUS_PER_NODE)
+    {
+        SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on node.",
+            RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
+
+        // stops all processes
+        MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
     // =========================================================================
@@ -161,6 +179,15 @@ int main(int argc, char *argv[])
     context.RANK = RANK;
 
     // TODO: device and memory usage infos
+    GPUInfo myInfo = GetDeviceInfos(RANK, RANK_LOCAL);
+    std::vector<GPUInfo> allInfo;
+    if (RANK == 0) { allInfo.resize(SIZE); }
+
+    MPI_Gather(&myInfo, sizeof(GPUInfo), MPI_BYTE,
+               allInfo.data(), sizeof(GPUInfo),
+               MPI_BYTE, 0, MPI_COMM_WORLD);
+
+    DisplayDeviceInfos(allInfo, RANK);
 
     if (shear_wave_decay)
     {
@@ -201,7 +228,7 @@ int main(int argc, char *argv[])
         Launch_FullyFusedLatticeUpdate_Push(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, N_PROCESSES, RANK,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // track requests for synchronization (4 per direction)
@@ -214,7 +241,7 @@ int main(int argc, char *argv[])
             // this rank sends its top halo layer
             // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Isend(
-                df_halo_top[i],     // pointer to source buffer
+                df_halo_top[i],         // pointer to source buffer
                 N_X,                    // number of entries
                 FP_MPI_TYPE,            // data type
                 RANK_ABOVE,             // destination rank

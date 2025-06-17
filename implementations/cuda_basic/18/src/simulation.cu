@@ -23,6 +23,12 @@ void InitializeConstants()
 {
     if (constantsInitialized) { return; }
 
+    // ---------
+    // | 6 2 5 |
+    // | 3 0 1 |
+    // | 7 4 8 |
+    // ---------
+
     //  0: ( 0,  0) = rest
     //  1: ( 1,  0) = east
     //  2: ( 0,  1) = north
@@ -203,6 +209,12 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
+    // ---------
+    // | 6 2 5 |
+    // | 3 0 1 |
+    // | 7 4 8 |
+    // ---------
+
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
@@ -218,12 +230,12 @@ __global__ void ComputeFullyFusedOperations_K(
         // inlined sub-kernel for the neighbor index
         // TODO: conditional or branch-less sub-kernel better for A100/H100 ?
         uint32_t dst_idx, dst_i;
-        ComputeNeighborIndex_BounceBackBoundary_BranchLess_K(
+        ComputeNeighborIndex_PeriodicBoundary_K(
             src_x, src_y, N_X, N_Y, i, dst_idx, dst_i);
 
         // inject lid velocity if directed into top wall
         // TODO: conditional or branch-less sub-kernel better for A100/H100 ?
-        InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
+        //InjectLidVelocity_BranchLess_K(src_y, N_Y, rho, omega, u_lid, i, f_new_i);
 
         // stream df value df_i to the neighbor in dir i
         // (direction i gets reversed in case of bounce-back)

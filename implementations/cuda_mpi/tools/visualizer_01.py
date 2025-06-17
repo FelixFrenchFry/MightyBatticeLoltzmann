@@ -15,8 +15,8 @@ omega = 1.7
 
 # step config
 step_start =    1
-step_end =      100
-step_stride =   20
+step_end =      200
+step_stride =   10
 steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
