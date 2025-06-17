@@ -6,11 +6,13 @@
 
 
 
-// load opposite direction vectors for bounce-back, velocity direction vectors,
-// and weight vectors into constant memory
+// load opposite direction vectors for bounce-back, reversed direction mapping vectors
+// for halo arrays, velocity direction vectors, and weight vectors into constant memory
 // (fast, global, read-only lookup table identical for all threads)
 // TODO: figure out how to safely use same constant memory across all .cu files
 __constant__ int dvc_opp_dir[9];
+__constant__ int dvc_rev_dir_map_halo_top[9];
+__constant__ int dvc_rev_dir_map_halo_bottom[9];
 __constant__ int dvc_c_x[9];
 __constant__ int dvc_c_y[9];
 __constant__ FP dvc_fp_c_x[9];
@@ -41,6 +43,8 @@ void InitializeConstants()
 
     // initialize opposite direction, velocity direction, and weight vectors
     int opp_dir[9] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
+    int rev_map_dir_halo_top[9] = { 42, 42, 0, 42, 42, 1, 2, 42, 42 }; // map 2, 5, 6 to 0, 1, 2
+    int rev_map_dir_halo_bottom[9] = { 42, 42, 42, 42, 0, 42, 42, 1, 2 }; // map 4, 7, 8 to 0, 1, 2
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
     FP fp_c_x[9] = { 0.0,  1.0,  0.0, -1.0,  0.0,  1.0, -1.0, -1.0,  1.0 };
@@ -50,6 +54,8 @@ void InitializeConstants()
 
     // copy them into constant memory on the device
     cudaMemcpyToSymbol(dvc_opp_dir, opp_dir, 9 * sizeof(int));
+    cudaMemcpyToSymbol(dvc_rev_dir_map_halo_top, rev_map_dir_halo_top, 9 * sizeof(int));
+    cudaMemcpyToSymbol(dvc_rev_dir_map_halo_bottom, rev_map_dir_halo_bottom, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_x, c_x, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_c_y, c_y, 9 * sizeof(int));
     cudaMemcpyToSymbol(dvc_fp_c_x, fp_c_x, 9 * sizeof(FP));
@@ -223,26 +229,27 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // (with respect to periodic boundary conditions and halo cells)
         uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
 
+        // TODO: split this whole thing into 3 separate for loops to avoid branching?
+        // check if streaming destination is outside of the process domain
         // ---------
         // | 6 2 5 |
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-
-        // TODO: split this whole thing into 3 separate for loops to avoid branching?
-        // check if streaming destination is outside of the process domain
         if (src_y == 0) // bottom cell layer
         {
             if (i == 4 || i == 7 || i == 8) // dir down -> stream into bottom halo
             {
-                dvc_df_halo_bottom[i][dst_x] = f_new_i;
+                // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
+                dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
             }
         }
         else if (src_y == N_Y - 1) // top cell layer
         {
             if (i == 2 || i == 5 || i == 6) // dir up -> stream into top halo
             {
-                dvc_df_halo_top[i][dst_x] = f_new_i;
+                // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
+                dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
             }
         }
         else // within -> stream to regular neighbor in regular df arrays
@@ -351,6 +358,7 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             uint32_t dst_x_raw = src_x + dvc_c_x[i];
             uint32_t dst_y_raw = src_y + dvc_c_y[i];
 
+            // TODO: FIX THIS BY USING INTS INSTEAD OF UNSIGNED INTS FOR THE DIRECTIONS CHECKS
             // check if streaming destination is outside of the process domain
             if (dst_y_raw < 0) // below, but no wall -> stream into bottom halo
             {

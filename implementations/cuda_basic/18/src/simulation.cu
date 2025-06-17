@@ -209,12 +209,6 @@ __global__ void ComputeFullyFusedOperations_K(
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X;
 
-    // ---------
-    // | 6 2 5 |
-    // | 3 0 1 |
-    // | 7 4 8 |
-    // ---------
-
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i

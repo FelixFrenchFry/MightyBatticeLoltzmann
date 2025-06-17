@@ -114,9 +114,6 @@ int main(int argc, char *argv[])
     // host-side arrays of 9 pointers to device-side df arrays
     FP* df[9];
     FP* df_next[9];
-    // domain decomposition specific df arrays for the halo cells
-    FP* df_halo_top[9]; // TODO: only dirs 2, 5, and 6 need to be sent?
-    FP* df_halo_bottom[9]; // TODO: only dirs 4, 7, and 8 need to be sent?
 
     // for each dir i, allocate 1D array of size N_CELLS on the device
     for (uint32_t i = 0; i < 9; i++)
@@ -124,12 +121,26 @@ int main(int argc, char *argv[])
         // (regular df arrays)
         cudaMalloc(&df[i], N_CELLS * sizeof(FP));
         cudaMalloc(&df_next[i], N_CELLS * sizeof(FP));
+    }
+
+    // domain decomposition-specific df arrays for the halo cells
+    // ---------
+    // | 6 2 5 |
+    // | 3 0 1 |
+    // | 7 4 8 |
+    // ---------
+    FP* df_halo_top[3]; // directions 2, 5, 6 map to indices 0, 1, 2 in the array
+    FP* df_halo_bottom[3]; // directions 4, 7, 8 map to indices 0, 1, 2 in the array
+
+    // for each select dir i, allocate 1D array of size N_CELLS on the device
+    for (uint32_t i = 0; i < 3; i++)
+    {
         // (halo df arrays)
         cudaMalloc(&df_halo_top[i], N_X * sizeof(FP));
         cudaMalloc(&df_halo_bottom[i], N_X * sizeof(FP));
     }
 
-    // device-side arrays of 9 pointers to device-side df arrays
+    // device-side arrays of 9 (3 for halos) pointers to device-side df arrays
     // (used as a device-side handle for the SoA data)
     FP** dvc_df;
     FP** dvc_df_next;
@@ -138,16 +149,16 @@ int main(int argc, char *argv[])
     // (halo df arrays)
     FP** dvc_df_halo_top;
     FP** dvc_df_halo_bottom;
-    cudaMalloc(&dvc_df_halo_top, 9 * sizeof(FP*));
-    cudaMalloc(&dvc_df_halo_bottom, 9 * sizeof(FP*));
+    cudaMalloc(&dvc_df_halo_top, 3 * sizeof(FP*));
+    cudaMalloc(&dvc_df_halo_bottom, 3 * sizeof(FP*));
 
     // copy the contents of the host-side handles to the device-side handles
     // (because apparently CUDA does not support directly passing an array of pointers)
     cudaMemcpy(dvc_df, df, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
     // (halo df arrays)
-    cudaMemcpy(dvc_df_halo_top, df_halo_top, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_halo_bottom, df_halo_bottom, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_top, df_halo_top, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_bottom, df_halo_bottom, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
     FP* dvc_rho;
@@ -232,57 +243,75 @@ int main(int argc, char *argv[])
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // track requests for synchronization (4 per direction)
-        MPI_Request requests[4 * 9];
+        MPI_Request requests[4 * 3];
         int req_idx = 0;
 
-        // TODO: send/receive halo layers into dvc_df_next while computing?
-        for (uint32_t i = 0; i < 9; i++)
-        {
-            // this rank sends its top halo layer
-            // TODO: dont give MPI pointers to pointers stored on the device!
-            MPI_Isend(
-                df_halo_top[i],         // pointer to source buffer
-                N_X,                    // number of entries
-                FP_MPI_TYPE,            // data type
-                RANK_ABOVE,             // destination rank
-                i,                      // tag
-                MPI_COMM_WORLD,         // MPI communicator
-                &requests[req_idx++]);  // progress tracker
+        // direction mapping for the halo arrays
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
+        constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
-            // rank above receives bottom layer
+        // TODO: send/receive halo layers into dvc_df_next while computing?
+        // TODO: adjust writing addresses for going from 9 to 3 directions
+        // top halo layers sending to bottom ghost in other rank's domain
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            int dir = dir_map_halo_top[i];
+
+            // this rank sends its top halo layer to the bottom ghost row of
+            // the rank above (per direction)
+            MPI_Isend(
+                df_halo_top[i],             // pointer to source buffer
+                N_X,                        // number of entries
+                FP_MPI_TYPE,                // data type
+                RANK_ABOVE,                 // destination rank
+                dir,                        // tag
+                MPI_COMM_WORLD,             // MPI communicator
+                &requests[req_idx++]);      // progress tracker
+
+            // this rank receives its top ghost row from the rank above (per direction)
             // (one row is overwritten, from index (N_Y-1) * N_X to N_Y * N_X)
             // TODO: off by one error?
-            // TODO: dont give MPI pointers to pointers stored on the device!
+            // TODO: start from 0 instead of (N_Y - 1) * N_X?
             MPI_Irecv(
-                df_next[i] + (N_Y - 1) * N_X,
+                df_next[dir] + (N_Y - 1) * N_X,
                 N_X,
                 FP_MPI_TYPE,
                 RANK_ABOVE,
-                i,
+                dir,
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
+        }
 
-            // this rank sends its bottom halo layer
-            // TODO: dont give MPI pointers to pointers stored on the device!
+        // bottom halo layers sending to top ghost in other rank's domain
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            int dir = dir_map_halo_bottom[i];
+
+            // this rank sends its bottom halo layer to the top ghost row of
+            // the rank below (per direction)
             MPI_Isend(
                 df_halo_bottom[i],
                 N_X,
                 FP_MPI_TYPE,
                 RANK_BELOW,
-                i + 9,
+                dir + 3,
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
 
-            // rank below receives top layer
+            // this rank receives its bottom ghost row from the rank above (per direction)
             // (one row is overwritten, from index 0 to N_X)
             // TODO: off by one error?
-            // TODO: dont give MPI pointers to pointers stored on the device!
             MPI_Irecv(
-                df_next[i],
+                df_next[dir],
                 N_X,
                 FP_MPI_TYPE,
                 RANK_BELOW,
-                i + 9,
+                dir + 3,
                 MPI_COMM_WORLD,
                 &requests[req_idx++]);
         }
@@ -313,6 +342,9 @@ int main(int argc, char *argv[])
     {
         cudaFree(df[i]);
         cudaFree(df_next[i]);
+    }
+    for (uint32_t i = 0; i < 3; i++)
+    {
         cudaFree(df_halo_top[i]);
         cudaFree(df_halo_bottom[i]);
     }
