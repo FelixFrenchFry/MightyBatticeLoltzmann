@@ -23,7 +23,7 @@ steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 dataType =          "velocity_x"
 outputDirName =     "output"
 versionDirName =    "01"
-subDirName =        "B"
+subDirName =        "A"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:

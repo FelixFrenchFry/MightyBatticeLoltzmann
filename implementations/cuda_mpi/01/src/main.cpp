@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.2;
+    constexpr FP omega = 1.5;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
     constexpr FP n = 2.0;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     // data export settings
     uint32_t export_interval = 10;
-    std::string export_name = "B";
+    std::string export_name = "A";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (RANK_LOCAL >= N_GPUS_PER_NODE)
+    if (RANK_LOCAL >= N_GPUS_PER_NODE && false)
     {
         SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on node.",
             RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
@@ -255,6 +255,91 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
+        if (RANK == 0 && step % 10 == 0)
+        {
+            FP* host_debug = new FP[N_X];
+
+            // bottom halo in direction 4
+            cudaMemcpy(host_debug, df_halo_bottom[0], N_X * sizeof(FP), cudaMemcpyDeviceToHost);
+            printf("bottom halo[0]: %f %f %f %f %f %f %f %f ...\n",
+                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
+                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
+
+            // top ghost row in direction 4 before halo exchange
+            cudaMemcpy(host_debug, df_next[4] + (N_Y - 1) * N_X, N_X * sizeof(FP), cudaMemcpyDeviceToHost);
+            printf("df_next[4] top row before recv: %f %f %f %f %f %f %f %f ...\n",
+                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
+                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
+
+            delete[] host_debug;
+        }
+
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            int dir_top = dir_map_halo_top[i];       // {2,5,6}
+            int dir_bottom = dir_map_halo_bottom[i]; // {4,7,8}
+
+            // top halo buffer -> wrap to bottom ghost row
+            cudaMemcpy(
+                df_next[dir_top],              // dest = bottom row (row 0)
+                df_halo_top[i],                // src = top halo buffer
+                N_X * sizeof(FP),
+                cudaMemcpyDeviceToDevice);
+
+            // bottom halo buffer -> wrap to top ghost row
+            cudaMemcpy(
+                df_next[dir_bottom] + (N_Y - 1) * N_X,  // dest = top row
+                df_halo_bottom[i],                      // src = bottom halo buffer
+                N_X * sizeof(FP),
+                cudaMemcpyDeviceToDevice);
+        }
+
+        cudaDeviceSynchronize();
+
+        /*
+        bool is_periodic = (SIZE == 1);
+
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            int dir_top = dir_map_halo_top[i];       // {2, 5, 6}
+            int dir_bottom = dir_map_halo_bottom[i]; // {4, 7, 8}
+
+            if (is_periodic)
+            {
+                // top halo: wrap to bottom row
+                MPI_Sendrecv(
+                    df_halo_top[i], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
+                    df_next[dir_top], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
+                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+                // bottom halo: wrap to top row
+                MPI_Sendrecv(
+                    df_halo_bottom[i], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
+                    df_next[dir_bottom] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
+                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+                SPDLOG_INFO("A");
+            }
+            else
+            {
+                // top halo: receive from above into top row
+                MPI_Sendrecv(
+                    df_halo_top[i], N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
+                    df_next[dir_top] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, dir_top,
+                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+                // bottom halo: receive from below into bottom row
+                MPI_Sendrecv(
+                    df_halo_bottom[i], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
+                    df_next[dir_bottom], N_X, FP_MPI_TYPE, RANK_BELOW, dir_bottom + 3,
+                    MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+                SPDLOG_INFO("B");
+            }
+        }
+        */
+
+        /*
         // TODO: send/receive halo layers into dvc_df_next while computing?
         // TODO: adjust writing addresses for going from 9 to 3 directions
         // top halo layers sending to bottom ghost in other rank's domain
@@ -318,6 +403,20 @@ int main(int argc, char *argv[])
 
         // wait for all MPI halo exchanges to finish
         MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
+        */
+
+        if (RANK == 0 && step % 10 == 0)
+        {
+            FP* host_debug = new FP[N_X];
+
+            // top ghost row in direction 4 after halo exchange
+            cudaMemcpy(host_debug, df_next[4] + (N_Y - 1) * N_X, N_X * sizeof(FP), cudaMemcpyDeviceToHost);
+            printf("df_next[4] top row before recv: %f %f %f %f %f %f %f %f ...\n",
+                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
+                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
+
+            delete[] host_debug;
+        }
 
         std::swap(dvc_df, dvc_df_next);
 

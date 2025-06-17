@@ -228,6 +228,7 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // determine x-coordinate of the streaming destination cell
         // (with respect to periodic boundary conditions and halo cells)
         uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
+        int dst_y_raw = src_y + dvc_c_y[i];
 
         // TODO: split this whole thing into 3 separate for loops to avoid branching?
         // check if streaming destination is outside of the process domain
@@ -236,26 +237,28 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        if (src_y == 0) // bottom cell layer
+        if (dst_y_raw < 0) // y-destination below domain -> stream into bottom halo
         {
-            if (i == 4 || i == 7 || i == 8) // dir down -> stream into bottom halo
-            {
-                // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-                dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
-            }
+            // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
+            dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
         }
-        else if (src_y == N_Y - 1) // top cell layer
+        else if (dst_y_raw >= N_Y) // y-destination above domain -> stream into top halo
         {
-            if (i == 2 || i == 5 || i == 6) // dir up -> stream into top halo
-            {
-                // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-                dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
-            }
+            // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
+            dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
         }
-        else // within -> stream to regular neighbor in regular df arrays
+        else // within domain -> stream to regular neighbor in regular df arrays
         {
             dvc_df_next[i][(src_y + dvc_c_y[i]) * N_X + dst_x] = f_new_i;
         }
+
+        /*
+        // regular periodic boundary for shear wave decay without halo exchange
+        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
+                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
+
+        dvc_df_next[i][dst_idx] = f_new_i;
+        */
     }
 }
 

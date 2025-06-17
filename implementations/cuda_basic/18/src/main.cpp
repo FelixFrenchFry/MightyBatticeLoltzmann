@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.7;
+    constexpr FP omega = 1.5;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
     constexpr FP n = 2.0;
