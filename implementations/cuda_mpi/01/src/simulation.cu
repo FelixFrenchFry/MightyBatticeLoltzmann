@@ -354,7 +354,8 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             // inject lid velocity if streaming is directed into top wall
             if (dvc_c_y[i] == 1 && src_y_global == N_Y_TOTAL - 1)
             {
-                f_new_i -= FP_CONST(6.0) * omega * rho * dvc_fp_c_x[i] * u_lid;
+                // TODO: correct equation w.r.t. omega and dvc_w[i] ?
+                f_new_i -= FP_CONST(6.0) * dvc_w[i] * rho * dvc_fp_c_x[i] * u_lid;
             }
 
             // same cell but opposite direction because of bounce-back

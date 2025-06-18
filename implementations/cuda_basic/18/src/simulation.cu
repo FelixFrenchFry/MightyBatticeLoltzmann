@@ -134,7 +134,8 @@ __device__ __forceinline__ void InjectLidVelocity_Conditional_K(
     // check if directed into top wall
     if (dvc_c_y[i] == 1 && src_y == N_Y - 1)
     {
-        f_new_i -= FP_CONST(6.0) * omega * rho * dvc_fp_c_x[i] * u_lid;
+        // TODO: correct equation?
+        f_new_i -= FP_CONST(6.0) * dvc_w[i] * rho * dvc_fp_c_x[i] * u_lid;
     }
 }
 

@@ -31,11 +31,11 @@ cuda_include = include_directories('/usr/local/cuda/include')
 cuda = dependency('cuda', required: true)
 
 # detect and integrate MPI
-#mpi = dependency('mpi')
+mpi = dependency('mpi')
 
-mpi = declare_dependency(
-    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
-    link_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:link').stdout().strip().split())
+#mpi = declare_dependency(
+#    compile_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:compile').stdout().strip().split(),
+#    link_args: run_command('/opt/openmpi-cuda-ucx/bin/mpic++', '--showme:link').stdout().strip().split())
 
 #mpi = declare_dependency(
 #    compile_args: run_command('/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/mpi/bin/mpic++', '--showme:compile').stdout().strip().split(),
