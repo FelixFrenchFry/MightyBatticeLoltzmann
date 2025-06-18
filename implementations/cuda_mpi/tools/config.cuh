@@ -2,8 +2,6 @@
 #include <cstdint>
 #include <mpi.h>
 
-
-
 // precision selection at compile-time
 #ifdef USE_FP64
     #define FP double

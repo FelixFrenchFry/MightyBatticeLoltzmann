@@ -1,8 +1,6 @@
 #pragma once
 #include <cstdint>
 
-
-
 // precision selection at compile-time
 #ifdef USE_FP64
     #define FP double

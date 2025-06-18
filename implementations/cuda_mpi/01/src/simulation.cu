@@ -230,7 +230,6 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
         int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
-        // TODO: split this whole thing into 3 separate for loops to avoid branching?
         // check if streaming destination is outside of the process domain
         // ---------
         // | 6 2 5 |
