@@ -358,6 +358,7 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             int dst_x_raw = src_x + dvc_c_x[i]; // possibly < 0
             int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
+            // TODO: only stream to halo if directed in 2 or 4, and not 5, 6, 7, 8 ?
             // check if streaming destination is outside of the process domain
             if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
             {
@@ -371,12 +372,7 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             }
             else // within domain -> stream to regular neighbor in regular df arrays
             {
-                //dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
-
-                int dst_idx = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
-                int dst_i = i;
-
-                dvc_df_next[dst_i][dst_idx] = f_new_i;
+                dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
             }
         }
     }
