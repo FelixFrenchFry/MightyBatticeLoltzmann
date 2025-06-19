@@ -65,6 +65,18 @@ inline GPUInfo GetDeviceInfos(
     res.mem_free = static_cast<double>(bytes_free)  / (1 << 30);
     res.mem_used  = res.mem_total - res.mem_free;
 
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess)
+    {
+        // specify detailed logging for the error message
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
+
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+
+        // return to basic logging
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
+    }
+
     return res;
 }
 

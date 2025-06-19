@@ -463,8 +463,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA kernel of rank {} failed: {}",
-            RANK, cudaGetErrorString(err));
+        // specify detailed logging for the error message
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
+
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+
+        // return to basic logging
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 }
 
@@ -534,7 +539,12 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA kernel of rank {} failed: {}",
-            RANK, cudaGetErrorString(err));
+        // specify detailed logging for the error message
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
+
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+
+        // return to basic logging
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 }

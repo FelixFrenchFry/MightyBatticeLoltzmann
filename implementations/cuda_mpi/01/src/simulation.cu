@@ -238,12 +238,12 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // ---------
         if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
         {
-            // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
+            // map 4, 7, 8 to 0, 1, 2 using array index map for bottom halos
             dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
         }
         else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
         {
-            // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
+            // map 2, 5, 6 to 0, 1, 2 using array index map for top halos
             dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
         }
         else // within domain -> stream to regular neighbor in regular df arrays
@@ -358,15 +358,16 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             int dst_x_raw = src_x + dvc_c_x[i]; // possibly < 0
             int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
-            // TODO: only stream to halo if directed in 2 or 4, and not 5, 6, 7, 8 ?
             // check if streaming destination is outside of the process domain
             if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
             {
+                // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
                 dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x_raw] = f_new_i;
             }
             else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
             {
+                // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
                 dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
             }
@@ -449,7 +450,12 @@ void Launch_FullyFusedLatticeUpdate_Push(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        SPDLOG_ERROR("CUDA kernel of rank {} failed: {}",
-            RANK, cudaGetErrorString(err));
+        // specify detailed logging for the error message
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
+
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+
+        // return to basic logging
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 }
