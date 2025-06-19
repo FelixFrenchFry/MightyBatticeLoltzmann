@@ -236,12 +236,12 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        if (dst_y_raw <= -1) // y-destination below domain -> stream into bottom halo
+        if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
         {
             // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
             dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
         }
-        else if (dst_y_raw >= N_Y) // y-destination above domain -> stream into top halo
+        else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
         {
             // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
             dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
@@ -337,10 +337,10 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        if ((dvc_c_x[i] == -1 && src_x == 0) ||                  // into left wall
-            (dvc_c_x[i] ==  1 && src_x == N_X - 1) ||            // into right wall
-            (dvc_c_y[i] == -1 && src_y_global == 0) ||           // into bottom wall
-            (dvc_c_y[i] ==  1 && src_y_global == N_Y_TOTAL - 1)) // into top wall
+        if ((dvc_c_x[i] == -1 && src_x == 0) ||                    // into left wall
+            (dvc_c_x[i] ==  1 && src_x == N_X - 1) ||              // into right wall
+            (dvc_c_y[i] == -1 && src_y_global == 0) ||             // into bottom wall
+            (dvc_c_y[i] ==  1 && src_y_global == N_Y_TOTAL - 1))   // into top wall
         {
             // inject lid velocity if streaming is directed into top wall
             if (dvc_c_y[i] == 1 && src_y_global == N_Y_TOTAL - 1)
@@ -353,24 +353,30 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             // (definitely within the process domain -> stream into regular df arrays)
             dvc_df_next[dvc_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
         }
-        else // (might be outside of the process domain)
+        else // (not directed into a wall, but might be outside of the process domain)
         {
             int dst_x_raw = src_x + dvc_c_x[i]; // possibly < 0
             int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
 
-            // TODO: FIX THIS BY USING INTS INSTEAD OF UNSIGNED INTS FOR THE DIRECTIONS CHECKS
             // check if streaming destination is outside of the process domain
             if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
             {
-                dvc_df_halo_bottom[i][dst_x_raw] = f_new_i;
+                // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
+                dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x_raw] = f_new_i;
             }
             else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
             {
-                dvc_df_halo_top[i][dst_x_raw] = f_new_i;
+                // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
+                dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
             }
             else // within domain -> stream to regular neighbor in regular df arrays
             {
-                dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
+                //dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
+
+                int dst_idx = (src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i]);
+                int dst_i = i;
+
+                dvc_df_next[dst_i][dst_idx] = f_new_i;
             }
         }
     }

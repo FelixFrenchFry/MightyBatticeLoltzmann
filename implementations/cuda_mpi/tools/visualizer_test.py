@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 # simulation config
-step =  5000
+step =  50000
 N_X =   1000
 N_Y =   1000
 

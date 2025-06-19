@@ -24,14 +24,14 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      60;
-    constexpr uint32_t N_Y_TOTAL =      40;
-    constexpr uint32_t N_STEPS =        200;
+    constexpr uint32_t N_X_TOTAL =      1000;
+    constexpr uint32_t N_Y_TOTAL =      1000;
+    constexpr uint32_t N_STEPS =        200000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.5;
+    constexpr FP omega = 1.7;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
     constexpr FP n = 2.0;
@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 50;
-    std::string export_name = "B";
+    uint32_t export_interval = 50000;
+    std::string export_name = "C";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     constexpr bool export_u_mag = false;
 
     // simulation settings
-    constexpr bool shear_wave_decay =     true;
-    constexpr bool lid_driven_cavity =    false;
+    constexpr bool shear_wave_decay =     false;
+    constexpr bool lid_driven_cavity =    true;
 
     // =========================================================================
     // domain decomposition and MPI stuff
@@ -84,8 +84,15 @@ int main(int argc, char *argv[])
     const uint32_t Y_START =    N_Y * RANK;
     const uint32_t Y_END =      Y_START + N_Y - 1;
     const uint32_t N_CELLS =    N_X * N_Y;
-    const int RANK_ABOVE =      (RANK + 1) % SIZE;
-    const int RANK_BELOW =      (RANK - 1 + SIZE) % SIZE;
+    const int RANK_ABOVE =      (RANK + 1) % SIZE;          // periodic
+    const int RANK_BELOW =      (RANK - 1 + SIZE) % SIZE;   // periodic
+    const bool IS_TOP_RANK =    RANK == SIZE - 1;
+    const bool IS_BOTTOM_RANK = RANK == 0;
+
+    SPDLOG_INFO("Rank {} says Size={}, and Rank_Above={}, and Rank_Below={}",
+        RANK, SIZE, RANK_ABOVE, RANK_BELOW);
+    SPDLOG_INFO("Rank {} is top rank: {}", RANK, IS_TOP_RANK);
+    SPDLOG_INFO("Rank {} is bottom rank: {}", RANK, IS_BOTTOM_RANK);
 
     if (N_Y_TOTAL % SIZE != 0)
     {
@@ -243,7 +250,7 @@ int main(int argc, char *argv[])
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // track requests for synchronization (4 per direction)
-        MPI_Request requests[4 * 3];
+        MPI_Request max_requests[4 * 3];
         int req_idx = 0;
 
         // direction mapping for the halo arrays
@@ -255,52 +262,10 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
-        /*
-        // send top halo (dir 2) to the bottom row of the neighbor above, and
-        // receive top halo (dir 2) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[0], N_X, FP_MPI_TYPE, RANK_ABOVE, 2,
-            df_next[2], N_X, FP_MPI_TYPE, RANK_BELOW, 2,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send top halo (dir 5) to the bottom row of the neighbor above, and
-        // receive top halo (dir 5) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[1], N_X, FP_MPI_TYPE, RANK_ABOVE, 5,
-            df_next[5], N_X, FP_MPI_TYPE, RANK_BELOW, 5,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send top halo (dir 6) to the bottom row of the neighbor above, and
-        // receive top halo (dir 6) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[2], N_X, FP_MPI_TYPE, RANK_ABOVE, 6,
-            df_next[6], N_X, FP_MPI_TYPE, RANK_BELOW, 6,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 4) to the top row of the neighbor below, and
-        // receive bottom halo (dir 4) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[0], N_X, FP_MPI_TYPE, RANK_BELOW, 4,
-            df_next[4] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 4,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 7) to the top row of the neighbor below, and
-        // receive bottom halo (dir 7) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[1], N_X, FP_MPI_TYPE, RANK_BELOW, 7,
-            df_next[7] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 7,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 8) to the top row of the neighbor below, and
-        // receive bottom halo (dir 8) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[2], N_X, FP_MPI_TYPE, RANK_BELOW, 8,
-            df_next[8] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 8,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        */
-
         // TODO: send/receive halo layers into dvc_df_next while computing?
-        // TODO: no exchange between top and bottom rank for lid driven cavity?
+        // asynchronous MPI sends/receives for halo exchange
+        // (no exchange between top and bottom rank for lid driven cavity,
+        // but full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
@@ -309,40 +274,56 @@ int main(int argc, char *argv[])
             // for each of the 3 top directions, do these halo exchanges:
 
             // send top halo buffer to the rank above
-            MPI_Isend(
-                df_halo_top[i],
-                N_X, FP_MPI_TYPE,
-                RANK_ABOVE, dir_top,
-                MPI_COMM_WORLD, &requests[req_idx++]);
+            if (not IS_TOP_RANK || shear_wave_decay)
+            {
+                // for a lid driven cavity, the rop rank does not do this
+                MPI_Isend(
+                    df_halo_top[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK_ABOVE, dir_top,
+                    MPI_COMM_WORLD, &max_requests[req_idx++]);
+            }
 
             // receive the top halo from the rank below into the own bottom row
             // (overwrite entries from 0 to N_X)
-            MPI_Irecv(
-                df_next[dir_top],
-                N_X, FP_MPI_TYPE,
-                RANK_BELOW, dir_top,
-                MPI_COMM_WORLD, &requests[req_idx++]);
+            if (not IS_BOTTOM_RANK || shear_wave_decay)
+            {
+                // for a lid driven cavity, the bottom rank does not do this
+                MPI_Irecv(
+                   df_next[dir_top],
+                   N_X, FP_MPI_TYPE,
+                   RANK_BELOW, dir_top,
+                   MPI_COMM_WORLD, &max_requests[req_idx++]);
+            }
 
             // for each of the 3 bottom directions, do these halo exchanges:
 
             // send bottom halo buffer to the rank below
-            MPI_Isend(
-                df_halo_bottom[i],
-                N_X, FP_MPI_TYPE,
-                RANK_BELOW, dir_bottom + 3,
-                MPI_COMM_WORLD, &requests[req_idx++]);
+            if (not IS_BOTTOM_RANK || shear_wave_decay)
+            {
+                // for a lid driven cavity, the bottom rank does not do this
+                MPI_Isend(
+                    df_halo_bottom[i],
+                    N_X, FP_MPI_TYPE,
+                    RANK_BELOW, dir_bottom + 3,
+                    MPI_COMM_WORLD, &max_requests[req_idx++]);
+            }
 
             // receive the bottom halo from the rank above into the own top row
             // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
-            MPI_Irecv(
-                df_next[dir_bottom] + (N_Y - 1) * N_X,
-                N_X, FP_MPI_TYPE,
-                RANK_ABOVE, dir_bottom + 3,
-                MPI_COMM_WORLD, &requests[req_idx++]);
+            if (not IS_TOP_RANK || shear_wave_decay)
+            {
+                // for a lid driven cavity, the rop rank does not do this
+                MPI_Irecv(
+                    df_next[dir_bottom] + (N_Y - 1) * N_X,
+                    N_X, FP_MPI_TYPE,
+                    RANK_ABOVE, dir_bottom + 3,
+                    MPI_COMM_WORLD, &max_requests[req_idx++]);
+            }
         }
 
         // wait for all MPI halo exchanges to finish
-        MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
+        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
         // TODO: BIG BIG BIG BUG FIX:
         // TODO: SWAP HOST POINTERS ON ALL MPI IMPLEMENTATIONS

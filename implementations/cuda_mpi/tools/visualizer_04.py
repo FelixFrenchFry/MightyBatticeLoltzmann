@@ -12,13 +12,13 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 # simulation config
 N_X =   1000
 N_Y =   1000
-omega = 1.5
+omega = 1.7
 u_lid = 0.1
 
 # step config
 step_start =    1
-step_end =      10000
-step_stride =   5000
+step_end =      200000
+step_stride =   50000
 steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
