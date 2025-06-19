@@ -242,27 +242,6 @@ int main(int argc, char *argv[])
             N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
-        /*
-        if (RANK == 0 && step % 10 == 0)
-        {
-            FP* host_debug = new FP[N_X];
-
-            // bottom halo in direction 4
-            cudaMemcpy(host_debug, df_halo_bottom[0], N_X * sizeof(FP), cudaMemcpyDeviceToHost);
-            printf("bottom halo[0]: %f %f %f %f %f %f %f %f ...\n",
-                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
-                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
-
-            // top ghost row in direction 4 before halo exchange
-            cudaMemcpy(host_debug, df_next[4] + (N_Y - 1) * N_X, N_X * sizeof(FP), cudaMemcpyDeviceToHost);
-            printf("df_next[4] top row before recv: %f %f %f %f %f %f %f %f ...\n",
-                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
-                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
-
-            delete[] host_debug;
-        }
-        */
-
         // track requests for synchronization (4 per direction)
         MPI_Request requests[4 * 3];
         int req_idx = 0;
@@ -276,6 +255,7 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
+        /*
         // send top halo (dir 2) to the bottom row of the neighbor above, and
         // receive top halo (dir 2) from the neighbor below into the bottom row
         MPI_Sendrecv(
@@ -317,11 +297,10 @@ int main(int argc, char *argv[])
             df_halo_bottom[2], N_X, FP_MPI_TYPE, RANK_BELOW, 8,
             df_next[8] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 8,
             MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        */
 
-        /*
         // TODO: send/receive halo layers into dvc_df_next while computing?
         // TODO: no exchange between top and bottom rank for lid driven cavity?
-        // TODO: use blocking MPI_Sendrecv() calls, because no computations during transfer anyways?
         for (uint32_t i = 0; i < 3; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
@@ -338,7 +317,6 @@ int main(int argc, char *argv[])
 
             // receive the top halo from the rank below into the own bottom row
             // (overwrite entries from 0 to N_X)
-            // TODO: receive top halo from rank BELOW or ABOVE?
             MPI_Irecv(
                 df_next[dir_top],
                 N_X, FP_MPI_TYPE,
@@ -356,7 +334,6 @@ int main(int argc, char *argv[])
 
             // receive the bottom halo from the rank above into the own top row
             // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
-            // TODO: receive bottom halo from rank BELOW or ABOVE?
             MPI_Irecv(
                 df_next[dir_bottom] + (N_Y - 1) * N_X,
                 N_X, FP_MPI_TYPE,
@@ -366,24 +343,11 @@ int main(int argc, char *argv[])
 
         // wait for all MPI halo exchanges to finish
         MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
-        */
 
-        /*
-        if (RANK == 0 && step % 10 == 0)
-        {
-            FP* host_debug = new FP[N_X];
-
-            // top ghost row in direction 4 after halo exchange
-            cudaMemcpy(host_debug, df_next[4] + (N_Y - 1) * N_X, N_X * sizeof(FP), cudaMemcpyDeviceToHost);
-            printf("df_next[4] top row before recv: %f %f %f %f %f %f %f %f ...\n",
-                host_debug[0], host_debug[1], host_debug[2], host_debug[3],
-                host_debug[4], host_debug[5], host_debug[6], host_debug[7]);
-
-            delete[] host_debug;
-        }
-        */
-
+        // TODO: BIG BIG BIG BUG FIX:
+        // TODO: SWAP HOST POINTERS ON ALL MPI IMPLEMENTATIONS
         std::swap(dvc_df, dvc_df_next);
+        std::swap(df, df_next);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,

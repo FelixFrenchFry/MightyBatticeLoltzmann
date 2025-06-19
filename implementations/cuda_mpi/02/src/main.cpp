@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     // data export settings
     uint32_t export_interval = 50;
-    std::string export_name = "B";
+    std::string export_name = "A";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -253,7 +253,18 @@ int main(int argc, char *argv[])
             N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        MPI_Sendrecv(
+            df_halo_bottom[0], N_X, FP_MPI_TYPE, RANK_BELOW, 0,
+            df_next[4] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 0,
+            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
         /*
+        // TODO: try explicit MPI data types for sanity check?
         if (RANK == 0 && step % 10 == 0)
         {
             FP* host_debug = new FP[N_X];
@@ -274,6 +285,7 @@ int main(int argc, char *argv[])
         }
         */
 
+        /*
         // track requests for synchronization (4 per direction)
         MPI_Request requests[4 * 3];
         int req_idx = 0;
@@ -290,7 +302,7 @@ int main(int argc, char *argv[])
         // TODO: send/receive halo layers into dvc_df_next while computing?
         // TODO: no exchange between top and bottom rank for lid driven cavity?
         // TODO: use blocking MPI_Sendrecv() calls, because no computations during transfer anyways?
-        for (uint32_t i = 0; i < 0; i++)
+        for (uint32_t i = 0; i < 3; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
@@ -333,7 +345,8 @@ int main(int argc, char *argv[])
         }
 
         // wait for all MPI halo exchanges to finish
-        //MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
+        MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
+        */
 
         /*
         if (RANK == 0 && step % 10 == 0)
@@ -351,6 +364,7 @@ int main(int argc, char *argv[])
         */
 
         std::swap(dvc_df, dvc_df_next);
+        std::swap(df, df_next);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,

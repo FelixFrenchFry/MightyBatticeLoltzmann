@@ -239,28 +239,17 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
         if (dst_y_raw <= -1) // y-destination below domain -> stream into bottom halo
         {
             // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-            // TODO: use explicit mapping for sanity check
             dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
         }
         else if (dst_y_raw >= N_Y) // y-destination above domain -> stream into top halo
         {
             // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-            // TODO: use explicit mapping for sanity check
             dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
         }
         else // within domain -> stream to regular neighbor in regular df arrays
         {
             dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
         }
-
-        // TODO: check if these streamed values are equal to the ones above
-        /*
-        // regular periodic boundary for shear wave decay without halo exchange
-        uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-                         + ((src_x + dvc_c_x[i] + N_X) % N_X);
-
-        dvc_df_next[i][dst_idx] = f_new_i;
-        */
     }
 }
 

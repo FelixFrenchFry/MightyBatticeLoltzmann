@@ -338,23 +338,33 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K(
         }
         */
 
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
         if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
         {
             // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-            // TODO: use explicit mapping for sanity check
-            uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-                             + ((src_x + dvc_c_x[i] + N_X) % N_X);
+            //uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
+            //                 + ((src_x + dvc_c_x[i] + N_X) % N_X);
 
-            dvc_df_next[i][dst_idx] = f_new_i;
+            //dvc_df_next[i][((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
+            //dvc_df_next[i][((dst_y_raw + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
+            //dvc_df_next[i][(N_Y - 1) * N_X + dst_x] = f_new_i;
+
+            if (i == 4) { dvc_df_halo_bottom[0][dst_x] = f_new_i; }
+            else { dvc_df_next[i][(N_Y - 1) * N_X + dst_x] = f_new_i; }
         }
         else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
         {
             // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-            // TODO: use explicit mapping for sanity check
-            uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-                             + ((src_x + dvc_c_x[i] + N_X) % N_X);
+            //uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
+            //                 + ((src_x + dvc_c_x[i] + N_X) % N_X);
 
-            dvc_df_next[i][dst_idx] = f_new_i;
+            //dvc_df_next[i][((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
+            //dvc_df_next[i][((dst_y_raw + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
+            dvc_df_next[i][0 + dst_x] = f_new_i;
         }
         else // within domain -> stream to regular neighbor in regular df arrays
         {
