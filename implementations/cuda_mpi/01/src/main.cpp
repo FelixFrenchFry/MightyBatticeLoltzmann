@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      1000;
-    constexpr uint32_t N_Y_TOTAL =      1000;
-    constexpr uint32_t N_STEPS =        10000;
+    constexpr uint32_t N_X_TOTAL =      60;
+    constexpr uint32_t N_Y_TOTAL =      40;
+    constexpr uint32_t N_STEPS =        200;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 5000;
-    std::string export_name = "C";
+    uint32_t export_interval = 50;
+    std::string export_name = "B";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
     constexpr bool export_u_x =   true;
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
     constexpr bool export_u_mag = false;
 
     // simulation settings
-    constexpr bool shear_wave_decay =     false;
-    constexpr bool lid_driven_cavity =    true;
+    constexpr bool shear_wave_decay =     true;
+    constexpr bool lid_driven_cavity =    false;
 
     // =========================================================================
     // domain decomposition and MPI stuff
@@ -242,19 +242,6 @@ int main(int argc, char *argv[])
             N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
-        // track requests for synchronization (4 per direction)
-        MPI_Request requests[4 * 3];
-        int req_idx = 0;
-
-        // direction mapping for the halo arrays
-        // ---------
-        // | 6 2 5 |
-        // | 3 0 1 |
-        // | 7 4 8 |
-        // ---------
-        constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
-        constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
-
         /*
         if (RANK == 0 && step % 10 == 0)
         {
@@ -276,8 +263,22 @@ int main(int argc, char *argv[])
         }
         */
 
+        // track requests for synchronization (4 per direction)
+        MPI_Request requests[4 * 3];
+        int req_idx = 0;
+
+        // direction mapping for the halo arrays
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
+        constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
+
         // TODO: send/receive halo layers into dvc_df_next while computing?
         // TODO: no exchange between top and bottom rank for lid driven cavity?
+        // TODO: use blocking MPI_Sendrecv() calls, because no computations during transfer anyways?
         for (uint32_t i = 0; i < 3; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
@@ -292,13 +293,13 @@ int main(int argc, char *argv[])
                 RANK_ABOVE, dir_top,
                 MPI_COMM_WORLD, &requests[req_idx++]);
 
-            // receive the top halo from the rank above into the top row
-            // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
-            // TODO: should it not be received into the bottom row instead?
+            // receive the top halo from the rank below into the own bottom row
+            // (overwrite entries from 0 to N_X)
+            // TODO: receive top halo from rank BELOW or ABOVE?
             MPI_Irecv(
                 df_next[dir_top],
                 N_X, FP_MPI_TYPE,
-                RANK_ABOVE, dir_top,
+                RANK_BELOW, dir_top,
                 MPI_COMM_WORLD, &requests[req_idx++]);
 
             // for each of the 3 bottom directions, do these halo exchanges:
@@ -310,13 +311,13 @@ int main(int argc, char *argv[])
                 RANK_BELOW, dir_bottom + 3,
                 MPI_COMM_WORLD, &requests[req_idx++]);
 
-            // receive the bottom halo from the rank below into the bottom row
-            // (overwrite entries from 0 to N_X)
-            // TODO: should it not be received into the top row instead?
+            // receive the bottom halo from the rank above into the own top row
+            // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
+            // TODO: receive bottom halo from rank BELOW or ABOVE?
             MPI_Irecv(
                 df_next[dir_bottom] + (N_Y - 1) * N_X,
                 N_X, FP_MPI_TYPE,
-                RANK_BELOW, dir_bottom + 3,
+                RANK_ABOVE, dir_bottom + 3,
                 MPI_COMM_WORLD, &requests[req_idx++]);
         }
 

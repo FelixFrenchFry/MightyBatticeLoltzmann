@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 # simulation config
-step =  200
-N_X =   60
-N_Y =   40
+step =  5000
+N_X =   1000
+N_Y =   1000
 
 # file path config
 versionDirName =    "01"
-subDirName =        "B"
+subDirName =        "C"
 dataType =          "velocity_x"
 
 # path to raw .bin export:
