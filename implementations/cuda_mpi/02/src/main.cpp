@@ -236,10 +236,21 @@ int main(int argc, char *argv[])
 
         // compute densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
-        Launch_FullyFusedLatticeUpdate_Push(
+        // TODO: only process inner cells -> [1, ..., N_Y - 2] * N_X
+
+        uint32_t N_CELLS_INNER = (N_Y - 2) * N_X;
+        uint32_t N_CELLS_OUTER = 2 * N_X;
+
+        Launch_FullyFusedLatticeUpdate_Push_Inner(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, SIZE, RANK,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
+            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+
+        Launch_FullyFusedLatticeUpdate_Push_Outer(
+            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         /*
@@ -276,53 +287,10 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
-        // send top halo (dir 2) to the bottom row of the neighbor above, and
-        // receive top halo (dir 2) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[0], N_X, FP_MPI_TYPE, RANK_ABOVE, 2,
-            df_next[2], N_X, FP_MPI_TYPE, RANK_BELOW, 2,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send top halo (dir 5) to the bottom row of the neighbor above, and
-        // receive top halo (dir 5) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[1], N_X, FP_MPI_TYPE, RANK_ABOVE, 5,
-            df_next[5], N_X, FP_MPI_TYPE, RANK_BELOW, 5,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send top halo (dir 6) to the bottom row of the neighbor above, and
-        // receive top halo (dir 6) from the neighbor below into the bottom row
-        MPI_Sendrecv(
-            df_halo_top[2], N_X, FP_MPI_TYPE, RANK_ABOVE, 6,
-            df_next[6], N_X, FP_MPI_TYPE, RANK_BELOW, 6,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 4) to the top row of the neighbor below, and
-        // receive bottom halo (dir 4) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[0], N_X, FP_MPI_TYPE, RANK_BELOW, 4,
-            df_next[4] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 4,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 7) to the top row of the neighbor below, and
-        // receive bottom halo (dir 7) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[1], N_X, FP_MPI_TYPE, RANK_BELOW, 7,
-            df_next[7] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 7,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        // send bottom halo (dir 8) to the top row of the neighbor below, and
-        // receive bottom halo (dir 8) from the neighbor above into the top row
-        MPI_Sendrecv(
-            df_halo_bottom[2], N_X, FP_MPI_TYPE, RANK_BELOW, 8,
-            df_next[8] + (N_Y - 1) * N_X, N_X, FP_MPI_TYPE, RANK_ABOVE, 8,
-            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-        /*
         // TODO: send/receive halo layers into dvc_df_next while computing?
         // TODO: no exchange between top and bottom rank for lid driven cavity?
         // TODO: use blocking MPI_Sendrecv() calls, because no computations during transfer anyways?
-        for (uint32_t i = 0; i < 3; i++)
+        for (uint32_t i = 0; i < 0; i++)
         {
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
@@ -365,8 +333,7 @@ int main(int argc, char *argv[])
         }
 
         // wait for all MPI halo exchanges to finish
-        MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
-        */
+        //MPI_Waitall(req_idx, requests, MPI_STATUSES_IGNORE);
 
         /*
         if (RANK == 0 && step % 10 == 0)

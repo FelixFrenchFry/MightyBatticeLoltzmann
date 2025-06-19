@@ -11,7 +11,7 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 # simulation config
 N_X =   60
 N_Y =   40
-omega = 1.7
+omega = 1.5
 
 # step config
 step_start =    1
