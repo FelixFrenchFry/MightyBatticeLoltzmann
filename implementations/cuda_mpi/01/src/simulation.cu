@@ -166,8 +166,6 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_K(
     FP* __restrict__ dvc_u_y,
     const FP omega,
     const uint32_t N_X, const uint32_t N_Y,
-    const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
-    const uint32_t Y_START, const uint32_t Y_END,
     const uint32_t N_CELLS,
     const bool write_rho,
     const bool write_u_x,
@@ -271,6 +269,7 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
     const uint32_t Y_START, const uint32_t Y_END,
     const uint32_t N_CELLS,
+    const int RANK,
     const bool write_rho,
     const bool write_u_x,
     const bool write_u_y)
@@ -364,12 +363,16 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
                 // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
                 dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x_raw] = f_new_i;
+
+                if (RANK != 1) printf("A");
             }
             else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
             {
                 // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
                 dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
+
+                if (RANK != 0) printf("B");
             }
             else // within domain -> stream to regular neighbor in regular df arrays
             {
@@ -411,15 +414,15 @@ void Launch_FullyFusedLatticeUpdate_Push(
     {
         FullyFusedLatticeUpdate_ShearWaveDecay_Push_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL,
-            Y_START, Y_END, N_CELLS, write_rho, write_u_x, write_u_y);
+            dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            N_CELLS, write_rho, write_u_x, write_u_y);
     }
     else if (lid_driven_cavity)
     {
         FullyFusedLatticeUpdate_LidDrivenCavity_Push_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL,
-            Y_START, Y_END, N_CELLS, write_rho, write_u_x, write_u_y);
+            Y_START, Y_END, N_CELLS, RANK, write_rho, write_u_x, write_u_y);
     }
     else
     {

@@ -177,6 +177,18 @@ int main(int argc, char *argv[])
     cudaMalloc(&dvc_u_x, N_CELLS * sizeof(FP));
     cudaMalloc(&dvc_u_y, N_CELLS * sizeof(FP));
 
+    cudaError_t err = cudaGetLastError();
+    if (err != cudaSuccess)
+    {
+        // specify detailed logging for the error message
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
+
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+
+        // return to basic logging
+        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
+    }
+
     // =========================================================================
     // device info and initialization
     // =========================================================================
@@ -268,8 +280,38 @@ int main(int argc, char *argv[])
         // but full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
+            // TODO: BIG IDEA
+            // TODO: WE DONT WANT TO SEND DIRECTIONS THAT GO INTO WALLS FOR LID DRIVEN CAVITY!!!
+            // TODO: (for X=0 and X=N_X-1 with 5, 6 and 7, 8!!!)
+
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
+
+            int offset_top = 0;
+            int offset_bottom = 0;
+            int count = N_X;
+
+            // transfer of top halos in dir 5, and bottom halos in dir 7
+            if (lid_driven_cavity && i == 1 && false)
+            {
+                offset_top = 0;
+                offset_bottom = 1;
+                count -= 1;
+            }
+
+            // transfer of top halos in dir 6, and bottom halos in dir 8
+            if (lid_driven_cavity && i == 2 && false)
+            {
+                offset_top = 1;
+                offset_bottom = 0;
+                count -= 1;
+            }
+
+            // ---------
+            // | 6 2 5 |
+            // | 3 0 1 |
+            // | 7 4 8 |
+            // ---------
 
             // for each of the 3 top directions, do these halo exchanges:
 
@@ -278,8 +320,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the rop rank does not do this
                 MPI_Isend(
-                    df_halo_top[i],
-                    N_X, FP_MPI_TYPE,
+                    df_halo_top[i] + offset_top,
+                    count, FP_MPI_TYPE,
                     RANK_ABOVE, dir_top,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
@@ -290,8 +332,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the bottom rank does not do this
                 MPI_Irecv(
-                   df_next[dir_top],
-                   N_X, FP_MPI_TYPE,
+                   df_next[dir_top] + offset_top,
+                   count, FP_MPI_TYPE,
                    RANK_BELOW, dir_top,
                    MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
@@ -303,8 +345,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the bottom rank does not do this
                 MPI_Isend(
-                    df_halo_bottom[i],
-                    N_X, FP_MPI_TYPE,
+                    df_halo_bottom[i] + offset_bottom,
+                    count, FP_MPI_TYPE,
                     RANK_BELOW, dir_bottom + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
@@ -315,14 +357,15 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the rop rank does not do this
                 MPI_Irecv(
-                    df_next[dir_bottom] + (N_Y - 1) * N_X,
-                    N_X, FP_MPI_TYPE,
+                    df_next[dir_bottom] + (N_Y - 1) * N_X + offset_bottom,
+                    count, FP_MPI_TYPE,
                     RANK_ABOVE, dir_bottom + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
         }
 
         // wait for all MPI halo exchanges to finish
+        // TODO: NOT PROPERLY WAITING FOR SYNC??? TRY BLOCKING SENDRECS INSTEAD?
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
         // TODO: BIG BIG BIG BUG FIX:

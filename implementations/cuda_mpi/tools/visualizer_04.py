@@ -39,7 +39,7 @@ def get_file_path(data: str, step: int) -> str:
         f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
 # misc
-outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
+outputDir = f"{outputDirName}/{versionDirName}/{subDirName}_2"
 os.makedirs(outputDir, exist_ok=True)
 stride_plot = 20
 

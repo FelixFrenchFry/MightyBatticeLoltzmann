@@ -24,7 +24,7 @@ def get_file_path(data: str, step: int) -> str:
 
 # output dir
 outputDirName = "output"
-outputDir = f"{outputDirName}/{versionDirName}/test"
+outputDir = f"{outputDirName}/{versionDirName}/test_2"
 os.makedirs(outputDir, exist_ok=True)
 
 # load and reshape data
