@@ -24,9 +24,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      1000;
-    constexpr uint32_t N_Y_TOTAL =      1000;
-    constexpr uint32_t N_STEPS =        200000;
+    constexpr uint32_t N_X_TOTAL =      15000;
+    constexpr uint32_t N_Y_TOTAL =      10000;
+    constexpr uint32_t N_STEPS =        10000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -280,38 +280,32 @@ int main(int argc, char *argv[])
         // but full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
-            // TODO: BIG IDEA
-            // TODO: WE DONT WANT TO SEND DIRECTIONS THAT GO INTO WALLS FOR LID DRIVEN CAVITY!!!
-            // TODO: (for X=0 and X=N_X-1 with 5, 6 and 7, 8!!!)
-
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
 
+            // for diagonal directions that bounce back from walls, send/receive
+            // only N_X - 1 elements and use offsets for the array pointers
             int offset_top = 0;
             int offset_bottom = 0;
             int count = N_X;
 
             // transfer of top halos in dir 5, and bottom halos in dir 7
-            if (lid_driven_cavity && i == 1 && false)
+            if (lid_driven_cavity && i == 1)
             {
-                offset_top = 0;
-                offset_bottom = 1;
-                count -= 1;
-            }
-
-            // transfer of top halos in dir 6, and bottom halos in dir 8
-            if (lid_driven_cavity && i == 2 && false)
-            {
+                // TODO: should offsets be the opposite?
                 offset_top = 1;
                 offset_bottom = 0;
                 count -= 1;
             }
 
-            // ---------
-            // | 6 2 5 |
-            // | 3 0 1 |
-            // | 7 4 8 |
-            // ---------
+            // transfer of top halos in dir 6, and bottom halos in dir 8
+            if (lid_driven_cavity && i == 2)
+            {
+                // TODO: should offsets be the opposite?
+                offset_top = 0;
+                offset_bottom = 1;
+                count -= 1;
+            }
 
             // for each of the 3 top directions, do these halo exchanges:
 

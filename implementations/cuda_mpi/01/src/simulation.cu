@@ -360,19 +360,13 @@ __global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
             // check if streaming destination is outside of the process domain
             if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
             {
-                // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
                 dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x_raw] = f_new_i;
-
-                if (RANK != 1) printf("A");
             }
             else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
             {
-                // TODO: is this ever executed if SIZE == 1? possible cause of bug for RANK > 1
                 // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
                 dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
-
-                if (RANK != 0) printf("B");
             }
             else // within domain -> stream to regular neighbor in regular df arrays
             {
