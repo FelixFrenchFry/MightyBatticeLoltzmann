@@ -154,10 +154,11 @@ __device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
 }
 
 // =============================================================================
-// fully fused lattice update kernel for lid shear wave decay simulation (inner cells only)
+// fully fused lattice update kernel for shear wave decay sim (inner cells only)
+// (identical to the lid driven cavity inner kernel, but separated for experiments)
 // =============================================================================
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
-__global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
+__global__ void FFLU_ShearWaveDecay_Push_Inner_K(
     const FP* const* __restrict__ dvc_df,
     FP* const* __restrict__ dvc_df_next,
     FP* __restrict__ dvc_rho,
@@ -173,10 +174,11 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS_INNER) { return; }
 
-    // only process inner cells -> [1, ..., N_Y - 2] * N_X and thus
+    // only process inner cells -> [1, ..., N_Y - 2] * N_X and
     // determine (x,y) coordinates among the inner cells
     uint32_t src_x = idx % N_X;
     uint32_t src_y = idx / N_X + 1; // starting from row 1, instead of 0
+    idx = src_y * N_X + src_x;
 
     // load df values into block-wise tiles of shared shared memory
     __shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
@@ -191,7 +193,7 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
     // velocity := sum over df values, weighted by each dir i
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        tile_df[i][threadIdx.x] = dvc_df[i][src_y * N_X + src_x];
+        tile_df[i][threadIdx.x] = dvc_df[i][idx];
         rho += tile_df[i][threadIdx.x];
         u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
         u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];
@@ -205,9 +207,9 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
     u_y /= rho;
 
     // write back final field values only if requested
-    if (write_rho) { dvc_rho[src_y * N_X + src_x] = rho; }
-    if (write_u_x) { dvc_u_x[src_y * N_X + src_x] = u_x; }
-    if (write_u_y) { dvc_u_y[src_y * N_X + src_x] = u_y; }
+    if (write_rho) { dvc_rho[idx] = rho; }
+    if (write_u_x) { dvc_u_x[idx] = u_x; }
+    if (write_u_y) { dvc_u_y[idx] = u_y; }
 
     // pre-compute squared velocity and cell coordinates for this thread
     FP u_sq = u_x * u_x + u_y * u_y;
@@ -224,9 +226,8 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
         FP f_new_i = tile_df[i][threadIdx.x] - omega
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
-        // TODO: inlined sub-kernel for the neighbor index
         // regular periodic boundary for shear wave decay without halo exchange
-        // determine x-coordinate of the streaming destination cell
+        // determine destination cell's index based on x/y-coordinates and direction i
         // (with respect to periodic boundary conditions)
         uint32_t dst_idx = (src_y + dvc_c_y[i]) * N_X
                          + ((src_x + dvc_c_x[i] + N_X) % N_X);
@@ -236,31 +237,31 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K(
 }
 
 // =============================================================================
-// fully fused lattice update kernel for lid shear wave decay simulation (outer cells only)
+// fully fused lattice update kernel for lid driven cavity sim (inner cells only)
+// (identical to the shear wave decay inner kernel, but separated for experiments)
 // =============================================================================
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
-__global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K(
+__global__ void FFLU_LidDrivenCavity_Push_Inner_K(
     const FP* const* __restrict__ dvc_df,
     FP* const* __restrict__ dvc_df_next,
-    FP* const* __restrict__ dvc_df_halo_top,
-    FP* const* __restrict__ dvc_df_halo_bottom,
     FP* __restrict__ dvc_rho,
     FP* __restrict__ dvc_u_x,
     FP* __restrict__ dvc_u_y,
     const FP omega,
     const uint32_t N_X, const uint32_t N_Y,
-    const uint32_t N_CELLS_OUTER,
+    const uint32_t N_CELLS_INNER,
     const bool write_rho,
     const bool write_u_x,
     const bool write_u_y)
 {
     uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx >= N_CELLS_OUTER) { return; }
+    if (idx >= N_CELLS_INNER) { return; }
 
-    // only process outer cells -> [0, N_Y - 1] * N_X and thus
-    // determine (x,y) coordinates among the outer cells
+    // only process inner cells -> [1, ..., N_Y - 2] * N_X and
+    // determine (x,y) coordinates among the inner cells
     uint32_t src_x = idx % N_X;
-    uint32_t src_y = (idx / N_X == 0) ? 0 : (N_Y - 1); // map to first or last row
+    uint32_t src_y = idx / N_X + 1; // starting from row 1, instead of 0
+    idx = src_y * N_X + src_x;
 
     // load df values into block-wise tiles of shared shared memory
     __shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
@@ -275,7 +276,7 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K(
     // velocity := sum over df values, weighted by each dir i
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        tile_df[i][threadIdx.x] = dvc_df[i][src_y * N_X + src_x];
+        tile_df[i][threadIdx.x] = dvc_df[i][idx];
         rho += tile_df[i][threadIdx.x];
         u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
         u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];
@@ -289,9 +290,9 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K(
     u_y /= rho;
 
     // write back final field values only if requested
-    if (write_rho) { dvc_rho[src_y * N_X + src_x] = rho; }
-    if (write_u_x) { dvc_u_x[src_y * N_X + src_x] = u_x; }
-    if (write_u_y) { dvc_u_y[src_y * N_X + src_x] = u_y; }
+    if (write_rho) { dvc_rho[idx] = rho; }
+    if (write_u_x) { dvc_u_x[idx] = u_x; }
+    if (write_u_y) { dvc_u_y[idx] = u_y; }
 
     // pre-compute squared velocity and cell coordinates for this thread
     FP u_sq = u_x * u_x + u_y * u_y;
@@ -308,94 +309,25 @@ __global__ void FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K(
         FP f_new_i = tile_df[i][threadIdx.x] - omega
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
-        // determine x-coordinate of the streaming destination cell
-        // (with respect to periodic boundary conditions and halo cells)
-        uint32_t dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
-        int dst_y_raw = src_y + dvc_c_y[i];
-
-        // check if streaming destination is outside of the process domain
+        // regular bounce-back boundary for lid driven cavity without halo exchange
         // ---------
         // | 6 2 5 |
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        /*
-        if (dst_y_raw < 0) // y-destination below domain -> stream into bottom halo
+        // check if directed into a wall (excluding top and bottom wall)
+        if ((dvc_c_x[i] == -1 && src_x == 0) ||        // into left wall
+            (dvc_c_x[i] ==  1 && src_x == N_X - 1))    // into right wall
         {
-            // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-            // TODO: use explicit mapping for sanity check
-            dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
+            // same cell but opposite direction because of bounce-back
+            dvc_df_next[dvc_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
         }
-        else if (dst_y_raw > static_cast<int>(N_Y) - 1) // y-destination above domain -> stream into top halo
+        else
         {
-            // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-            // TODO: use explicit mapping for sanity check
-            dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
-        }
-        else // within domain -> stream to regular neighbor in regular df arrays
-        {
-            dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
-        }
-        */
-
-        // ---------
-        // | 6 2 5 |
-        // | 3 0 1 |
-        // | 7 4 8 |
-        // ---------
-        if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
-        {
-            // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-            //uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-            //                 + ((src_x + dvc_c_x[i] + N_X) % N_X);
-
-            //dvc_df_next[i][((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
-            //dvc_df_next[i][((dst_y_raw + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
-            //dvc_df_next[i][(N_Y - 1) * N_X + dst_x] = f_new_i;
-
-            if (i == 4) { dvc_df_halo_bottom[0][dst_x] = f_new_i; }
-            else { dvc_df_next[i][(N_Y - 1) * N_X + dst_x] = f_new_i; }
-        }
-        else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
-        {
-            // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-            //uint32_t dst_idx = ((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X
-            //                 + ((src_x + dvc_c_x[i] + N_X) % N_X);
-
-            //dvc_df_next[i][((src_y + dvc_c_y[i] + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
-            //dvc_df_next[i][((dst_y_raw + N_Y) % N_Y) * N_X + dst_x] = f_new_i;
-            dvc_df_next[i][0 + dst_x] = f_new_i;
-        }
-        else // within domain -> stream to regular neighbor in regular df arrays
-        {
-            dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
+            // normal neighbor in direction i
+            dvc_df_next[i][(src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i])] = f_new_i;
         }
     }
-}
-
-// =============================================================================
-// fully fused lattice update kernel for lid driven cavity simulation
-// =============================================================================
-template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
-__global__ void FullyFusedLatticeUpdate_LidDrivenCavity_Push_K(
-    const FP* const* __restrict__ dvc_df,
-    FP* const* __restrict__ dvc_df_next,
-    FP* const* __restrict__ dvc_df_halo_top,
-    FP* const* __restrict__ dvc_df_halo_bottom,
-    FP* __restrict__ dvc_rho,
-    FP* __restrict__ dvc_u_x,
-    FP* __restrict__ dvc_u_y,
-    const FP omega,
-    const FP u_lid,
-    const uint32_t N_X, const uint32_t N_Y,
-    const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
-    const uint32_t Y_START, const uint32_t Y_END,
-    const uint32_t N_CELLS,
-    const bool write_rho,
-    const bool write_u_x,
-    const bool write_u_y)
-{
-    // TODO
 }
 
 void Launch_FullyFusedLatticeUpdate_Push_Inner(
@@ -425,16 +357,17 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
 
     const uint32_t N_GRIDSIZE = (N_CELLS_INNER + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    // TODO: remove deprecated/unused kernel arguments
     if (shear_wave_decay)
     {
-        FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+        FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_CELLS_INNER, write_rho, write_u_x, write_u_y);
     }
     else if (lid_driven_cavity)
     {
-        // TODO
+        FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            N_CELLS_INNER, write_rho, write_u_x, write_u_y);
     }
     else
     {
@@ -448,13 +381,15 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     {
         if (shear_wave_decay)
         {
-            DisplayKernelAttributes(FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
-                fmt::format("FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K"),
+            DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
+                fmt::format("FFLU_ShearWaveDecay_Push_Inner_K"),
                 N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
         else if (lid_driven_cavity)
         {
-            // TODO
+            DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
+                fmt::format("FFLU_LidDrivenCavity_Push_Inner_K"),
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
 
         kernelAttributesDisplayed_inner = true;
@@ -470,6 +405,236 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
+    }
+}
+
+// =============================================================================
+// fully fused lattice update kernel for shear wave decay sim (outer cells only)
+// (for applying the periodic boundary conditions and populating the hallo cells)
+// =============================================================================
+template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
+__global__ void FFLU_ShearWaveDecay_Push_Outer_K(
+    const FP* const* __restrict__ dvc_df,
+    FP* const* __restrict__ dvc_df_next,
+    FP* const* __restrict__ dvc_df_halo_top,
+    FP* const* __restrict__ dvc_df_halo_bottom,
+    FP* __restrict__ dvc_rho,
+    FP* __restrict__ dvc_u_x,
+    FP* __restrict__ dvc_u_y,
+    const FP omega,
+    const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t N_CELLS_OUTER,
+    const bool write_rho,
+    const bool write_u_x,
+    const bool write_u_y)
+{
+    uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= N_CELLS_OUTER) { return; }
+
+    // only process outer cells -> [0, N_Y - 1] * N_X and
+    // determine (x,y) coordinates among the outer cells
+    int src_x = idx % N_X;
+    int src_y = (idx / N_X == 0) ? 0 : (N_Y - 1); // map to first or last row
+    idx = src_y * N_X + src_x;
+
+    // load df values into block-wise tiles of shared shared memory
+    __shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
+
+    // used for summing stuff up and computing collision
+    FP rho = FP_CONST(0.0);
+    FP u_x = FP_CONST(0.0);
+    FP u_y = FP_CONST(0.0);
+
+    // populate shared memory tiles and compute sums in the same loop
+    // density := sum over df values in each dir i
+    // velocity := sum over df values, weighted by each dir i
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        rho += tile_df[i][threadIdx.x];
+        u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
+        u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];
+    }
+
+    // exit thread to avoid division by zero or erroneous values
+    if (rho <= FP_CONST(0.0)) { return; }
+
+    // finalize velocities
+    u_x /= rho;
+    u_y /= rho;
+
+    // write back final field values only if requested
+    if (write_rho) { dvc_rho[idx] = rho; }
+    if (write_u_x) { dvc_u_x[idx] = u_x; }
+    if (write_u_y) { dvc_u_y[idx] = u_y; }
+
+    // pre-compute squared velocity and cell coordinates for this thread
+    FP u_sq = u_x * u_x + u_y * u_y;
+
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        // compute dot product of c_i * u and equilibrium df value for dir i
+        FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
+        FP f_eq_i = dvc_w[i] * rho
+                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+
+        // relax df towards equilibrium
+        FP f_new_i = tile_df[i][threadIdx.x] - omega
+                   * (tile_df[i][threadIdx.x] - f_eq_i);
+
+        // determine x-coordinate of the streaming destination cell
+        // (with respect to periodic boundary conditions and halo cells)
+        int dst_x = (src_x + dvc_c_x[i] + N_X) % N_X;
+        int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
+
+        // check if streaming destination is outside of the process domain
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        if (dst_y_raw == -1) // y-destination below domain -> stream into bottom halo
+        {
+            // map 4, 7, 8 to 0, 1, 2 using array index map for bottom halos
+            dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x] = f_new_i;
+        }
+        else if (dst_y_raw == N_Y) // y-destination above domain -> stream into top halo
+        {
+            // map 2, 5, 6 to 0, 1, 2 using array index map for top halos
+            dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
+        }
+        else // within domain -> stream to regular neighbor in regular df arrays
+        {
+            dvc_df_next[i][dst_y_raw * N_X + dst_x] = f_new_i;
+        }
+    }
+}
+
+// =============================================================================
+// TODO: fully fused lattice update kernel for lid driven cavity sim (outer cells only)
+// (for applying the bounce-back boundary conditions, lid velocity, and populating the hallo cells)
+// =============================================================================
+template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
+__global__ void FFLU_LidDrivenCavity_Push_Outer_K(
+    const FP* const* __restrict__ dvc_df,
+    FP* const* __restrict__ dvc_df_next,
+    FP* const* __restrict__ dvc_df_halo_top,
+    FP* const* __restrict__ dvc_df_halo_bottom,
+    FP* __restrict__ dvc_rho,
+    FP* __restrict__ dvc_u_x,
+    FP* __restrict__ dvc_u_y,
+    const FP omega,
+    const FP u_lid,
+    const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t N_Y_TOTAL, const uint32_t Y_START,
+    const uint32_t N_CELLS_OUTER,
+    const bool write_rho,
+    const bool write_u_x,
+    const bool write_u_y)
+{
+    uint32_t idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx >= N_CELLS_OUTER) { return; }
+
+    // only process outer cells -> [0, N_Y - 1] * N_X and
+    // determine (x,y) coordinates among the outer cells
+    int src_x = idx % N_X;
+    int src_y = (idx / N_X == 0) ? 0 : (N_Y - 1); // map to first or last row
+    int src_y_global = src_y + Y_START;
+    idx = src_y * N_X + src_x;
+
+    // load df values into block-wise tiles of shared shared memory
+    __shared__ FP tile_df[N_DIR][N_BLOCKSIZE];
+
+    // used for summing stuff up and computing collision
+    FP rho = FP_CONST(0.0);
+    FP u_x = FP_CONST(0.0);
+    FP u_y = FP_CONST(0.0);
+
+    // populate shared memory tiles and compute sums in the same loop
+    // density := sum over df values in each dir i
+    // velocity := sum over df values, weighted by each dir i
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        rho += tile_df[i][threadIdx.x];
+        u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
+        u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];
+    }
+
+    // exit thread to avoid division by zero or erroneous values
+    if (rho <= FP_CONST(0.0)) { return; }
+
+    // finalize velocities
+    u_x /= rho;
+    u_y /= rho;
+
+    // write back final field values only if requested
+    if (write_rho) { dvc_rho[idx] = rho; }
+    if (write_u_x) { dvc_u_x[idx] = u_x; }
+    if (write_u_y) { dvc_u_y[idx] = u_y; }
+
+    // pre-compute squared velocity and cell coordinates for this thread
+    FP u_sq = u_x * u_x + u_y * u_y;
+
+    // TODO: check for signed math using uint32_t -> incorrect results!!!
+    for (uint32_t i = 0; i < N_DIR; i++)
+    {
+        // compute dot product of c_i * u and equilibrium df value for dir i
+        FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
+        FP f_eq_i = dvc_w[i] * rho
+                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+
+        // relax df towards equilibrium
+        FP f_new_i = tile_df[i][threadIdx.x] - omega
+                   * (tile_df[i][threadIdx.x] - f_eq_i);
+
+        // determine coordinates and direction of the streaming destination cell
+        // (with respect to bounce-back boundary conditions and halo cells)
+        // check if streaming is directed into a wall (bounce-back)
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        if ((dvc_c_x[i] == -1 && src_x == 0) ||                    // into left wall
+            (dvc_c_x[i] ==  1 && src_x == N_X - 1) ||              // into right wall
+            (dvc_c_y[i] == -1 && src_y_global == 0) ||             // into bottom wall
+            (dvc_c_y[i] ==  1 && src_y_global == N_Y_TOTAL - 1))   // into top wall
+        {
+            // inject lid velocity if streaming is directed into top wall
+            if (dvc_c_y[i] == 1 && src_y_global == N_Y_TOTAL - 1)
+            {
+                // TODO: correct equation w.r.t. omega and dvc_w[i] ?
+                f_new_i -= FP_CONST(6.0) * dvc_w[i] * rho * dvc_fp_c_x[i] * u_lid;
+            }
+
+            // same cell but opposite direction because of bounce-back
+            // (definitely within the process domain -> stream into regular df arrays)
+            dvc_df_next[dvc_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
+        }
+        else // (not directed into a wall, but might be outside of the process domain)
+        {
+            int dst_x_raw = src_x + dvc_c_x[i]; // possibly < 0
+            int dst_y_raw = src_y + dvc_c_y[i]; // possibly < 0
+
+            // check if streaming destination is outside of the process domain
+            if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
+            {
+                // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
+                dvc_df_halo_bottom[dvc_rev_dir_map_halo_bottom[i]][dst_x_raw] = f_new_i;
+            }
+            else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
+            {
+                // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
+                dvc_df_halo_top[dvc_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
+            }
+            else // within domain -> stream to regular neighbor in regular df arrays
+            {
+                dvc_df_next[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
+            }
+        }
     }
 }
 
@@ -500,17 +665,19 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
 
     const uint32_t N_GRIDSIZE = (N_CELLS_OUTER + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    // TODO: remove deprecated/unused kernel arguments
     if (shear_wave_decay)
     {
-        FullyFusedLatticeUpdate_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+        FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
     }
     else if (lid_driven_cavity)
     {
-        // TODO
+        FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_Y_TOTAL, Y_START,
+            N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
     }
     else
     {
@@ -524,13 +691,15 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     {
         if (shear_wave_decay)
         {
-            DisplayKernelAttributes(FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
-                fmt::format("FullyFusedLatticeUpdate_ShearWaveDecay_Push_Inner_K"),
+            DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
+                fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
                 N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
         else if (lid_driven_cavity)
         {
-            // TODO
+            DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
+                fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
         }
 
         kernelAttributesDisplayed_outer = true;

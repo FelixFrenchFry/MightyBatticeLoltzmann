@@ -4,6 +4,7 @@
 
 
 
+// TODO: remove redundant arguments
 void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const FP* const* dvc_df,
     FP* const* dvc_df_next,
@@ -27,6 +28,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const bool write_u_x = false,
     const bool write_u_y = false);
 
+// TODO: remove redundant arguments
 void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const FP* const* dvc_df,
     FP* const* dvc_df_next,

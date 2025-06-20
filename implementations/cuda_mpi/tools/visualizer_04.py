@@ -25,8 +25,8 @@ steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
-versionDirName =    "01"
-subDirName =        "C"
+versionDirName =    "02"
+subDirName =        "B"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:
@@ -39,7 +39,7 @@ def get_file_path(data: str, step: int) -> str:
         f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
 # misc
-outputDir = f"{outputDirName}/{versionDirName}/{subDirName}_2"
+outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
 stride_plot = 20
 

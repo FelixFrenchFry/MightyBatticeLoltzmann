@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     // relaxation factor, rest density, max velocity, number of sine periods,
     // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.7;
+    constexpr FP omega = 1.5;
     constexpr FP rho_0 = 1.0;
     constexpr FP u_max = 0.1;
     constexpr FP n = 2.0;
@@ -39,12 +39,12 @@ int main(int argc, char *argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 50000;
-    std::string export_name = "C";
+    uint32_t export_interval = 50;
+    std::string export_name = "A";
     std::string export_num = "01";
     constexpr bool export_rho =   false;
-    constexpr bool export_u_x =   true;
-    constexpr bool export_u_y =   true;
+    constexpr bool export_u_x =   false;
+    constexpr bool export_u_y =   false;
     constexpr bool export_u_mag = false;
 
     // simulation settings
@@ -88,11 +88,6 @@ int main(int argc, char *argv[])
     const int RANK_BELOW =      (RANK - 1 + SIZE) % SIZE;   // periodic
     const bool IS_TOP_RANK =    RANK == SIZE - 1;
     const bool IS_BOTTOM_RANK = RANK == 0;
-
-    SPDLOG_INFO("Rank {} says Size={}, and Rank_Above={}, and Rank_Below={}",
-        RANK, SIZE, RANK_ABOVE, RANK_BELOW);
-    SPDLOG_INFO("Rank {} is top rank: {}", RANK, IS_TOP_RANK);
-    SPDLOG_INFO("Rank {} is bottom rank: {}", RANK, IS_BOTTOM_RANK);
 
     if (N_Y_TOTAL % SIZE != 0)
     {
@@ -359,11 +354,9 @@ int main(int argc, char *argv[])
         }
 
         // wait for all MPI halo exchanges to finish
-        // TODO: NOT PROPERLY WAITING FOR SYNC??? TRY BLOCKING SENDRECS INSTEAD?
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
-        // TODO: BIG BIG BIG BUG FIX:
-        // TODO: SWAP HOST POINTERS ON ALL MPI IMPLEMENTATIONS
+        // swap both device and host pointers to the df arrays
         std::swap(dvc_df, dvc_df_next);
         std::swap(df, df_next);
 
