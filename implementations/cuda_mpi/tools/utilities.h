@@ -2,11 +2,110 @@
 #include "config.cuh"
 #include <chrono>
 #include <cuda_runtime.h>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <spdlog/spdlog.h>
 #include <unistd.h>
 
+
+
+struct SimulationParameters
+{
+    // scale
+    uint32_t N_X_TOTAL;
+    uint32_t N_Y_TOTAL;
+    uint32_t N_STEPS;
+
+    // parameters
+    FP omega;
+    FP rho_0;
+    FP u_max;
+    FP u_lid;
+    FP n_sin;
+
+    // export
+    uint32_t export_interval;
+    char export_name[128];
+    char export_num[128];
+    bool export_rho;
+    bool export_u_x;
+    bool export_u_y;
+    bool export_u_mag;
+
+    // mode
+    bool shear_wave_decay;
+    bool lid_driven_cavity;
+};
+
+inline void OverwriteSimulationParameters(
+    SimulationParameters& parameters,
+    const std::string& key,
+    const std::string& value)
+{
+    if (key == "N_X_TOTAL") parameters.N_X_TOTAL = std::stoi(value);
+    else if (key == "N_Y_TOTAL") parameters.N_Y_TOTAL = std::stoi(value);
+    else if (key == "N_STEPS") parameters.N_STEPS = std::stoi(value);
+    else if (key == "omega") parameters.omega = std::stod(value);
+    else if (key == "rho_0") parameters.rho_0 = std::stod(value);
+    else if (key == "u_max") parameters.u_max = std::stod(value);
+    else if (key == "u_lid") parameters.u_lid = std::stod(value);
+    else if (key == "n_sin") parameters.n_sin = std::stod(value);
+    else if (key == "export_interval") parameters.export_interval = std::stoi(value);
+    else if (key == "export_name")
+    {
+        std::strncpy(parameters.export_name, value.c_str(), sizeof(parameters.export_name) - 1);
+        parameters.export_name[sizeof(parameters.export_name) - 1] = '\0';
+    }
+    else if (key == "export_num")
+    {
+        std::strncpy(parameters.export_num, value.c_str(), sizeof(parameters.export_num) - 1);
+        parameters.export_num[sizeof(parameters.export_num) - 1] = '\0';
+    }
+    else if (key == "export_rho") parameters.export_rho = (std::stoi(value) != 0);
+    else if (key == "export_u_x") parameters.export_u_x = (std::stoi(value) != 0);
+    else if (key == "export_u_y") parameters.export_u_y = (std::stoi(value) != 0);
+    else if (key == "export_u_mag") parameters.export_u_mag = (std::stoi(value) != 0);
+    else if (key == "shear_wave_decay") parameters.shear_wave_decay = (std::stoi(value) != 0);
+    else if (key == "lid_driven_cavity") parameters.lid_driven_cavity = (std::stoi(value) != 0);
+    else
+    {
+        SPDLOG_WARN("Unknown parameter in simulation input file: {}", key);
+    }
+}
+
+inline void DisplaySimulationParameters(
+    SimulationParameters& parameters,
+    int RANK = 0)
+{
+    if (RANK == 0)
+    {
+        printf("\nSimulation Parameters\n");
+        printf("------------------------------\n");
+        printf("%-20s = %u\n", "N_X_TOTAL", parameters.N_X_TOTAL);
+        printf("%-20s = %u\n", "N_Y_TOTAL", parameters.N_Y_TOTAL);
+        printf("%-20s = %u\n", "N_STEPS", parameters.N_STEPS);
+
+        printf("%-20s = %.3f\n", "omega", parameters.omega);
+        printf("%-20s = %.3f\n", "rho_0", parameters.rho_0);
+        printf("%-20s = %.3f\n", "u_max", parameters.u_max);
+        printf("%-20s = %.3f\n", "u_lid", parameters.u_lid);
+        printf("%-20s = %.3f\n", "n_sin", parameters.n_sin);
+
+        printf("%-20s = %u\n", "export_interval", parameters.export_interval);
+        printf("%-20s = %s\n", "export_name", parameters.export_name);
+        printf("%-20s = %s\n", "export_num", parameters.export_num);
+
+        printf("%-20s = %s\n", "export_rho", parameters.export_rho ? "true" : "false");
+        printf("%-20s = %s\n", "export_u_x", parameters.export_u_x ? "true" : "false");
+        printf("%-20s = %s\n", "export_u_y", parameters.export_u_y ? "true" : "false");
+        printf("%-20s = %s\n", "export_u_mag", parameters.export_u_mag ? "true" : "false");
+
+        printf("%-20s = %s\n", "shear_wave_decay", parameters.shear_wave_decay ? "true" : "false");
+        printf("%-20s = %s\n", "lid_driven_cavity", parameters.lid_driven_cavity ? "true" : "false");
+        printf("\n");
+    }
+}
 
 
 struct GPUInfo
@@ -34,7 +133,6 @@ inline GPUInfo GetDeviceInfos(
     GPUInfo res;
 
     // get gpu properties
-    cudaSetDevice(RANK_LOCAL);
     cudaDeviceProp props{};
     cudaGetDeviceProperties(&props, RANK_LOCAL);
 
@@ -71,7 +169,7 @@ inline GPUInfo GetDeviceInfos(
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
@@ -87,15 +185,20 @@ inline void DisplayDeviceInfos(
 {
     if (RANK == 0)
     {
-        printf("\n%-5s %-10s %-30s %-3s %-4s %-4s %-9s %-9s %-8s %-8s %-6s %-6s\n",
-               "Rank", "Node", "GPU Name", "#", "CC", "SMs", "ShMem/SM",
+        printf("%-5s %-10s %-34s %-3s %-4s %-4s %-9s %-9s %-8s %-8s %-6s %-6s\n",
+               "Rank", "Node", "GPU Model", "#", "CC", "SMs", "ShMem/SM",
                "Total GB", "Used GB", "Free GB", "Sub-X", "Sub-Y");
-        printf("--------------------------------------------------------"
-                     "--------------------------------------------------------\n");
+        printf("----------------------------------------------------------"
+                     "----------------------------------------------------------\n");
         for (const auto& info : allInfo)
         {
-            printf("%-5d %-10s %-30s %-3d %-4d %-4d %-9lu %-9.3f %-8.3f %-8.3f %-6d %-6d\n",
-                   info.RANK, info.name_host, info.name_device, info.RANK_LOCAL,
+            // limit node name to 8 characters + null
+            char name_host_short[9];
+            strncpy(name_host_short, info.name_host, 8);
+            name_host_short[8] = '\0';
+
+            printf("%-5d %-10s %-34s %-3d %-4d %-4d %-9lu %-9.3f %-8.3f %-8.3f %-6d %-6d\n",
+                   info.RANK, name_host_short, info.name_device, info.RANK_LOCAL,
                    info.cc, info.sm_count, info.shared_mem_per_sm,
                    info.mem_total, info.mem_used, info.mem_free, N_X, N_Y);
         }

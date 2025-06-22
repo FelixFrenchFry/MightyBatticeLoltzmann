@@ -401,7 +401,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
@@ -711,7 +711,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");

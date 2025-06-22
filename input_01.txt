@@ -1,0 +1,21 @@
+N_X_TOTAL 1000
+N_Y_TOTAL 1000
+N_STEPS 200000
+
+omega 1.7
+rho_0 1.0
+u_max 0.1
+u_lid 0.1
+n_sin 2.0
+
+export_interval 50000
+export_name C
+export_num 03
+
+export_rho 0
+export_u_x 1
+export_u_y 1
+export_u_mag 0
+
+shear_wave_decay 0
+lid_driven_cavity 1

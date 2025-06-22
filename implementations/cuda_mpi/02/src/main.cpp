@@ -1,6 +1,14 @@
 // CUDA & MPI implementation of Lattice-Boltzmann with notable properties:
-// 1D domain decomposition along the Y-axis
-// TODO: description
+// - coalesced memory accesses of df values
+// - shared memory tiling for df values
+// - fully fused density/velocity/collision/streaming kernel (push)
+// - lid-driven cavity with bounce-back boundary conditions
+// - fp32/fp64 precision switch at compile-time for df, density, velocity values
+// - int and fp versions of the directions vectors to avoid casting
+// - export interval synced global write-back of density and velocity values
+// - 1D domain decomposition along the Y-axis for multi-rank execution
+// - additional halo arrays for push streaming and async mpi halo exchange
+// - separate kernels for inner/outer cells
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -105,7 +113,7 @@ int main(int argc, char *argv[])
 
     if (RANK_LOCAL >= N_GPUS_PER_NODE && false)
     {
-        SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on node.",
+        SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on the node",
             RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
 
         // stops all processes
@@ -226,14 +234,6 @@ int main(int argc, char *argv[])
         Launch_ApplyInitialCondition_LidDrivenCavity_K(dvc_df, dvc_rho, dvc_u_x,
             dvc_u_y, rho_0, N_CELLS);
     }
-
-    /* TODO
-    auto inputPath = "./simulation_test_input.txt";
-    if (RANK == 0 && not std::filesystem::exists(inputPath))
-    {
-        SPDLOG_WARN("Could not find input file {}", inputPath);
-    }
-    */
 
     // =========================================================================
     // main simulation loop

@@ -8,6 +8,9 @@
 // - export interval synced global write-back of density and velocity values
 // - 1D domain decomposition along the Y-axis for multi-rank execution
 // - additional halo arrays for push streaming and async mpi halo exchange
+// - separate kernels for inner/outer cells
+// - TODO: input file
+// - TODO: overlap of compute and communication
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -28,38 +31,7 @@ int main(int argc, char *argv[])
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
     // =========================================================================
-    // general parameters
-    // =========================================================================
-    // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      15000;
-    constexpr uint32_t N_Y_TOTAL =      10000;
-    constexpr uint32_t N_STEPS =        10000;
-    constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
-
-    // relaxation factor, rest density, max velocity, number of sine periods,
-    // wavenumber (frequency), lid velocity
-    constexpr FP omega = 1.5;
-    constexpr FP rho_0 = 1.0;
-    constexpr FP u_max = 0.1;
-    constexpr FP n = 2.0;
-    constexpr FP k = (FP_CONST(2.0) * FP_PI * n) / static_cast<FP>(N_Y_TOTAL);
-    constexpr FP u_lid = 0.1;
-
-    // data export settings
-    uint32_t export_interval = 50;
-    std::string export_name = "A";
-    std::string export_num = "01";
-    constexpr bool export_rho =   false;
-    constexpr bool export_u_x =   false;
-    constexpr bool export_u_y =   false;
-    constexpr bool export_u_mag = false;
-
-    // simulation settings
-    constexpr bool shear_wave_decay =     false;
-    constexpr bool lid_driven_cavity =    true;
-
-    // =========================================================================
-    // domain decomposition and MPI stuff
+    // MPI handling
     // =========================================================================
     MPI_Init(&argc, &argv);
 
@@ -77,24 +49,136 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(NODE_COMM, &RANK_LOCAL);
 
     // pick GPU by local rank
-    int N_GPUS_PER_NODE;
+    int N_GPUS_PER_NODE = 0;
     cudaGetDeviceCount(&N_GPUS_PER_NODE);
+
+    if (RANK_LOCAL >= N_GPUS_PER_NODE && false)
+    {
+        SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on the node",
+            RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
+
+        // stops all processes
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+
     cudaSetDevice(RANK_LOCAL % N_GPUS_PER_NODE);
 
-    // domain specification of this process
+    // =========================================================================
+    // parameters and input file handling
+    // =========================================================================
+    // default input parameters before potentially loading an input file
+    SimulationParameters parameters
+    {
+        // scale
+        .N_X_TOTAL =    1000,
+        .N_Y_TOTAL =    1000,
+        .N_STEPS =      200000,
+
+        // parameters
+        .omega =        1.7,
+        .rho_0 =        1.0,
+        .u_max =        0.1,
+        .u_lid =        0.1,
+        .n_sin =        2.0,
+
+        // export
+        .export_interval =  50000,
+        .export_name =      "C",
+        .export_num =       "03",
+        .export_rho =       false,
+        .export_u_x =       true,
+        .export_u_y =       true,
+        .export_u_mag =     false,
+
+        // mode
+        .shear_wave_decay =     false,
+        .lid_driven_cavity =    true
+    };
+
+    // (optional) overwrite default with simulation parameters from a file
+    if (RANK == 0)
+    {
+        // default input path and optional overwrite via first command line arg
+        std::string inputPath = (argc > 1) ? argv[1] : "<unspecified>";
+
+        if (std::filesystem::exists(inputPath))
+        {
+            std::ifstream infile(inputPath);
+            std::string line;
+            while (std::getline(infile, line))
+            {
+                // skip comments and empty lines
+                if (line.empty() || line[0] == '#') continue;
+
+                std::istringstream iss(line);
+                std::string key, value;
+                if (!(iss >> key >> value)) continue;
+
+                OverwriteSimulationParameters(parameters, key, value);
+            }
+
+            printf("\n");
+            SPDLOG_INFO("Rank 0 loaded parameters from {}",
+                inputPath);
+        }
+        else
+        {
+            printf("\n");
+            SPDLOG_WARN("Rank 0 did not find input file {}, using default parameters",
+                inputPath);
+        }
+
+        DisplaySimulationParameters(parameters);
+    }
+
+    MPI_Bcast(&parameters, sizeof(SimulationParameters), MPI_BYTE, 0, MPI_COMM_WORLD);
+
+    // simulation domain width, height, and number of cells before decomposition
+    const uint32_t N_X_TOTAL =      parameters.N_X_TOTAL;
+    const uint32_t N_Y_TOTAL =      parameters.N_Y_TOTAL;
+    const uint32_t N_STEPS =        parameters.N_STEPS;
+    const uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
+
+    // relaxation factor, rest density, max shear wave velocity, lid velocity,
+    // number of sine periods, wavenumber (frequency)
+    const FP omega =    parameters.omega;
+    const FP rho_0 =    parameters.rho_0;
+    const FP u_max =    parameters.u_max;
+    const FP u_lid =    parameters.u_lid;
+    const FP n_sin =    parameters.n_sin;
+    const FP w_num =    (FP_CONST(2.0) * FP_PI * n_sin) / static_cast<FP>(N_Y_TOTAL);
+
+    // data export settings
+    const uint32_t export_interval =    parameters.export_interval;
+    const std::string export_name =     parameters.export_name;
+    const std::string export_num =      parameters.export_num;
+    const bool export_rho =             parameters.export_rho;
+    const bool export_u_x =             parameters.export_u_x;
+    const bool export_u_y =             parameters.export_u_y;
+    const bool export_u_mag =           parameters.export_u_mag;
+
+    // simulation mode
+    const bool shear_wave_decay =       parameters.shear_wave_decay;
+    const bool lid_driven_cavity =      parameters.lid_driven_cavity;
+
+    // =========================================================================
+    // domain decomposition
+    // =========================================================================
     // rank 0: owns rows        0   to    (Y/p) - 1
     // rank 1: owns rows    (Y/p)   to   (2Y/p) - 1
     // rank 2: owns rows   (2Y/p)   to   (3Y/p) - 1
     // rank 3: ...
-    const uint32_t N_X =        N_X_TOTAL;
-    const uint32_t N_Y =        N_Y_TOTAL / SIZE;
-    const uint32_t Y_START =    N_Y * RANK;
-    const uint32_t Y_END =      Y_START + N_Y - 1;
-    const uint32_t N_CELLS =    N_X * N_Y;
-    const int RANK_ABOVE =      (RANK + 1) % SIZE;          // periodic
-    const int RANK_BELOW =      (RANK - 1 + SIZE) % SIZE;   // periodic
-    const bool IS_TOP_RANK =    RANK == SIZE - 1;
-    const bool IS_BOTTOM_RANK = RANK == 0;
+    const uint32_t N_X =            N_X_TOTAL;
+    const uint32_t N_Y =            N_Y_TOTAL / SIZE;
+    const uint32_t Y_START =        N_Y * RANK;
+    const uint32_t Y_END =          Y_START + N_Y - 1;
+    const uint32_t N_CELLS =        N_X * N_Y;
+    const uint32_t N_CELLS_INNER =  (N_Y - 2) * N_X;
+    const uint32_t N_CELLS_OUTER =  2 * N_X;
+    const int RANK_ABOVE =          (RANK + 1) % SIZE;          // periodic
+    const int RANK_BELOW =          (RANK - 1 + SIZE) % SIZE;   // periodic
+    const bool IS_TOP_RANK =        RANK == SIZE - 1;
+    const bool IS_BOTTOM_RANK =     RANK == 0;
 
     if (N_Y_TOTAL % SIZE != 0)
     {
@@ -106,15 +190,6 @@ int main(int argc, char *argv[])
             // stops all processes
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
-    }
-
-    if (RANK_LOCAL >= N_GPUS_PER_NODE && false)
-    {
-        SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on node.",
-            RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
-
-        // stops all processes
-        MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
     // =========================================================================
@@ -224,21 +299,13 @@ int main(int argc, char *argv[])
     if (shear_wave_decay)
     {
         Launch_ApplyInitialCondition_ShearWaveDecay_K(dvc_df, dvc_rho, dvc_u_x,
-            dvc_u_y, rho_0,u_max, k, N_X, N_Y, Y_START, N_CELLS);
+            dvc_u_y, rho_0,u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
     }
     if (lid_driven_cavity)
     {
         Launch_ApplyInitialCondition_LidDrivenCavity_K(dvc_df, dvc_rho, dvc_u_x,
             dvc_u_y, rho_0, N_CELLS);
     }
-
-    /* TODO
-    auto inputPath = "./simulation_test_input.txt";
-    if (RANK == 0 && not std::filesystem::exists(inputPath))
-    {
-        SPDLOG_WARN("Could not find input file {}", inputPath);
-    }
-    */
 
     // =========================================================================
     // main simulation loop
@@ -255,12 +322,27 @@ int main(int argc, char *argv[])
         SelectWriteBackData(step, export_interval, export_rho, export_u_x,
             export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
 
+        // TODO: do async halo exchange while processing inner cells
+
         // compute densities and velocities, update df_i values based on
         // densities and velocities and move them to neighboring cells
-        Launch_FullyFusedLatticeUpdate_Push(
+
+        // only process inner cells that don't stream to halo arrays
+        // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
+        // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
+        Launch_FullyFusedLatticeUpdate_Push_Inner(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS, SIZE, RANK,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
+            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+
+        // only process outer cells that stream to halo arrays for 3 out of 9 directions
+        // shear wave decay with pbc -> [0, N_Y - 1] * N_X
+        // lid driven cavity with bbbc -> [0] * N_X or [N_Y - 1] * N_X
+        Launch_FullyFusedLatticeUpdate_Push_Outer(
+            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // track requests for synchronization (4 per direction)

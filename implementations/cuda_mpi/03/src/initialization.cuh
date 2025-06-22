@@ -1,0 +1,25 @@
+#pragma once
+#include "../../tools/config.cuh"
+#include <cstdint>
+
+
+
+void Launch_ApplyInitialCondition_ShearWaveDecay_K(
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
+    const FP u_max,
+    const FP w_num,
+    const uint32_t N_X, const uint32_t N_Y,
+    const uint32_t Y_START,
+    const uint32_t N_CELLS);
+
+void Launch_ApplyInitialCondition_LidDrivenCavity_K(
+    FP* const* dvc_df,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
+    const FP rho_0,
+    const uint32_t N_CELLS);
