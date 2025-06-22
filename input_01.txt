@@ -10,7 +10,7 @@ n_sin 2.0
 
 export_interval 50000
 export_name C
-export_num 03
+export_num 04
 
 export_rho 0
 export_u_x 1

@@ -25,7 +25,7 @@ steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
-versionDirName =    "03"
+versionDirName =    "04"
 subDirName =        "C"
 
 # formatting helper

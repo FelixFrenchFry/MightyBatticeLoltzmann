@@ -10,6 +10,7 @@
 // - additional halo arrays for push streaming and async mpi halo exchange
 // - separate kernels for inner/outer cells
 // - optional input.txt file for simulation parameters passed via command line
+// - TODO: overlap of compute and communication
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
         // export
         .export_interval =  50000,
         .export_name =      "C",
-        .export_num =       "03",
+        .export_num =       "04",
         .export_rho =       false,
         .export_u_x =       true,
         .export_u_y =       true,
@@ -91,7 +92,7 @@ int main(int argc, char *argv[])
 
         // mode
         .shear_wave_decay =     false,
-        .lid_driven_cavity =    true
+        .lid_driven_cavity =    true,
     };
 
     // (optional) overwrite default with simulation parameters from a file
@@ -321,29 +322,6 @@ int main(int argc, char *argv[])
         SelectWriteBackData(step, export_interval, export_rho, export_u_x,
             export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
 
-        // TODO: do async halo exchange while processing inner cells
-
-        // compute densities and velocities, update df_i values based on
-        // densities and velocities and move them to neighboring cells
-
-        // only process inner cells that don't stream to halo arrays
-        // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
-        // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
-        Launch_FullyFusedLatticeUpdate_Push_Inner(
-            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
-            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
-
-        // only process outer cells that stream to halo arrays for 3 out of 9 directions
-        // shear wave decay with pbc -> [0, N_Y - 1] * N_X
-        // lid driven cavity with bbbc -> [0] * N_X or [N_Y - 1] * N_X
-        Launch_FullyFusedLatticeUpdate_Push_Outer(
-            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
-            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
-
         // track requests for synchronization (4 per direction)
         MPI_Request max_requests[4 * 3];
         int req_idx = 0;
@@ -357,12 +335,13 @@ int main(int argc, char *argv[])
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
 
-        // TODO: send/receive halo layers into dvc_df_next while computing?
-        // asynchronous MPI sends/receives for halo exchange
+        // async MPI sends/receive halo exchange, parallel to inner cell compute
         // (no exchange between top and bottom rank for lid driven cavity,
         // but full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
+            if (step == 1) { break; }
+
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
 
@@ -441,16 +420,35 @@ int main(int argc, char *argv[])
             }
         }
 
-        // wait for all MPI halo exchanges to finish
+        // wait for async MPI halo exchanges to finish, before outer cells can start compute
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
-        // swap both device and host pointers to the df arrays
-        std::swap(dvc_df, dvc_df_next);
-        std::swap(df, df_next);
+        // only process inner cells that don't stream to halo arrays
+        // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
+        // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
+        Launch_FullyFusedLatticeUpdate_Push_Inner(
+            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
+            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+
+        // only process outer cells that stream to halo arrays for 3 out of 9 directions
+        // shear wave decay with pbc -> [0, N_Y - 1] * N_X
+        // lid driven cavity with bbbc -> [0] * N_X or [N_Y - 1] * N_X
+        Launch_FullyFusedLatticeUpdate_Push_Outer(
+            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
+            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
+            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
+
+        // swap host pointers to the df arrays used by the MPI communication
+        if (step != 1) { std::swap(df, df_next); }
+        // swap device pointers to the df arrays used by the compute kernels
+        std::swap(dvc_df, dvc_df_next);
 
         if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
