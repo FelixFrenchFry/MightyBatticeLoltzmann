@@ -16,14 +16,14 @@ omega = 1.5
 # step config
 step_start =    1
 step_end =      200
-step_stride =   10
+step_stride =   50
 steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
 dataType =          "velocity_x"
 outputDirName =     "output"
-versionDirName =    "18"
-subDirName =        "Z"
+versionDirName =    "19"
+subDirName =        "B"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:

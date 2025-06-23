@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
         .lid_driven_cavity =    true,
 
         // misc
-        .branchless_outer =     false
+        .branchless =           false
     };
 
     // (optional) overwrite default with simulation parameters from a file
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     const bool lid_driven_cavity =      parameters.lid_driven_cavity;
 
     // misc stuff
-    const bool branchless_outer =       parameters.branchless_outer;
+    const bool branchless =             parameters.branchless;
 
     // =========================================================================
     // domain decomposition
@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
@@ -444,8 +444,9 @@ int main(int argc, char *argv[])
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
             N_Y_TOTAL, Y_START, N_STEPS, N_CELLS_OUTER, RANK, shear_wave_decay,
-            lid_driven_cavity, branchless_outer, write_rho, write_u_x, write_u_y);
+            lid_driven_cavity, branchless, write_rho, write_u_x, write_u_y);
 
+        // TODO: move this below the pointer swap?
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);

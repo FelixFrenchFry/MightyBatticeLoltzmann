@@ -211,7 +211,7 @@ __global__ void FFLU_ShearWaveDecay_Push_Inner_K(
     if (write_u_x) { dvc_u_x[idx] = u_x; }
     if (write_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity and cell coordinates for this thread
+    // pre-compute squared velocity for this thread's cell
     FP u_sq = u_x * u_x + u_y * u_y;
 
     for (uint32_t i = 0; i < N_DIR; i++)
@@ -227,11 +227,12 @@ __global__ void FFLU_ShearWaveDecay_Push_Inner_K(
                    * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // regular periodic boundary for shear wave decay without halo exchange
-        // determine destination cell's index based on x/y-coordinates and direction i
+        // determine destination cell's index based on x/y-coordinates and dir i
         // (with respect to periodic boundary conditions)
         uint32_t dst_idx = (src_y + dvc_c_y[i]) * N_X
                          + ((src_x + dvc_c_x[i] + N_X) % N_X);
 
+        // stream df value to the destination in dir i
         dvc_df_next[i][dst_idx] = f_new_i;
     }
 }
@@ -294,7 +295,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
     if (write_u_x) { dvc_u_x[idx] = u_x; }
     if (write_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity and cell coordinates for this thread
+    // pre-compute squared velocity for this thread's cell
     FP u_sq = u_x * u_x + u_y * u_y;
 
     for (uint32_t i = 0; i < N_DIR; i++)
@@ -324,7 +325,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
         }
         else
         {
-            // normal neighbor in direction i
+            // stream to regular neighbor in dir i
             dvc_df_next[i][(src_y + dvc_c_y[i]) * N_X + (src_x + dvc_c_x[i])] = f_new_i;
         }
     }
@@ -396,7 +397,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
@@ -463,16 +464,17 @@ __global__ void FFLU_ShearWaveDecay_Push_Outer_K(
     if (write_u_x) { dvc_u_x[idx] = u_x; }
     if (write_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity and cell coordinates for this thread
+    // pre-compute squared velocity for this thread's cell
     FP u_sq = u_x * u_x + u_y * u_y;
 
     for (uint32_t i = 0; i < N_DIR; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
         FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
-        FP f_eq_i = dvc_w[i] * rho
-                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
-                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+        FP f_eq_i = dvc_w[i] * rho * (FP_CONST(1.0)
+                  + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu
+                  - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
         FP f_new_i = tile_df[i][threadIdx.x] - omega
@@ -569,7 +571,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     if (write_u_x) { dvc_u_x[idx] = u_x; }
     if (write_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity and cell coordinates for this thread
+    // pre-compute squared velocity for this thread's cell
     FP u_sq = u_x * u_x + u_y * u_y;
 
     // TODO: check for signed math using uint32_t -> incorrect results!!!
@@ -577,9 +579,10 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
         FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
-        FP f_eq_i = dvc_w[i] * rho
-                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
-                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+        FP f_eq_i = dvc_w[i] * rho * (FP_CONST(1.0)
+                  + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu
+                  - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
         FP f_new_i = tile_df[i][threadIdx.x] - omega
@@ -605,7 +608,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
                 f_new_i -= FP_CONST(6.0) * dvc_w[i] * rho * dvc_fp_c_x[i] * u_lid;
             }
 
-            // same cell but opposite direction because of bounce-back
+            // same cell but opposite direction of dir i because of bounce-back
             // (definitely within the process domain -> stream into regular df arrays)
             dvc_df_next[dvc_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
         }
@@ -822,7 +825,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const int RANK,
     const bool shear_wave_decay,
     const bool lid_driven_cavity,
-    const bool branchless_outer,
+    const bool branchless,
     const bool write_rho,
     const bool write_u_x,
     const bool write_u_y)
@@ -831,6 +834,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
 
     const uint32_t N_GRIDSIZE = (N_CELLS_OUTER + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
+    // TODO: branchless shear wave decay outer cell compute kernel
     if (shear_wave_decay)
     {
         FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
@@ -838,14 +842,14 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
             dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
     }
-    else if (lid_driven_cavity && !branchless_outer)
+    else if (lid_driven_cavity && !branchless)
     {
         FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_Y_TOTAL, Y_START,
             N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
     }
-    else if (lid_driven_cavity && branchless_outer)
+    else if (lid_driven_cavity && branchless)
     {
         FFLU_LidDrivenCavity_Push_Outer_BL_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
@@ -862,19 +866,20 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
 
     if (RANK == 0 && !kernelAttributesDisplayed_outer)
     {
+        // TODO: branchless shear wave decay outer cell compute kernel
         if (shear_wave_decay)
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
                 N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
-        else if (lid_driven_cavity && !branchless_outer)
+        else if (lid_driven_cavity && !branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
                 N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
-        else if (lid_driven_cavity && branchless_outer)
+        else if (lid_driven_cavity && branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_BL_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_BL_K"),
@@ -890,7 +895,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         // specify detailed logging for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
-        SPDLOG_ERROR("CUDA error: {}", cudaGetErrorString(err));
+        SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
         // return to basic logging
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");

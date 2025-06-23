@@ -38,7 +38,7 @@ struct SimulationParameters
     bool lid_driven_cavity;
 
     // misc
-    bool branchless_outer;
+    bool branchless;
 };
 
 inline void OverwriteSimulationParameters(
@@ -71,7 +71,7 @@ inline void OverwriteSimulationParameters(
     else if (key == "export_u_mag") parameters.export_u_mag = (std::stoi(value) != 0);
     else if (key == "shear_wave_decay") parameters.shear_wave_decay = (std::stoi(value) != 0);
     else if (key == "lid_driven_cavity") parameters.lid_driven_cavity = (std::stoi(value) != 0);
-    else if (key == "branchless_outer") parameters.branchless_outer = (std::stoi(value) != 0);
+    else if (key == "branchless") parameters.branchless = (std::stoi(value) != 0);
     else
     {
         SPDLOG_WARN("Unknown parameter in simulation input file: {}", key);
@@ -107,10 +107,11 @@ inline void DisplaySimulationParameters(
 
         printf("%-20s = %s\n", "shear_wave_decay", parameters.shear_wave_decay ? "true" : "false");
         printf("%-20s = %s\n", "lid_driven_cavity", parameters.lid_driven_cavity ? "true" : "false");
+
+        printf("%-20s = %s\n", "branchless", parameters.branchless ? "true" : "false");
         printf("\n");
     }
 }
-
 
 struct GPUInfo
 {
@@ -240,6 +241,26 @@ inline void DisplayKernelAttributes(
             (2 * N_X * 100.0f) / (N_X * N_Y));
 }
 
+// execution time in seconds, number of lattice updates, blups
+inline void DisplayPerformanceStats(
+    std::chrono::time_point<std::chrono::steady_clock> start_time,
+    std::chrono::time_point<std::chrono::steady_clock> end_time,
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t N_STEPS)
+{
+    double execution_time = std::chrono::duration<double>(end_time - start_time).count();
+
+    uint64_t total_updates = static_cast<uint64_t>(N_X * N_Y)
+                           * static_cast<uint64_t>(N_STEPS);
+
+    double blups = static_cast<double>(total_updates) / (execution_time * 1e9);
+
+    std::cerr << std::endl;
+    SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
+    SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
+    SPDLOG_INFO("BLUPS:                     {:.3f}\n", blups);
+}
+
 inline void DisplayProgressBar(
     const uint32_t step,
     const uint32_t N_STEPS)
@@ -292,24 +313,4 @@ inline void DisplayProgressBar(
     }
 
     if (step == N_STEPS) { std::cout << std::endl; }
-}
-
-// execution time in seconds, number of lattice updates, blups
-inline void DisplayPerformanceStats(
-    std::chrono::time_point<std::chrono::steady_clock> start_time,
-    std::chrono::time_point<std::chrono::steady_clock> end_time,
-    uint32_t N_X, uint32_t N_Y,
-    uint32_t N_STEPS)
-{
-    double execution_time = std::chrono::duration<double>(end_time - start_time).count();
-
-    uint64_t total_updates = static_cast<uint64_t>(N_X * N_Y)
-                           * static_cast<uint64_t>(N_STEPS);
-
-    double blups = static_cast<double>(total_updates) / (execution_time * 1e9);
-
-    std::cerr << std::endl;
-    SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
-    SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
-    SPDLOG_INFO("BLUPS:                     {:.3f}\n", blups);
 }

@@ -20,4 +20,4 @@ export_u_mag 0
 shear_wave_decay 0
 lid_driven_cavity 1
 
-branchless_outer 0
+branchless 0
