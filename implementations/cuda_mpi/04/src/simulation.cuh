@@ -48,6 +48,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const int RANK,
     const bool shear_wave_decay = true,
     const bool lid_driven_cavity = false,
+    const bool branchless_outer = false,
     const bool write_rho = false,
     const bool write_u_x = false,
     const bool write_u_y = false);

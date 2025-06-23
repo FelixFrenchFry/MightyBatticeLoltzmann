@@ -7,7 +7,7 @@
 // - int and fp versions of the directions vectors to avoid casting
 // - export interval synced global write-back of density and velocity values
 // - 1D domain decomposition along the Y-axis for multi-rank execution
-// - additional halo arrays for push streaming and async mpi halo exchange
+// - additional halo arrays for push streaming and async MPI halo exchange
 // - separate kernels for inner/outer cells
 
 #include "../../tools/config.cuh"

@@ -7,10 +7,10 @@
 // - int and fp versions of the directions vectors to avoid casting
 // - export interval synced global write-back of density and velocity values
 // - 1D domain decomposition along the Y-axis for multi-rank execution
-// - additional halo arrays for push streaming and async mpi halo exchange
+// - additional halo arrays for push streaming and async MPI halo exchange
 // - separate kernels for inner/outer cells
 // - optional input.txt file for simulation parameters passed via command line
-// - TODO: overlap of compute and communication
+// - overlap of MPI communication and compute kernel for inner cells
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -93,6 +93,9 @@ int main(int argc, char *argv[])
         // mode
         .shear_wave_decay =     false,
         .lid_driven_cavity =    true,
+
+        // misc
+        .branchless_outer =     false
     };
 
     // (optional) overwrite default with simulation parameters from a file
@@ -160,6 +163,9 @@ int main(int argc, char *argv[])
     // simulation mode
     const bool shear_wave_decay =       parameters.shear_wave_decay;
     const bool lid_driven_cavity =      parameters.lid_driven_cavity;
+
+    // misc stuff
+    const bool branchless_outer =      parameters.branchless_outer;
 
     // =========================================================================
     // domain decomposition
@@ -439,7 +445,7 @@ int main(int argc, char *argv[])
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
             N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
-            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+            shear_wave_decay, lid_driven_cavity, branchless_outer, write_rho, write_u_x, write_u_y);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,

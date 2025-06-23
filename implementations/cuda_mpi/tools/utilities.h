@@ -36,6 +36,9 @@ struct SimulationParameters
     // mode
     bool shear_wave_decay;
     bool lid_driven_cavity;
+
+    // misc
+    bool branchless_outer;
 };
 
 inline void OverwriteSimulationParameters(
@@ -68,6 +71,7 @@ inline void OverwriteSimulationParameters(
     else if (key == "export_u_mag") parameters.export_u_mag = (std::stoi(value) != 0);
     else if (key == "shear_wave_decay") parameters.shear_wave_decay = (std::stoi(value) != 0);
     else if (key == "lid_driven_cavity") parameters.lid_driven_cavity = (std::stoi(value) != 0);
+    else if (key == "branchless_outer") parameters.branchless_outer = (std::stoi(value) != 0);
     else
     {
         SPDLOG_WARN("Unknown parameter in simulation input file: {}", key);
