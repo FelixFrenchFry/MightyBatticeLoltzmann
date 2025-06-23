@@ -36,16 +36,16 @@ int main(int argc, char *argv[])
     MPI_Init(&argc, &argv);
 
     // get the total number of processes and the rank of this process
-    int SIZE, RANK;
-    MPI_Comm_size(MPI_COMM_WORLD, &SIZE);
+    int RANK_SIZE, RANK;
+    MPI_Comm_size(MPI_COMM_WORLD, &RANK_SIZE);
     MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
 
     // split by node
     MPI_Comm NODE_COMM;
     MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &NODE_COMM);
 
-    int SIZE_LOCAL, RANK_LOCAL;
-    MPI_Comm_size(NODE_COMM, &SIZE_LOCAL);
+    int RANK_SIZE_LOCAL, RANK_LOCAL;
+    MPI_Comm_size(NODE_COMM, &RANK_SIZE_LOCAL);
     MPI_Comm_rank(NODE_COMM, &RANK_LOCAL);
 
     // pick GPU by local rank
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
     const bool lid_driven_cavity =      parameters.lid_driven_cavity;
 
     // misc stuff
-    const bool branchless_outer =      parameters.branchless_outer;
+    const bool branchless_outer =       parameters.branchless_outer;
 
     // =========================================================================
     // domain decomposition
@@ -175,23 +175,23 @@ int main(int argc, char *argv[])
     // rank 2: owns rows   (2Y/p)   to   (3Y/p) - 1
     // rank 3: ...
     const uint32_t N_X =            N_X_TOTAL;
-    const uint32_t N_Y =            N_Y_TOTAL / SIZE;
+    const uint32_t N_Y =            N_Y_TOTAL / RANK_SIZE;
     const uint32_t Y_START =        N_Y * RANK;
     const uint32_t Y_END =          Y_START + N_Y - 1;
     const uint32_t N_CELLS =        N_X * N_Y;
     const uint32_t N_CELLS_INNER =  (N_Y - 2) * N_X;
     const uint32_t N_CELLS_OUTER =  2 * N_X;
-    const int RANK_ABOVE =          (RANK + 1) % SIZE;          // periodic
-    const int RANK_BELOW =          (RANK - 1 + SIZE) % SIZE;   // periodic
-    const bool IS_TOP_RANK =        RANK == SIZE - 1;
+    const int RANK_ABOVE =          (RANK + 1) % RANK_SIZE;             // periodic
+    const int RANK_BELOW =          (RANK - 1 + RANK_SIZE) % RANK_SIZE; // periodic
+    const bool IS_TOP_RANK =        RANK == RANK_SIZE - 1;
     const bool IS_BOTTOM_RANK =     RANK == 0;
 
-    if (N_Y_TOTAL % SIZE != 0)
+    if (N_Y_TOTAL % RANK_SIZE != 0)
     {
         if (RANK == 0)
         {
             SPDLOG_ERROR("Total Y must be divisible by number of processes ({} % {} != 0)",
-                N_Y_TOTAL, SIZE);
+                N_Y_TOTAL, RANK_SIZE);
 
             // stops all processes
             MPI_Abort(MPI_COMM_WORLD, 1);
@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
     // TODO: device and memory usage infos
     GPUInfo myInfo = GetDeviceInfos(RANK, RANK_LOCAL);
     std::vector<GPUInfo> allInfo;
-    if (RANK == 0) { allInfo.resize(SIZE); }
+    if (RANK == 0) { allInfo.resize(RANK_SIZE); }
 
     MPI_Gather(&myInfo, sizeof(GPUInfo), MPI_BYTE,
                allInfo.data(), sizeof(GPUInfo),
@@ -430,10 +430,9 @@ int main(int argc, char *argv[])
         // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
         // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Inner(
-            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
-            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_CELLS_INNER, RANK, shear_wave_decay,
+            lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // wait for async MPI halo exchanges to finish, before outer cells can start compute
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
@@ -443,9 +442,9 @@ int main(int argc, char *argv[])
         // lid driven cavity with bbbc -> [0] * N_X or [N_Y - 1] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Outer(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
-            N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_OUTER, SIZE, RANK,
-            shear_wave_decay, lid_driven_cavity, branchless_outer, write_rho, write_u_x, write_u_y);
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
+            N_Y_TOTAL, Y_START, N_STEPS, N_CELLS_OUTER, RANK, shear_wave_decay,
+            lid_driven_cavity, branchless_outer, write_rho, write_u_x, write_u_y);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,

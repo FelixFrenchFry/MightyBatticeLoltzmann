@@ -214,13 +214,13 @@ __global__ void ComputeFullyFusedOperations_K(
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
         FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
-        FP f_eq_i = dvc_w[i] * rho
-                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
-                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+        FP f_eq_i = dvc_w[i] * rho * (FP_CONST(1.0)
+                  + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu
+                  - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
-        FP f_new_i = tile_df[i][threadIdx.x] - omega
-                   * (tile_df[i][threadIdx.x] - f_eq_i);
+        FP f_new_i = tile_df[i][threadIdx.x] - omega * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // inlined sub-kernel for the neighbor index
         // TODO: conditional or branch-less sub-kernel better for A100/H100 ?

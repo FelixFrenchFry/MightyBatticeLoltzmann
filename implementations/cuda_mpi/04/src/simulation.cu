@@ -301,13 +301,13 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
         FP cu = dvc_fp_c_x[i] * u_x + dvc_fp_c_y[i] * u_y;
-        FP f_eq_i = dvc_w[i] * rho
-                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
-                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+        FP f_eq_i = dvc_w[i] * rho * (FP_CONST(1.0)
+                  + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu
+                  - FP_CONST(1.5) * u_sq);
 
         // relax df towards equilibrium
-        FP f_new_i = tile_df[i][threadIdx.x] - omega
-                   * (tile_df[i][threadIdx.x] - f_eq_i);
+        FP f_new_i = tile_df[i][threadIdx.x] - omega * (tile_df[i][threadIdx.x] - f_eq_i);
 
         // regular bounce-back boundary for lid driven cavity without halo exchange
         // ---------
@@ -333,19 +333,14 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
 void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const FP* const* dvc_df,
     FP* const* dvc_df_next,
-    FP* const* dvc_df_halo_top,
-    FP* const* dvc_df_halo_bottom,
     FP* dvc_rho,
     FP* dvc_u_x,
     FP* dvc_u_y,
     const FP omega,
-    const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
-    const uint32_t Y_START, const uint32_t Y_END,
     const uint32_t N_STEPS,
     const uint32_t N_CELLS_INNER,
-    const uint32_t N_PROCESSES,
     const int RANK,
     const bool shear_wave_decay,
     const bool lid_driven_cavity,
@@ -383,13 +378,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
 
         kernelAttributesDisplayed_inner = true;
@@ -821,10 +816,9 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
-    const uint32_t Y_START, const uint32_t Y_END,
+    const uint32_t Y_START,
     const uint32_t N_STEPS,
     const uint32_t N_CELLS_OUTER,
-    const uint32_t N_PROCESSES,
     const int RANK,
     const bool shear_wave_decay,
     const bool lid_driven_cavity,
@@ -872,19 +866,19 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
         else if (lid_driven_cavity && !branchless_outer)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
         else if (lid_driven_cavity && branchless_outer)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_BL_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_BL_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
         }
 
         kernelAttributesDisplayed_outer = true;

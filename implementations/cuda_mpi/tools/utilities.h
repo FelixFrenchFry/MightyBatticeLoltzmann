@@ -218,8 +218,7 @@ inline void DisplayKernelAttributes(
     uint32_t N_GRIDSIZE, uint32_t N_BLOCKSIZE,
     uint32_t N_X, uint32_t N_Y,
     uint32_t N_X_TOTAL, uint32_t N_Y_TOTAL,
-    uint32_t N_STEPS,
-    uint32_t N_PROCESSES)
+    uint32_t N_STEPS)
 {
     cudaFuncAttributes attr;
     cudaError_t err = cudaFuncGetAttributes(&attr, kernel);
