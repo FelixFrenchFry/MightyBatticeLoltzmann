@@ -426,9 +426,6 @@ int main(int argc, char *argv[])
             }
         }
 
-        // wait for async MPI halo exchanges to finish, before outer cells can start compute
-        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
-
         // only process inner cells that don't stream to halo arrays
         // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
         // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
@@ -437,6 +434,9 @@ int main(int argc, char *argv[])
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y,
             N_X_TOTAL, N_Y_TOTAL, Y_START, Y_END, N_STEPS, N_CELLS_INNER, SIZE, RANK,
             shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
+
+        // wait for async MPI halo exchanges to finish, before outer cells can start compute
+        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
         // only process outer cells that stream to halo arrays for 3 out of 9 directions
         // shear wave decay with pbc -> [0, N_Y - 1] * N_X
