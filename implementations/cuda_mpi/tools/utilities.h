@@ -84,7 +84,7 @@ inline void DisplaySimulationParameters(
 {
     if (RANK == 0)
     {
-        printf("\nSimulation Parameters\n");
+        printf("\nParameters\n");
         printf("------------------------------\n");
         printf("%-20s = %u\n", "N_X_TOTAL", parameters.N_X_TOTAL);
         printf("%-20s = %u\n", "N_Y_TOTAL", parameters.N_Y_TOTAL);

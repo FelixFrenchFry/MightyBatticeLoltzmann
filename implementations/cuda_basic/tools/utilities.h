@@ -81,7 +81,7 @@ inline void OverwriteSimulationParameters(
 inline void DisplaySimulationParameters(
     SimulationParameters& parameters)
 {
-    printf("\nSimulation Parameters\n");
+    printf("\nParameters\n");
     printf("------------------------------\n");
     printf("%-20s = %u\n", "N_X_TOTAL", parameters.N_X_TOTAL);
     printf("%-20s = %u\n", "N_Y_TOTAL", parameters.N_Y_TOTAL);
@@ -107,6 +107,36 @@ inline void DisplaySimulationParameters(
 
     printf("%-20s = %s\n", "branchless", parameters.branchless ? "true" : "false");
     printf("\n");
+
+    /*
+    // simulation parameters
+    printf("%-10s %-10s %-10s %-7s %-7s %-7s %-7s %-7s %-20s\n",
+           "N_X_TOTAL", "N_Y_TOTAL", "N_STEPS", "omega", "rho_0", "u_max", "u_lid",
+           "n_sin", "scenario");
+    printf("----------------------------------------------"
+                 "----------------------------------------------\n");
+
+    printf("%-10d %-10d %-10d %-7.3f %-7.3f %-7.3f %-7.3f %-7.3f %-15s\n",
+           parameters.N_X_TOTAL, parameters.N_Y_TOTAL, parameters.N_STEPS,
+           parameters.omega, parameters.rho_0, parameters.u_max, parameters.u_lid,
+           parameters.n_sin,
+           parameters.shear_wave_decay ? "shear wave decay" : "lid driven cavity");
+    printf("\n\n");
+
+    // export settings
+    printf("%-5s %-15s %-10s %-5s %-5s %-5s %-6s %-10s\n",
+           "num", "folder name", "interval", "rho", "u_x", "u_y",
+           "u_mag", "branchless");
+    printf("-----------------------------------"
+                 "-----------------------------------\n");
+
+    printf("%-5s %-15s %-10d %-5s %-5s %-5s %-6s %-10s\n",
+        parameters.export_num, parameters.export_name, parameters.export_interval,
+        parameters.export_rho ? "yes" : "no", parameters.export_u_x ? "yes" : "no",
+        parameters.export_u_y ? "yes" : "no", parameters.export_u_mag ? "yes" : "no",
+        parameters.branchless ? "true" : "false");
+    printf("\n\n");
+    */
 }
 
 struct GPUInfo
@@ -176,10 +206,10 @@ inline void DisplayDeviceInfos(
     uint32_t N_X, uint32_t N_Y)
 {
     printf("%-10s %-34s %-4s %-4s %-9s %-9s %-8s %-8s %-6s %-6s\n",
-               "Node", "GPU Model", "CC", "SMs", "ShMem/SM",
-               "Total GB", "Used GB", "Free GB", "Dim-X", "Dim-Y");
-    printf("-----------------------------------------------------"
-                 "-----------------------------------------------------\n");
+           "Node", "GPU Model", "CC", "SMs", "ShMem/SM",
+           "Total GB", "Used GB", "Free GB", "Dim-X", "Dim-Y");
+    printf("------------------------------------------------------"
+                 "------------------------------------------------------\n");
     // limit node name to 8 characters + null
     char name_host_short[9];
     strncpy(name_host_short, info.name_host, 8);

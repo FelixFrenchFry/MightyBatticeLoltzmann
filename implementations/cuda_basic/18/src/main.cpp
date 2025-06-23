@@ -27,9 +27,9 @@ int main(int argc, char* argv[])
 
     // grid width, height, number of simulation steps, number of grid cells
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
-    constexpr uint32_t N_X =      60;
-    constexpr uint32_t N_Y =      40;
-    constexpr uint32_t N_STEPS =  200;
+    constexpr uint32_t N_X =      15000;
+    constexpr uint32_t N_Y =      10000;
+    constexpr uint32_t N_STEPS =  10000;
     constexpr uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -42,12 +42,12 @@ int main(int argc, char* argv[])
     constexpr FP u_lid = 0.1;
 
     // data export settings
-    uint32_t export_interval = 500;
+    uint32_t export_interval = 50000;
     std::string export_name = "Z";
     std::string export_num = "18";
     constexpr bool export_rho =   false;
-    constexpr bool export_u_x =   true;
-    constexpr bool export_u_y =   true;
+    constexpr bool export_u_x =   false;
+    constexpr bool export_u_y =   false;
     constexpr bool export_u_mag = false;
 
     // simulation settings
@@ -97,8 +97,8 @@ int main(int argc, char* argv[])
     context.N_X = N_X;
     context.N_Y = N_Y;
 
-    DisplayDeviceModel();
-    DisplayDeviceMemoryUsage();
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, N_X, N_Y);
 
     if (shear_wave_decay)
     {
@@ -135,7 +135,7 @@ int main(int argc, char* argv[])
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
-        DisplayProgressBar(step, N_STEPS);
+        DisplayProgressBar_Interactive(step, N_STEPS);
     }
 
     auto end_time = std::chrono::steady_clock::now();

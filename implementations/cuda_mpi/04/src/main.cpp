@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
     context.N_CELLS = N_CELLS;
     context.RANK = RANK;
 
-    // TODO: device and memory usage infos
+    // device and memory usage infos
     GPUInfo myInfo = GetDeviceInfos(RANK, RANK_LOCAL);
     std::vector<GPUInfo> allInfo;
     if (RANK == 0) { allInfo.resize(RANK_SIZE); }
@@ -446,15 +446,14 @@ int main(int argc, char *argv[])
             N_Y_TOTAL, Y_START, N_STEPS, N_CELLS_OUTER, RANK, shear_wave_decay,
             lid_driven_cavity, branchless, write_rho, write_u_x, write_u_y);
 
-        // TODO: move this below the pointer swap?
-        // export actual data from the arrays that have been written back to
-        ExportSelectedData(context, export_name, export_num, step,
-            export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
-
         // swap host pointers to the df arrays used by the MPI communication
         if (step != 1) { std::swap(df, df_next); }
         // swap device pointers to the df arrays used by the compute kernels
         std::swap(dvc_df, dvc_df_next);
+
+        // export actual data from the arrays that have been written back to
+        ExportSelectedData(context, export_name, export_num, step,
+            export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
         if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
