@@ -379,13 +379,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL - 2, N_STEPS);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL - 2, N_STEPS);
         }
 
         kernelAttributesDisplayed_inner = true;
@@ -871,19 +871,19 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
         }
         else if (lid_driven_cavity && !branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
         }
         else if (lid_driven_cavity && branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_BL_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_BL_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
         }
 
         kernelAttributesDisplayed_outer = true;

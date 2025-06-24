@@ -57,6 +57,7 @@ void ExportScalarFieldFromMPIDevices(
     fs::path filename = outputPath / oss.str();
 
     printf("Z");
+    fflush(stdout);
 
     // open shared file with MPI I/O
     MPI_File mpiFile;
@@ -65,6 +66,7 @@ void ExportScalarFieldFromMPIDevices(
                   MPI_INFO_NULL, &mpiFile);
 
     printf("A");
+    fflush(stdout);
 
     // truncate the files to zero bytes
     if (RANK == 0)
@@ -74,6 +76,7 @@ void ExportScalarFieldFromMPIDevices(
     MPI_Barrier(COMM);
 
     printf("B");
+    fflush(stdout);
 
     // compute write-offset of this rank
     MPI_Offset byte_offset = static_cast<MPI_Offset>(Y_START) * N_X_TOTAL * sizeof(FP);
@@ -85,10 +88,12 @@ void ExportScalarFieldFromMPIDevices(
                   FP_MPI_TYPE, MPI_STATUS_IGNORE);
 
     printf("C");
+    fflush(stdout);
 
     MPI_File_close(&mpiFile);
 
     printf("D");
+    fflush(stdout);
 
     //SPDLOG_INFO("Rank {} -> wrote {} at offset y={} ({}x{})",
     //            RANK, filename.string(), Y_START, N_X, N_Y);
