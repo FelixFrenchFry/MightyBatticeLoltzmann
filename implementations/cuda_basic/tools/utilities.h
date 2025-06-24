@@ -222,14 +222,21 @@ inline void DisplayDeviceInfos(
     printf("\n");
 }
 
+inline void DisplayDomainDecompositionInfo(
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t N_STEPS)
+{
+    SPDLOG_INFO("Simulation size [X/Y/N]:    [ {} / {} / {} ]",
+        N_X, N_Y, N_STEPS);
+}
+
 // header-only display of CUDA kernel attributes
 template <typename KernelT>
 inline void DisplayKernelAttributes(
     KernelT kernel,
     const std::string& kernel_name,
     uint32_t N_GRIDSIZE, uint32_t N_BLOCKSIZE,
-    uint32_t N_X, uint32_t N_Y,
-    uint32_t N_STEPS)
+    uint32_t N_X_KERNEL, uint32_t N_Y_KERNEL)
 {
     cudaFuncAttributes attr;
     cudaError_t err = cudaFuncGetAttributes(&attr, kernel);
@@ -240,13 +247,13 @@ inline void DisplayKernelAttributes(
         return;
     }
 
-    SPDLOG_INFO("Kernel [name/grid/block]:  [ {} / {} / {} ]",
+    SPDLOG_INFO("Kernel [name/grid/block]:   [ {} / {} / {} ]",
         kernel_name, N_GRIDSIZE, N_BLOCKSIZE);
-    SPDLOG_INFO("Registers per thread:      {}", attr.numRegs);
-    SPDLOG_INFO("Shared memory per block:   {} bytes", attr.sharedSizeBytes);
-    SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
-    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]\n",
-        N_X, N_Y, N_STEPS);
+    SPDLOG_INFO("Registers per thread:       {}", attr.numRegs);
+    SPDLOG_INFO("Shared memory per block:    {} bytes", attr.sharedSizeBytes);
+    SPDLOG_INFO("Local memory per thread:    {} bytes", attr.localSizeBytes);
+    SPDLOG_INFO("Kernel domain size [X/Y]:   [ {} / {} ]\n",
+        N_X_KERNEL, N_Y_KERNEL);
 }
 
 // execution time in seconds, number of lattice updates, blups

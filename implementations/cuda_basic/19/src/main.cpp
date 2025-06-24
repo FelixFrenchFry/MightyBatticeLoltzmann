@@ -188,6 +188,7 @@ int main(int argc, char* argv[])
 
     GPUInfo myInfo = GetDeviceInfos();
     DisplayDeviceInfos(myInfo, N_X, N_Y);
+    DisplayDomainDecompositionInfo(N_X, N_Y, N_STEPS);
 
     if (shear_wave_decay)
     {

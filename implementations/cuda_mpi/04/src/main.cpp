@@ -70,9 +70,9 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    1000,
-        .N_Y_TOTAL =    1000,
-        .N_STEPS =      200000,
+        .N_X_TOTAL =    15000,
+        .N_Y_TOTAL =    10000,
+        .N_STEPS =      10000,
 
         // parameters
         .omega =        1.7,
@@ -82,12 +82,12 @@ int main(int argc, char *argv[])
         .n_sin =        2.0,
 
         // export
-        .export_interval =  50000,
+        .export_interval =  5000,
         .export_name =      "C",
         .export_num =       "04",
         .export_rho =       false,
-        .export_u_x =       true,
-        .export_u_y =       true,
+        .export_u_x =       false,
+        .export_u_y =       false,
         .export_u_mag =     false,
 
         // mode
@@ -202,10 +202,12 @@ int main(int argc, char *argv[])
     // data structures and CUDA stuff
     // =========================================================================
     // host-side arrays of 9 pointers to device-side df arrays
+    // df = [ pointer -> GPU array for dir 0, ..., pointer -> GPU array for dir 8 ]
     FP* df[9];
     FP* df_next[9];
 
     // for each dir i, allocate 1D array of size N_CELLS on the device
+    // and store a pointer to it in df[i] / df_next[i]
     for (uint32_t i = 0; i < 9; i++)
     {
         // (regular df arrays)
@@ -222,7 +224,8 @@ int main(int argc, char *argv[])
     FP* df_halo_top[3]; // directions 2, 5, 6 map to indices 0, 1, 2 in the array
     FP* df_halo_bottom[3]; // directions 4, 7, 8 map to indices 0, 1, 2 in the array
 
-    // for each select dir i, allocate 1D array of size N_CELLS on the device
+    // for each select dir i, allocate 1D array of size N_X on the device
+    // and store a pointer to it in df_halo_top[i] / df_halo_bottom[i]
     for (uint32_t i = 0; i < 3; i++)
     {
         // (halo df arrays)
@@ -231,7 +234,8 @@ int main(int argc, char *argv[])
     }
 
     // device-side arrays of 9 (3 for halos) pointers to device-side df arrays
-    // (used as a device-side handle for the SoA data)
+    // (same as the df[9] pointer array, but now located on the device and used
+    // as a device-side handle for the SoA data used in compute kernels)
     FP** dvc_df;
     FP** dvc_df_next;
     cudaMalloc(&dvc_df, 9 * sizeof(FP*));
@@ -243,7 +247,7 @@ int main(int argc, char *argv[])
     cudaMalloc(&dvc_df_halo_bottom, 3 * sizeof(FP*));
 
     // copy the contents of the host-side handles to the device-side handles
-    // (because apparently CUDA does not support directly passing an array of pointers)
+    // (because CUDA does not support directly passing an array of pointers)
     cudaMemcpy(dvc_df, df, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
     // (halo df arrays)
@@ -441,7 +445,7 @@ int main(int argc, char *argv[])
 
         // only process outer cells that stream to halo arrays for 3 out of 9 directions
         // shear wave decay with pbc -> [0, N_Y - 1] * N_X
-        // lid driven cavity with bbbc -> [0] * N_X or [N_Y - 1] * N_X
+        // lid driven cavity with bbbc -> [0] * N_X or [0, N_Y - 1] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Outer(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
