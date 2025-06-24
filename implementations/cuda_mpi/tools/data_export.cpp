@@ -63,21 +63,20 @@ void ExportScalarFieldFromMPIDevices(
                   MPI_INFO_NULL, &mpiFile);
 
     // truncate the files to zero bytes
-    MPI_File_set_size(mpiFile, 5);
-
-    // compute write-offset of this process
-    uint64_t elem_offset = static_cast<uint64_t>(Y_START) * N_X_TOTAL;
-    MPI_Offset byte_offset = elem_offset * sizeof(FP);
-
-    // write to local buffer as a block for each row
-    // TODO: do a single collective write instead?
-    for (uint32_t row_y = 0; row_y < N_Y; row_y++)
+    if (RANK == 0)
     {
-        MPI_Offset row_offset = byte_offset + row_y * N_X_TOTAL * sizeof(FP);
-        MPI_File_write_at(mpiFile, row_offset,
-                          host_buffer.data() + row_y * N_X,
-                          N_X, FP_MPI_TYPE, MPI_STATUS_IGNORE);
+        MPI_File_set_size(mpiFile, static_cast<MPI_Offset>(N_X_TOTAL) * N_Y_TOTAL * sizeof(FP));
     }
+    MPI_Barrier(COMM);
+
+    // compute write-offset of this rank
+    MPI_Offset byte_offset = static_cast<MPI_Offset>(Y_START) * N_X_TOTAL * sizeof(FP);
+
+    // write this rank's N_CELLS data points to its section in the shared buffer
+    MPI_File_write_at(mpiFile, byte_offset,
+                  host_buffer.data(),
+                  N_CELLS,
+                  FP_MPI_TYPE, MPI_STATUS_IGNORE);
 
     MPI_File_close(&mpiFile);
 
