@@ -301,6 +301,8 @@ int main(int argc, char *argv[])
                MPI_BYTE, 0, MPI_COMM_WORLD);
 
     DisplayDeviceInfos(allInfo, N_X, N_Y, RANK);
+    // TODO: add additional metrics that are interesting for this use case
+    DisplayDomainDecompositionInfo(N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, RANK_SIZE, RANK);
 
     if (shear_wave_decay)
     {
@@ -462,7 +464,7 @@ int main(int argc, char *argv[])
     {
         auto end_time = std::chrono::steady_clock::now();
         // TODO: add additional metrics that are interesting for this use case
-        DisplayPerformanceStats(start_time, end_time, N_X, N_Y_TOTAL, N_STEPS);
+        DisplayPerformanceStats(start_time, end_time, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
     }
 
     // =========================================================================

@@ -211,16 +211,34 @@ inline void DisplayDeviceInfos(
     }
 }
 
+inline void DisplayDomainDecompositionInfo(
+    uint32_t N_X, uint32_t N_Y,
+    uint32_t N_X_TOTAL, uint32_t N_Y_TOTAL,
+    uint32_t N_STEPS,
+    int RANK_SIZE,
+    int RANK)
+{
+    if (RANK != 0) { return; }
+
+    SPDLOG_INFO("Simulation size [X/Y/N]:    [ {} / {} / {} ]",
+        N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+    SPDLOG_INFO("Sub-domain size [X/Y/N]:    [ {} / {} / {} ] * {}",
+        N_X, N_Y, N_STEPS, RANK_SIZE);
+    SPDLOG_INFO("Halo cells per sub-domain:  {:.2f} %\n",
+            (2 * N_X * 100.0f) / (N_X * N_Y));
+}
+
 // header-only display of CUDA kernel attributes
 template <typename KernelT>
 inline void DisplayKernelAttributes(
     KernelT kernel,
     const std::string& kernel_name,
     uint32_t N_GRIDSIZE, uint32_t N_BLOCKSIZE,
-    uint32_t N_X, uint32_t N_Y,
-    uint32_t N_X_TOTAL, uint32_t N_Y_TOTAL,
-    uint32_t N_STEPS)
+    uint32_t N_X_KERNEL, uint32_t N_Y_KERNEL,
+    int RANK)
 {
+    if (RANK != 0) { return; }
+
     cudaFuncAttributes attr;
     cudaError_t err = cudaFuncGetAttributes(&attr, kernel);
     if (err != cudaSuccess)
@@ -230,35 +248,35 @@ inline void DisplayKernelAttributes(
         return;
     }
 
-    SPDLOG_INFO("Kernel [name/grid/block]:  [ {} / {} / {} ]",
+    SPDLOG_INFO("Kernel [name/grid/block]:   [ {} / {} / {} ]",
         kernel_name, N_GRIDSIZE, N_BLOCKSIZE);
-    SPDLOG_INFO("Registers per thread:      {}", attr.numRegs);
-    SPDLOG_INFO("Shared memory per block:   {} bytes", attr.sharedSizeBytes);
-    SPDLOG_INFO("Local memory per thread:   {} bytes", attr.localSizeBytes);
-    SPDLOG_INFO("Simulation size [X/Y/N]:   [ {} / {} / {} ]",
-        N_X_TOTAL, N_Y_TOTAL, N_STEPS);
-    SPDLOG_INFO("Halo cells per sub-domain: {:.2f} %\n",
-            (2 * N_X * 100.0f) / (N_X * N_Y));
+    SPDLOG_INFO("Registers per thread:       {}", attr.numRegs);
+    SPDLOG_INFO("Shared memory per block:    {} bytes", attr.sharedSizeBytes);
+    SPDLOG_INFO("Local memory per thread:    {} bytes", attr.localSizeBytes);
+    SPDLOG_INFO("Kernel domain size [X/Y]:   [ {} / {} ]\n",
+        N_X_KERNEL, N_Y_KERNEL);
 }
 
 // execution time in seconds, number of lattice updates, blups
 inline void DisplayPerformanceStats(
     std::chrono::time_point<std::chrono::steady_clock> start_time,
     std::chrono::time_point<std::chrono::steady_clock> end_time,
-    uint32_t N_X, uint32_t N_Y,
+    uint32_t N_X_TOTAL, uint32_t N_Y_TOTAL,
     uint32_t N_STEPS)
 {
     double execution_time = std::chrono::duration<double>(end_time - start_time).count();
 
-    uint64_t total_updates = static_cast<uint64_t>(N_X * N_Y)
+    uint64_t total_updates = static_cast<uint64_t>(N_X_TOTAL * N_Y_TOTAL)
                            * static_cast<uint64_t>(N_STEPS);
 
     double blups = static_cast<double>(total_updates) / (execution_time * 1e9);
 
     std::cerr << std::endl;
-    SPDLOG_INFO("Total execution time:      {:.3f} sec", execution_time);
-    SPDLOG_INFO("Step execution time:       {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
-    SPDLOG_INFO("BLUPS:                     {:.3f}\n", blups);
+    SPDLOG_INFO("Simulation size [X/Y/N]:    [ {} / {} / {} ]",
+        N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+    SPDLOG_INFO("Total execution time:       {:.3f} sec", execution_time);
+    SPDLOG_INFO("Step execution time:        {:.3f} ms", (execution_time / N_STEPS) * 1000.0f);
+    SPDLOG_INFO("BLUPS:                      {:.3f}\n", blups);
 }
 
 inline void DisplayProgressBar(

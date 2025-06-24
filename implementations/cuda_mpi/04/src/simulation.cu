@@ -373,19 +373,19 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
 
-    if (RANK == 0 && !kernelAttributesDisplayed_inner)
+    if (!kernelAttributesDisplayed_inner)
     {
         if (shear_wave_decay)
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL - 2, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y - 2, RANK);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL - 2, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y - 2, RANK);
         }
 
         kernelAttributesDisplayed_inner = true;
@@ -864,26 +864,26 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     // wait for GPU to finish operations
     cudaDeviceSynchronize();
 
-    if (RANK == 0 && !kernelAttributesDisplayed_outer)
+    if (!kernelAttributesDisplayed_outer)
     {
         // TODO: branchless shear wave decay outer cell compute kernel
         if (shear_wave_decay)
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, 2, RANK);
         }
         else if (lid_driven_cavity && !branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, 2, RANK);
         }
         else if (lid_driven_cavity && branchless)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_BL_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_BL_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, 2, N_STEPS);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, 2, RANK);
         }
 
         kernelAttributesDisplayed_outer = true;
