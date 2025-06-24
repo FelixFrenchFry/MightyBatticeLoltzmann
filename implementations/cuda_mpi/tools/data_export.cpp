@@ -69,10 +69,11 @@ void ExportScalarFieldFromMPIDevices(
     fflush(stdout);
 
     // truncate the files to zero bytes
-    if (RANK == 0)
-    {
-        MPI_File_set_size(mpiFile, static_cast<MPI_Offset>(N_X_TOTAL) * N_Y_TOTAL * sizeof(FP));
-    }
+    MPI_Offset file_size = (RANK == 0)
+        ? static_cast<MPI_Offset>(N_X_TOTAL) * N_Y_TOTAL * sizeof(FP)
+        : 0; // other ranks must call too, but size is ignored
+
+    MPI_File_set_size(mpiFile, file_size);
     MPI_Barrier(COMM);
 
     printf("B");
