@@ -93,7 +93,7 @@ __global__ void FFLU_ShearWaveDecay_Push_K(
     // velocity := sum over df values, weighted by each dir i
     for (uint32_t i = 0; i < N_DIR; i++)
     {
-        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        tile_df[i][threadIdx.x] = dvc_df[0][58];
         rho += tile_df[i][threadIdx.x];
         u_x += tile_df[i][threadIdx.x] * dvc_fp_c_x[i];
         u_y += tile_df[i][threadIdx.x] * dvc_fp_c_y[i];

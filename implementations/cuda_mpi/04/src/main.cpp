@@ -170,9 +170,9 @@ int main(int argc, char *argv[])
     // =========================================================================
     // domain decomposition
     // =========================================================================
-    // rank 0: owns rows        0   to    (Y/p) - 1
-    // rank 1: owns rows    (Y/p)   to   (2Y/p) - 1
-    // rank 2: owns rows   (2Y/p)   to   (3Y/p) - 1
+    // rank 0: owns rows        0   to    (Y/r) - 1
+    // rank 1: owns rows    (Y/r)   to   (2Y/r) - 1
+    // rank 2: owns rows   (2Y/r)   to   (3Y/r) - 1
     // rank 3: ...
     const uint32_t N_X =            N_X_TOTAL;
     const uint32_t N_Y =            N_Y_TOTAL / RANK_SIZE;
