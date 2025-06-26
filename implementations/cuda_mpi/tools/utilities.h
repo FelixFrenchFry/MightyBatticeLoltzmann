@@ -279,10 +279,11 @@ inline void DisplayPerformanceStats(
     SPDLOG_INFO("BLUPS:                      {:.3f}\n", blups);
 }
 
-inline void DisplayProgressBar(
+inline int DisplayProgressBar(
     const uint32_t step,
     const uint32_t N_STEPS)
 {
+    int res = 0;
     static int last_percent = -1;
 
     // remember last timestamp
@@ -293,6 +294,7 @@ inline void DisplayProgressBar(
 
     while (last_percent < percent)
     {
+        res = 1;
         last_percent++;
 
         // compute time diff for this percent step
@@ -331,4 +333,6 @@ inline void DisplayProgressBar(
     }
 
     if (step == N_STEPS) { std::cout << std::endl; }
+
+    return res;
 }
