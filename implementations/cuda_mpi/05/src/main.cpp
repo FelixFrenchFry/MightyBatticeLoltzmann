@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     int COORD_Y = COORDS[0];
     int COORD_X = COORDS[1];
 
-    SPDLOG_INFO("Rank {} has grid position (Y = {}, X = {})", RANK, RANK_Y, RANK_X);
+    SPDLOG_INFO("Rank {} has grid position (Y = {}, X = {})", RANK, COORD_Y, COORD_X);
 
     // split by node
     MPI_Comm NODE_COMM;
@@ -209,8 +209,8 @@ int main(int argc, char *argv[])
     // rank 3: ...
     const uint32_t N_X =            N_X_TOTAL / N_SUBDIVISIONS_X;
     const uint32_t N_Y =            N_Y_TOTAL / N_SUBDIVISIONS_Y;
-    const uint32_t X_START =        N_X * RANK;
-    const uint32_t Y_START =        N_Y * RANK;
+    const uint32_t X_START =        N_X * COORD_X;
+    const uint32_t Y_START =        N_Y * COORD_Y;
     const uint32_t X_END =          X_START + N_X - 1;
     const uint32_t Y_END =          Y_START + N_Y - 1;
     const uint32_t N_CELLS =        N_X * N_Y;
@@ -290,12 +290,11 @@ int main(int argc, char *argv[])
     // and store a pointer to it in df_halo_top[i] / df_halo_bottom[i]
     for (uint32_t i = 0; i < 3; i++)
     {
-        // TODO: how to deal with the corners?
         // (halo df arrays)
         cudaMalloc(&df_halo_top[i], N_X * sizeof(FP));
         cudaMalloc(&df_halo_bottom[i], N_X * sizeof(FP));
-        cudaMalloc(&df_halo_left[i], (N_Y - 2) * sizeof(FP));
-        cudaMalloc(&df_halo_right[i], (N_Y - 2) * sizeof(FP));
+        cudaMalloc(&df_halo_left[i], N_Y * sizeof(FP));
+        cudaMalloc(&df_halo_right[i], N_Y * sizeof(FP));
     }
 
     // device-side arrays of 9 (3 for halos) pointers to device-side df arrays
@@ -308,8 +307,27 @@ int main(int argc, char *argv[])
     // (halo df arrays)
     FP** dvc_df_halo_top;
     FP** dvc_df_halo_bottom;
+    FP** dvc_df_halo_left;
+    FP** dvc_df_halo_right;
     cudaMalloc(&dvc_df_halo_top, 3 * sizeof(FP*));
     cudaMalloc(&dvc_df_halo_bottom, 3 * sizeof(FP*));
+    cudaMalloc(&dvc_df_halo_left, 3 * sizeof(FP*));
+    cudaMalloc(&dvc_df_halo_right, 3 * sizeof(FP*));
+
+    // additional arrays for receiving the left/right halo arrays (3 per dir)
+    // (instead of being sent into the destinations, values need to be unpacked)
+    // TODO: pass host pointers to MPI instead!!!
+    FP* dvc_df_halo_left_recv[3];
+    FP* dvc_df_halo_right_recv[3];
+    for (uint32_t i = 0; i < 3; i++)
+    {
+        cudaMalloc(&dvc_df_halo_left_recv[i], N_Y * sizeof(FP));
+        cudaMalloc(&dvc_df_halo_right_recv[i], N_Y * sizeof(FP));
+    }
+
+    // additional explicit array for the halo corners
+    FP* dvc_df_halo_corners;
+    cudaMalloc(&dvc_df_halo_corners, 4 * sizeof(FP));
 
     // copy the contents of the host-side handles to the device-side handles
     // (because CUDA does not support directly passing an array of pointers)
@@ -318,6 +336,8 @@ int main(int argc, char *argv[])
     // (halo df arrays)
     cudaMemcpy(dvc_df_halo_top, df_halo_top, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_halo_bottom, df_halo_bottom, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_left, df_halo_left, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_right, df_halo_right, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
     FP* dvc_rho;
@@ -399,8 +419,7 @@ int main(int argc, char *argv[])
         SelectWriteBackData(step, export_interval, export_rho, export_u_x,
             export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
 
-        // track requests for synchronization (4 per direction)
-        MPI_Request max_requests[4 * 3];
+        MPI_Request max_requests[4 * 4];
         int req_idx = 0;
 
         // direction mapping for the halo arrays
@@ -411,25 +430,30 @@ int main(int argc, char *argv[])
         // ---------
         constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
         constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
+        constexpr int dir_map_halo_left[3] =    { 3, 6, 7 };
+        constexpr int dir_map_halo_right[3] =   { 1, 5, 8 };
 
+        // TODO: adjust for shear wave decay to work too
         // async MPI sends/receive halo exchange, parallel to inner cell compute
-        // (no exchange between top and bottom rank for lid driven cavity,
-        // but full exchange for shear wave decay)
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        // (top and bottom exchange)
         for (uint32_t i = 0; i < 3; i++)
         {
-            if (step == 1) { break; }
-
             int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
             int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
 
             // for diagonal directions that bounce back from walls, send/receive
-            // only N_X - 1 elements and use offsets for the array pointers
-            int offset_top = 0;
+            // only N_X-1 elements and use offsets for the array pointers
+            int offset_top =    0;
             int offset_bottom = 0;
-            int count = N_X;
+            int count =         N_X;
 
             // transfer of top halos in dir 5, and bottom halos in dir 7
-            if (lid_driven_cavity && i == 1)
+            if (i == 1)
             {
                 // TODO: should offsets be the opposite?
                 offset_top = 1;
@@ -438,7 +462,7 @@ int main(int argc, char *argv[])
             }
 
             // transfer of top halos in dir 6, and bottom halos in dir 8
-            if (lid_driven_cavity && i == 2)
+            if (i == 2)
             {
                 // TODO: should offsets be the opposite?
                 offset_top = 0;
@@ -448,54 +472,144 @@ int main(int argc, char *argv[])
 
             // for each of the 3 top directions, do these halo exchanges:
 
-            // send top halo buffer to the rank above
-            if (not IS_TOP_RANK || shear_wave_decay)
+            if (not IS_TOP_EDGE) // with bbbc, a rank on the top edge should not send this
             {
-                // for a lid driven cavity, the rop rank does not do this
+                // send top halo buffer to the rank above
                 MPI_Isend(
-                    df_halo_top[i] + offset_top,
-                    count, FP_MPI_TYPE,
-                    RANK_ABOVE, dir_top,
-                    MPI_COMM_WORLD, &max_requests[req_idx++]);
+                    df_halo_top[i] + offset_top, count,
+                    FP_MPI_TYPE, RANK_TOP, dir_top,
+                    CART_COMM, &max_requests[req_idx++]);
             }
 
-            // receive the top halo from the rank below into the own bottom row
-            // (overwrite entries from 0 to N_X)
-            if (not IS_BOTTOM_RANK || shear_wave_decay)
+            if (not IS_BOTTOM_EDGE) // with bbbc, a rank on the bottom edge should not receive this
             {
-                // for a lid driven cavity, the bottom rank does not do this
+                // receive the top halo from the rank below into the own bottom row
+                // (overwrites entries from 0 to N_X)
                 MPI_Irecv(
-                   df_next[dir_top] + offset_top,
-                   count, FP_MPI_TYPE,
-                   RANK_BELOW, dir_top,
-                   MPI_COMM_WORLD, &max_requests[req_idx++]);
+                    df_next[dir_top] + offset_top, count,
+                    FP_MPI_TYPE, RANK_BOTTOM, dir_top,
+                    CART_COMM, &max_requests[req_idx++]);
             }
 
             // for each of the 3 bottom directions, do these halo exchanges:
 
-            // send bottom halo buffer to the rank below
-            if (not IS_BOTTOM_RANK || shear_wave_decay)
+            if (not IS_BOTTOM_EDGE) // with bbbc, a rank on the bottom edge should not send this
             {
-                // for a lid driven cavity, the bottom rank does not do this
+                // send bottom halo buffer to the rank below
                 MPI_Isend(
-                    df_halo_bottom[i] + offset_bottom,
-                    count, FP_MPI_TYPE,
-                    RANK_BELOW, dir_bottom + 3,
-                    MPI_COMM_WORLD, &max_requests[req_idx++]);
+                    df_halo_bottom[i] + offset_bottom, count,
+                    FP_MPI_TYPE, RANK_BOTTOM, dir_bottom + 3,
+                    CART_COMM, &max_requests[req_idx++]);
             }
 
-            // receive the bottom halo from the rank above into the own top row
-            // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
-            if (not IS_TOP_RANK || shear_wave_decay)
+            if (not IS_TOP_EDGE) // with bbbc, a rank on the top edge should not receive this
             {
-                // for a lid driven cavity, the rop rank does not do this
+                // receive the bottom halo from the rank above into the own top row
+                // (overwrite entries from (N_Y - 1) * N_X to N_Y * N_X)
                 MPI_Irecv(
-                    df_next[dir_bottom] + (N_Y - 1) * N_X + offset_bottom,
-                    count, FP_MPI_TYPE,
-                    RANK_ABOVE, dir_bottom + 3,
+                    df_next[dir_bottom] + (N_Y - 1) * N_X + offset_bottom, count,
+                    FP_MPI_TYPE, RANK_TOP, dir_bottom + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
         }
+
+        // TODO: adjust for shear wave decay to work too
+        // async MPI sends/receive halo exchange, parallel to inner cell compute
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        // (left and right exchange)
+        for (uint32_t i = 0; i < 3; i++)
+        {
+            int dir_left = dir_map_halo_left[i];        // {3, 6, 7}
+            int dir_right = dir_map_halo_right[i];      // {1, 5, 8}
+
+            // for diagonal directions that bounce back from walls, send/receive
+            // only N_Y-1 elements and use offsets for the array pointers
+            int offset_left =   0;
+            int offset_right =  0;
+            int count =         N_X;
+
+            // transfer of left halos in dir 6, and right halos in dir 5
+            if (i == 1)
+            {
+                // TODO: should offsets be the opposite?
+                offset_left = 1;
+                offset_right = 0;
+                count -= 1;
+            }
+
+            // transfer of left halos in dir 7, and right halos in dir 8
+            if (i == 2)
+            {
+                // TODO: should offsets be the opposite?
+                offset_left = 0;
+                offset_right = 1;
+                count -= 1;
+            }
+
+            // for each of the 3 left directions, do these halo exchanges:
+
+            if (not IS_LEFT_EDGE) // with bbbc, a rank on the left edge should not send this
+            {
+                // send left halo buffer to the rank on the left
+                // TODO: pack the column values into an own array for MPI to send it
+                MPI_Isend(
+                    dvc_df_halo_left[i] + offset_left, count,
+                    FP_MPI_TYPE, RANK_LEFT, dir_left,
+                    CART_COMM, &max_requests[req_idx++]);
+            }
+
+            if (not IS_RIGHT_EDGE) // with bbbc, a rank on the right edge should not receive this
+            {
+                // receive the left halo from the rank on the right into the own right column
+                // TODO: pack the column values into an own array for MPI to send it
+                MPI_Isend(
+                    dvc_df_halo_left_recv[dir_left] + offset_left, count,
+                    FP_MPI_TYPE, RANK_RIGHT, dir_left,
+                    CART_COMM, &max_requests[req_idx++]);
+            }
+
+            // for each of the 3 right directions, do these halo exchanges:
+
+            if (not IS_RIGHT_EDGE) // with bbbc, a rank on the right edge should not send this
+            {
+                // send right halo buffer to the rank on the right
+                MPI_Isend(
+                    df_halo_right[i] + offset_right, count,
+                    FP_MPI_TYPE, RANK_RIGHT, dir_right + 3,
+                    CART_COMM, &max_requests[req_idx++]);
+            }
+
+            if (not IS_LEFT_EDGE) // with bbbc, a rank on the left edge should not receive this
+            {
+                // receive the right halo from the rank on the left into the own left column
+                MPI_Irecv(
+                    dvc_df_halo_right_recv[i] + offset_right, count,
+                    FP_MPI_TYPE, RANK_LEFT, dir_right + 3,
+                    CART_COMM, &max_requests[req_idx++]);
+            }
+        }
+
+        // TODO: unpack values from the halo receive arrays
+
+        // async MPI sends/receive halo exchange, parallel to inner cell compute
+        // ---------
+        // | 6 2 5 |
+        // | 3 0 1 |
+        // | 7 4 8 |
+        // ---------
+        // TODO: (corner exchange)
+        // send upper right corner value in dir 5 to upper left rank
+        MPI_Isend(
+            df_halo_right[i] + offset_right, count,
+            FP_MPI_TYPE, RANK_RIGHT, dir_right + 3,
+            CART_COMM, &max_requests[req_idx++]);
+
+        // wait for async MPI halo exchanges to finish, before outer cells can start compute
+        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
         // only process inner cells that don't stream to halo arrays
         // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
@@ -505,8 +619,7 @@ int main(int argc, char *argv[])
             N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_CELLS_INNER, RANK, shear_wave_decay,
             lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
-        // wait for async MPI halo exchanges to finish, before outer cells can start compute
-        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
+        // TODO: finish async communication here instead of before the inner compute kernel
 
         // only process outer cells that stream to halo arrays for 3 out of 9 directions
         // shear wave decay with pbc -> [0, N_Y - 1] * N_X
