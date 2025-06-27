@@ -313,14 +313,14 @@ inline int DisplayProgressBar(
         int eta_s = eta_seconds % 60;
 
         // temp simplified message info config
-        spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] %v");
+        spdlog::set_pattern("[%H:%M:%S] %v");
 
         // display colored progress milestone
         if (not (last_percent == 0 || last_percent == 100))
         {
             SPDLOG_INFO("\033[38;2;255;40;50m{:>3} %"
-                        "\033[0m          (~ {:02}:{:02}:{:02} remaining, "
-                        "step {}/{})",
+                        "\033[0m     (~ {:02}:{:02}:{:02} remain) "
+                        "{}/{} steps",
                         last_percent, eta_h, eta_m, eta_s, step, N_STEPS);
         }
         else
