@@ -409,12 +409,17 @@ __global__ void FFLU_ShearWaveDecay_Push_Outer_K(
     FP* const* __restrict__ dvc_df_next,
     FP* const* __restrict__ dvc_df_halo_top,
     FP* const* __restrict__ dvc_df_halo_bottom,
+    FP* const* __restrict__ dvc_df_halo_left,
+    FP* const* __restrict__ dvc_df_halo_right,
+    FP* __restrict__ dvc_df_halo_corners,
     FP* __restrict__ dvc_rho,
     FP* __restrict__ dvc_u_x,
     FP* __restrict__ dvc_u_y,
     const FP omega,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_CELLS_OUTER,
+    const bool IS_TOP_EDGE, const bool IS_BOTTOM_EDGE,
+    const bool IS_LEFT_EDGE, const bool IS_RIGHT_EDGE,
     const bool write_rho,
     const bool write_u_x,
     const bool write_u_y)
@@ -516,7 +521,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     FP* const* __restrict__ dvc_df_halo_bottom,
     FP* const* __restrict__ dvc_df_halo_left,
     FP* const* __restrict__ dvc_df_halo_right,
-    FP* const* __restrict__ dvc_df_halo_corners,
+    FP* __restrict__ dvc_df_halo_corners,
     FP* __restrict__ dvc_rho,
     FP* __restrict__ dvc_u_x,
     FP* __restrict__ dvc_u_y,
@@ -526,6 +531,8 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
     const uint32_t X_START, const uint32_t Y_START,
     const uint32_t N_CELLS_OUTER,
+    const bool IS_TOP_EDGE, const bool IS_BOTTOM_EDGE,
+    const bool IS_LEFT_EDGE, const bool IS_RIGHT_EDGE,
     const bool write_rho,
     const bool write_u_x,
     const bool write_u_y)
@@ -682,7 +689,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     FP* const* dvc_df_halo_bottom,
     FP* const* dvc_df_halo_left,
     FP* const* dvc_df_halo_right,
-    FP* const* dvc_df_halo_corners,
+    FP* dvc_df_halo_corners,
     FP* dvc_rho,
     FP* dvc_u_x,
     FP* dvc_u_y,
@@ -690,10 +697,12 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
-    const uint32_t Y_START,
+    const uint32_t X_START, const uint32_t Y_START,
     const uint32_t N_STEPS,
     const uint32_t N_CELLS_OUTER,
     const int RANK,
+    const bool IS_TOP_EDGE, const bool IS_BOTTOM_EDGE,
+    const bool IS_LEFT_EDGE, const bool IS_RIGHT_EDGE,
     const bool shear_wave_decay,
     const bool lid_driven_cavity,
     const bool write_rho,
@@ -708,15 +717,19 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     {
         FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
+            dvc_df_halo_left, dvc_df_halo_right, dvc_df_halo_corners,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y, N_CELLS_OUTER,
+            IS_TOP_EDGE, IS_BOTTOM_EDGE, IS_LEFT_EDGE, IS_RIGHT_EDGE,
+            write_rho, write_u_x, write_u_y);
     }
     else if (lid_driven_cavity)
     {
         FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_Y_TOTAL, Y_START,
-            N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
+            dvc_df_halo_left, dvc_df_halo_right, dvc_df_halo_corners,
+            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL,
+            X_START, Y_START, N_CELLS_OUTER, IS_TOP_EDGE, IS_BOTTOM_EDGE,
+            IS_LEFT_EDGE, IS_RIGHT_EDGE, write_rho, write_u_x, write_u_y);
     }
     else
     {

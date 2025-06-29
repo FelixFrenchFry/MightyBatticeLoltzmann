@@ -249,6 +249,22 @@ int main(int argc, char *argv[])
     // horizontal (X-axis): 1
     int RANK_LEFT, RANK_RIGHT;
     MPI_Cart_shift(CART_COMM, 1, 1, &RANK_LEFT, &RANK_RIGHT);
+    // diagonal top right
+    int COORDS_TOP_RIGHT[2] = { COORDS[0] - 1, COORDS[1] + 1};
+    int RANK_TOP_RIGHT = MPI_PROC_NULL;
+    MPI_Cart_rank(CART_COMM, COORDS_TOP_RIGHT, &RANK_TOP_RIGHT);
+    // diagonal top left
+    int COORDS_TOP_LEFT[2] = { COORDS[0] - 1, COORDS[1] - 1};
+    int RANK_TOP_LEFT = MPI_PROC_NULL;
+    MPI_Cart_rank(CART_COMM, COORDS_TOP_LEFT, &RANK_TOP_LEFT);
+    // diagonal bottom left
+    int COORDS_BOTTOM_LEFT[2] = { COORDS[0] + 1, COORDS[1] - 1};
+    int RANK_BOTTOM_LEFT = MPI_PROC_NULL;
+    MPI_Cart_rank(CART_COMM, COORDS_BOTTOM_LEFT, &RANK_BOTTOM_LEFT);
+    // diagonal bottom right
+    int COORDS_BOTTOM_RIGHT[2] = { COORDS[0] + 1, COORDS[1] + 1};
+    int RANK_BOTTOM_RIGHT = MPI_PROC_NULL;
+    MPI_Cart_rank(CART_COMM, COORDS_BOTTOM_RIGHT, &RANK_BOTTOM_RIGHT);
 
     const bool IS_TOP_EDGE =    (COORD_Y == N_SUBDIVISIONS_Y - 1);
     const bool IS_BOTTOM_EDGE = (COORD_Y == 0);
@@ -317,15 +333,21 @@ int main(int argc, char *argv[])
     // additional arrays for receiving the left/right halo arrays (3 per dir)
     // (instead of being sent into the destinations, values need to be unpacked)
     // TODO: pass host pointers to MPI instead!!!
-    FP* dvc_df_halo_left_recv[3];
-    FP* dvc_df_halo_right_recv[3];
+    FP* df_halo_left_recv[3];
+    FP* df_halo_right_recv[3];
     for (uint32_t i = 0; i < 3; i++)
     {
-        cudaMalloc(&dvc_df_halo_left_recv[i], N_Y * sizeof(FP));
-        cudaMalloc(&dvc_df_halo_right_recv[i], N_Y * sizeof(FP));
+        cudaMalloc(&df_halo_left_recv[i], N_Y * sizeof(FP));
+        cudaMalloc(&df_halo_right_recv[i], N_Y * sizeof(FP));
     }
 
+    FP** dvc_df_halo_left_recv;
+    FP** dvc_df_halo_right_recv;
+    cudaMalloc(&dvc_df_halo_left_recv, 3 * sizeof(FP*));
+    cudaMalloc(&dvc_df_halo_right_recv, 3 * sizeof(FP*));
+
     // additional explicit array for the halo corners
+    // map dirs 5, 6, 7, 8 to 0, 1, 2, 3 in the corner halo array
     FP* dvc_df_halo_corners;
     cudaMalloc(&dvc_df_halo_corners, 4 * sizeof(FP));
 
@@ -419,7 +441,8 @@ int main(int argc, char *argv[])
         SelectWriteBackData(step, export_interval, export_rho, export_u_x,
             export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
 
-        MPI_Request max_requests[4 * 4];
+        // TODO: adjust max number of requests
+        MPI_Request max_requests[4 * 40];
         int req_idx = 0;
 
         // direction mapping for the halo arrays
@@ -596,17 +619,86 @@ int main(int argc, char *argv[])
         // TODO: unpack values from the halo receive arrays
 
         // async MPI sends/receive halo exchange, parallel to inner cell compute
+        // define receive destinations for the corner halo exchange
         // ---------
         // | 6 2 5 |
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        // TODO: (corner exchange)
-        // send upper right corner value in dir 5 to upper left rank
-        MPI_Isend(
-            df_halo_right[i] + offset_right, count,
-            FP_MPI_TYPE, RANK_RIGHT, dir_right + 3,
-            CART_COMM, &max_requests[req_idx++]);
+        // TODO: off-by-one errors?
+        // send top right corner value to the bottom left
+        FP* dst_TR = df_next[5];
+        // send top left corner value to the bottom right
+        FP* dst_TL = df_next[6] + N_X - 1;
+        // send bottom left corner value to the top right
+        FP* dst_BL = df_next[7] + (N_X * N_Y) - 1;
+        // send bottom right corner value to the top left
+        FP* dst_BR = df_next[8] + N_X * (N_Y - 1);
+
+        // TODO: do the tags match up?
+        // if this rank has an upper right neighbor
+        if (RANK_TOP_RIGHT != MPI_PROC_NULL)
+        {
+            // send upper right corner value in dir 5 to upper right rank
+            MPI_Isend(
+                &dvc_df_halo_corners[0], 1,
+                FP_MPI_TYPE, RANK_TOP_RIGHT, 20,
+                CART_COMM, &max_requests[req_idx++]);
+
+            // receive the bottom left corner value in dir 7 from the upper right rank
+            MPI_Irecv(
+                dst_BL, 1,
+                FP_MPI_TYPE, RANK_TOP_RIGHT, 22,
+                CART_COMM, &max_requests[req_idx++]);
+        }
+
+        // if this rank has an upper left neighbor
+        if (RANK_TOP_LEFT != MPI_PROC_NULL)
+        {
+            // send upper left corner value in dir 6 to upper left rank
+            MPI_Isend(
+                &dvc_df_halo_corners[1], 1,
+                FP_MPI_TYPE, RANK_TOP_LEFT, 21,
+                CART_COMM, &max_requests[req_idx++]);
+
+            // receive the bottom right corner value in dir 8 from the upper left rank
+            MPI_Irecv(
+                dst_BR, 1,
+                FP_MPI_TYPE, RANK_TOP_LEFT, 23,
+                CART_COMM, &max_requests[req_idx++]);
+        }
+
+        // if this rank has a bottom left neighbor
+        if (RANK_BOTTOM_LEFT != MPI_PROC_NULL)
+        {
+            // send bottom left corner value in dir 7 to bottom left rank
+            MPI_Isend(
+                &dvc_df_halo_corners[2], 1,
+                FP_MPI_TYPE, RANK_BOTTOM_LEFT, 22,
+                CART_COMM, &max_requests[req_idx++]);
+
+            // receive the upper right corner value in dir 5 from the bottom left rank
+            MPI_Irecv(
+                dst_TR, 1,
+                FP_MPI_TYPE, RANK_BOTTOM_LEFT, 20,
+                CART_COMM, &max_requests[req_idx++]);
+        }
+
+        // if this rank has a bottom right neighbor
+        if (RANK_BOTTOM_RIGHT != MPI_PROC_NULL)
+        {
+            // send bottom right corner value in dir 8 to bottom right rank
+            MPI_Isend(
+                &dvc_df_halo_corners[3], 1,
+                FP_MPI_TYPE, RANK_BOTTOM_RIGHT, 23,
+                CART_COMM, &max_requests[req_idx++]);
+
+            // receive the upper left corner value in dir 6 from the bottom right rank
+            MPI_Irecv(
+                dst_TL, 1,
+                FP_MPI_TYPE, RANK_BOTTOM_RIGHT, 21,
+                CART_COMM, &max_requests[req_idx++]);
+        }
 
         // wait for async MPI halo exchanges to finish, before outer cells can start compute
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
@@ -626,9 +718,11 @@ int main(int argc, char *argv[])
         // lid driven cavity with bbbc -> [0] * N_X or [0, N_Y - 1] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Outer(
             dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
+            dvc_df_halo_left, dvc_df_halo_right, dvc_df_halo_corners,
             dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
-            N_Y_TOTAL, Y_START, N_STEPS, N_CELLS_OUTER, RANK, shear_wave_decay,
-            lid_driven_cavity, branchless, write_rho, write_u_x, write_u_y);
+            N_Y_TOTAL, X_START, Y_START, N_STEPS, N_CELLS_OUTER, RANK,
+            IS_TOP_EDGE, IS_BOTTOM_EDGE, IS_LEFT_EDGE, IS_RIGHT_EDGE,
+            shear_wave_decay, lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // swap host pointers to the df arrays used by the MPI communication
         if (step != 1) { std::swap(df, df_next); }
