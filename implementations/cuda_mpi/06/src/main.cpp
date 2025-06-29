@@ -501,33 +501,17 @@ int main(int argc, char *argv[])
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
-        auto end_total_step_time = std::chrono::steady_clock::now();
-        acc_total_step_time += std::chrono::duration_cast<std::chrono::milliseconds>(
-            end_total_step_time - start_total_step_time).count();
-
         if (RANK == 0)
         {
-            if (DisplayProgressBar(step, N_STEPS) == 1)
+            auto end_total_step_time = std::chrono::steady_clock::now();
+            acc_total_step_time += std::chrono::duration_cast<std::chrono::microseconds>(
+                end_total_step_time - start_total_step_time).count() / 1000.0;
+
+            if (DisplayProgressBar(step, N_STEPS, true,
+                acc_total_step_time, acc_communication_time,
+                acc_compute_time_inner, acc_compute_time_outer))
             {
-                int steps_averaged_over = N_STEPS / 100;
-
-                double step_time =  acc_total_step_time / steps_averaged_over;
-                double comm_time =  acc_communication_time / steps_averaged_over;
-                double inner_time = acc_compute_time_inner / steps_averaged_over;
-                double outer_time = acc_compute_time_outer / steps_averaged_over;
-
-                double comm_pct  = 100.0 * comm_time  / step_time;
-                double inner_pct = 100.0 * inner_time / step_time;
-                double outer_pct = 100.0 * outer_time / step_time;
-
-                // print execution times, averaged over the last few steps
-                printf("Avg total step time:    %9.3f ms\n", step_time);
-                printf("Avg halo exchange time: %9.3f ms (~%5.1f%%)\n", comm_time, comm_pct);
-                printf("Avg inner compute time: %9.3f ms (~%5.1f%%)\n", inner_time, inner_pct);
-                printf("Avg outer compute time: %9.3f ms (~%5.1f%%)\n", outer_time, outer_pct);
-                printf("\n");
-
-                // reset accumulators
+                // reset accumulators if progress was printed
                 acc_total_step_time    = 0.0;
                 acc_communication_time = 0.0;
                 acc_compute_time_inner = 0.0;

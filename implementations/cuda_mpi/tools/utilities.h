@@ -281,7 +281,12 @@ inline void DisplayPerformanceStats(
 
 inline int DisplayProgressBar(
     const uint32_t step,
-    const uint32_t N_STEPS)
+    const uint32_t N_STEPS,
+    bool extended = false,
+    double acc_total_step_time = 1.0,
+    double acc_communication_time = 1.0,
+    double acc_compute_time_inner = 1.0,
+    double acc_compute_time_outer = 1.0)
 {
     int res = 0;
     static int last_percent = -1;
@@ -294,6 +299,21 @@ inline int DisplayProgressBar(
 
     while (last_percent < percent)
     {
+        // extended with more detailed time measurements
+        int steps_averaged_over = N_STEPS / 100;
+
+        double step_time =  acc_total_step_time / steps_averaged_over;
+        double comm_time =  acc_communication_time / steps_averaged_over;
+        double inner_time = acc_compute_time_inner / steps_averaged_over;
+        double outer_time = acc_compute_time_outer / steps_averaged_over;
+        double misc_time = (acc_total_step_time - acc_communication_time
+                         - acc_compute_time_inner - acc_compute_time_outer)
+                         / steps_averaged_over;
+
+        double comm_pct  = (100.0 * comm_time)  / step_time;
+        double inner_pct = (100.0 * inner_time) / step_time;
+        double outer_pct = (100.0 * outer_time) / step_time;
+
         res = 1;
         last_percent++;
 
@@ -318,10 +338,12 @@ inline int DisplayProgressBar(
         // display colored progress milestone
         if (not (last_percent == 0 || last_percent == 100))
         {
-            SPDLOG_INFO("\033[38;2;255;40;50m{:>3} %"
-                        "\033[0m     (~ {:02}:{:02}:{:02} remain) "
-                        "{}/{} steps",
-                        last_percent, eta_h, eta_m, eta_s, step, N_STEPS);
+            SPDLOG_INFO("\033[38;2;255;40;50m{:>3} %\033[0m  "
+                        "(T-{:02}:{:02}:{:02}) "
+                        "{}/{} steps  |  avg [inner/outer/comm]:  "
+                        "[ {:.1f} / {:.1f} / {:.1f} ] ≈ {:.1f} ms",
+                        last_percent, eta_h, eta_m, eta_s, step, N_STEPS,
+                        inner_time, outer_time, comm_time, step_time);
         }
         else
         {
