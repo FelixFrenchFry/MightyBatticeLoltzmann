@@ -1,0 +1,720 @@
+FP32 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+FP64 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+=========================================================================================================
+A100 x1 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 1 rank on 1 GPU 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    70.865   8.387    15000  30000
+
+[2025-06-29 16:12:21] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:12:21] [info] Sub-domain size [X/Y/N]:    [ 15000 / 30000 / 1000 ] * 1
+[2025-06-29 16:12:21] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-06-29 16:12:21] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1757696 / 256 ]
+[2025-06-29 16:12:21] [info] Registers per thread:       36
+[2025-06-29 16:12:21] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:12:21] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:12:21] [info] Kernel domain size [X/Y]:   [ 15000 / 29998 ]
+
+[2025-06-29 16:12:21] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:12:21] [info] Registers per thread:       38
+[2025-06-29 16:12:21] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:12:21] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:12:21] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:13:02]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 41.6 / 0.0 / 0.0 ] ≈ 41.6 ms
+
+[2025-06-29 16:13:03] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:13:03] [info] Total execution time:       41.602 sec
+[2025-06-29 16:13:03] [info] Step execution time:        41.602 ms
+[2025-06-29 16:13:03] [info] BLUPS:                      10.817
+
+=========================================================================================================
+A100 x1 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 2 ranks on 1 GPU 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by slot -np 2 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    71.319   7.932    15000  15000
+1     uc2n901.                                      1   0    0    0         79.252    71.317   7.934    15000  15000
+
+[2025-06-29 16:13:23] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:13:23] [info] Sub-domain size [X/Y/N]:    [ 15000 / 15000 / 1000 ] * 2
+[2025-06-29 16:13:23] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-06-29 16:13:23] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878790 / 256 ]
+[2025-06-29 16:13:23] [info] Registers per thread:       36
+[2025-06-29 16:13:23] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:13:23] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:13:23] [info] Kernel domain size [X/Y]:   [ 15000 / 14998 ]
+
+[2025-06-29 16:13:23] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:13:23] [info] Registers per thread:       38
+[2025-06-29 16:13:23] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:13:23] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:13:23] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:14:12]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 47.6 / 0.3 / 0.5 ] ≈ 49.0 ms
+
+[2025-06-29 16:14:12] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:14:12] [info] Total execution time:       48.852 sec
+[2025-06-29 16:14:12] [info] Step execution time:        48.852 ms
+[2025-06-29 16:14:12] [info] BLUPS:                      9.212
+
+=========================================================================================================
+A100 x1 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 4 ranks on 1 GPU 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by slot -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    65.504   13.748   15000  7500
+1     uc2n901.                                      1   0    0    0         79.252    70.543   8.709    15000  7500
+2     uc2n901.                                      2   0    0    0         79.252    72.225   7.027    15000  7500
+3     uc2n901.                                      3   0    0    0         79.252    72.225   7.027    15000  7500
+
+[2025-06-29 16:14:23] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:14:23] [info] Sub-domain size [X/Y/N]:    [ 15000 / 7500 / 1000 ] * 4
+[2025-06-29 16:14:23] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-06-29 16:14:24] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 439336 / 256 ]
+[2025-06-29 16:14:24] [info] Registers per thread:       36
+[2025-06-29 16:14:24] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:14:24] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:14:24] [info] Kernel domain size [X/Y]:   [ 15000 / 7498 ]
+
+[2025-06-29 16:14:24] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:14:24] [info] Registers per thread:       38
+[2025-06-29 16:14:24] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:14:24] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:14:24] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:15:14]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 41.6 / 0.7 / 0.7 ] ≈ 50.9 ms
+
+[2025-06-29 16:15:14] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:15:14] [info] Total execution time:       50.659 sec
+[2025-06-29 16:15:14] [info] Step execution time:        50.659 ms
+[2025-06-29 16:15:14] [info] BLUPS:                      8.883
+
+=========================================================================================================
+A100 x1 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 1 GPU 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by slot -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    73.885   5.367    15000  3750
+1     uc2n901.                                      1   0    0    0         79.252    73.041   6.210    15000  3750
+2     uc2n901.                                      2   0    0    0         79.252    28.629   50.623   15000  3750
+3     uc2n901.                                      3   0    0    0         79.252    28.207   51.044   15000  3750
+4     uc2n901.                                      4   0    0    0         79.252    73.887   5.365    15000  3750
+5     uc2n901.                                      5   0    0    0         79.252    27.785   51.466   15000  3750
+6     uc2n901.                                      6   0    0    0         79.252    73.041   6.210    15000  3750
+7     uc2n901.                                      7   0    0    0         79.252    47.834   31.417   15000  3750
+
+[2025-06-29 16:15:27] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:15:27] [info] Sub-domain size [X/Y/N]:    [ 15000 / 3750 / 1000 ] * 8
+[2025-06-29 16:15:27] [info] Halo cells per sub-domain:  0.05 %
+
+[2025-06-29 16:15:27] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 219610 / 256 ]
+[2025-06-29 16:15:27] [info] Registers per thread:       36
+[2025-06-29 16:15:27] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:15:27] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:15:27] [info] Kernel domain size [X/Y]:   [ 15000 / 3748 ]
+
+[2025-06-29 16:15:27] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:15:27] [info] Registers per thread:       38
+[2025-06-29 16:15:27] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:15:27] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:15:27] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:16:19]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 45.2 / 1.4 / 1.4 ] ≈ 52.9 ms
+
+[2025-06-29 16:16:20] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:16:20] [info] Total execution time:       52.930 sec
+[2025-06-29 16:16:20] [info] Step execution time:        52.930 ms
+[2025-06-29 16:16:20] [info] BLUPS:                      8.502
+
+=========================================================================================================
+A100 x1 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 1 GPU 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by slot -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    77.096   2.155    15000  1875
+1     uc2n901.                                      1   0    0    0         79.252    20.364   58.888   15000  1875
+2     uc2n901.                                      2   0    0    0         79.252    45.624   33.628   15000  1875
+3     uc2n901.                                      3   0    0    0         79.252    52.378   26.874   15000  1875
+4     uc2n901.                                      4   0    0    0         79.252    73.079   6.173    15000  1875
+5     uc2n901.                                      5   0    0    0         79.252    50.053   29.198   15000  1875
+6     uc2n901.                                      6   0    0    0         79.252    76.667   2.585    15000  1875
+7     uc2n901.                                      7   0    0    0         79.252    50.053   29.198   15000  1875
+8     uc2n901.                                      8   0    0    0         79.252    73.714   5.538    15000  1875
+9     uc2n901.                                      9   0    0    0         79.252    76.667   2.585    15000  1875
+10    uc2n901.                                      10  0    0    0         79.252    76.667   2.585    15000  1875
+11    uc2n901.                                      11  0    0    0         79.252    69.903   9.349    15000  1875
+12    uc2n901.                                      12  0    0    0         79.252    76.034   3.218    15000  1875
+13    uc2n901.                                      13  0    0    0         79.252    77.518   1.733    15000  1875
+14    uc2n901.                                      14  0    0    0         79.252    67.790   11.462   15000  1875
+15    uc2n901.                                      15  0    0    0         79.252    52.378   26.874   15000  1875
+
+[2025-06-29 16:17:37] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:17:37] [info] Sub-domain size [X/Y/N]:    [ 15000 / 1875 / 1000 ] * 16
+[2025-06-29 16:17:37] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-06-29 16:17:37] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 109747 / 256 ]
+[2025-06-29 16:17:37] [info] Registers per thread:       36
+[2025-06-29 16:17:37] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:17:37] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:17:37] [info] Kernel domain size [X/Y]:   [ 15000 / 1873 ]
+
+[2025-06-29 16:17:37] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:17:37] [info] Registers per thread:       38
+[2025-06-29 16:17:37] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:17:37] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:17:37] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:18:36]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 30.0 / 2.7 / 16.8 ] ≈ 59.2 ms
+
+[2025-06-29 16:18:36] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:18:36] [info] Total execution time:       59.059 sec
+[2025-06-29 16:18:36] [info] Step execution time:        59.059 ms
+[2025-06-29 16:18:36] [info] BLUPS:                      7.620
+
+=========================================================================================================
+A100 x2 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 2 ranks on 2 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:2:node -np 2 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    35.673   43.579   15000  15000
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    35.673   43.579   15000  15000
+
+[2025-06-29 16:21:33] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:21:33] [info] Sub-domain size [X/Y/N]:    [ 15000 / 15000 / 1000 ] * 2
+[2025-06-29 16:21:33] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-06-29 16:21:33] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878790 / 256 ]
+[2025-06-29 16:21:33] [info] Registers per thread:       36
+[2025-06-29 16:21:33] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:21:33] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:21:33] [info] Kernel domain size [X/Y]:   [ 15000 / 14998 ]
+
+[2025-06-29 16:21:33] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:21:33] [info] Registers per thread:       38
+[2025-06-29 16:21:33] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:21:33] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:21:33] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:21:53]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 20.7 / 0.0 / 0.0 ] ≈ 20.8 ms
+
+[2025-06-29 16:21:54] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:21:54] [info] Total execution time:       20.840 sec
+[2025-06-29 16:21:54] [info] Step execution time:        20.840 ms
+[2025-06-29 16:21:54] [info] BLUPS:                      21.593
+
+=========================================================================================================
+A100 x2 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 4 ranks on 2 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    36.128   43.124   15000  7500
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    36.128   43.124   15000  7500
+2     uc2n901.                                      2   0    0    0         79.252    26.046   53.206   15000  7500
+3     uc2n901.                                      3   0    0    0         79.252    21.847   57.405   15000  7500
+
+[2025-06-29 16:22:23] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:22:23] [info] Sub-domain size [X/Y/N]:    [ 15000 / 7500 / 1000 ] * 4
+[2025-06-29 16:22:23] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-06-29 16:22:23] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 439336 / 256 ]
+[2025-06-29 16:22:23] [info] Registers per thread:       36
+[2025-06-29 16:22:23] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:22:23] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:22:23] [info] Kernel domain size [X/Y]:   [ 15000 / 7498 ]
+
+[2025-06-29 16:22:23] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:22:23] [info] Registers per thread:       38
+[2025-06-29 16:22:23] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:22:23] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:22:23] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:22:48]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 21.9 / 0.3 / 0.0 ] ≈ 25.0 ms
+
+[2025-06-29 16:22:48] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:22:48] [info] Total execution time:       24.933 sec
+[2025-06-29 16:22:48] [info] Step execution time:        24.933 ms
+[2025-06-29 16:22:48] [info] BLUPS:                      18.048
+
+=========================================================================================================
+A100 x2 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 2 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:16:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    36.018   43.234   15000  1875
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    34.119   45.132   15000  1875
+2     uc2n901.                                      2   0    0    0         79.252    34.961   44.291   15000  1875
+3     uc2n901.                                      3   0    0    0         79.252    27.783   51.468   15000  1875
+4     uc2n901.                                      4   0    0    0         79.252    38.139   41.113   15000  1875
+5     uc2n901.                                      5   0    0    0         79.252    34.330   44.921   15000  1875
+6     uc2n901.                                      6   0    0    0         79.252    38.772   40.480   15000  1875
+7     uc2n901.                                      7   0    0    0         79.252    38.139   41.113   15000  1875
+8     uc2n901.                                      8   0    0    0         79.252    30.946   48.306   15000  1875
+9     uc2n901.                                      9   0    0    0         79.252    38.139   41.113   15000  1875
+10    uc2n901.                                      10  0    0    0         79.252    14.582   64.669   15000  1875
+11    uc2n901.                                      11  0    0    0         79.252    36.658   42.593   15000  1875
+12    uc2n901.                                      12  0    0    0         79.252    36.655   42.597   15000  1875
+13    uc2n901.                                      13  0    0    0         79.252    27.360   51.892   15000  1875
+14    uc2n901.                                      14  0    0    0         79.252    13.739   65.513   15000  1875
+15    uc2n901.                                      15  0    0    0         79.252    38.776   40.476   15000  1875
+
+[2025-06-29 16:23:30] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:23:30] [info] Sub-domain size [X/Y/N]:    [ 15000 / 1875 / 1000 ] * 16
+[2025-06-29 16:23:30] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-06-29 16:23:30] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 109747 / 256 ]
+[2025-06-29 16:23:30] [info] Registers per thread:       36
+[2025-06-29 16:23:30] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:23:30] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:23:30] [info] Kernel domain size [X/Y]:   [ 15000 / 1873 ]
+
+[2025-06-29 16:23:30] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:23:30] [info] Registers per thread:       38
+[2025-06-29 16:23:30] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:23:30] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:23:30] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:23:57]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 12.6 / 1.3 / 1.6 ] ≈ 27.9 ms
+
+[2025-06-29 16:23:58] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:23:58] [info] Total execution time:       27.886 sec
+[2025-06-29 16:23:58] [info] Step execution time:        27.886 ms
+[2025-06-29 16:23:58] [info] BLUPS:                      16.137
+
+=========================================================================================================
+A100 x4 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 4 ranks on 4 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    18.077   61.174   15000  7500
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    18.077   61.174   15000  7500
+2     uc2n901.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    18.077   61.174   15000  7500
+3     uc2n901.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    18.077   61.174   15000  7500
+
+[2025-06-29 16:30:05] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:30:05] [info] Sub-domain size [X/Y/N]:    [ 15000 / 7500 / 1000 ] * 4
+[2025-06-29 16:30:05] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-06-29 16:30:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 439336 / 256 ]
+[2025-06-29 16:30:05] [info] Registers per thread:       36
+[2025-06-29 16:30:05] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:30:05] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:30:05] [info] Kernel domain size [X/Y]:   [ 15000 / 7498 ]
+
+[2025-06-29 16:30:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:30:05] [info] Registers per thread:       38
+[2025-06-29 16:30:05] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:30:05] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:30:05] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:30:15]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 10.5 / 0.0 / 0.1 ] ≈ 10.6 ms
+
+[2025-06-29 16:30:16] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:30:16] [info] Total execution time:       10.623 sec
+[2025-06-29 16:30:16] [info] Step execution time:        10.623 ms
+[2025-06-29 16:30:16] [info] BLUPS:                      42.359
+
+=========================================================================================================
+A100 x4 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 4 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:8:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    18.491   60.761   15000  3750
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    18.491   60.761   15000  3750
+2     uc2n901.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    18.491   60.761   15000  3750
+3     uc2n901.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    18.491   60.761   15000  3750
+4     uc2n901.                                      4   0    0    0         79.252    13.448   65.804   15000  3750
+5     uc2n901.                                      5   0    0    0         79.252    13.868   65.384   15000  3750
+6     uc2n901.                                      6   0    0    0         79.252    11.349   67.903   15000  3750
+7     uc2n901.                                      7   0    0    0         79.252    17.229   62.022   15000  3750
+
+[2025-06-29 16:30:57] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:30:57] [info] Sub-domain size [X/Y/N]:    [ 15000 / 3750 / 1000 ] * 8
+[2025-06-29 16:30:57] [info] Halo cells per sub-domain:  0.05 %
+
+[2025-06-29 16:30:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 219610 / 256 ]
+[2025-06-29 16:30:57] [info] Registers per thread:       36
+[2025-06-29 16:30:57] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:30:57] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:30:57] [info] Kernel domain size [X/Y]:   [ 15000 / 3748 ]
+
+[2025-06-29 16:30:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:30:57] [info] Registers per thread:       38
+[2025-06-29 16:30:57] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:30:57] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:30:57] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:31:09]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 9.6 / 0.3 / 0.0 ] ≈ 12.8 ms
+
+[2025-06-29 16:31:09] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:31:09] [info] Total execution time:       12.706 sec
+[2025-06-29 16:31:09] [info] Step execution time:        12.706 ms
+[2025-06-29 16:31:09] [info] BLUPS:                      35.417
+
+
+=========================================================================================================
+A100 x4 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 4 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:8:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    16.388   62.864   15000  3750
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    14.708   64.544   15000  3750
+2     uc2n901.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    18.491   60.761   15000  3750
+3     uc2n901.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    17.649   61.602   15000  3750
+4     uc2n901.                                      4   0    0    0         79.252    18.489   60.763   15000  3750
+5     uc2n901.                                      5   0    0    0         79.252    18.491   60.761   15000  3750
+6     uc2n901.                                      6   0    0    0         79.252    18.489   60.763   15000  3750
+7     uc2n901.                                      7   0    0    0         79.252    18.491   60.761   15000  3750
+
+[2025-06-29 16:27:16] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:27:16] [info] Sub-domain size [X/Y/N]:    [ 15000 / 3750 / 1000 ] * 8
+[2025-06-29 16:27:16] [info] Halo cells per sub-domain:  0.05 %
+
+[2025-06-29 16:27:16] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 219610 / 256 ]
+[2025-06-29 16:27:16] [info] Registers per thread:       36
+[2025-06-29 16:27:16] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:27:16] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:27:16] [info] Kernel domain size [X/Y]:   [ 15000 / 3748 ]
+
+[2025-06-29 16:27:16] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:27:16] [info] Registers per thread:       38
+[2025-06-29 16:27:16] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:27:16] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:27:16] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:27:28]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 6.4 / 2.5 / 0.0 ] ≈ 12.7 ms
+
+[2025-06-29 16:27:29] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:27:29] [info] Total execution time:       12.700 sec
+[2025-06-29 16:27:29] [info] Step execution time:        12.700 ms
+[2025-06-29 16:27:29] [info] BLUPS:                      35.433
+
+
+=========================================================================================================
+A100 x4 / cuda_mpi_06 / FP64 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 4 GPUs 🧮
+=========================================================================================================
+mpirun --bind-to none --map-by ppr:16:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_06
+
+Parameters
+------------------------------
+N_X_TOTAL            = 15000
+N_Y_TOTAL            = 30000
+N_STEPS              = 1000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n901.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    18.557   60.695   15000  1875
+1     uc2n901.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    17.711   61.541   15000  1875
+2     uc2n901.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    19.402   59.849   15000  1875
+3     uc2n901.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    10.572   68.679   15000  1875
+4     uc2n901.                                      4   0    0    0         79.252    13.488   65.763   15000  1875
+5     uc2n901.                                      5   0    0    0         79.252    16.021   63.230   15000  1875
+6     uc2n901.                                      6   0    0    0         79.252    16.232   63.019   15000  1875
+7     uc2n901.                                      7   0    0    0         79.252    14.967   64.285   15000  1875
+8     uc2n901.                                      8   0    0    0         79.252    19.402   59.849   15000  1875
+9     uc2n901.                                      9   0    0    0         79.252    19.404   59.847   15000  1875
+10    uc2n901.                                      10  0    0    0         79.252    15.176   64.076   15000  1875
+11    uc2n901.                                      11  0    0    0         79.252    19.406   59.845   15000  1875
+12    uc2n901.                                      12  0    0    0         79.252    6.100    73.152   15000  1875
+13    uc2n901.                                      13  0    0    0         79.252    5.334    73.918   15000  1875
+14    uc2n901.                                      14  0    0    0         79.252    7.457    71.795   15000  1875
+15    uc2n901.                                      15  0    0    0         79.252    12.100   67.152   15000  1875
+
+[2025-06-29 16:27:45] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:27:45] [info] Sub-domain size [X/Y/N]:    [ 15000 / 1875 / 1000 ] * 16
+[2025-06-29 16:27:45] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-06-29 16:27:45] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 109747 / 256 ]
+[2025-06-29 16:27:45] [info] Registers per thread:       36
+[2025-06-29 16:27:45] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:27:45] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:27:45] [info] Kernel domain size [X/Y]:   [ 15000 / 1873 ]
+
+[2025-06-29 16:27:45] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-06-29 16:27:45] [info] Registers per thread:       38
+[2025-06-29 16:27:45] [info] Shared memory per block:    18432 bytes
+[2025-06-29 16:27:45] [info] Local memory per thread:    0 bytes
+[2025-06-29 16:27:45] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+[16:27:59]  99 %  (T-00:00:00) 990/1000 steps  |  avg [inner/outer/comm]:  [ 4.6 / 3.3 / 0.0 ] ≈ 14.1 ms
+
+[2025-06-29 16:27:59] [info] Simulation size [X/Y/N]:    [ 15000 / 30000 / 1000 ]
+[2025-06-29 16:27:59] [info] Total execution time:       14.011 sec
+[2025-06-29 16:27:59] [info] Step execution time:        14.011 ms
+[2025-06-29 16:27:59] [info] BLUPS:                      32.117
