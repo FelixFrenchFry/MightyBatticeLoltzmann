@@ -70,9 +70,9 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    15000,
-        .N_Y_TOTAL =    10000,
-        .N_STEPS =      10000,
+        .N_X_TOTAL =    30000,
+        .N_Y_TOTAL =    30000,
+        .N_STEPS =      5000,
 
         // parameters
         .omega =        1.7,
@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
-        if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
+        //if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
 
     if (RANK == 0)
@@ -469,6 +469,7 @@ int main(int argc, char *argv[])
         auto end_time = std::chrono::steady_clock::now();
         // TODO: add additional metrics that are interesting for this use case
         DisplayPerformanceStats(start_time, end_time, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+        SPDLOG_INFO("------------------------------------------------------\n\n\n");
     }
 
     // =========================================================================

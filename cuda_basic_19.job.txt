@@ -1,5 +1,5 @@
 #!/bin/bash -x
-#SBATCH --job-name=cuda_basic_19_Test
+#SBATCH --job-name=cuda_basic_19_test
 #SBATCH --partition=gpu_h100
 #SBATCH --gres=gpu:gpu:1
 #SBATCH --nodes=1

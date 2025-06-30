@@ -358,3 +358,31 @@ inline int DisplayProgressBar(
 
     return res;
 }
+
+inline void DisplayProgressBar_Interactive(
+    const uint32_t step,
+    const uint32_t N_STEPS)
+{
+    float progress = static_cast<float>(step) / N_STEPS;
+    uint32_t position = static_cast<int>(50 * progress);
+
+    std::cout << "\r[";
+
+    for (uint32_t i = 0; i < 50; i++)
+    {
+        if (i < position)       { std::cout << "="; }
+        else if (i == position) { std::cout << ">"; }
+        else                    { std::cout << " "; }
+    }
+
+    // RGB color for progress percentage
+    std::cout << "] \033[38;2;255;40;50m"
+              << std::fixed << std::setprecision(2)
+              << (progress * 100.0f) << " %"
+              << "\033[0m"
+              << " (step " << step << "/" << N_STEPS << ")";
+
+    std::cout.flush();
+
+    if (step == N_STEPS) { std::cout << std::endl; }
+}
