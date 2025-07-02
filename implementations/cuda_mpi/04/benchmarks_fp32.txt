@@ -2,9 +2,9 @@ A100 ///////////////////////////////////////////////////////////////////////////
 
 
 
-=========================================================================================================
+============================================================================================================
 A100 x1 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 1 rank on 1 GPU on 1 node 🧮
-=========================================================================================================
+============================================================================================================
 mpirun --bind-to none --map-by ppr:1:node -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
 
 Parameters
@@ -53,9 +53,9 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-01 02:21:00] [info] Step execution time:        43.762 ms
 [2025-07-01 02:21:00] [info] BLUPS:                      20.566
 
-=========================================================================================================
+============================================================================================================
 A100 x2 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 2 ranks on 2 GPUs on 2 nodes 🧮
-=========================================================================================================
+============================================================================================================
 mpirun --bind-to none --map-by ppr:1:node -np 2 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
 
 Parameters
@@ -105,9 +105,9 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-01 02:14:52] [info] Step execution time:        21.843 ms
 [2025-07-01 02:14:52] [info] BLUPS:                      41.203
 
-=========================================================================================================
+============================================================================================================
 A100 x4 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 4 ranks on 4 GPUs on 2 nodes 🧮
-=========================================================================================================
+============================================================================================================
 mpirun --bind-to none --map-by ppr:2:node -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
 
 Parameters
@@ -159,9 +159,9 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-01 02:15:55] [info] Step execution time:        11.129 ms
 [2025-07-01 02:15:55] [info] BLUPS:                      80.873
 
-=========================================================================================================
+============================================================================================================
 A100 x6 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 6 ranks on 6 GPUs on 2 nodes 🧮
-=========================================================================================================
+============================================================================================================
 mpirun --bind-to none --map-by ppr:3:node -np 6 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
 
 Parameters
@@ -215,9 +215,9 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-01 02:16:39] [info] Step execution time:        7.365 ms
 [2025-07-01 02:16:39] [info] BLUPS:                      122.197
 
-=========================================================================================================
+============================================================================================================
 A100 x8 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 8 GPUs on 2 nodes 🧮
-=========================================================================================================
+============================================================================================================
 mpirun --bind-to none --map-by ppr:4:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
 
 Parameters
@@ -274,6 +274,134 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-01 02:17:15] [info] BLUPS:                      162.762
 
 ============================================================================================================
+A100 x12 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 12 ranks on 12 GPUs on 3 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:3:node -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n909.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    6.347    72.905   30000  2500
+1     uc2n909.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    6.347    72.905   30000  2500
+2     uc2n909.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    6.347    72.905   30000  2500
+3     uc2n911.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    6.347    72.905   30000  2500
+4     uc2n911.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    6.347    72.905   30000  2500
+5     uc2n911.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    6.347    72.905   30000  2500
+6     uc2n912.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    6.347    72.905   30000  2500
+7     uc2n912.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    6.347    72.905   30000  2500
+8     uc2n912.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    6.347    72.905   30000  2500
+9     uc2n913.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    6.347    72.905   30000  2500
+10    uc2n913.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    6.347    72.905   30000  2500
+11    uc2n913.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    6.347    72.905   30000  2500
+
+[2025-07-02 04:20:08] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-02 04:20:08] [info] Sub-domain size [X/Y/N]:    [ 30000 / 2500 / 5000 ] * 12
+[2025-07-02 04:20:08] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-02 04:20:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 292735 / 256 ]
+[2025-07-02 04:20:08] [info] Registers per thread:       30
+[2025-07-02 04:20:08] [info] Shared memory per block:    9216 bytes
+[2025-07-02 04:20:08] [info] Local memory per thread:    0 bytes
+[2025-07-02 04:20:08] [info] Kernel domain size [X/Y]:   [ 30000 / 2498 ]
+
+[2025-07-02 04:20:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-02 04:20:08] [info] Registers per thread:       32
+[2025-07-02 04:20:08] [info] Shared memory per block:    9216 bytes
+[2025-07-02 04:20:08] [info] Local memory per thread:    0 bytes
+[2025-07-02 04:20:08] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-02 04:20:26] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-02 04:20:26] [info] Total execution time:       18.515 sec
+[2025-07-02 04:20:26] [info] Step execution time:        3.703 ms
+[2025-07-02 04:20:26] [info] BLUPS:                      243.051
+
+============================================================================================================
+A100 x16 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 16 GPUs on 4 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n909.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    4.870    74.381   30000  1875
+1     uc2n909.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    4.870    74.381   30000  1875
+2     uc2n909.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    4.870    74.381   30000  1875
+3     uc2n909.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    4.870    74.381   30000  1875
+4     uc2n911.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    4.870    74.381   30000  1875
+5     uc2n911.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    4.870    74.381   30000  1875
+6     uc2n911.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    4.870    74.381   30000  1875
+7     uc2n911.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    4.870    74.381   30000  1875
+8     uc2n912.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    4.870    74.381   30000  1875
+9     uc2n912.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    4.870    74.381   30000  1875
+10    uc2n912.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    4.870    74.381   30000  1875
+11    uc2n912.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    4.870    74.381   30000  1875
+12    uc2n913.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    4.870    74.381   30000  1875
+13    uc2n913.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    4.870    74.381   30000  1875
+14    uc2n913.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    4.870    74.381   30000  1875
+15    uc2n913.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    4.870    74.381   30000  1875
+
+[2025-07-02 04:20:35] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-02 04:20:35] [info] Sub-domain size [X/Y/N]:    [ 30000 / 1875 / 5000 ] * 16
+[2025-07-02 04:20:35] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-07-02 04:20:35] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 219493 / 256 ]
+[2025-07-02 04:20:35] [info] Registers per thread:       30
+[2025-07-02 04:20:35] [info] Shared memory per block:    9216 bytes
+[2025-07-02 04:20:35] [info] Local memory per thread:    0 bytes
+[2025-07-02 04:20:35] [info] Kernel domain size [X/Y]:   [ 30000 / 1873 ]
+
+[2025-07-02 04:20:35] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-02 04:20:35] [info] Registers per thread:       32
+[2025-07-02 04:20:35] [info] Shared memory per block:    9216 bytes
+[2025-07-02 04:20:35] [info] Local memory per thread:    0 bytes
+[2025-07-02 04:20:35] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-02 04:20:49] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-02 04:20:49] [info] Total execution time:       13.936 sec
+[2025-07-02 04:20:49] [info] Step execution time:        2.787 ms
+[2025-07-02 04:20:49] [info] BLUPS:                      322.910
+
+============================================================================================================
 A100 scaling results
 ============================================================================================================
 A100 x1  ->    20.5 BLUPS
@@ -281,6 +409,8 @@ A100 x2  ->    41.2 BLUPS out of ~  41.0   (100.48 %)
 A100 x4  ->    80.8 BLUPS out of ~  82.0   (98.53 %)
 A100 x6  ->   122.1 BLUPS out of ~ 123.0   (99.26 %)
 A100 x8  ->   162.7 BLUPS out of ~ 164.0   (99.20 %)
+A100 x12 ->   243.0 BLUPS out of ~ 246.0   (98.78 %)
+A100 x16 ->   322.9 BLUPS out of ~ 328.0   (98.44 %)
 
 
 
