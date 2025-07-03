@@ -339,11 +339,17 @@ inline int DisplayProgressBar(
         if (not (last_percent == 0 || last_percent == 100))
         {
             SPDLOG_INFO("\033[38;2;255;40;50m{:>3} %\033[0m  "
+                        "(T-{:02}:{:02}:{:02}) {}/{} steps",
+                        last_percent, eta_h, eta_m, eta_s, step, N_STEPS);
+
+            /*
+            SPDLOG_INFO("\033[38;2;255;40;50m{:>3} %\033[0m  "
                         "(T-{:02}:{:02}:{:02}) "
                         "{}/{} steps  |  avg [inner/outer/comm]:  "
                         "[ {:.1f} / {:.1f} / {:.1f} ] ≈ {:.1f} ms",
                         last_percent, eta_h, eta_m, eta_s, step, N_STEPS,
                         inner_time, outer_time, comm_time, step_time);
+                        */
         }
         else
         {
