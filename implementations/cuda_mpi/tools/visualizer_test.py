@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 # simulation config
-step =  50000
-N_X =   1000
-N_Y =   1000
+step =  25000
+N_X =   10000
+N_Y =   10000
 
 # file path config
-versionDirName =    "01"
-subDirName =        "C"
+versionDirName =    "04"
+subDirName =        "E"
 dataType =          "velocity_x"
 
 # path to raw .bin export:
@@ -24,7 +24,7 @@ def get_file_path(data: str, step: int) -> str:
 
 # output dir
 outputDirName = "output"
-outputDir = f"{outputDirName}/{versionDirName}/test_2"
+outputDir = f"{outputDirName}/{versionDirName}/test"
 os.makedirs(outputDir, exist_ok=True)
 
 # load and reshape data
@@ -35,7 +35,7 @@ print(f"✅ Loaded {bin_path} | shape={A.shape} | min={A.min()} max={A.max()}")
 
 # save plot
 plt.figure(figsize=(8, 6))
-plt.imshow(A, cmap="inferno", origin="lower", aspect="auto")
+plt.imshow(A, cmap="jet", origin="lower", aspect="auto")
 plt.colorbar(label=dataType)
 plt.title(f"{dataType} at step {step}")
 plt.xlabel("X")

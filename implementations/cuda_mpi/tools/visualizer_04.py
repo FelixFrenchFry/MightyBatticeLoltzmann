@@ -18,7 +18,7 @@ u_lid = 0.1
 # step config
 step_start =    1
 step_end =      25_000_000
-step_stride =   25_000
+step_stride =   250_000
 steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
