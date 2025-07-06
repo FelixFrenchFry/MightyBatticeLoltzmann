@@ -1,0 +1,23 @@
+N_X_TOTAL 20000
+N_Y_TOTAL 20000
+N_STEPS 40000000
+
+omega 1.2
+rho_0 1.0
+u_max 0.1
+u_lid 0.1
+n_sin 2.0
+
+export_interval 50000
+export_name F
+export_num 04
+
+export_rho 0
+export_u_x 1
+export_u_y 1
+export_u_mag 0
+
+shear_wave_decay 0
+lid_driven_cavity 1
+
+branchless 0
