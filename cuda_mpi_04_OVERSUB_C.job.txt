@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=8
-#SBATCH --time=00:7:00
+#SBATCH --time=00:17:00
 #SBATCH --mem=256gb
 #SBATCH --output=job_%j.out
 #SBATCH --error=job_%j.err
@@ -20,25 +20,26 @@ export CUDA_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64
 # build it
 cd $HOME/MightyBatticeLoltzmann
 meson setup buildDir --wipe --buildtype=release
+ninja -C buildDir implementations/cuda_mpi/cuda_mpi_03
 ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
 
 # launch it with different configurations (oversubscribed)
-mpirun --bind-to none --map-by ppr:4:node -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:8:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:12:node -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:16:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:20:node -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:24:node -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:28:node -np 28 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 28 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:32:node -np 32 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 32 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:36:node -np 36 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 36 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
-mpirun --bind-to none --map-by ppr:40:node -np 40 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+mpirun --bind-to none -np 40 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
