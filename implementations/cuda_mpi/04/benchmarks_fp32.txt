@@ -511,6 +511,84 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-02 04:20:49] [info] Step execution time:        2.787 ms
 [2025-07-02 04:20:49] [info] BLUPS:                      322.910
 
+============================================================================================================
+A100 x20 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 20 ranks on 20 GPUs on 5 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
+
+============================================================================================================
+A100 x24 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 24 ranks on 24 GPUs on 6 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n902.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+1     uc2n902.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+2     uc2n902.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+3     uc2n902.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+4     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+5     uc2n903.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+6     uc2n903.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+7     uc2n903.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+8     uc2n904.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+9     uc2n904.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+10    uc2n904.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+11    uc2n904.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+12    uc2n909.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+13    uc2n909.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+14    uc2n909.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+15    uc2n909.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+16    uc2n910.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+17    uc2n910.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+18    uc2n910.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+19    uc2n910.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+20    uc2n913.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    3.394    75.858   30000  1250
+21    uc2n913.   NVIDIA A100 80GB PCIe              1   80   108  167936    79.252    3.394    75.858   30000  1250
+22    uc2n913.   NVIDIA A100 80GB PCIe              2   80   108  167936    79.252    3.394    75.858   30000  1250
+23    uc2n913.   NVIDIA A100 80GB PCIe              3   80   108  167936    79.252    3.394    75.858   30000  1250
+
+[2025-07-09 21:18:51] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 21:18:51] [info] Sub-domain size [X/Y/N]:    [ 30000 / 1250 / 5000 ] * 24
+[2025-07-09 21:18:51] [info] Halo cells per sub-domain:  0.16 %
+
+[2025-07-09 21:18:51] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 146250 / 256 ]
+[2025-07-09 21:18:51] [info] Registers per thread:       30
+[2025-07-09 21:18:51] [info] Shared memory per block:    9216 bytes
+[2025-07-09 21:18:51] [info] Local memory per thread:    0 bytes
+[2025-07-09 21:18:51] [info] Kernel domain size [X/Y]:   [ 30000 / 1248 ]
+
+[2025-07-09 21:18:51] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 21:18:51] [info] Registers per thread:       32
+[2025-07-09 21:18:51] [info] Shared memory per block:    9216 bytes
+[2025-07-09 21:18:51] [info] Local memory per thread:    0 bytes
+[2025-07-09 21:18:51] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 21:19:00] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 21:19:00] [info] Total execution time:       9.492 sec
+[2025-07-09 21:19:00] [info] Step execution time:        1.898 ms
+[2025-07-09 21:19:00] [info] BLUPS:                      474.084
 
 
 H100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1545,6 +1623,7 @@ A100 x6  ->   122.1 BLUPS out of ~ 123.0   (99.26 %)
 A100 x8  ->   162.7 BLUPS out of ~ 164.0   (99.20 %)
 A100 x12 ->   243.0 BLUPS out of ~ 246.0   (98.78 %)
 A100 x16 ->   322.9 BLUPS out of ~ 328.0   (98.44 %)
+A100 x24 ->   474.0 BLUPS out of
 
 ============================================================================================================
 H100 scaling results (on X=30000 * Y=30000)
