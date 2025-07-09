@@ -10,23 +10,23 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 # TODO: use quiver plot or stream plot?
 # ----- VISUALIZATION OF THE VELOCITY VECTOR STREAMLINES -----
 # simulation config
-N_X =   10000
-N_Y =   10000
-omega = 1.2
+N_X =   1000
+N_Y =   1000
+omega = 1.7
 u_lid = 0.1
 
 # step config
 step_start =    1
-step_end =      25_000_000
-step_stride =   250_000
+step_end =      200_000
+step_stride =   50_000
 steps = [1] + list(range(step_stride, step_end + 1, step_stride))
 
 # output path config
 dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
-versionDirName =    "04"
-subDirName =        "E"
+versionDirName =    "06"
+subDirName =        "Y"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:

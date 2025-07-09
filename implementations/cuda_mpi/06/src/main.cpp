@@ -11,8 +11,7 @@
 // - separate kernels for inner/outer cells
 // - optional input.txt file for simulation parameters passed via command line
 // - overlap of MPI communication and compute kernel for inner cells
-// - separate measurements of communication and computation runtimes
-// - removed branchless kernel version and implemented other code simplifications
+// - removed branchless kernel version and made other code simplifications
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -28,8 +27,7 @@
 
 int main(int argc, char *argv[])
 {
-    // configure spdlog to display error messages like this:
-    // [year-month-day hour:min:sec] [type] [message]
+    // logging message format: [year-month-day hour:min:sec] [type] [message]
     spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
 
     // =========================================================================
@@ -37,7 +35,7 @@ int main(int argc, char *argv[])
     // =========================================================================
     MPI_Init(&argc, &argv);
 
-    // get the total number of processes and the rank of this process
+    // get total number of processes and the rank of this process
     int RANK_SIZE, RANK;
     MPI_Comm_size(MPI_COMM_WORLD, &RANK_SIZE);
     MPI_Comm_rank(MPI_COMM_WORLD, &RANK);
@@ -59,7 +57,6 @@ int main(int argc, char *argv[])
         SPDLOG_ERROR("Local rank {} wants GPU {}, but only {} GPUs found on the node",
             RANK_LOCAL, RANK_LOCAL, N_GPUS_PER_NODE);
 
-        // stops all processes
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
@@ -72,9 +69,9 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    15000,
-        .N_Y_TOTAL =    10000,
-        .N_STEPS =      10000,
+        .N_X_TOTAL =    1'000,
+        .N_Y_TOTAL =    1'000,
+        .N_STEPS =      200'000,
 
         // parameters
         .omega =        1.7,
@@ -84,12 +81,12 @@ int main(int argc, char *argv[])
         .n_sin =        2.0,
 
         // export
-        .export_interval =  5000,
-        .export_name =      "C",
-        .export_num =       "04",
+        .export_interval =  50'000,
+        .export_name =      "B",
+        .export_num =       "06",
         .export_rho =       false,
-        .export_u_x =       false,
-        .export_u_y =       false,
+        .export_u_x =       true,
+        .export_u_y =       true,
         .export_u_mag =     false,
 
         // mode
@@ -138,11 +135,10 @@ int main(int argc, char *argv[])
 
     MPI_Bcast(&parameters, sizeof(SimulationParameters), MPI_BYTE, 0, MPI_COMM_WORLD);
 
-    // simulation domain width, height, and number of cells before decomposition
+    // simulation dimension before domain decomposition
     const uint32_t N_X_TOTAL =      parameters.N_X_TOTAL;
     const uint32_t N_Y_TOTAL =      parameters.N_Y_TOTAL;
     const uint32_t N_STEPS =        parameters.N_STEPS;
-    const uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max shear wave velocity, lid velocity,
     // number of sine periods, wavenumber (frequency)
@@ -166,11 +162,8 @@ int main(int argc, char *argv[])
     const bool shear_wave_decay =       parameters.shear_wave_decay;
     const bool lid_driven_cavity =      parameters.lid_driven_cavity;
 
-    // misc stuff
-    const bool branchless =             parameters.branchless;
-
     // =========================================================================
-    // domain decomposition
+    // domain decomposition (r = RANK_SIZE)
     // =========================================================================
     // rank 0: owns rows        0   to    (Y/r) - 1
     // rank 1: owns rows    (Y/r)   to   (2Y/r) - 1
@@ -179,10 +172,9 @@ int main(int argc, char *argv[])
     const uint32_t N_X =            N_X_TOTAL;
     const uint32_t N_Y =            N_Y_TOTAL / RANK_SIZE;
     const uint32_t Y_START =        N_Y * RANK;
-    const uint32_t Y_END =          Y_START + N_Y - 1;
     const uint32_t N_CELLS =        N_X * N_Y;
-    const uint32_t N_CELLS_INNER =  (N_Y - 2) * N_X;
-    const uint32_t N_CELLS_OUTER =  2 * N_X;
+    const uint32_t N_CELLS_INNER =  N_X * (N_Y - 2);
+    const uint32_t N_CELLS_OUTER =  N_X * 2;
     const int RANK_ABOVE =          (RANK + 1) % RANK_SIZE;             // periodic
     const int RANK_BELOW =          (RANK - 1 + RANK_SIZE) % RANK_SIZE; // periodic
     const bool IS_TOP_RANK =        RANK == RANK_SIZE - 1;
@@ -195,7 +187,6 @@ int main(int argc, char *argv[])
             SPDLOG_ERROR("Total Y must be divisible by number of processes ({} % {} != 0)",
                 N_Y_TOTAL, RANK_SIZE);
 
-            // stops all processes
             MPI_Abort(MPI_COMM_WORLD, 1);
         }
     }
@@ -204,17 +195,17 @@ int main(int argc, char *argv[])
     // data structures and CUDA stuff
     // =========================================================================
     // host-side arrays of 9 pointers to device-side df arrays
-    // df = [ pointer -> GPU array for dir 0, ..., pointer -> GPU array for dir 8 ]
-    FP* df[9];
-    FP* df_next[9];
+    // h_df = [ pointer -> dvc array for dir 0, ..., pointer -> dvc array for dir 8 ]
+    FP* h_df[9];
+    FP* h_df_new[9];
 
     // for each dir i, allocate 1D array of size N_CELLS on the device
-    // and store a pointer to it in df[i] / df_next[i]
+    // and store pointer to it
     for (uint32_t i = 0; i < 9; i++)
     {
         // (regular df arrays)
-        cudaMalloc(&df[i], N_CELLS * sizeof(FP));
-        cudaMalloc(&df_next[i], N_CELLS * sizeof(FP));
+        cudaMalloc(&h_df[i], N_CELLS * sizeof(FP));
+        cudaMalloc(&h_df_new[i], N_CELLS * sizeof(FP));
     }
 
     // domain decomposition-specific df arrays for the halo cells
@@ -223,58 +214,56 @@ int main(int argc, char *argv[])
     // | 3 0 1 |
     // | 7 4 8 |
     // ---------
-    FP* df_halo_top[3]; // directions 2, 5, 6 map to indices 0, 1, 2 in the array
-    FP* df_halo_bottom[3]; // directions 4, 7, 8 map to indices 0, 1, 2 in the array
+    FP* h_df_halo_top[3]; // dirs 2, 5, 6 map to indices 0, 1, 2 in the array
+    FP* h_df_halo_bot[3]; // dirs 4, 7, 8 map to indices 0, 1, 2 in the array
 
-    // for each select dir i, allocate 1D array of size N_X on the device
-    // and store a pointer to it in df_halo_top[i] / df_halo_bottom[i]
+    // for each halo-relevant dir i, allocate 1D array of size N_X on the device
+    // and store pointer to it
     for (uint32_t i = 0; i < 3; i++)
     {
         // (halo df arrays)
-        cudaMalloc(&df_halo_top[i], N_X * sizeof(FP));
-        cudaMalloc(&df_halo_bottom[i], N_X * sizeof(FP));
+        cudaMalloc(&h_df_halo_top[i], N_X * sizeof(FP));
+        cudaMalloc(&h_df_halo_bot[i], N_X * sizeof(FP));
     }
 
     // device-side arrays of 9 (3 for halos) pointers to device-side df arrays
     // (same as the df[9] pointer array, but now located on the device and used
     // as a device-side handle for the SoA data used in compute kernels)
-    FP** dvc_df;
-    FP** dvc_df_next;
-    cudaMalloc(&dvc_df, 9 * sizeof(FP*));
-    cudaMalloc(&dvc_df_next, 9 * sizeof(FP*));
+    FP** df;
+    FP** df_new;
+    cudaMalloc(&df, 9 * sizeof(FP*));
+    cudaMalloc(&df_new, 9 * sizeof(FP*));
     // (halo df arrays)
-    FP** dvc_df_halo_top;
-    FP** dvc_df_halo_bottom;
-    cudaMalloc(&dvc_df_halo_top, 3 * sizeof(FP*));
-    cudaMalloc(&dvc_df_halo_bottom, 3 * sizeof(FP*));
+    FP** df_halo_top;
+    FP** df_halo_bot;
+    cudaMalloc(&df_halo_top, 3 * sizeof(FP*));
+    cudaMalloc(&df_halo_bot, 3 * sizeof(FP*));
 
     // copy the contents of the host-side handles to the device-side handles
-    // (because CUDA does not support directly passing an array of pointers)
-    cudaMemcpy(dvc_df, df, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_next, df_next, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
+    // (because CUDA does not support directly passing an array of pointers?)
+    cudaMemcpy(df, h_df, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(df_new, h_df_new, 9 * sizeof(FP*), cudaMemcpyHostToDevice);
     // (halo df arrays)
-    cudaMemcpy(dvc_df_halo_top, df_halo_top, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_halo_bottom, df_halo_bottom, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(df_halo_top, h_df_halo_top, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
+    cudaMemcpy(df_halo_bot, h_df_halo_bot, 3 * sizeof(FP*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
-    FP* dvc_rho;
-    FP* dvc_u_x;
-    FP* dvc_u_y;
-
-    // for each array, allocate memory of size N_CELLS on the device
-    cudaMalloc(&dvc_rho, N_CELLS * sizeof(FP));
-    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(FP));
-    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(FP));
+    FP* rho;
+    FP* u_x;
+    FP* u_y;
+    cudaMalloc(&rho, N_CELLS * sizeof(FP));
+    cudaMalloc(&u_x, N_CELLS * sizeof(FP));
+    cudaMalloc(&u_y, N_CELLS * sizeof(FP));
 
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        // specify detailed logging for the error message
+        // use detailed logging format for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
         SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
-        // return to basic logging
+        // return to basic format
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 
@@ -283,11 +272,11 @@ int main(int argc, char *argv[])
     // =========================================================================
     // collect buffers and other data for export context
     SimulationExportContext context;
-    context.dvc_df = dvc_df;
-    context.dvc_df_next = dvc_df_next;
-    context.dvc_rho = dvc_rho;
-    context.dvc_u_x = dvc_u_x;
-    context.dvc_u_y = dvc_u_y;
+    context.dvc_df = df;
+    context.dvc_df_next = df_new;
+    context.dvc_rho = rho;
+    context.dvc_u_x = u_x;
+    context.dvc_u_y = u_y;
     context.COMM = MPI_COMM_WORLD;
     context.N_X = N_X;
     context.N_Y = N_Y;
@@ -297,7 +286,7 @@ int main(int argc, char *argv[])
     context.N_CELLS = N_CELLS;
     context.RANK = RANK;
 
-    // device and memory usage infos
+    // get device and memory usage infos
     GPUInfo myInfo = GetDeviceInfos(RANK, RANK_LOCAL);
     std::vector<GPUInfo> allInfo;
     if (RANK == 0) { allInfo.resize(RANK_SIZE); }
@@ -307,36 +296,26 @@ int main(int argc, char *argv[])
                MPI_BYTE, 0, MPI_COMM_WORLD);
 
     DisplayDeviceInfos(allInfo, N_X, N_Y, RANK);
-    // TODO: add additional metrics that are interesting for this use case
     DisplayDomainDecompositionInfo(N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, RANK_SIZE, RANK);
 
     if (shear_wave_decay)
     {
-        Launch_ApplyInitialCondition_ShearWaveDecay_K(dvc_df, dvc_rho, dvc_u_x,
-            dvc_u_y, rho_0,u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
+        Launch_ApplyInitialCondition_ShearWaveDecay_K(
+            df, rho, u_x, u_y, rho_0, u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
     }
     if (lid_driven_cavity)
     {
-        Launch_ApplyInitialCondition_LidDrivenCavity_K(dvc_df, dvc_rho, dvc_u_x,
-            dvc_u_y, rho_0, N_CELLS);
+        Launch_ApplyInitialCondition_LidDrivenCavity_K(
+            df, rho, u_x, u_y, rho_0, N_CELLS);
     }
 
     // =========================================================================
     // main simulation loop
     // =========================================================================
-    // execution time measurement accumulators and temp variables
     auto start_time = std::chrono::steady_clock::now();
-    double acc_total_step_time    = 0.0;    // in ms
-    double acc_communication_time = 0.0;    // in ms
-    double acc_compute_time_inner = 0.0;    // in ms
-    double acc_compute_time_outer = 0.0;    // in ms
-    float compute_time_inner = 0.0f;        // in ms
-    float compute_time_outer = 0.0f;        // in ms
 
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
-        auto start_total_step_time = std::chrono::steady_clock::now();
-
         // decide which data needs global write-backs due to exports
         bool write_rho = false;
         bool write_u_x = false;
@@ -349,47 +328,40 @@ int main(int argc, char *argv[])
         MPI_Request max_requests[4 * 3];
         int req_idx = 0;
 
-        // direction mapping for the halo arrays
+        // dir mapping for the halo arrays
         // ---------
         // | 6 2 5 |
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
-        constexpr int dir_map_halo_top[3] =     { 2, 5, 6 };
-        constexpr int dir_map_halo_bottom[3] =  { 4, 7, 8 };
+        constexpr int dir_map_halo_top[3] = { 2, 5, 6 };
+        constexpr int dir_map_halo_bot[3] = { 4, 7, 8 };
 
         // async MPI sends/receive halo exchange, parallel to inner cell compute
         // (no exchange between top and bottom rank for lid driven cavity,
-        // but full exchange for shear wave decay)
+        // BUT full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
             if (step == 1) { break; }
 
-            int dir_top = dir_map_halo_top[i];          // {2, 5, 6}
-            int dir_bottom = dir_map_halo_bottom[i];    // {4, 7, 8}
+            int dir_top = dir_map_halo_top[i]; // {2, 5, 6}
+            int dir_bot = dir_map_halo_bot[i]; // {4, 7, 8}
 
-            // for diagonal directions that bounce back from walls, send/receive
-            // only N_X - 1 elements and use offsets for the array pointers
+            // for diagonal dirs, send/receive only N_X - 1 elements due to one
+            // bounce-back in the corners and use offsets for the array pointers
             int offset_top = 0;
-            int offset_bottom = 0;
+            int offset_bot = 0;
             int count = N_X;
 
-            // transfer of top halos in dir 5, and bottom halos in dir 7
-            if (lid_driven_cavity && i == 1)
+            if (lid_driven_cavity && (i == 1 || i == 2))
             {
-                // TODO: should offsets be the opposite?
-                offset_top = 1;
-                offset_bottom = 0;
                 count -= 1;
-            }
 
-            // transfer of top halos in dir 6, and bottom halos in dir 8
-            if (lid_driven_cavity && i == 2)
-            {
-                // TODO: should offsets be the opposite?
-                offset_top = 0;
-                offset_bottom = 1;
-                count -= 1;
+                // transfer of top halos in dir 5, and bottom halos in dir 7
+                i == 1 ? offset_top = 1 : 0;
+
+                // transfer of top halos in dir 6, and bottom halos in dir 8
+                i == 2 ? offset_bot = 1 : 0;
             }
 
             // for each of the 3 top directions, do these halo exchanges:
@@ -399,9 +371,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the rop rank does not do this
                 MPI_Isend(
-                    df_halo_top[i] + offset_top,
-                    count, FP_MPI_TYPE,
-                    RANK_ABOVE, dir_top,
+                    h_df_halo_top[i] + offset_top, count,
+                    FP_MPI_TYPE, RANK_ABOVE, dir_top,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
 
@@ -411,9 +382,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the bottom rank does not do this
                 MPI_Irecv(
-                   df_next[dir_top] + offset_top,
-                   count, FP_MPI_TYPE,
-                   RANK_BELOW, dir_top,
+                   h_df_new[dir_top] + offset_top, count,
+                   FP_MPI_TYPE, RANK_BELOW, dir_top,
                    MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
 
@@ -424,9 +394,8 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the bottom rank does not do this
                 MPI_Isend(
-                    df_halo_bottom[i] + offset_bottom,
-                    count, FP_MPI_TYPE,
-                    RANK_BELOW, dir_bottom + 3,
+                    h_df_halo_bot[i] + offset_bot, count,
+                    FP_MPI_TYPE, RANK_BELOW, dir_bot + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
 
@@ -436,88 +405,42 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the rop rank does not do this
                 MPI_Irecv(
-                    df_next[dir_bottom] + (N_Y - 1) * N_X + offset_bottom,
-                    count, FP_MPI_TYPE,
-                    RANK_ABOVE, dir_bottom + 3,
+                    h_df_new[dir_bot] + (N_Y - 1) * N_X + offset_bot, count,
+                    FP_MPI_TYPE, RANK_ABOVE, dir_bot + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
         }
-
-        // start execution time measurement of compute kernel for inner cells
-        cudaEvent_t start_inner, end_inner;
-        cudaEventCreate(&start_inner);
-        cudaEventCreate(&end_inner);
-        cudaEventRecord(start_inner);
 
         // only process inner cells that don't stream to halo arrays
         // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
         // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Inner(
-            dvc_df, dvc_df_next, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
+            df, df_new, rho, u_x, u_y, omega, N_X, N_Y,
             N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_CELLS_INNER, RANK, shear_wave_decay,
             lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
-        // finish measurement and add to accumulator
-        cudaEventRecord(end_inner);
-        cudaEventSynchronize(end_inner);
-        cudaEventElapsedTime(&compute_time_inner, start_inner, end_inner);
-        acc_compute_time_inner += compute_time_inner;
-        compute_time_inner = 0.0f;
-
         // wait for async MPI halo exchanges to finish, before outer cells can start compute
-        double comm_start = MPI_Wtime();
-        if (step != 1) { MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE); }
-        double comm_end = MPI_Wtime();
-        acc_communication_time += (comm_end - comm_start) * 1000.0;
-
-        // start execution time measurement of compute kernel for outer cells
-        cudaEvent_t start_outer, end_outer;
-        cudaEventCreate(&start_outer);
-        cudaEventCreate(&end_outer);
-        cudaEventRecord(start_outer);
+        MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
         // only process outer cells that stream to halo arrays for 3 out of 9 directions
         // shear wave decay with pbc -> [0, N_Y - 1] * N_X
         // lid driven cavity with bbbc -> [0] * N_X or [0, N_Y - 1] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Outer(
-            dvc_df, dvc_df_next, dvc_df_halo_top, dvc_df_halo_bottom,
-            dvc_rho, dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
+            df, df_new, df_halo_top, df_halo_bot,
+            rho, u_x, u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL,
             N_Y_TOTAL, Y_START, N_STEPS, N_CELLS_OUTER, RANK, shear_wave_decay,
-            lid_driven_cavity, branchless, write_rho, write_u_x, write_u_y);
-
-        // finish measurement and add to accumulator
-        cudaEventRecord(end_outer);
-        cudaEventSynchronize(end_outer);
-        cudaEventElapsedTime(&compute_time_outer, start_outer, end_outer);
-        acc_compute_time_outer += compute_time_outer;
-        compute_time_outer = 0.0f;
+            lid_driven_cavity, write_rho, write_u_x, write_u_y);
 
         // swap host pointers to the df arrays used by the MPI communication
-        if (step != 1) { std::swap(df, df_next); }
+        if (step != 1) { std::swap(h_df, h_df_new); }
         // swap device pointers to the df arrays used by the compute kernels
-        std::swap(dvc_df, dvc_df_next);
+        std::swap(df, df_new);
 
         // export actual data from the arrays that have been written back to
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
-        if (RANK == 0)
-        {
-            auto end_total_step_time = std::chrono::steady_clock::now();
-            acc_total_step_time += std::chrono::duration_cast<std::chrono::microseconds>(
-                end_total_step_time - start_total_step_time).count() / 1000.0;
-
-            if (DisplayProgressBar(step, N_STEPS, true,
-                acc_total_step_time, acc_communication_time,
-                acc_compute_time_inner, acc_compute_time_outer))
-            {
-                // reset accumulators if progress was printed
-                acc_total_step_time    = 0.0;
-                acc_communication_time = 0.0;
-                acc_compute_time_inner = 0.0;
-                acc_compute_time_outer = 0.0;
-            }
-        }
+        if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
 
     if (RANK == 0)
@@ -525,6 +448,7 @@ int main(int argc, char *argv[])
         auto end_time = std::chrono::steady_clock::now();
         // TODO: add additional metrics that are interesting for this use case
         DisplayPerformanceStats(start_time, end_time, N_X_TOTAL, N_Y_TOTAL, N_STEPS);
+        SPDLOG_INFO("------------------------------------------------------\n\n\n");
     }
 
     // =========================================================================
@@ -532,19 +456,19 @@ int main(int argc, char *argv[])
     // =========================================================================
     for (uint32_t i = 0; i < 9; i++)
     {
-        cudaFree(df[i]);
-        cudaFree(df_next[i]);
+        cudaFree(h_df[i]);
+        cudaFree(h_df_new[i]);
     }
     for (uint32_t i = 0; i < 3; i++)
     {
-        cudaFree(df_halo_top[i]);
-        cudaFree(df_halo_bottom[i]);
+        cudaFree(h_df_halo_top[i]);
+        cudaFree(h_df_halo_bot[i]);
     }
-    cudaFree(dvc_df);
-    cudaFree(dvc_df_next);
-    cudaFree(dvc_rho);
-    cudaFree(dvc_u_x);
-    cudaFree(dvc_u_y);
+    cudaFree(df);
+    cudaFree(df_new);
+    cudaFree(rho);
+    cudaFree(u_x);
+    cudaFree(u_y);
 
     MPI_Finalize();
 
