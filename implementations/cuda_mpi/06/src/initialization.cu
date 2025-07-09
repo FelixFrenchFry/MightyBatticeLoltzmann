@@ -8,9 +8,9 @@
 // load velocity direction and weight vectors into constant memory
 // (fast, global, read-only lookup table identical for all threads)
 // TODO: figure out how to safely use same constant memory across all .cu files
-__constant__ int dvc_ik_c_x[9];
-__constant__ int dvc_ik_c_y[9];
-__constant__ FP dvc_ik_w[9];
+__constant__ int con_ik_c_x[9];
+__constant__ int con_ik_c_y[9];
+__constant__ FP con_ik_w[9];
 bool constantsInitialized_IK = false;
 
 void InitializeConstants_IK()
@@ -34,15 +34,15 @@ void InitializeConstants_IK()
                 1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
 
     // copy them into constant memory on the device
-    cudaMemcpyToSymbol(dvc_ik_c_x, c_x, 9 * sizeof(int));
-    cudaMemcpyToSymbol(dvc_ik_c_y, c_y, 9 * sizeof(int));
-    cudaMemcpyToSymbol(dvc_ik_w, w, 9 * sizeof(FP));
+    cudaMemcpyToSymbol(con_ik_c_x, c_x, 9 * sizeof(int));
+    cudaMemcpyToSymbol(con_ik_c_y, c_y, 9 * sizeof(int));
+    cudaMemcpyToSymbol(con_ik_w, w, 9 * sizeof(FP));
 
     cudaDeviceSynchronize();
     constantsInitialized_IK = true;
 }
 
-template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
+template <uint32_t N_BLOCKSIZE>
 __global__ void ApplyInitialCondition_ShearWaveDecay_K(
     FP* const* __restrict__ dvc_df,
     FP* __restrict__ dvc_rho,
@@ -70,13 +70,14 @@ __global__ void ApplyInitialCondition_ShearWaveDecay_K(
     dvc_u_x[idx] = u_x_val;
     dvc_u_y[idx] = FP_CONST(0.0);
 
-    for (uint32_t i = 0; i < N_DIR; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
-        FP cu = dvc_ik_c_x[i] * u_x_val + dvc_ik_c_y[i] * FP_CONST(0.0);
-        FP f_eq_i = dvc_ik_w[i] * rho_0
-                  * (FP_CONST(1.0) + FP_CONST(3.0) * cu
-                  + FP_CONST(4.5) * cu * cu - FP_CONST(1.5) * u_sq);
+        FP cu = con_ik_c_x[i] * u_x_val + con_ik_c_y[i] * FP_CONST(0.0);
+        FP f_eq_i = con_ik_w[i] * rho_0 * (FP_CONST(1.0)
+                  + FP_CONST(3.0) * cu
+                  + FP_CONST(4.5) * cu * cu
+                  - FP_CONST(1.5) * u_sq);
 
         // set initial df values
         dvc_df[i][idx] = f_eq_i;
@@ -99,7 +100,7 @@ void Launch_ApplyInitialCondition_ShearWaveDecay_K(
 
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    ApplyInitialCondition_ShearWaveDecay_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+    ApplyInitialCondition_ShearWaveDecay_K<N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
 
     // wait for GPU to finish operations
@@ -108,17 +109,17 @@ void Launch_ApplyInitialCondition_ShearWaveDecay_K(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        // specify detailed logging for the error message
+        // use detailed logging format for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
         SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
-        // return to basic logging
+        // return to basic format
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 }
 
-template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
+template <uint32_t N_BLOCKSIZE>
 __global__ void ApplyInitialCondition_LidDrivenCavity_K(
     FP* const* __restrict__ dvc_df,
     FP* __restrict__ dvc_rho,
@@ -135,10 +136,10 @@ __global__ void ApplyInitialCondition_LidDrivenCavity_K(
     dvc_u_x[idx] = FP_CONST(0.0);
     dvc_u_y[idx] = FP_CONST(0.0);
 
-    for (uint32_t i = 0; i < N_DIR; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         // set initial df values
-        dvc_df[i][idx] = dvc_ik_w[i] * rho_0;
+        dvc_df[i][idx] = con_ik_w[i] * rho_0;
     }
 }
 
@@ -154,7 +155,7 @@ void Launch_ApplyInitialCondition_LidDrivenCavity_K(
 
     const uint32_t N_GRIDSIZE = (N_CELLS + N_BLOCKSIZE - 1) / N_BLOCKSIZE;
 
-    ApplyInitialCondition_LidDrivenCavity_K<N_DIR, N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
+    ApplyInitialCondition_LidDrivenCavity_K<N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
         dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, N_CELLS);
 
     // wait for GPU to finish operations
@@ -163,12 +164,12 @@ void Launch_ApplyInitialCondition_LidDrivenCavity_K(
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess)
     {
-        // specify detailed logging for the error message
+        // use detailed logging format for the error message
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%s:%#] [%^%l%$] %v");
 
         SPDLOG_ERROR("CUDA error: {}\n", cudaGetErrorString(err));
 
-        // return to basic logging
+        // return to basic format
         spdlog::set_pattern("[%Y-%m-%d %H:%M:%S] [%^%l%$] %v");
     }
 }

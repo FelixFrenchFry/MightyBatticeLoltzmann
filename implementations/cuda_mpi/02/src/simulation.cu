@@ -155,7 +155,6 @@ __device__ __forceinline__ void InjectLidVelocity_BranchLess_K(
 
 // =============================================================================
 // fully fused lattice update kernel for shear wave decay sim (inner cells only)
-// (identical to the lid driven cavity inner kernel, but separated for experiments)
 // =============================================================================
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void FFLU_ShearWaveDecay_Push_Inner_K(
@@ -238,7 +237,6 @@ __global__ void FFLU_ShearWaveDecay_Push_Inner_K(
 
 // =============================================================================
 // fully fused lattice update kernel for lid driven cavity sim (inner cells only)
-// (identical to the shear wave decay inner kernel, but separated for experiments)
 // =============================================================================
 template <uint32_t N_DIR, uint32_t N_BLOCKSIZE>
 __global__ void FFLU_LidDrivenCavity_Push_Inner_K(

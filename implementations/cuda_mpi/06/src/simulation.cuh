@@ -5,11 +5,11 @@
 
 
 void Launch_FullyFusedLatticeUpdate_Push_Inner(
-    const FP* const* df,
-    FP* const* df_new,
-    FP* rho,
-    FP* u_x,
-    FP* u_y,
+    const FP* const* dvc_df,
+    FP* const* dvc_df_new,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
     const FP omega,
     const uint32_t N_X, const uint32_t N_Y,
     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
@@ -23,13 +23,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const bool write_u_y = false);
 
 void Launch_FullyFusedLatticeUpdate_Push_Outer(
-    const FP* const* df,
-    FP* const* df_new,
-    FP* const* df_halo_top,
-    FP* const* df_halo_bottom,
-    FP* rho,
-    FP* u_x,
-    FP* u_y,
+    const FP* const* dvc_df,
+    FP* const* dvc_df_new,
+    FP* const* dvc_df_halo_top,
+    FP* const* dvc_df_halo_bot,
+    FP* dvc_rho,
+    FP* dvc_u_x,
+    FP* dvc_u_y,
     const FP omega,
     const FP u_lid,
     const uint32_t N_X, const uint32_t N_Y,
