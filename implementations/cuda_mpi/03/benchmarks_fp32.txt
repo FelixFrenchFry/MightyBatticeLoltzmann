@@ -1,0 +1,959 @@
+5070 Ti /////////////////////////////////////////////////////////////////////////////////////////////////////////
+(on X=10000 * Y=10000)
+
+
+
+============================================================================================================
+5070 Ti x1 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 1 rank on 1 GPU on 1 node 🧮
+============================================================================================================
+TODO
+
+
+
+H100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+(on X=30000 * Y=30000)
+
+
+
+============================================================================================================
+H100 x2 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 2 ranks on 2 GPUs on 2 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 2 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+
+============================================================================================================
+H100 x3 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 3 ranks on 3 GPUs on 3 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 3 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   30000  10000
+1     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   30000  10000
+2     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   30000  10000
+
+[2025-07-09 13:49:58] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:49:58] [info] Sub-domain size [X/Y/N]:    [ 30000 / 10000 / 5000 ] * 3
+[2025-07-09 13:49:58] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-09 13:49:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1171641 / 256 ]
+[2025-07-09 13:49:58] [info] Registers per thread:       30
+[2025-07-09 13:49:58] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:49:58] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:49:58] [info] Kernel domain size [X/Y]:   [ 30000 / 9998 ]
+
+[2025-07-09 13:49:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:49:58] [info] Registers per thread:       36
+[2025-07-09 13:49:58] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:49:58] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:49:58] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:50:52] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:50:52] [info] Total execution time:       53.136 sec
+[2025-07-09 13:50:52] [info] Step execution time:        10.627 ms
+[2025-07-09 13:50:52] [info] BLUPS:                      84.689
+
+============================================================================================================
+H100 x4 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 4 ranks on 4 GPUs on 4 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   30000  7500
+1     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   30000  7500
+2     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   30000  7500
+3     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   30000  7500
+
+[2025-07-09 13:49:07] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:49:07] [info] Sub-domain size [X/Y/N]:    [ 30000 / 7500 / 5000 ] * 4
+[2025-07-09 13:49:07] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-09 13:49:07] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878672 / 256 ]
+[2025-07-09 13:49:07] [info] Registers per thread:       30
+[2025-07-09 13:49:07] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:49:07] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:49:07] [info] Kernel domain size [X/Y]:   [ 30000 / 7498 ]
+
+[2025-07-09 13:49:07] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:49:07] [info] Registers per thread:       36
+[2025-07-09 13:49:07] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:49:07] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:49:07] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:49:47] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:49:47] [info] Total execution time:       39.653 sec
+[2025-07-09 13:49:47] [info] Step execution time:        7.931 ms
+[2025-07-09 13:49:47] [info] BLUPS:                      113.485
+
+============================================================================================================
+H100 x6 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 6 ranks on 6 GPUs on 6 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 6 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+1     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+2     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+3     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+4     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+5     uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   30000  5000
+
+[2025-07-09 13:48:29] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:48:29] [info] Sub-domain size [X/Y/N]:    [ 30000 / 5000 / 5000 ] * 6
+[2025-07-09 13:48:29] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-09 13:48:29] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 585704 / 256 ]
+[2025-07-09 13:48:29] [info] Registers per thread:       30
+[2025-07-09 13:48:29] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:48:29] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:48:29] [info] Kernel domain size [X/Y]:   [ 30000 / 4998 ]
+
+[2025-07-09 13:48:29] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:48:29] [info] Registers per thread:       36
+[2025-07-09 13:48:29] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:48:29] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:48:29] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:48:56] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:48:56] [info] Total execution time:       26.620 sec
+[2025-07-09 13:48:56] [info] Step execution time:        5.324 ms
+[2025-07-09 13:48:56] [info] BLUPS:                      169.047
+
+============================================================================================================
+H100 x8 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 8 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+1     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+2     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+3     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+4     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+5     uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+6     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+7     uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   30000  3750
+
+[2025-07-09 13:47:57] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:47:57] [info] Sub-domain size [X/Y/N]:    [ 30000 / 3750 / 5000 ] * 8
+[2025-07-09 13:47:57] [info] Halo cells per sub-domain:  0.05 %
+
+[2025-07-09 13:47:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 439219 / 256 ]
+[2025-07-09 13:47:57] [info] Registers per thread:       30
+[2025-07-09 13:47:57] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:57] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:57] [info] Kernel domain size [X/Y]:   [ 30000 / 3748 ]
+
+[2025-07-09 13:47:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:47:57] [info] Registers per thread:       36
+[2025-07-09 13:47:57] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:57] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:57] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:48:17] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:48:17] [info] Total execution time:       20.098 sec
+[2025-07-09 13:48:17] [info] Step execution time:        4.020 ms
+[2025-07-09 13:48:17] [info] BLUPS:                      223.908
+
+============================================================================================================
+H100 x12 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 12 ranks on 12 GPUs on 6 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:2:node -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+2     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+3     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+4     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+5     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+6     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+7     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+8     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+9     uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+10    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    6.450    86.646   30000  2500
+11    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    6.450    86.646   30000  2500
+
+[2025-07-09 13:47:32] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:47:32] [info] Sub-domain size [X/Y/N]:    [ 30000 / 2500 / 5000 ] * 12
+[2025-07-09 13:47:32] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-09 13:47:32] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 292735 / 256 ]
+[2025-07-09 13:47:32] [info] Registers per thread:       30
+[2025-07-09 13:47:32] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:32] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:32] [info] Kernel domain size [X/Y]:   [ 30000 / 2498 ]
+
+[2025-07-09 13:47:32] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:47:32] [info] Registers per thread:       36
+[2025-07-09 13:47:32] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:32] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:32] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:47:45] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:47:45] [info] Total execution time:       13.450 sec
+[2025-07-09 13:47:45] [info] Step execution time:        2.690 ms
+[2025-07-09 13:47:45] [info] BLUPS:                      334.578
+
+============================================================================================================
+H100 x16 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 16 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:2:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+2     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+3     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+4     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+5     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+6     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+7     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+8     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+9     uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+10    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+11    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+12    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+13    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+14    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    4.973    88.123   30000  1875
+15    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    4.973    88.123   30000  1875
+
+[2025-07-09 13:47:08] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:47:08] [info] Sub-domain size [X/Y/N]:    [ 30000 / 1875 / 5000 ] * 16
+[2025-07-09 13:47:08] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-07-09 13:47:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 219493 / 256 ]
+[2025-07-09 13:47:08] [info] Registers per thread:       30
+[2025-07-09 13:47:08] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:08] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:08] [info] Kernel domain size [X/Y]:   [ 30000 / 1873 ]
+
+[2025-07-09 13:47:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:47:08] [info] Registers per thread:       36
+[2025-07-09 13:47:08] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:47:08] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:47:08] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:47:19] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:47:19] [info] Total execution time:       10.363 sec
+[2025-07-09 13:47:19] [info] Step execution time:        2.073 ms
+[2025-07-09 13:47:19] [info] BLUPS:                      434.223
+
+============================================================================================================
+H100 x20 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 20 ranks on 20 GPUs on 7 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:3:node -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+2     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+3     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+4     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+5     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+6     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+7     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+8     uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+9     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+10    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+11    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+12    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+13    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+14    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+15    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+16    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+17    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    4.071    89.025   30000  1500
+18    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    4.071    89.025   30000  1500
+19    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    4.071    89.025   30000  1500
+
+[2025-07-09 13:46:47] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:46:47] [info] Sub-domain size [X/Y/N]:    [ 30000 / 1500 / 5000 ] * 20
+[2025-07-09 13:46:47] [info] Halo cells per sub-domain:  0.13 %
+
+[2025-07-09 13:46:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 175547 / 256 ]
+[2025-07-09 13:46:47] [info] Registers per thread:       30
+[2025-07-09 13:46:47] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:46:47] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:46:47] [info] Kernel domain size [X/Y]:   [ 30000 / 1498 ]
+
+[2025-07-09 13:46:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:46:47] [info] Registers per thread:       36
+[2025-07-09 13:46:47] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:46:47] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:46:47] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:46:55] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:46:55] [info] Total execution time:       8.307 sec
+[2025-07-09 13:46:55] [info] Step execution time:        1.661 ms
+[2025-07-09 13:46:55] [info] BLUPS:                      541.730
+
+============================================================================================================
+H100 x24 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 24 ranks on 24 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:3:node -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+2     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+3     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+4     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+5     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+6     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+7     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+8     uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+9     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+10    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+11    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+12    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+13    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+14    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+15    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+16    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+17    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+18    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+19    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+20    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+21    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    3.497    89.599   30000  1250
+22    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    3.497    89.599   30000  1250
+23    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    3.497    89.599   30000  1250
+
+[2025-07-09 13:46:26] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:46:26] [info] Sub-domain size [X/Y/N]:    [ 30000 / 1250 / 5000 ] * 24
+[2025-07-09 13:46:26] [info] Halo cells per sub-domain:  0.16 %
+
+[2025-07-09 13:46:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 146250 / 256 ]
+[2025-07-09 13:46:26] [info] Registers per thread:       30
+[2025-07-09 13:46:26] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:46:26] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:46:26] [info] Kernel domain size [X/Y]:   [ 30000 / 1248 ]
+
+[2025-07-09 13:46:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-09 13:46:26] [info] Registers per thread:       36
+[2025-07-09 13:46:26] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:46:26] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:46:26] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[2025-07-09 13:46:33] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-09 13:46:33] [info] Total execution time:       6.989 sec
+[2025-07-09 13:46:33] [info] Step execution time:        1.398 ms
+[2025-07-09 13:46:33] [info] BLUPS:                      643.871
+
+
+
+H100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+(on X=60000 * Y=60000)
+
+
+
+============================================================================================================
+H100 x8 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 8 ranks on 8 GPUs on 4 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:1:node -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+1     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+2     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+3     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+4     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+5     uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+6     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+7     uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    35.776   57.320   60000  7500
+
+[2025-07-09 13:44:52] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:44:52] [info] Sub-domain size [X/Y/N]:    [ 60000 / 7500 / 5000 ] * 8
+[2025-07-09 13:44:52] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-09 13:44:52] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1757344 / 256 ]
+[2025-07-09 13:44:52] [info] Registers per thread:       30
+[2025-07-09 13:44:52] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:44:52] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:44:52] [info] Kernel domain size [X/Y]:   [ 60000 / 7498 ]
+
+[2025-07-09 13:44:52] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:44:52] [info] Registers per thread:       36
+[2025-07-09 13:44:52] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:44:52] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:44:52] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:46:12] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:46:12] [info] Total execution time:       79.416 sec
+[2025-07-09 13:46:12] [info] Step execution time:        15.883 ms
+[2025-07-09 13:46:12] [info] BLUPS:                      226.654
+
+============================================================================================================
+H100 x12 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 12 ranks on 12 GPUs on 6 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:2:node -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+2     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+3     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+4     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+5     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+6     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+7     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+8     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+9     uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+10    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    24.046   69.051   60000  5000
+11    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    24.046   69.051   60000  5000
+
+[2025-07-09 13:43:47] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:43:47] [info] Sub-domain size [X/Y/N]:    [ 60000 / 5000 / 5000 ] * 12
+[2025-07-09 13:43:47] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-09 13:43:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1171407 / 256 ]
+[2025-07-09 13:43:47] [info] Registers per thread:       30
+[2025-07-09 13:43:47] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:43:47] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:43:47] [info] Kernel domain size [X/Y]:   [ 60000 / 4998 ]
+
+[2025-07-09 13:43:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:43:47] [info] Registers per thread:       36
+[2025-07-09 13:43:47] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:43:47] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:43:47] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:44:40] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:44:40] [info] Total execution time:       53.373 sec
+[2025-07-09 13:44:40] [info] Step execution time:        10.675 ms
+[2025-07-09 13:44:40] [info] BLUPS:                      337.251
+
+============================================================================================================
+H100 x16 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 16 ranks on 16 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:2:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+2     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+3     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+4     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+5     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+6     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+7     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+8     uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+9     uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+10    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+11    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+12    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+13    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+14    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    18.180   74.916   60000  3750
+15    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    18.180   74.916   60000  3750
+
+[2025-07-09 13:42:54] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:42:54] [info] Sub-domain size [X/Y/N]:    [ 60000 / 3750 / 5000 ] * 16
+[2025-07-09 13:42:54] [info] Halo cells per sub-domain:  0.05 %
+
+[2025-07-09 13:42:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878438 / 256 ]
+[2025-07-09 13:42:54] [info] Registers per thread:       30
+[2025-07-09 13:42:54] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:42:54] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:42:54] [info] Kernel domain size [X/Y]:   [ 60000 / 3748 ]
+
+[2025-07-09 13:42:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:42:54] [info] Registers per thread:       36
+[2025-07-09 13:42:54] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:42:54] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:42:54] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:43:34] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:43:34] [info] Total execution time:       39.856 sec
+[2025-07-09 13:43:34] [info] Step execution time:        7.971 ms
+[2025-07-09 13:43:34] [info] BLUPS:                      451.630
+
+============================================================================================================
+H100 x20 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 20 ranks on 20 GPUs on 7 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:3:node -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+2     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+3     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+4     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+5     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+6     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+7     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+8     uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+9     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+10    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+11    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+12    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+13    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+14    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+15    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+16    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+17    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    14.653   78.443   60000  3000
+18    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    14.653   78.443   60000  3000
+19    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    14.653   78.443   60000  3000
+
+[2025-07-09 13:42:09] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:42:09] [info] Sub-domain size [X/Y/N]:    [ 60000 / 3000 / 5000 ] * 20
+[2025-07-09 13:42:09] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-09 13:42:09] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 702657 / 256 ]
+[2025-07-09 13:42:09] [info] Registers per thread:       30
+[2025-07-09 13:42:09] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:42:09] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:42:09] [info] Kernel domain size [X/Y]:   [ 60000 / 2998 ]
+
+[2025-07-09 13:42:09] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:42:09] [info] Registers per thread:       36
+[2025-07-09 13:42:09] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:42:09] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:42:09] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:42:41] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:42:41] [info] Total execution time:       31.790 sec
+[2025-07-09 13:42:41] [info] Step execution time:        6.358 ms
+[2025-07-09 13:42:41] [info] BLUPS:                      566.216
+
+============================================================================================================
+H100 x24 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 24 ranks on 24 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:3:node -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+2     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+3     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+4     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+5     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+6     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+7     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+8     uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+9     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+10    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+11    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+12    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+13    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+14    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+15    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+16    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+17    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+18    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+19    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+20    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+21    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    12.315   80.781   60000  2500
+22    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    12.315   80.781   60000  2500
+23    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    12.315   80.781   60000  2500
+
+[2025-07-09 13:41:28] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:41:28] [info] Sub-domain size [X/Y/N]:    [ 60000 / 2500 / 5000 ] * 24
+[2025-07-09 13:41:28] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-09 13:41:28] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 585469 / 256 ]
+[2025-07-09 13:41:28] [info] Registers per thread:       30
+[2025-07-09 13:41:28] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:41:28] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:41:28] [info] Kernel domain size [X/Y]:   [ 60000 / 2498 ]
+
+[2025-07-09 13:41:28] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:41:28] [info] Registers per thread:       36
+[2025-07-09 13:41:28] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:41:28] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:41:28] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:41:55] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:41:55] [info] Total execution time:       26.656 sec
+[2025-07-09 13:41:55] [info] Step execution time:        5.331 ms
+[2025-07-09 13:41:55] [info] BLUPS:                      675.275
+
+============================================================================================================
+H100 x32 / cuda_mpi_03 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 32 ranks on 32 GPUs on 8 nodes 🧮
+============================================================================================================
+mpirun --bind-to none --map-by ppr:4:node -np 32 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+1     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+2     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+3     uc3n072.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+4     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+5     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+6     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+7     uc3n073.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+8     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+9     uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+10    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+11    uc3n075.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+12    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+13    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+14    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+15    uc3n076.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+16    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+17    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+18    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+19    uc3n077.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+20    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+21    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+22    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+23    uc3n078.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+24    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+25    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+26    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+27    uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+28    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    9.362    83.734   60000  1875
+29    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    9.362    83.734   60000  1875
+30    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    9.362    83.734   60000  1875
+31    uc3n080.   NVIDIA H100                        3   90   132  233472    93.096    9.362    83.734   60000  1875
+
+[2025-07-09 13:40:54] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:40:54] [info] Sub-domain size [X/Y/N]:    [ 60000 / 1875 / 5000 ] * 32
+[2025-07-09 13:40:54] [info] Halo cells per sub-domain:  0.11 %
+
+[2025-07-09 13:40:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 438985 / 256 ]
+[2025-07-09 13:40:54] [info] Registers per thread:       30
+[2025-07-09 13:40:54] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:40:54] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:40:54] [info] Kernel domain size [X/Y]:   [ 60000 / 1873 ]
+
+[2025-07-09 13:40:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-09 13:40:54] [info] Registers per thread:       36
+[2025-07-09 13:40:54] [info] Shared memory per block:    9216 bytes
+[2025-07-09 13:40:54] [info] Local memory per thread:    0 bytes
+[2025-07-09 13:40:54] [info] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[2025-07-09 13:41:14] [info] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-09 13:41:14] [info] Total execution time:       20.320 sec
+[2025-07-09 13:41:14] [info] Step execution time:        4.064 ms
+[2025-07-09 13:41:14] [info] BLUPS:                      885.807
+
+
+
+============================================================================================================
+H100 scaling results (on X=30000 * Y=30000)
+============================================================================================================
+H100 x3  ->    84.6 BLUPS
+H100 x4  ->   113.4 BLUPS
+H100 x6  ->   169.0 BLUPS
+H100 x8  ->   223.9 BLUPS
+H100 x12 ->   334.5 BLUPS
+H100 x16 ->   434.2 BLUPS
+H100 x20 ->   541.7 BLUPS
+H100 x24 ->   643.8 BLUPS
+
+============================================================================================================
+H100 scaling results (on X=60000 * Y=60000)
+============================================================================================================
+// TODO: use x4 as a baseline instead of x8
+H100 x8  ->   226.6 BLUPS
+H100 x12 ->   337.2 BLUPS out of ~ 339.9   (99.20 %)
+H100 x16 ->   451.6 BLUPS out of ~ 453.2   (99.64 %)
+H100 x20 ->   566.2 BLUPS out of ~ 566.5   (99.94 %)
+H100 x24 ->   675.2 BLUPS out of ~ 679.8   (99.32 %)
+H100 x32 ->   885.8 BLUPS out of ~ 906.4   (97.72 %)
