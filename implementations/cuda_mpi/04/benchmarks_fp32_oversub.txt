@@ -1,0 +1,834 @@
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ ninja -C buildDir implementations/cuda_mpi/cuda_mpi_03
+ninja: Entering directory `buildDir'
+ninja: no work to do.
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+
+[2025-07-09 15:14:18] [info] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 20160
+N_Y_TOTAL            = 20160
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:14:18] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:14:18] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    16.969   76.127   20160  5040
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    16.970   76.127   20160  5040
+2     uc3n076.                                      2   0    0    0         93.096    16.589   76.508   20160  5040
+3     uc3n076.                                      3   0    0    0         93.096    16.589   76.508   20160  5040
+
+[2025-07-09 15:14:18] [info] Simulation size [X/Y/N]:    [ 20160 / 20160 / 5000 ]
+[2025-07-09 15:14:18] [info] Sub-domain size [X/Y/N]:    [ 20160 / 5040 / 5000 ] * 4
+[2025-07-09 15:14:18] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-09 15:14:18] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 396743 / 256 ]
+[2025-07-09 15:14:18] [info] Registers per thread:       30
+[2025-07-09 15:14:18] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:14:18] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:14:18] [info] Kernel domain size [X/Y]:   [ 20160 / 5038 ]
+
+[2025-07-09 15:14:18] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 158 / 256 ]
+[2025-07-09 15:14:18] [info] Registers per thread:       36
+[2025-07-09 15:14:18] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:14:18] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:14:18] [info] Kernel domain size [X/Y]:   [ 20160 / 2 ]
+
+^C[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:14:49] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:14:49] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:14:49] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    6.716    86.381   12000  3000
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    6.444    86.652   12000  3000
+2     uc3n076.                                      2   0    0    0         93.096    5.633    87.463   12000  3000
+3     uc3n076.                                      3   0    0    0         93.096    6.716    86.381   12000  3000
+
+[2025-07-09 15:14:49] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:14:49] [info] Sub-domain size [X/Y/N]:    [ 12000 / 3000 / 5000 ] * 4
+[2025-07-09 15:14:49] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-09 15:14:49] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 140532 / 256 ]
+[2025-07-09 15:14:49] [info] Registers per thread:       30
+[2025-07-09 15:14:49] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:14:49] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:14:49] [info] Kernel domain size [X/Y]:   [ 12000 / 2998 ]
+
+[2025-07-09 15:14:49] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:14:49] [info] Registers per thread:       36
+[2025-07-09 15:14:49] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:14:49] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:14:49] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+^C[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 2/buildDir/implementations/cuda_mpi/cuda_mpi_04 i
+nput_01.txtt
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: 2/buildDir/implementations/cuda_mpi/cuda_mpi_04
+Node: uc3n076
+
+while attempting to start process rank 0.
+--------------------------------------------------------------------------
+4 total processes failed to start
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 2 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:15:31] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    6.202    86.894   12000  6000
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    6.202    86.894   12000  6000
+
+[2025-07-09 15:15:31] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:15:31] [info] Sub-domain size [X/Y/N]:    [ 12000 / 6000 / 5000 ] * 2
+[2025-07-09 15:15:31] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-09 15:15:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 281157 / 256 ]
+[2025-07-09 15:15:31] [info] Registers per thread:       30
+[2025-07-09 15:15:31] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:15:31] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:15:31] [info] Kernel domain size [X/Y]:   [ 12000 / 5998 ]
+
+[2025-07-09 15:15:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:15:31] [info] Registers per thread:       36
+[2025-07-09 15:15:31] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:15:31] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:15:31] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+
+[2025-07-09 15:15:43] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:15:43] [info] Total execution time:       12.750 sec
+[2025-07-09 15:15:43] [info] Step execution time:        2.550 ms
+[2025-07-09 15:15:43] [info] BLUPS:                      56.471
+
+[2025-07-09 15:15:43] [info] ------------------------------------------------------
+
+
+
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:16:04] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:16:04] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:04] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    6.714    86.383   12000  3000
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    6.716    86.381   12000  3000
+2     uc3n076.                                      2   0    0    0         93.096    6.714    86.383   12000  3000
+3     uc3n076.                                      3   0    0    0         93.096    6.714    86.383   12000  3000
+
+[2025-07-09 15:16:04] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:16:04] [info] Sub-domain size [X/Y/N]:    [ 12000 / 3000 / 5000 ] * 4
+[2025-07-09 15:16:04] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-09 15:16:04] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 140532 / 256 ]
+[2025-07-09 15:16:04] [info] Registers per thread:       30
+[2025-07-09 15:16:04] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:16:04] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:16:04] [info] Kernel domain size [X/Y]:   [ 12000 / 2998 ]
+
+[2025-07-09 15:16:04] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:16:04] [info] Registers per thread:       36
+[2025-07-09 15:16:04] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:16:04] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:16:04] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+
+[2025-07-09 15:16:19] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:16:19] [info] Total execution time:       15.562 sec
+[2025-07-09 15:16:19] [info] Step execution time:        3.112 ms
+[2025-07-09 15:16:19] [info] BLUPS:                      46.265
+
+[2025-07-09 15:16:19] [info] ------------------------------------------------------
+
+
+
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:16:42] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:16:42] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    10.905   82.191   12000  600
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    10.909   82.187   12000  600
+2     uc3n076.                                      2   0    0    0         93.096    10.560   82.536   12000  600
+3     uc3n076.                                      3   0    0    0         93.096    10.908   82.189   12000  600
+4     uc3n076.                                      4   0    0    0         93.096    10.900   82.197   12000  600
+5     uc3n076.                                      5   0    0    0         93.096    10.572   82.525   12000  600
+6     uc3n076.                                      6   0    0    0         93.096    10.896   82.201   12000  600
+7     uc3n076.                                      7   0    0    0         93.096    9.892    83.204   12000  600
+8     uc3n076.                                      8   0    0    0         93.096    9.782    83.314   12000  600
+9     uc3n076.                                      9   0    0    0         93.096    10.738   82.359   12000  600
+10    uc3n076.                                      10  0    0    0         93.096    10.702   82.394   12000  600
+11    uc3n076.                                      11  0    0    0         93.096    10.681   82.415   12000  600
+12    uc3n076.                                      12  0    0    0         93.096    10.841   82.255   12000  600
+13    uc3n076.                                      13  0    0    0         93.096    10.822   82.275   12000  600
+14    uc3n076.                                      14  0    0    0         93.096    10.841   82.255   12000  600
+15    uc3n076.                                      15  0    0    0         93.096    10.484   82.612   12000  600
+16    uc3n076.                                      16  0    0    0         93.096    9.980    83.117   12000  600
+17    uc3n076.                                      17  0    0    0         93.096    10.878   82.218   12000  600
+18    uc3n076.                                      18  0    0    0         93.096    10.532   82.564   12000  600
+19    uc3n076.                                      19  0    0    0         93.096    10.341   82.755   12000  600
+
+[2025-07-09 15:16:42] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:16:42] [info] Sub-domain size [X/Y/N]:    [ 12000 / 600 / 5000 ] * 20
+[2025-07-09 15:16:42] [info] Halo cells per sub-domain:  0.33 %
+
+[2025-07-09 15:16:42] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 28032 / 256 ]
+[2025-07-09 15:16:42] [info] Registers per thread:       30
+[2025-07-09 15:16:42] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:16:42] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:16:42] [info] Kernel domain size [X/Y]:   [ 12000 / 598 ]
+
+[2025-07-09 15:16:42] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:16:42] [info] Registers per thread:       36
+[2025-07-09 15:16:42] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:16:42] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:16:42] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+
+[2025-07-09 15:17:09] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:17:09] [info] Total execution time:       27.266 sec
+[2025-07-09 15:17:09] [info] Step execution time:        5.453 ms
+[2025-07-09 15:17:09] [info] BLUPS:                      26.407
+
+[2025-07-09 15:17:09] [info] ------------------------------------------------------
+
+
+
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 40 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:17:56] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:17:56] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    16.010   77.087   12000  300
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    16.047   77.049   12000  300
+2     uc3n076.                                      2   0    0    0         93.096    15.017   78.079   12000  300
+3     uc3n076.                                      3   0    0    0         93.096    15.535   77.561   12000  300
+4     uc3n076.                                      4   0    0    0         93.096    15.888   77.208   12000  300
+5     uc3n076.                                      5   0    0    0         93.096    15.986   77.110   12000  300
+6     uc3n076.                                      6   0    0    0         93.096    15.888   77.208   12000  300
+7     uc3n076.                                      7   0    0    0         93.096    14.185   78.911   12000  300
+8     uc3n076.                                      8   0    0    0         93.096    15.459   77.637   12000  300
+9     uc3n076.                                      9   0    0    0         93.096    14.990   78.106   12000  300
+10    uc3n076.                                      10  0    0    0         93.096    15.652   77.444   12000  300
+11    uc3n076.                                      11  0    0    0         93.096    15.535   77.561   12000  300
+12    uc3n076.                                      12  0    0    0         93.096    16.053   77.044   12000  300
+13    uc3n076.                                      13  0    0    0         93.096    15.764   77.333   12000  300
+14    uc3n076.                                      14  0    0    0         93.096    16.008   77.089   12000  300
+15    uc3n076.                                      15  0    0    0         93.096    15.535   77.561   12000  300
+16    uc3n076.                                      16  0    0    0         93.096    16.055   77.042   12000  300
+17    uc3n076.                                      17  0    0    0         93.096    15.953   77.143   12000  300
+18    uc3n076.                                      18  0    0    0         93.096    15.017   78.079   12000  300
+19    uc3n076.                                      19  0    0    0         93.096    16.064   77.032   12000  300
+20    uc3n076.                                      20  0    0    0         93.096    15.904   77.192   12000  300
+21    uc3n076.                                      21  0    0    0         93.096    15.986   77.110   12000  300
+22    uc3n076.                                      22  0    0    0         93.096    15.459   77.637   12000  300
+23    uc3n076.                                      23  0    0    0         93.096    15.852   77.245   12000  300
+24    uc3n076.                                      24  0    0    0         93.096    15.652   77.444   12000  300
+25    uc3n076.                                      25  0    0    0         93.096    15.867   77.229   12000  300
+26    uc3n076.                                      26  0    0    0         93.096    15.799   77.298   12000  300
+27    uc3n076.                                      27  0    0    0         93.096    15.982   77.114   12000  300
+28    uc3n076.                                      28  0    0    0         93.096    15.783   77.313   12000  300
+29    uc3n076.                                      29  0    0    0         93.096    15.535   77.561   12000  300
+30    uc3n076.                                      30  0    0    0         93.096    15.799   77.298   12000  300
+31    uc3n076.                                      31  0    0    0         93.096    15.867   77.229   12000  300
+32    uc3n076.                                      32  0    0    0         93.096    15.888   77.208   12000  300
+33    uc3n076.                                      33  0    0    0         93.096    16.043   77.053   12000  300
+34    uc3n076.                                      34  0    0    0         93.096    14.892   78.204   12000  300
+35    uc3n076.                                      35  0    0    0         93.096    15.867   77.229   12000  300
+36    uc3n076.                                      36  0    0    0         93.096    15.459   77.637   12000  300
+37    uc3n076.                                      37  0    0    0         93.096    15.170   77.926   12000  300
+38    uc3n076.                                      38  0    0    0         93.096    15.459   77.637   12000  300
+39    uc3n076.                                      39  0    0    0         93.096    15.764   77.333   12000  300
+
+[2025-07-09 15:17:56] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:17:56] [info] Sub-domain size [X/Y/N]:    [ 12000 / 300 / 5000 ] * 40
+[2025-07-09 15:17:56] [info] Halo cells per sub-domain:  0.67 %
+
+[2025-07-09 15:17:56] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 13969 / 256 ]
+[2025-07-09 15:17:56] [info] Registers per thread:       30
+[2025-07-09 15:17:56] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:17:56] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:17:56] [info] Kernel domain size [X/Y]:   [ 12000 / 298 ]
+
+[2025-07-09 15:17:56] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:17:56] [info] Registers per thread:       36
+[2025-07-09 15:17:56] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:17:56] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:17:56] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+
+[2025-07-09 15:18:38] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:18:38] [info] Total execution time:       41.936 sec
+[2025-07-09 15:18:38] [info] Step execution time:        8.387 ms
+[2025-07-09 15:18:38] [info] BLUPS:                      17.169
+
+[2025-07-09 15:18:38] [info] ------------------------------------------------------
+
+
+
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 100 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+--------------------------------------------------------------------------
+There are not enough slots available in the system to satisfy the 100
+slots that were requested by the application:
+
+  ./buildDir/implementations/cuda_mpi/cuda_mpi_04
+
+Either request fewer slots for your application, or make more slots
+available for use.
+
+A "slot" is the Open MPI term for an allocatable unit where we can
+launch a process.  The number of slots available are defined by the
+environment in which Open MPI processes are run:
+
+  1. Hostfile, via "slots=N" clauses (N defaults to number of
+     processor cores if not provided)
+  2. The --host command line parameter, via a ":N" suffix on the
+     hostname (N defaults to 1 if not provided)
+  3. Resource manager (e.g., SLURM, PBS/Torque, LSF, etc.)
+  4. If none of a hostfile, the --host command line parameter, or an
+     RM is present, Open MPI defaults to the number of processor cores
+
+In all the above cases, if you want Open MPI to default to the number
+of hardware threads instead of the number of processor cores, use the
+--use-hwthread-cpus option.
+
+Alternatively, you can use the --oversubscribe option to ignore the
+number of available slots when deciding the number of processes to
+launch.
+--------------------------------------------------------------------------
+[fr_fl184@uc3n076 MightyBatticeLoltzmann]$ mpirun --bind-to none -np 80 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_01.txt
+
+[2025-07-09 15:19:52] [info] Rank 0 loaded parameters from input_01.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 12000
+N_Y_TOTAL            = 12000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:52] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+[2025-07-09 15:19:53] [utilities.h:177] [error] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    27.237   65.859   12000  150
+1     uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    27.232   65.865   12000  150
+2     uc3n076.                                      2   0    0    0         93.096    25.521   67.576   12000  150
+3     uc3n076.                                      3   0    0    0         93.096    26.421   66.675   12000  150
+4     uc3n076.                                      4   0    0    0         93.096    25.521   67.576   12000  150
+5     uc3n076.                                      5   0    0    0         93.096    26.710   66.386   12000  150
+6     uc3n076.                                      6   0    0    0         93.096    26.038   67.058   12000  150
+7     uc3n076.                                      7   0    0    0         93.096    26.972   66.124   12000  150
+8     uc3n076.                                      8   0    0    0         93.096    27.130   65.966   12000  150
+9     uc3n076.                                      9   0    0    0         93.096    27.109   65.988   12000  150
+10    uc3n076.                                      10  0    0    0         93.096    27.075   66.021   12000  150
+11    uc3n076.                                      11  0    0    0         93.096    26.972   66.124   12000  150
+12    uc3n076.                                      12  0    0    0         93.096    26.903   66.193   12000  150
+13    uc3n076.                                      13  0    0    0         93.096    26.034   67.062   12000  150
+14    uc3n076.                                      14  0    0    0         93.096    26.595   66.501   12000  150
+15    uc3n076.                                      15  0    0    0         93.096    26.808   66.288   12000  150
+16    uc3n076.                                      16  0    0    0         93.096    27.013   66.083   12000  150
+17    uc3n076.                                      17  0    0    0         93.096    27.167   65.929   12000  150
+18    uc3n076.                                      18  0    0    0         93.096    27.013   66.083   12000  150
+19    uc3n076.                                      19  0    0    0         93.096    27.267   65.829   12000  150
+20    uc3n076.                                      20  0    0    0         93.096    27.101   65.996   12000  150
+21    uc3n076.                                      21  0    0    0         93.096    27.109   65.988   12000  150
+22    uc3n076.                                      22  0    0    0         93.096    26.903   66.193   12000  150
+23    uc3n076.                                      23  0    0    0         93.096    27.109   65.988   12000  150
+24    uc3n076.                                      24  0    0    0         93.096    27.263   65.833   12000  150
+25    uc3n076.                                      25  0    0    0         93.096    26.972   66.124   12000  150
+26    uc3n076.                                      26  0    0    0         93.096    27.263   65.833   12000  150
+27    uc3n076.                                      27  0    0    0         93.096    27.058   66.038   12000  150
+28    uc3n076.                                      28  0    0    0         93.096    26.903   66.193   12000  150
+29    uc3n076.                                      29  0    0    0         93.096    27.109   65.988   12000  150
+30    uc3n076.                                      30  0    0    0         93.096    27.237   65.859   12000  150
+31    uc3n076.                                      31  0    0    0         93.096    27.105   65.992   12000  150
+32    uc3n076.                                      32  0    0    0         93.096    26.259   66.837   12000  150
+33    uc3n076.                                      33  0    0    0         93.096    26.034   67.062   12000  150
+34    uc3n076.                                      34  0    0    0         93.096    27.149   65.947   12000  150
+35    uc3n076.                                      35  0    0    0         93.096    26.808   66.288   12000  150
+36    uc3n076.                                      36  0    0    0         93.096    26.595   66.501   12000  150
+37    uc3n076.                                      37  0    0    0         93.096    26.421   66.675   12000  150
+38    uc3n076.                                      38  0    0    0         93.096    26.259   66.837   12000  150
+39    uc3n076.                                      39  0    0    0         93.096    26.390   66.706   12000  150
+40    uc3n076.                                      40  0    0    0         93.096    26.716   66.380   12000  150
+41    uc3n076.                                      41  0    0    0         93.096    26.823   66.273   12000  150
+42    uc3n076.                                      42  0    0    0         93.096    26.038   67.058   12000  150
+43    uc3n076.                                      43  0    0    0         93.096    25.368   67.728   12000  150
+44    uc3n076.                                      44  0    0    0         93.096    26.985   66.111   12000  150
+45    uc3n076.                                      45  0    0    0         93.096    26.710   66.386   12000  150
+46    uc3n076.                                      46  0    0    0         93.096    26.903   66.193   12000  150
+47    uc3n076.                                      47  0    0    0         93.096    26.025   67.072   12000  150
+48    uc3n076.                                      48  0    0    0         93.096    26.351   66.746   12000  150
+49    uc3n076.                                      49  0    0    0         93.096    26.808   66.288   12000  150
+50    uc3n076.                                      50  0    0    0         93.096    26.595   66.501   12000  150
+51    uc3n076.                                      51  0    0    0         93.096    26.034   67.062   12000  150
+52    uc3n076.                                      52  0    0    0         93.096    26.351   66.746   12000  150
+53    uc3n076.                                      53  0    0    0         93.096    26.390   66.706   12000  150
+54    uc3n076.                                      54  0    0    0         93.096    26.259   66.837   12000  150
+55    uc3n076.                                      55  0    0    0         93.096    25.751   67.345   12000  150
+56    uc3n076.                                      56  0    0    0         93.096    26.595   66.501   12000  150
+57    uc3n076.                                      57  0    0    0         93.096    26.034   67.062   12000  150
+58    uc3n076.                                      58  0    0    0         93.096    26.595   66.501   12000  150
+59    uc3n076.                                      59  0    0    0         93.096    26.421   66.675   12000  150
+60    uc3n076.                                      60  0    0    0         93.096    27.046   66.050   12000  150
+61    uc3n076.                                      61  0    0    0         93.096    26.808   66.288   12000  150
+62    uc3n076.                                      62  0    0    0         93.096    26.763   66.333   12000  150
+63    uc3n076.                                      63  0    0    0         93.096    26.034   67.062   12000  150
+64    uc3n076.                                      64  0    0    0         93.096    27.075   66.021   12000  150
+65    uc3n076.                                      65  0    0    0         93.096    26.808   66.288   12000  150
+66    uc3n076.                                      66  0    0    0         93.096    26.763   66.333   12000  150
+67    uc3n076.                                      67  0    0    0         93.096    26.972   66.124   12000  150
+68    uc3n076.                                      68  0    0    0         93.096    26.716   66.380   12000  150
+69    uc3n076.                                      69  0    0    0         93.096    26.972   66.124   12000  150
+70    uc3n076.                                      70  0    0    0         93.096    26.763   66.333   12000  150
+71    uc3n076.                                      71  0    0    0         93.096    26.421   66.675   12000  150
+72    uc3n076.                                      72  0    0    0         93.096    26.763   66.333   12000  150
+73    uc3n076.                                      73  0    0    0         93.096    27.150   65.947   12000  150
+74    uc3n076.                                      74  0    0    0         93.096    27.013   66.083   12000  150
+75    uc3n076.                                      75  0    0    0         93.096    27.058   66.038   12000  150
+76    uc3n076.                                      76  0    0    0         93.096    26.351   66.746   12000  150
+77    uc3n076.                                      77  0    0    0         93.096    26.972   66.124   12000  150
+78    uc3n076.                                      78  0    0    0         93.096    26.351   66.746   12000  150
+79    uc3n076.                                      79  0    0    0         93.096    26.808   66.288   12000  150
+
+[2025-07-09 15:19:53] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:19:53] [info] Sub-domain size [X/Y/N]:    [ 12000 / 150 / 5000 ] * 80
+[2025-07-09 15:19:53] [info] Halo cells per sub-domain:  1.33 %
+
+[2025-07-09 15:19:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 6938 / 256 ]
+[2025-07-09 15:19:53] [info] Registers per thread:       30
+[2025-07-09 15:19:53] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:19:53] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:19:53] [info] Kernel domain size [X/Y]:   [ 12000 / 148 ]
+
+[2025-07-09 15:19:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 94 / 256 ]
+[2025-07-09 15:19:53] [info] Registers per thread:       36
+[2025-07-09 15:19:53] [info] Shared memory per block:    9216 bytes
+[2025-07-09 15:19:53] [info] Local memory per thread:    0 bytes
+[2025-07-09 15:19:53] [info] Kernel domain size [X/Y]:   [ 12000 / 2 ]
+
+
+[2025-07-09 15:21:09] [info] Simulation size [X/Y/N]:    [ 12000 / 12000 / 5000 ]
+[2025-07-09 15:21:09] [info] Total execution time:       75.360 sec
+[2025-07-09 15:21:09] [info] Step execution time:        15.072 ms
+[2025-07-09 15:21:09] [info] BLUPS:                      9.554
+
+[2025-07-09 15:21:09] [info] ------------------------------------------------------
