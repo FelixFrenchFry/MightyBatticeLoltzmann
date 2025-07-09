@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=8
-#SBATCH --time=00:17:00
+#SBATCH --time=00:25:00
 #SBATCH --mem=256gb
 #SBATCH --output=job_%j.out
 #SBATCH --error=job_%j.err
@@ -43,3 +43,24 @@ mpirun --bind-to none -np 32 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 inp
 mpirun --bind-to none -np 36 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
 
 mpirun --bind-to none -np 40 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_04.txt
+
+# launch it with different configurations (oversubscribed)
+mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 8 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 12 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 20 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 24 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 28 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 32 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 36 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
+
+mpirun --bind-to none -np 40 ./buildDir/implementations/cuda_mpi/cuda_mpi_03 input_04.txt
