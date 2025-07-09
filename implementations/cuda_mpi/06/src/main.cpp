@@ -342,6 +342,7 @@ int main(int argc, char *argv[])
         // BUT full exchange for shear wave decay)
         for (uint32_t i = 0; i < 3; i++)
         {
+            // IMPORTANT TO NOT OVERWRITE THE INITIALIZED VALUES WITH TRASH
             if (step == 1) { break; }
 
             int dir_top = dir_map_halo_top[i]; // {2, 5, 6}
@@ -382,7 +383,7 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the bottom rank does not do this
                 MPI_Irecv(
-                   df_new[dir_top] + offset_top, count,
+                   df[dir_top] + offset_top, count,
                    FP_MPI_TYPE, RANK_BELOW, dir_top,
                    MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
@@ -405,7 +406,7 @@ int main(int argc, char *argv[])
             {
                 // for a lid driven cavity, the rop rank does not do this
                 MPI_Irecv(
-                    df_new[dir_bot] + (N_Y - 1) * N_X + offset_bot, count,
+                    df[dir_bot] + (N_Y - 1) * N_X + offset_bot, count,
                     FP_MPI_TYPE, RANK_ABOVE, dir_bot + 3,
                     MPI_COMM_WORLD, &max_requests[req_idx++]);
             }
@@ -432,7 +433,7 @@ int main(int argc, char *argv[])
             write_rho, write_u_x, write_u_y);
 
         // swap host pointers to the df arrays used by the MPI communication
-        if (step != 1) { std::swap(df, df_new); }
+        std::swap(df, df_new);
         // swap device pointers to the df arrays used by the compute kernels
         std::swap(dvc_df, dvc_df_new);
 
