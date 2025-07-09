@@ -1,15 +1,15 @@
 N_X_TOTAL 18000
 N_Y_TOTAL 8000
-N_STEPS 25000000
+N_STEPS 10000000
 
-omega 1.5
+omega 1.2
 rho_0 1.0
 u_max 0.1
 u_lid 0.1
 n_sin 2.0
 
 export_interval 25000
-export_name F
+export_name I
 export_num 04
 
 export_rho 0

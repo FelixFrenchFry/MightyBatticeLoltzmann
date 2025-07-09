@@ -54,6 +54,57 @@ Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Tota
 [2025-07-06 05:15:53] [info] Step execution time:        9.461 ms
 [2025-07-06 05:15:53] [info] BLUPS:                      10.570
 
+============================================================================================================
+5070 Ti x1 / cuda_mpi_04 / FP32 / reg limit 240 ✅ / lid driven cavity 🔄️ / 1 rank on 1 GPU on 1 node 🧮
+============================================================================================================
+mpirun -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_I.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 18000
+N_Y_TOTAL            = 8000
+N_STEPS              = 10000000
+omega                = 1.200
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 25000
+export_name          = I
+export_num           = 04
+export_rho           = false
+export_u_x           = true
+export_u_y           = true
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    13.237   2.684    18000  8000
+
+[2025-07-07 11:38:00] [info] Simulation size [X/Y/N]:    [ 18000 / 8000 / 10000000 ]
+[2025-07-07 11:38:00] [info] Sub-domain size [X/Y/N]:    [ 18000 / 8000 / 10000000 ] * 1
+[2025-07-07 11:38:00] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-07 11:38:01] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 562360 / 256 ]
+[2025-07-07 11:38:01] [info] Registers per thread:       63
+[2025-07-07 11:38:01] [info] Shared memory per block:    9216 bytes
+[2025-07-07 11:38:01] [info] Local memory per thread:    0 bytes
+[2025-07-07 11:38:01] [info] Kernel domain size [X/Y]:   [ 18000 / 7998 ]
+
+[2025-07-07 11:38:01] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 141 / 256 ]
+[2025-07-07 11:38:01] [info] Registers per thread:       37
+[2025-07-07 11:38:01] [info] Shared memory per block:    9216 bytes
+[2025-07-07 11:38:01] [info] Local memory per thread:    0 bytes
+[2025-07-07 11:38:01] [info] Kernel domain size [X/Y]:   [ 18000 / 2 ]
+
+[2025-07-09 02:38:33] [info] Simulation size [X/Y/N]:    [ 18000 / 8000 / 10000000 ]
+[2025-07-09 02:38:33] [info] Total execution time:       136559.591 sec
+[2025-07-09 02:38:33] [info] Step execution time:        13.656 ms
+[2025-07-09 02:38:33] [info] BLUPS:                      10.545
+
 
 
 A100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
