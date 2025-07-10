@@ -49,12 +49,41 @@ void ExportScalarFieldFromMPIDevices(
 
     namespace fs = std::filesystem;
     fs::path outputPath = fs::path(outputDirName) / versionDirName / subDirName;
-    fs::create_directories(outputPath);
+
+    if (RANK == 0)
+    {
+        try
+        {
+            fs::create_directories(outputPath);
+        }
+        catch (const fs::filesystem_error& e1)
+        {
+            SPDLOG_ERROR("Rank 0 -> failed to create directories: {}", e1.what());
+        }
+    }
+    MPI_Barrier(COMM);
 
     std::string typeName = SimulationDataToString(type);
     std::ostringstream oss;
     oss << typeName << "_" << std::setw(9) << std::setfill('0') << suffixNum << ".bin";
     fs::path filename = outputPath / oss.str();
+
+    if (RANK == 0)
+    {
+        try
+        {
+            MPI_File tempFile;
+            MPI_File_open(COMM, filename.string().c_str(),
+                          MPI_MODE_CREATE | MPI_MODE_WRONLY,
+                          MPI_INFO_NULL, &tempFile);
+            MPI_File_close(&tempFile);
+        }
+        catch (const fs::filesystem_error& e2)
+        {
+            SPDLOG_ERROR("Rank 0 -> failed to create file: {}", e2.what());
+        }
+    }
+    MPI_Barrier(COMM);
 
     // open shared file with MPI I/O
     MPI_File mpiFile;
