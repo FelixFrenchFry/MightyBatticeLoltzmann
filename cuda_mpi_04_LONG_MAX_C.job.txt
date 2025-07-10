@@ -20,7 +20,6 @@ export CUDA_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64
 # build it
 cd $HOME/MightyBatticeLoltzmann
 meson setup buildDir --wipe --buildtype=release
-ninja -C buildDir implementations/cuda_mpi/cuda_mpi_03
 ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
 
 # launch
