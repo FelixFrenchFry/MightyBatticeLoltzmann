@@ -54,6 +54,8 @@ void ExportScalarFieldFromMPIDevices(
     {
         try
         {
+            SPDLOG_INFO("Rank 0 -> creating directory {}...", outputPath.string());
+
             fs::create_directories(outputPath);
         }
         catch (const fs::filesystem_error& e1)
@@ -72,6 +74,8 @@ void ExportScalarFieldFromMPIDevices(
     {
         try
         {
+            SPDLOG_INFO("Rank 0 -> creating file {}...", filename.string());
+
             MPI_File tempFile;
             MPI_File_open(COMM, filename.string().c_str(),
                           MPI_MODE_CREATE | MPI_MODE_WRONLY,
@@ -102,8 +106,8 @@ void ExportScalarFieldFromMPIDevices(
 
     MPI_File_close(&mpiFile);
 
-    //SPDLOG_INFO("Rank {} -> wrote {} at offset y={} ({}x{})",
-    //            RANK, filename.string(), Y_START, N_X, N_Y);
+    SPDLOG_INFO("Rank {} -> wrote to {} at offset y={} ({}x{})",
+                RANK, filename.string(), Y_START, N_X, N_Y);
 }
 
 void ExportSimulationData(
