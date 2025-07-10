@@ -1,0 +1,66 @@
++ module load toolkit/nvidia-hpc-sdk/25.1
+++ /opt/bwhpc/common/admin/modules/module-wrapper/modulecmd bash load toolkit/nvidia-hpc-sdk/25.1
++ eval 'CC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvc;' export 'CC;' 'CPATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include;' export 'CPATH;' 'CPLUS_INCLUDE_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include;' export 'CPLUS_INCLUDE_PATH;' 'CPP=cpp;' export 'CPP;' 'CXX=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvc++;' export 'CXX;' 'C_INCLUDE_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include;' export 'C_INCLUDE_PATH;' 'F77=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran;' export 'F77;' 'F90=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran;' export 'F90;' 'FC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran;' export 'FC;' 'KIT_FAMILY_COMPILER=toolkit/nvidia-hpc-sdk;' export 'KIT_FAMILY_COMPILER;' 'KIT_FAMILY_COMPILER_VERSION=25.1;' export 'KIT_FAMILY_COMPILER_VERSION;' 'KIT_FAMILY_MPI=toolkit/nvidia-hpc-sdk;' export 'KIT_FAMILY_MPI;' 'KIT_FAMILY_MPI_VERSION=25.1;' export 'KIT_FAMILY_MPI_VERSION;' 'LD_LIBRARY_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/lib64:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/lib64;' export 'LD_LIBRARY_PATH;' 'LMOD_FAMILY_COMPILER=toolkit/nvidia-hpc-sdk;' export 'LMOD_FAMILY_COMPILER;' 'LMOD_FAMILY_COMPILER_VERSION=25.1;' export 'LMOD_FAMILY_COMPILER_VERSION;' 'LMOD_FAMILY_MPI=toolkit/nvidia-hpc-sdk;' export 'LMOD_FAMILY_MPI;' 'LMOD_FAMILY_MPI_VERSION=25.1;' export 'LMOD_FAMILY_MPI_VERSION;' 'MANPATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/man:/usr/share/lmod/lmod/share/man:/usr/share/man::;' export 'MANPATH;' 'MODULEPATH=/opt/bwhpc/fr/modulefiles:/opt/bwhpc/common/modulefiles;' export 'MODULEPATH;' 'NVHPC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1;' export 'NVHPC;' 'NVHPC_ROOT=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1;' export 'NVHPC_ROOT;' 'PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/mpi/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/bin:/home/fr/fr_fr/fr_fl184/.local/bin:/home/fr/fr_fr/fr_fl184/bin:/software/all/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin;' export 'PATH;' '_ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IGZhbHNlLApkZXB0aFQgPSB7fSwKZmFtaWx5ID0gewpjb21waWxlciA9ICJ0b29sa2l0L252aWRpYS1ocGMtc2RrIiwKbXBpID0gInRvb2xraXQvbnZpZGlhLWhwYy1zZGsiLAp9LAptVCA9IHsKWyJ0b29sa2l0L252aWRpYS1ocGMtc2RrIl0gPSB7CmZuID0gIi9vcHQvYndocGMvY29tbW9uL21vZHVsZWZpbGVzL3Rvb2xraXQvbnZpZGlhLWhwYy1zZGsvMjUuMS5sdWEiLApmdWxsTmFtZSA9ICJ0b29sa2l0L252aWRpYS1ocGMtc2RrLzI1LjEiLApsb2FkT3JkZXIgPSAxLApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIs;' export '_ModuleTable001_;' '_ModuleTable002_=CnVzZXJOYW1lID0gInRvb2xraXQvbnZpZGlhLWhwYy1zZGsvMjUuMSIsCndWID0gIjAwMDAwMDAyNS4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCn0sCm1wYXRoQSA9IHsKIi9vcHQvYndocGMvZnIvbW9kdWxlZmlsZXMiLCAiL29wdC9id2hwYy9jb21tb24vbW9kdWxlZmlsZXMiLAp9LApzeXN0ZW1CYXNlTVBBVEggPSAiL29wdC9id2hwYy9mci9tb2R1bGVmaWxlczovb3B0L2J3aHBjL2NvbW1vbi9tb2R1bGVmaWxlcyIsCn0K;' export '_ModuleTable002_;' '_ModuleTable_Sz_=2;' export '_ModuleTable_Sz_;'
+++ CC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvc
+++ export CC
+++ CPATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include
+++ export CPATH
+++ CPLUS_INCLUDE_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include
+++ export CPLUS_INCLUDE_PATH
+++ CPP=cpp
+++ export CPP
+++ CXX=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvc++
+++ export CXX
+++ C_INCLUDE_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/include/qd:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/include:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/include
+++ export C_INCLUDE_PATH
+++ F77=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran
+++ export F77
+++ F90=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran
+++ export F90
+++ FC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin/nvfortran
+++ export FC
+++ KIT_FAMILY_COMPILER=toolkit/nvidia-hpc-sdk
+++ export KIT_FAMILY_COMPILER
+++ KIT_FAMILY_COMPILER_VERSION=25.1
+++ export KIT_FAMILY_COMPILER_VERSION
+++ KIT_FAMILY_MPI=toolkit/nvidia-hpc-sdk
+++ export KIT_FAMILY_MPI
+++ KIT_FAMILY_MPI_VERSION=25.1
+++ export KIT_FAMILY_MPI_VERSION
+++ LD_LIBRARY_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nvshmem/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/nccl/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/math_libs/lib64:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/lib:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/lib64
+++ export LD_LIBRARY_PATH
+++ LMOD_FAMILY_COMPILER=toolkit/nvidia-hpc-sdk
+++ export LMOD_FAMILY_COMPILER
+++ LMOD_FAMILY_COMPILER_VERSION=25.1
+++ export LMOD_FAMILY_COMPILER_VERSION
+++ LMOD_FAMILY_MPI=toolkit/nvidia-hpc-sdk
+++ export LMOD_FAMILY_MPI
+++ LMOD_FAMILY_MPI_VERSION=25.1
+++ export LMOD_FAMILY_MPI_VERSION
+++ MANPATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/man:/usr/share/lmod/lmod/share/man:/usr/share/man::
+++ export MANPATH
+++ MODULEPATH=/opt/bwhpc/fr/modulefiles:/opt/bwhpc/common/modulefiles
+++ export MODULEPATH
+++ NVHPC=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1
+++ export NVHPC
+++ NVHPC_ROOT=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1
+++ export NVHPC_ROOT
+++ PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/extras/qd/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/comm_libs/mpi/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/compilers/bin:/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda/bin:/home/fr/fr_fr/fr_fl184/.local/bin:/home/fr/fr_fr/fr_fl184/bin:/software/all/bin:/usr/share/Modules/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+++ export PATH
+++ _ModuleTable001_=X01vZHVsZVRhYmxlXyA9IHsKTVR2ZXJzaW9uID0gMywKY19yZWJ1aWxkVGltZSA9IGZhbHNlLApjX3Nob3J0VGltZSA9IGZhbHNlLApkZXB0aFQgPSB7fSwKZmFtaWx5ID0gewpjb21waWxlciA9ICJ0b29sa2l0L252aWRpYS1ocGMtc2RrIiwKbXBpID0gInRvb2xraXQvbnZpZGlhLWhwYy1zZGsiLAp9LAptVCA9IHsKWyJ0b29sa2l0L252aWRpYS1ocGMtc2RrIl0gPSB7CmZuID0gIi9vcHQvYndocGMvY29tbW9uL21vZHVsZWZpbGVzL3Rvb2xraXQvbnZpZGlhLWhwYy1zZGsvMjUuMS5sdWEiLApmdWxsTmFtZSA9ICJ0b29sa2l0L252aWRpYS1ocGMtc2RrLzI1LjEiLApsb2FkT3JkZXIgPSAxLApwcm9wVCA9IHt9LApzdGFja0RlcHRoID0gMCwKc3RhdHVzID0gImFjdGl2ZSIs
+++ export _ModuleTable001_
+++ _ModuleTable002_=CnVzZXJOYW1lID0gInRvb2xraXQvbnZpZGlhLWhwYy1zZGsvMjUuMSIsCndWID0gIjAwMDAwMDAyNS4wMDAwMDAwMDEuKnpmaW5hbCIsCn0sCn0sCm1wYXRoQSA9IHsKIi9vcHQvYndocGMvZnIvbW9kdWxlZmlsZXMiLCAiL29wdC9id2hwYy9jb21tb24vbW9kdWxlZmlsZXMiLAp9LApzeXN0ZW1CYXNlTVBBVEggPSAiL29wdC9id2hwYy9mci9tb2R1bGVmaWxlczovb3B0L2J3aHBjL2NvbW1vbi9tb2R1bGVmaWxlcyIsCn0K
+++ export _ModuleTable002_
+++ _ModuleTable_Sz_=2
+++ export _ModuleTable_Sz_
++ export CC=gcc
++ CC=gcc
++ export CXX=g++
++ CXX=g++
++ export CUDA_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda
++ CUDA_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda
++ cd /home/fr/fr_fr/fr_fl184/MightyBatticeLoltzmann
++ meson setup buildDir --wipe --buildtype=release
++ ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
++ mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_G.txt
+slurmstepd: error: *** JOB 689519 ON uc2n916 CANCELLED AT 2025-07-10T11:11:04 ***
