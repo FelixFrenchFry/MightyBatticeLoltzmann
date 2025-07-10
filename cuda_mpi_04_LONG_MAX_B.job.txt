@@ -1,6 +1,6 @@
 #!/bin/bash -x
-#SBATCH --job-name=cuda_mpi_04_test_LONG_MAX_C
-#SBATCH --partition=gpu_h100
+#SBATCH --job-name=cuda_mpi_04_test_LONG_MAX_B
+#SBATCH --partition=gpu_h100_il
 #SBATCH --nodes=4
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:4
@@ -24,4 +24,4 @@ ninja -C buildDir implementations/cuda_mpi/cuda_mpi_03
 ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
 
 # launch
-mpirun --bind-to none --map-by ppr:4:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_H_C.txt
+mpirun --bind-to none --map-by ppr:4:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_H_B.txt
