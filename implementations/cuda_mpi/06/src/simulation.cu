@@ -420,7 +420,7 @@ __global__ void FFLU_ShearWaveDecay_Push_Outer_K(
 }
 
 // =============================================================================
-// fully fused lattice update kernel for lid driven cavity sim (outer cells only)
+// fully fused lattice update kernel for LDC sim (outer cells only)
 // (for applying the bbbc, lid velocity, and populating the hallo cells)
 // =============================================================================
 template <uint32_t N_BLOCKSIZE>
@@ -486,7 +486,7 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     FP u_sq = u_x * u_x + u_y * u_y;
 
     // TODO: check for signed math using uint32_t -> incorrect results!!!
-    for (uint32_t i = 0; i < N_DIR; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         // compute dot product of c_i * u and equilibrium df value for dir i
         FP cu = con_fp_c_x[i] * u_x + con_fp_c_y[i] * u_y;

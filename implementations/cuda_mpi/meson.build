@@ -65,3 +65,14 @@ executable(
     link_with : [lib],
     dependencies : [spdlog, cuda, mpi]
 )
+
+executable(
+    'cuda_mpi_07',
+    ['07/src/main.cpp',
+     '07/src/initialization.cu',
+     '07/src/simulation.cu',
+     'tools/data_export.cpp'],
+    include_directories : [lib_incdirs, cuda_include],
+    link_with : [lib],
+    dependencies : [spdlog, cuda, mpi]
+)
