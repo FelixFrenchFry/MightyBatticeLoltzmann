@@ -1,12 +1,12 @@
 #!/bin/bash -x
-#SBATCH --job-name=cuda_mpi_04_test_LONG_C
-#SBATCH --partition=gpu_h100
-#SBATCH --nodes=4
+#SBATCH --job-name=cuda_mpi_04_test_LONG_B
+#SBATCH --partition=gpu_h100_il
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
 #SBATCH --gres=gpu:4
 #SBATCH --cpus-per-task=8
-#SBATCH --time=12:00:00
-#SBATCH --mem=512gb
+#SBATCH --time=48:00:00
+#SBATCH --mem=256gb
 #SBATCH --output=job_%j.out
 #SBATCH --error=job_%j.err
 
@@ -23,4 +23,4 @@ meson setup buildDir --wipe --buildtype=release
 ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
 
 # launch
-mpirun --bind-to none --map-by ppr:4:node -np 16 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_G.txt
+mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_G.txt
