@@ -34,24 +34,24 @@ int main(int argc, char* argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    15000,
+        .N_X_TOTAL =    10000,
         .N_Y_TOTAL =    10000,
         .N_STEPS =      10000,
 
         // parameters
-        .omega =        1.7,
+        .omega =        1.2,
         .rho_0 =        1.0,
         .u_max =        0.1,
         .u_lid =        0.1,
         .n_sin =        2.0,
 
         // export
-        .export_interval =  50000,
-        .export_name =      "A",
-        .export_num =       "19",
+        .export_interval =  25000,
+        .export_name =      "E",
+        .export_num =       "04",
         .export_rho =       false,
-        .export_u_x =       false,
-        .export_u_y =       false,
+        .export_u_x =       true,
+        .export_u_y =       true,
         .export_u_mag =     false,
 
         // mode

@@ -70,26 +70,9 @@ void ExportScalarFieldFromMPIDevices(
     oss << typeName << "_" << std::setw(9) << std::setfill('0') << suffixNum << ".bin";
     fs::path filename = outputPath / oss.str();
 
-    if (RANK == 0)
-    {
-        try
-        {
-            SPDLOG_INFO("Rank 0 -> creating file {}...", filename.string());
-
-            MPI_File tempFile;
-            MPI_File_open(COMM, filename.string().c_str(),
-                          MPI_MODE_CREATE | MPI_MODE_WRONLY,
-                          MPI_INFO_NULL, &tempFile);
-            MPI_File_close(&tempFile);
-        }
-        catch (const fs::filesystem_error& e2)
-        {
-            SPDLOG_ERROR("Rank 0 -> failed to create file: {}", e2.what());
-        }
-    }
-    MPI_Barrier(COMM);
-
     // open shared file with MPI I/O
+    SPDLOG_INFO("Rank 0 -> creating file {}...", filename.string());
+    // TODO: GETS STUCK HERE WHEN LAUNCHED WITH RANKS ON DIFFERENT GPUs
     MPI_File mpiFile;
     MPI_File_open(COMM, filename.string().c_str(),
                   MPI_MODE_CREATE | MPI_MODE_WRONLY,
