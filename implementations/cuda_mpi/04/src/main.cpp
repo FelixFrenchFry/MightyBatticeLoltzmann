@@ -70,24 +70,24 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    30000,
-        .N_Y_TOTAL =    30000,
-        .N_STEPS =      5000,
+        .N_X_TOTAL =    30'000,
+        .N_Y_TOTAL =    30'000,
+        .N_STEPS =      100'000'000,
 
         // parameters
-        .omega =        1.7,
+        .omega =        1.1,
         .rho_0 =        1.0,
         .u_max =        0.1,
         .u_lid =        0.1,
         .n_sin =        2.0,
 
         // export
-        .export_interval =  5000,
-        .export_name =      "C",
+        .export_interval =  250'000,
+        .export_name =      "H_B",
         .export_num =       "04",
         .export_rho =       false,
-        .export_u_x =       false,
-        .export_u_y =       false,
+        .export_u_x =       true,
+        .export_u_y =       true,
         .export_u_mag =     false,
 
         // mode
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
     if (shear_wave_decay)
     {
         Launch_ApplyInitialCondition_ShearWaveDecay_K(dvc_df, dvc_rho, dvc_u_x,
-            dvc_u_y, rho_0,u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
+            dvc_u_y, rho_0, u_max, w_num, N_X, N_Y, Y_START, N_CELLS);
     }
     if (lid_driven_cavity)
     {
@@ -461,7 +461,7 @@ int main(int argc, char *argv[])
         ExportSelectedData(context, export_name, export_num, step,
             export_interval, export_rho, export_u_x, export_u_y, export_u_mag);
 
-        //if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
+        if (RANK == 0) { DisplayProgressBar(step, N_STEPS); }
     }
 
     if (RANK == 0)
