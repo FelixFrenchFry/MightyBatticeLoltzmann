@@ -8,8 +8,8 @@ u_max 0.1
 u_lid 0.1
 n_sin 2.0
 
-export_interval 250000
-export_name G
+export_interval 100000
+export_name G_C
 export_num 04
 
 export_rho 0

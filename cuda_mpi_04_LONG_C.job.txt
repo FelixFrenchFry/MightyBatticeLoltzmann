@@ -1,6 +1,6 @@
 #!/bin/bash -x
-#SBATCH --job-name=cuda_mpi_04_test_LONG_B
-#SBATCH --partition=gpu_h100_il
+#SBATCH --job-name=cuda_mpi_04_test_LONG_C
+#SBATCH --partition=gpu_h100
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:4
 #SBATCH --time=48:00:00
@@ -20,4 +20,4 @@ cd $HOME/MightyBatticeLoltzmann
 ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
 
 # launch
-mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_G_B.txt
+mpirun --bind-to none -np 4 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_cavity_video_G_C.txt
