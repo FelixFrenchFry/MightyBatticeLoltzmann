@@ -44,7 +44,7 @@ void ExportScalarFieldFromMPIDevices(
     if (err != cudaSuccess)
     {
         SPDLOG_ERROR("Rank {} -> cudaMemcpy failed: {}",
-            RANK, cudaGetErrorString(err));
+                     RANK, cudaGetErrorString(err));
     }
 
     namespace fs = std::filesystem;
@@ -60,7 +60,7 @@ void ExportScalarFieldFromMPIDevices(
         }
         catch (const fs::filesystem_error& e1)
         {
-            SPDLOG_ERROR("Rank 0 -> failed to create directories: {}", e1.what());
+            SPDLOG_ERROR("Rank 0 -> failed to create directory: {}", e1.what());
         }
     }
     MPI_Barrier(COMM);
@@ -71,26 +71,29 @@ void ExportScalarFieldFromMPIDevices(
     fs::path filename = outputPath / oss.str();
 
     // open shared file with MPI I/O
-    SPDLOG_INFO("Rank 0 -> creating file {}...", filename.string());
+    SPDLOG_INFO("Rank {} -> opening shared file {}...", RANK, filename.string());
     // TODO: GETS STUCK HERE WHEN LAUNCHED WITH RANKS ON DIFFERENT GPUs
     MPI_File mpiFile;
     MPI_File_open(COMM, filename.string().c_str(),
                   MPI_MODE_CREATE | MPI_MODE_WRONLY,
                   MPI_INFO_NULL, &mpiFile);
 
+    SPDLOG_INFO("Rank {} -> opened the file", RANK);
+
     // compute write-offset of this rank
     MPI_Offset byte_offset = static_cast<MPI_Offset>(Y_START) * N_X_TOTAL * sizeof(FP);
 
     // write this rank's N_CELLS data points to its section in the shared buffer
     MPI_File_write_at(mpiFile, byte_offset,
-                  host_buffer.data(),
-                  N_CELLS,
+                  host_buffer.data(), N_CELLS,
                   FP_MPI_TYPE, MPI_STATUS_IGNORE);
-
-    MPI_File_close(&mpiFile);
 
     SPDLOG_INFO("Rank {} -> wrote to {} at offset y={} ({}x{})",
                 RANK, filename.string(), Y_START, N_X, N_Y);
+
+    MPI_File_close(&mpiFile);
+
+    SPDLOG_INFO("Rank {} -> closed the file", RANK);
 }
 
 void ExportSimulationData(
