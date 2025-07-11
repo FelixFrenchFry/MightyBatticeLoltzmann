@@ -16,9 +16,9 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const int RANK,
     const bool is_SWD = false,
     const bool is_LDC = true,
-    const bool write_rho = false,
-    const bool write_u_x = false,
-    const bool write_u_y = false);
+    const bool save_rho = false,
+    const bool save_u_x = false,
+    const bool save_u_y = false);
 
 void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const float* const* dvc_df,
@@ -38,6 +38,6 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const int RANK,
     const bool is_SWD = false,
     const bool is_LDC = true,
-    const bool write_rho = false,
-    const bool write_u_x = false,
-    const bool write_u_y = false);
+    const bool save_rho = false,
+    const bool save_u_x = false,
+    const bool save_u_y = false);

@@ -74,88 +74,73 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
     const float omega,
     const int N_X, const int N_Y,
     const int N_CELLS_INNER,
-    const bool write_rho,
-    const bool write_u_x,
-    const bool write_u_y)
+    const bool save_rho,
+    const bool save_u_x,
+    const bool save_u_y)
 {
+    // thread index
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS_INNER) { return; }
 
-    // only process inner cells -> [1, ..., N_Y - 2] * N_X and
-    // determine (x,y) coordinates among the inner cells
-    int src_x = idx % N_X;
-    int src_y = idx / N_X + 1; // starting from row 1, instead of 0
-    idx = src_y * N_X + src_x;
+    // determine (x, y) coordinates of cell processed by this thread
+    int cell_x = idx % N_X;
+    int cell_y = idx / N_X + 1; // skip bottom row
+    idx += N_X; // translate into cell index
 
-    // load df values into block-wise tiles of shared shared memory
-    __shared__ float tile_df[9][N_BLOCKSIZE];
-
-    // used for summing stuff up and computing collision
+    // temp accumulators
     float rho = 0.0f;
     float u_x = 0.0f;
     float u_y = 0.0f;
 
-    // populate shared memory tiles and compute sums in the same loop
-    // density := sum over df values in each dir i
-    // velocity := sum over df values, weighted by each dir i
     for (int i = 0; i < 9; i++)
     {
         // fully coalesced load from global memory
-        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        float df_val = dvc_df[i][idx];
 
-        rho += tile_df[i][threadIdx.x];
-        u_x += tile_df[i][threadIdx.x] * con_c_x[i];
-        u_y += tile_df[i][threadIdx.x] * con_c_y[i];
+        rho += df_val;
+        u_x += df_val * con_c_x[i];
+        u_y += df_val * con_c_y[i];
     }
-
-    // exit thread to avoid division by zero or erroneous values
-    if (rho <= 0.0f) { return; }
 
     // finalize velocities
     u_x /= rho;
     u_y /= rho;
 
     // write final field values to global device memory
-    if (write_rho) { dvc_rho[idx] = rho; }
-    if (write_u_x) { dvc_u_x[idx] = u_x; }
-    if (write_u_y) { dvc_u_y[idx] = u_y; }
+    if (save_rho) { dvc_rho[idx] = rho; }
+    if (save_u_x) { dvc_u_x[idx] = u_x; }
+    if (save_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity for this thread's cell
+    // squared velocity
     float u_sq = u_x * u_x + u_y * u_y;
 
-    for (uint32_t i = 0; i < 9; i++)
+    for (int i = 0; i < 9; i++)
     {
         // dot product of c_i * u
-        float cu = con_c_x[i] * u_x
-                 + con_c_y[i] * u_y;
+        float cu = con_c_x[i] * u_x + con_c_y[i] * u_y;
 
-        // equilibrium df value for dir i
-        float f_eq_i = con_w[i] * rho * (1.0f
-                     + 3.0f * cu
-                     + 4.5f * cu * cu
-                     - 1.5f * u_sq);
+        // equilibrium value for direction i
+        float df_eq_i = con_w[i] * rho
+                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
-        // relax df towards equilibrium
-        float f_new_i = tile_df[i][threadIdx.x]
-                      - omega * (tile_df[i][threadIdx.x] - f_eq_i);
+        // relax towards equilibrium
+        float df_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
-        // regular bounce-back boundary for lid driven cavity without halo exchange
-        // ---------
-        // | 6 2 5 |
-        // | 3 0 1 |
-        // | 7 4 8 |
-        // ---------
-        // check if directed into a wall (excluding top and bottom wall)
-        if ((con_c_x[i] == -1 && src_x == 0) ||        // into left wall
-            (con_c_x[i] ==  1 && src_x == N_X - 1))    // into right wall
+        // check if streaming into a boundary
+        if ((con_c_x[i] == -1 && cell_x == 0) ||     // left boundary
+            (con_c_x[i] ==  1 && cell_x == N_X - 1)) // right boundary
         {
-            // same cell but opposite direction because of bounce-back
-            dvc_df_new[con_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
+            // bounce-back stream into same cell, but opposite direction
+            dvc_df_new[con_opp_dir[i]][cell_y * N_X + cell_x] = f_new_i;
         }
         else
         {
-            // stream to regular neighbor in dir i
-            dvc_df_new[i][(src_y + con_c_y[i]) * N_X + (src_x + con_c_x[i])] = f_new_i;
+            // destination coordiantes
+            int dst_x = cell_x + con_c_x[i];
+            int dst_y = cell_y + con_c_y[i];
+
+            // stream to destination cell in direction i
+            dvc_df_new[i][cell_y * N_X + cell_x] = f_new_i;
         }
     }
 }
@@ -174,9 +159,9 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     const int RANK,
     const bool is_SWD,
     const bool is_LDC,
-    const bool write_rho,
-    const bool write_u_x,
-    const bool write_u_y)
+    const bool save_rho,
+    const bool save_u_x,
+    const bool save_u_y)
 {
     InitializeConstants();
 
@@ -190,7 +175,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
     {
         FFLU_LidDrivenCavity_Push_Inner_K<N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_new, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
-            N_CELLS_INNER, write_rho, write_u_x, write_u_y);
+            N_CELLS_INNER, save_rho, save_u_x, save_u_y);
     }
     else
     {
@@ -243,114 +228,93 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     const int N_X, const int N_Y,
     const int N_Y_TOTAL, const int Y_START,
     const int N_CELLS_OUTER,
-    const bool write_rho,
-    const bool write_u_x,
-    const bool write_u_y)
+    const bool save_rho,
+    const bool save_u_x,
+    const bool save_u_y)
 {
+    // thread index
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS_OUTER) { return; }
 
-    // only process outer cells -> [0, N_Y - 1] * N_X and
-    // determine (x,y) coordinates among the outer cells
-    int src_x = idx % N_X;
-    int src_y = (idx / N_X == 0) ? 0 : (N_Y - 1); // map to first or last row
-    int src_y_global = src_y + Y_START;
-    idx = src_y * N_X + src_x;
+    // determine (x, y) coordinates of cell processed by this thread
+    int cell_x = idx % N_X;
+    int cell_y = (idx / N_X == 0) ? 0 : (N_Y - 1); // map to first or last row
+    int cell_y_global = cell_y + Y_START;
+    idx = cell_y * N_X + cell_x; // cell index
 
-    // load df values into block-wise tiles of shared shared memory
-    __shared__ float tile_df[9][N_BLOCKSIZE];
-
-    // used for summing stuff up and computing collision
+    // temp accumulators
     float rho = 0.0f;
     float u_x = 0.0f;
     float u_y = 0.0f;
 
-    // populate shared memory tiles and compute sums in the same loop
-    // density := sum over df values in each dir i
-    // velocity := sum over df values, weighted by each dir i
     for (int i = 0; i < 9; i++)
     {
         // fully coalesced load from global memory
-        tile_df[i][threadIdx.x] = dvc_df[i][idx];
+        float df_val = dvc_df[i][idx];
 
-        rho += tile_df[i][threadIdx.x];
-        u_x += tile_df[i][threadIdx.x] * con_c_x[i];
-        u_y += tile_df[i][threadIdx.x] * con_c_y[i];
+        rho += df_val;
+        u_x += df_val * con_c_x[i];
+        u_y += df_val * con_c_y[i];
     }
-
-    // exit thread to avoid division by zero or erroneous values
-    if (rho <= 0.0f) { return; }
 
     // finalize velocities
     u_x /= rho;
     u_y /= rho;
 
     // write final field values to global device memory
-    if (write_rho) { dvc_rho[idx] = rho; }
-    if (write_u_x) { dvc_u_x[idx] = u_x; }
-    if (write_u_y) { dvc_u_y[idx] = u_y; }
+    if (save_rho) { dvc_rho[idx] = rho; }
+    if (save_u_x) { dvc_u_x[idx] = u_x; }
+    if (save_u_y) { dvc_u_y[idx] = u_y; }
 
-    // pre-compute squared velocity for this thread's cell
+    // squared velocity
     float u_sq = u_x * u_x + u_y * u_y;
 
     for (int i = 0; i < 9; i++)
     {
         // dot product of c_i * u
-        float cu = con_c_x[i] * u_x
-                 + con_c_y[i] * u_y;
+        float cu = con_c_x[i] * u_x + con_c_y[i] * u_y;
 
-        // equilibrium df value for dir i
-        float f_eq_i = con_w[i] * rho * (1.0f
-                     + 3.0f * cu
-                     + 4.5f * cu * cu
-                     - 1.5f * u_sq);
+        // equilibrium value for direction i
+        float df_eq_i = con_w[i] * rho
+                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
-        // relax df towards equilibrium
-        float f_new_i = tile_df[i][threadIdx.x]
-                      - omega * (tile_df[i][threadIdx.x] - f_eq_i);
+        // relax towards equilibrium
+        float df_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
-        // determine coordinates and direction of the streaming destination cell
-        // (with respect to bounce-back boundary conditions and halo cells)
-        // check if streaming is directed into a wall (bounce-back)
-        // ---------
-        // | 6 2 5 |
-        // | 3 0 1 |
-        // | 7 4 8 |
-        // ---------
-        if ((con_c_x[i] == -1 && src_x == 0) ||                    // into left wall
-            (con_c_x[i] ==  1 && src_x == N_X - 1) ||              // into right wall
-            (con_c_y[i] == -1 && src_y_global == 0) ||             // into bottom wall
-            (con_c_y[i] ==  1 && src_y_global == N_Y_TOTAL - 1))   // into top wall
+        // check if streaming into a boundary
+        if ((con_c_x[i] == -1 && cell_x == 0) ||                  // left boundary
+            (con_c_x[i] ==  1 && cell_x == N_X - 1) ||            // right boundary
+            (con_c_y[i] == -1 && cell_y_global == 0) ||           // bottom boundary
+            (con_c_y[i] ==  1 && cell_y_global == N_Y_TOTAL - 1)) // top boundary
         {
-            // inject lid velocity if streaming is directed into top wall
-            if (con_c_y[i] == 1 && src_y_global == N_Y_TOTAL - 1)
+            // top boundary? inject lid velocity
+            if (con_c_y[i] == 1 && cell_y_global == N_Y_TOTAL - 1)
             {
                 f_new_i -= 6.0f * con_w[i] * rho * con_c_x[i] * u_lid;
             }
 
-            // same cell but opposite direction of dir i because of bounce-back
-            // (definitely within the process domain -> stream into regular df arrays)
-            dvc_df_new[con_opp_dir[i]][src_y * N_X + src_x] = f_new_i;
+            // bounce-back stream into same cell, but opposite direction
+            dvc_df_new[con_opp_dir[i]][cell_y * N_X + cell_x] = f_new_i;
         }
-        else // (not directed into a wall, but might be outside of the process domain)
+        else // (possibly outside of the sub-domain)
         {
-            int dst_x_raw = src_x + con_c_x[i]; // possibly < 0
-            int dst_y_raw = src_y + con_c_y[i]; // possibly < 0
+            // destination coordiantes
+            int dst_x = cell_x + con_c_x[i];
+            int dst_y = cell_y + con_c_y[i];
 
-            // check if streaming destination is outside of the process domain
-            if (dst_y_raw == -1) // below domain, but no wall -> stream into bottom halo
+            if (dst_y == -1) // below domain -> stream into bottom halo
             {
-                // map 4, 7, 8 to 0, 1, 2 using direction map for bottom halos
-                dvc_df_halo_bot[con_rev_dir_map_halo_bot[i]][dst_x_raw] = f_new_i;
+                // map 4, 7, 8 to 0, 1, 2
+                dvc_df_halo_bot[con_rev_dir_map_halo_bot[i]][dst_x] = f_new_i;
             }
-            else if (dst_y_raw == N_Y) // above domain, but no wall -> stream into top halo
+            else if (dst_y == N_Y) // above domain -> stream into top halo
             {
-                // map 2, 5, 6 to 0, 1, 2 using direction map for top halos
-                dvc_df_halo_top[con_rev_dir_map_halo_top[i]][dst_x_raw] = f_new_i;
+                // map 2, 5, 6 to 0, 1, 2
+                dvc_df_halo_top[con_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
             }
-            else // within domain -> stream to regular neighbor in regular df arrays
+            else // within domain -> stream to destination cell in direction i
             {
-                dvc_df_new[i][dst_y_raw * N_X + dst_x_raw] = f_new_i;
+                dvc_df_new[i][dst_y * N_X + dst_x] = f_new_i;
             }
         }
     }
@@ -374,9 +338,9 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
     const int RANK,
     const bool is_SWD,
     const bool is_LDC,
-    const bool write_rho,
-    const bool write_u_x,
-    const bool write_u_y)
+    const bool save_rho,
+    const bool save_u_x,
+    const bool save_u_y)
 {
     InitializeConstants();
 
@@ -391,7 +355,7 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         FFLU_LidDrivenCavity_Push_Outer_K<N_BLOCKSIZE><<<N_GRIDSIZE, N_BLOCKSIZE>>>(
             dvc_df, dvc_df_new, dvc_df_halo_top, dvc_df_halo_bot, dvc_rho,
             dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_Y_TOTAL, Y_START,
-            N_CELLS_OUTER, write_rho, write_u_x, write_u_y);
+            N_CELLS_OUTER, save_rho, save_u_x, save_u_y);
     }
     else
     {

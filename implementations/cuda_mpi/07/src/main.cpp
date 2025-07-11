@@ -11,6 +11,7 @@
 // - overlap of MPI communication and compute kernel for inner cells
 // - removed branchless kernel version and made other code simplifications
 // - TODO: SIMPLIFY EXPRESSIONS, DATA TYPES, COMMENTS, ... FOR PRESENTATION PURPOSES
+// - TODO: THIS VERSION IS NON-FUNCTIONAL
 
 #include "../../tools/config.cuh"
 #include "../../tools/data_export.h"
@@ -317,12 +318,12 @@ int main(int argc, char *argv[])
     for (uint32_t step = 1; step <= N_STEPS; step++)
     {
         // decide which data needs global write-backs due to exports
-        bool write_rho = false;
-        bool write_u_x = false;
-        bool write_u_y = false;
+        bool save_rho = false;
+        bool save_u_x = false;
+        bool save_u_y = false;
 
         SelectWriteBackData(step, export_interval, export_rho, export_u_x,
-            export_u_y, export_u_mag, write_rho, write_u_x, write_u_y);
+            export_u_y, export_u_mag, save_rho, save_u_x, save_u_y);
 
         // track requests for synchronization (4 per direction)
         MPI_Request max_requests[4 * 3];
@@ -418,7 +419,7 @@ int main(int argc, char *argv[])
         Launch_FullyFusedLatticeUpdate_Push_Inner(
             dvc_df, dvc_df_new, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_CELLS_INNER, RANK, is_SWD, is_LDC,
-            write_rho, write_u_x, write_u_y);
+            save_rho, save_u_x, save_u_y);
 
         // wait for async MPI halo exchanges to finish, before outer cells can start compute
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
@@ -430,7 +431,7 @@ int main(int argc, char *argv[])
             dvc_df, dvc_df_new, dvc_df_halo_top, dvc_df_halo_bot, dvc_rho,
             dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL,
             Y_START, N_STEPS, N_CELLS_OUTER, RANK, is_SWD, is_LDC,
-            write_rho, write_u_x, write_u_y);
+            save_rho, save_u_x, save_u_y);
 
         // swap host pointers to the df arrays used by the MPI communication
         std::swap(df, df_new);
