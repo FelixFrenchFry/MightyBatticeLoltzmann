@@ -1,6 +1,6 @@
-N_X_TOTAL 20000
-N_Y_TOTAL 20000
-N_STEPS 40000000
+N_X_TOTAL 24000
+N_Y_TOTAL 24000
+N_STEPS 60000000
 
 omega 1.2
 rho_0 1.0
@@ -9,7 +9,7 @@ u_lid 0.1
 n_sin 2.0
 
 export_interval 100000
-export_name L
+export_name Y
 export_num 04
 
 export_rho 0
