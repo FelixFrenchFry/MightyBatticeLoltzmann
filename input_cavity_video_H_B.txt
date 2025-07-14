@@ -1,5 +1,5 @@
-N_X_TOTAL 30000
-N_Y_TOTAL 30000
+N_X_TOTAL 28000
+N_Y_TOTAL 28000
 N_STEPS 100000000
 
 omega 1.1
@@ -8,7 +8,7 @@ u_max 0.1
 u_lid 0.1
 n_sin 2.0
 
-export_interval 250000
+export_interval 200000
 export_name H_B
 export_num 04
 
