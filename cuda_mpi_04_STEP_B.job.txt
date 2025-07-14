@@ -1,0 +1,65 @@
+#!/bin/bash -x
+#SBATCH --job-name=cuda_mpi_04_test_STEP
+#SBATCH --partition=gpu_h100_il
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=8
+#SBATCH --time=00:35:00
+#SBATCH --mem=96gb
+#SBATCH --output=job_%j.out
+#SBATCH --error=job_%j.err
+
+module load toolkit/nvidia-hpc-sdk/25.1
+
+# propagate toolchain vars
+export CC=gcc
+export CXX=g++
+export CUDA_PATH=/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda
+
+# build it
+cd $HOME/MightyBatticeLoltzmann
+ninja -C buildDir implementations/cuda_mpi/cuda_mpi_04
+
+# launch it with different configurations (oversubscribed)
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_01.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_02.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_03.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_04.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_05.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_06.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_07.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_08.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_09.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_10.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_11.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_12.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_13.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_14.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_15.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_16.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_17.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_18.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_19.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_20.txt
+
+mpirun --bind-to none --map-by slot -np 1 ./buildDir/implementations/cuda_mpi/cuda_mpi_04 input_step_21.txt
