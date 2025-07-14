@@ -87,7 +87,7 @@ def plot_step(step):
         ax2.margins(0)
 
         # add one shared colorbar in the center
-        cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', shrink=0.85, pad=0.05)
+        cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', pad=0.05)
         cbar.set_label("velocity", fontsize=font_legend)
         cbar.ax.tick_params(labelsize=10)
 

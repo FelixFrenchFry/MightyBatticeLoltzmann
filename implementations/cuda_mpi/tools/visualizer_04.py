@@ -5,6 +5,7 @@ import matplotlib
 matplotlib.use('Agg') # fast backend
 import matplotlib.pyplot as plt
 import multiprocessing as mp
+import matplotlib.colors as mcolors
 import sys
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
@@ -50,6 +51,11 @@ outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
 stride_plot = 40
 
+# font sizes
+font_axes = 16
+font_titles = 16
+font_legend = 16
+
 # single step processing function
 def plot_step(step: int):
     try:
@@ -63,16 +69,18 @@ def plot_step(step: int):
         y = np.linspace(0, N_Y, u_x_ds.shape[0], endpoint=False)
         X, Y = np.meshgrid(x, y)
 
-        fig, ax = plt.subplots(figsize=(6, 5))
         speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
+
+        fig, ax = plt.subplots(figsize=(6, 5))
+        norm = mcolors.Normalize(vmin=0.0, vmax=u_lid)
         strm = ax.streamplot(
             X, Y, u_x_ds, u_y_ds,
             density=1.5, linewidth=1.5, arrowsize=1.0,
-            color=speed, cmap='inferno')
-        fig.colorbar(strm.lines, ax=ax, label="velocity magnitude")
-        ax.set_title(f"step {step}, omega {omega}, u_lid {u_lid}")
-        ax.set_xlabel("X")
-        ax.set_ylabel("Y")
+            color=speed, cmap='inferno', norm=norm)
+        fig.colorbar(strm.lines, ax=ax, pad=0.1)
+        ax.set_title(f"{step:>9,}", fontsize=font_titles)
+        #ax.set_xlabel("X", fontsize=font_axes)
+        #ax.set_ylabel("Y", fontsize=font_axes)
         ax.set_xlim(0, N_X)
         ax.set_ylim(0, N_Y)
         ax.set_aspect("equal")
