@@ -1,54 +1,110 @@
-#!/usr/bin/env python3
+#!/home/felix/code/MightyBatticeLoltzmann/.venv/bin/python
 import os
-import sys
 import numpy as np
+import matplotlib
+matplotlib.use('Agg') # fast backend
 import matplotlib.pyplot as plt
+import multiprocessing as mp
+import sys
 FP = np.float64 if "--FP64" in sys.argv else np.float32
 
+
+
+# ----- VISUALIZATION OF THE X/Y-VELOCITY AS A SHARED HEATMAP -----
 # simulation config
-step =  25000
-N_X =   10000
-N_Y =   10000
+N_X =   12000
+N_Y =   12000
+omega = 1.2
+u_lid = 0.1
 
-# file path config
+# step config
+step_start =    25_000
+step_end =      12_000_000
+step_stride =   25_000
+steps = [1] + list(range(step_start, step_end + 1, step_stride))
+
+# output path config
+dataType_A =        "velocity_x"
+dataType_B =        "velocity_y"
+outputDirName =     "output"
 versionDirName =    "04"
-subDirName =        "E"
-dataType =          "velocity_x"
+subDirName =        "K"
 
-# path to raw .bin export:
+# formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:
     return f"_{step:0{width}d}"
 
+# data import file path
 def get_file_path(data: str, step: int) -> str:
-    return f"../../../exported/{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin"
+    return (
+        f"../../../exported/"
+        f"{versionDirName}/{subDirName}/{data}{format_step_suffix(step)}.bin")
 
-# output dir
-outputDirName = "output"
-outputDir = f"{outputDirName}/{versionDirName}/test"
+# lazy loading
+def load_velocity_component(filename: str, dtype: np.dtype) -> np.ndarray:
+    return np.memmap(filename, dtype=dtype, mode='r', shape=(N_Y, N_X))
+
+# misc
+outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
+stride_plot = 40
 
-# load and reshape data
-bin_path = get_file_path(dataType, step)
-A = np.fromfile(bin_path, dtype=FP).reshape((N_Y, N_X))
+# font sizes
+font_axes = 16
+font_titles = 20
+font_legend = 16
 
-print(f"✅ Loaded {bin_path} | shape={A.shape} | min={A.min()} max={A.max()}")
+# plotting function for multiprocessing
+def plot_step(step):
+    try:
+        # load x and y velocity components
+        u_x = load_velocity_component(get_file_path("velocity_x", step), FP)
+        u_y = load_velocity_component(get_file_path("velocity_y", step), FP)
+        u_x_ds = u_x[::stride_plot, ::stride_plot]
+        u_y_ds = u_y[::stride_plot, ::stride_plot]
 
-# save plot
-plt.figure(figsize=(8, 6))
-plt.imshow(A, cmap="jet", origin="lower", aspect="auto")
-plt.colorbar(label=dataType)
-plt.title(f"{dataType} at step {step}")
-plt.xlabel("X")
-plt.ylabel("Y")
+        # create shared figure
+        fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(12, 5), constrained_layout=True)
 
-output_png = f"{outputDir}/{dataType}{format_step_suffix(step)}.png"
-plt.savefig(output_png, dpi=300, bbox_inches='tight')
-plt.close()
+        # plot u_x
+        im1 = ax1.imshow(u_x_ds, cmap='seismic', origin='lower',
+                         extent=[0, N_X, 0, N_Y], aspect='equal',
+                         vmin=-u_lid, vmax=u_lid)
+        ax1.set_title(f"x-velocity (u_x)", fontsize=font_titles)
+        ax1.set_xlabel("X", fontsize=font_axes)
+        ax1.set_ylabel("Y", fontsize=font_axes)
+        ax1.grid(False)
+        ax1.margins(0)
 
-print("min:", np.min(A))
-print("max:", np.max(A))
-print("mean:", np.mean(A))
-print("contains NaN?", np.isnan(A).any())
-print("contains inf?", np.isinf(A).any())
+        # plot u_y
+        im2 = ax2.imshow(u_y_ds, cmap='seismic', origin='lower',
+                         extent=[0, N_X, 0, N_Y], aspect='equal',
+                         vmin=-u_lid, vmax=u_lid)
+        ax2.set_title(f"y-velocity (u_y)", fontsize=font_titles)
+        ax2.set_xlabel("X", fontsize=font_axes)
+        #ax2.set_ylabel("Y", fontsize=font_axes)
+        ax2.grid(False)
+        ax2.margins(0)
 
-print(f"✅ Saved plot: {output_png}")
+        # add one shared colorbar in the center
+        cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', shrink=0.85, pad=0.05)
+        cbar.set_label("velocity", fontsize=font_legend)
+        cbar.ax.tick_params(labelsize=10)
+
+        # save as png
+        outputPath = f"{outputDir}/velocity_shared{format_step_suffix(step)}.png"
+        plt.savefig(outputPath, dpi=300)
+        plt.close()
+
+        # free up memory
+        del u_x, u_y, u_x_ds, u_y_ds, im1, im2, fig, ax1, ax2
+        import gc; gc.collect()
+
+        print(f"✅  Saved plot: {outputPath}")
+
+    except Exception as e:
+        print(f"⚠️ Failed for step {step}: {e}")
+
+if __name__ == "__main__":
+    with mp.Pool(10) as pool:
+        pool.map(plot_step, steps)

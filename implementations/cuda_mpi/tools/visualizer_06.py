@@ -10,8 +10,7 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 
 
-# TODO: use quiver plot or stream plot?
-# ----- VISUALIZATION OF THE VELOCITY AS VECTOR STREAMLINES -----
+# ----- VISUALIZATION OF THE Y-VELOCITY AS HEATMAP -----
 # simulation config
 N_X =   12000
 N_Y =   12000
@@ -25,8 +24,7 @@ step_stride =   25_000
 steps = [1] + list(range(step_start, step_end + 1, step_stride))
 
 # output path config
-dataType_A =        "velocity_x"
-dataType_B =        "velocity_y"
+dataType =          "velocity_y"
 outputDirName =     "output"
 versionDirName =    "04"
 subDirName =        "K"
@@ -50,40 +48,32 @@ outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
 stride_plot = 40
 
-# single step processing function
-def plot_step(step: int):
+# plotting function for multiprocessing
+def plot_step(step):
     try:
-        u_x = load_velocity_component(get_file_path(dataType_A, step), FP)
-        u_y = load_velocity_component(get_file_path(dataType_B, step), FP)
-
+        # load velocity x-component
+        u_x = load_velocity_component(get_file_path(dataType, step), FP)
         u_x_ds = u_x[::stride_plot, ::stride_plot]
-        u_y_ds = u_y[::stride_plot, ::stride_plot]
 
-        x = np.linspace(0, N_X, u_x_ds.shape[1], endpoint=False)
-        y = np.linspace(0, N_Y, u_x_ds.shape[0], endpoint=False)
-        X, Y = np.meshgrid(x, y)
-
+        # plot as heatmap
         fig, ax = plt.subplots(figsize=(6, 5))
-        speed = np.sqrt(u_x_ds**2 + u_y_ds**2)
-        strm = ax.streamplot(
-            X, Y, u_x_ds, u_y_ds,
-            density=1.5, linewidth=1.5, arrowsize=1.0,
-            color=speed, cmap='inferno')
-        fig.colorbar(strm.lines, ax=ax, label="velocity magnitude")
-        ax.set_title(f"step {step}, omega {omega}, u_lid {u_lid}")
+        im = ax.imshow(u_x_ds, cmap='seismic', origin='lower',
+                       extent=[0, N_X, 0, N_Y], aspect='equal',
+                       vmin=-u_lid, vmax=u_lid)
+        fig.colorbar(im, ax=ax, label="y-velocity (u_y)")
+        #ax.set_title(f"y-velocity at step {step}, omega {omega}, u_lid {u_lid}")
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
-        ax.set_xlim(0, N_X)
-        ax.set_ylim(0, N_Y)
-        ax.set_aspect("equal")
-        ax.grid(True)
+        ax.grid(False)
         ax.margins(0)
 
-        outputPath = f"{outputDir}/streamlines{format_step_suffix(step)}.png"
+        # save as png
+        outputPath = f"{outputDir}/{dataType}{format_step_suffix(step)}.png"
         plt.savefig(outputPath, dpi=300)
         plt.close()
 
-        del u_x, u_y, u_x_ds, u_y_ds, X, Y, speed, strm, fig, ax
+        # free up memory
+        del u_x, u_x_ds, im, fig, ax
         import gc; gc.collect()
 
         print(f"✅  Saved plot: {outputPath}")
@@ -91,7 +81,6 @@ def plot_step(step: int):
     except Exception as e:
         print(f"⚠️ Failed for step {step}: {e}")
 
-# run with multiprocessing
 if __name__ == "__main__":
     with mp.Pool(10) as pool:
         pool.map(plot_step, steps)
