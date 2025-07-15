@@ -70,9 +70,9 @@ def plot_step(step):
         im1 = ax1.imshow(u_x_ds, cmap='seismic', origin='lower',
                          extent=[0, N_X, 0, N_Y], aspect='equal',
                          vmin=-u_lid, vmax=u_lid)
-        ax1.set_title(f"x-velocity (u_x)", fontsize=font_titles)
-        ax1.set_xlabel("X", fontsize=font_axes)
-        ax1.set_ylabel("Y", fontsize=font_axes)
+        #ax1.set_title(f"x-velocity (u_x)", fontsize=font_titles)
+        #ax1.set_xlabel("X", fontsize=font_axes)
+        #ax1.set_ylabel("Y", fontsize=font_axes)
         ax1.grid(False)
         ax1.margins(0)
 
@@ -80,15 +80,15 @@ def plot_step(step):
         im2 = ax2.imshow(u_y_ds, cmap='seismic', origin='lower',
                          extent=[0, N_X, 0, N_Y], aspect='equal',
                          vmin=-u_lid, vmax=u_lid)
-        ax2.set_title(f"y-velocity (u_y)", fontsize=font_titles)
-        ax2.set_xlabel("X", fontsize=font_axes)
+        #ax2.set_title(f"y-velocity (u_y)", fontsize=font_titles)
+        #ax2.set_xlabel("X", fontsize=font_axes)
         #ax2.set_ylabel("Y", fontsize=font_axes)
         ax2.grid(False)
         ax2.margins(0)
 
         # add one shared colorbar in the center
         cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', pad=0.05)
-        cbar.set_label("velocity", fontsize=font_legend)
+        #cbar.set_label("velocity", fontsize=font_legend)
         cbar.ax.tick_params(labelsize=10)
 
         # save as png

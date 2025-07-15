@@ -12,15 +12,15 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 # ----- VISUALIZATION OF THE X/Y-VELOCITY AS A SHARED HEATMAP -----
 # simulation config
-N_X =   24000
-N_Y =   24000
-omega = 1.1
+N_X =   12000
+N_Y =   12000
+omega = 1.2
 u_lid = 0.1
 
 # step config
-step_start =    100_000
-step_end =      40_000_000
-step_stride =   100_000
+step_start =    25_000
+step_end =      12_000_000
+step_stride =   25_000
 steps = [1] + list(range(step_start, step_end + 1, step_stride))
 
 # output path config
@@ -28,7 +28,7 @@ dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
 versionDirName =    "04"
-subDirName =        "M_FINAL"
+subDirName =        "K"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:
@@ -50,9 +50,9 @@ os.makedirs(outputDir, exist_ok=True)
 stride_plot = 40
 
 # font sizes
-font_axes = 18
+font_axes = 22
 font_titles = 22
-font_legend = 18
+font_legend = 24
 
 # plotting function for multiprocessing
 def plot_step(step):
@@ -75,6 +75,8 @@ def plot_step(step):
         #ax1.set_ylabel("Y", fontsize=font_axes)
         ax1.grid(False)
         ax1.margins(0)
+        ax1.set_xticks([])
+        ax1.set_yticks([])
 
         # plot u_y
         im2 = ax2.imshow(u_y_ds, cmap='seismic', origin='lower',
@@ -85,11 +87,12 @@ def plot_step(step):
         #ax2.set_ylabel("Y", fontsize=font_axes)
         ax2.grid(False)
         ax2.margins(0)
+        ax2.set_xticks([])
+        ax2.set_yticks([])
 
         # add one shared colorbar in the center
-        cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', shrink=0.85, pad=0.05)
-        #cbar.set_label("velocity", fontsize=font_legend)
-        cbar.ax.tick_params(labelsize=10)
+        cbar = fig.colorbar(im1, ax=[ax1, ax2], orientation='vertical', pad=0.05)
+        cbar.ax.tick_params(labelsize=font_legend)
 
         # save as png
         outputPath = f"{outputDir}/velocity_shared{format_step_suffix(step)}.png"
