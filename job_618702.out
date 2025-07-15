@@ -1,0 +1,15 @@
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc3n[072-081]
+Job ID: 618702
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: TIMEOUT (exit code 0)
+Nodes: 10
+Cores per node: 32
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 06:34:40 core-walltime
+Job Wall-clock time: 00:01:14
+Memory Utilized: 50.43 MB
+Memory Efficiency: 0.00% of 1.25 TB (128.00 GB/node)

@@ -1,0 +1,209 @@
+ninja: Entering directory `buildDir'
+ninja: no work to do.
+
+[2025-07-12 21:47:08] [[32minfo[m] Rank 0 loaded parameters from input_cavity_video_M.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 24000
+N_Y_TOTAL            = 24000
+N_STEPS              = 400000000
+omega                = 1.100
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 100000
+export_name          = M
+export_num           = 04
+export_rho           = false
+export_u_x           = true
+export_u_y           = true
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-12 21:47:08] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-12 21:47:08] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-12 21:47:08] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-12 21:47:08] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n907.   NVIDIA H100 PCIe                   0   90   114  233472    79.190    11.704   67.486   24000  3000  
+1     uc2n907.   NVIDIA H100 PCIe                   1   90   114  233472    79.190    12.243   66.946   24000  3000  
+2     uc2n907.   NVIDIA H100 PCIe                   2   90   114  233472    79.190    12.243   66.946   24000  3000  
+3     uc2n907.   NVIDIA H100 PCIe                   3   90   114  233472    79.190    12.245   66.945   24000  3000  
+4     uc2n907.                                      4   0    0    0         79.190    12.243   66.946   24000  3000  
+5     uc2n907.                                      5   0    0    0         79.190    12.243   66.946   24000  3000  
+6     uc2n907.                                      6   0    0    0         79.190    12.243   66.946   24000  3000  
+7     uc2n907.                                      7   0    0    0         79.190    12.243   66.946   24000  3000  
+
+[2025-07-12 21:47:08] [[32minfo[m] Simulation size [X/Y/N]:    [ 24000 / 24000 / 400000000 ]
+[2025-07-12 21:47:08] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 24000 / 3000 / 400000000 ] * 8
+[2025-07-12 21:47:08] [[32minfo[m] Halo cells per sub-domain:  0.07 %
+
+[2025-07-12 21:47:08] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 281063 / 256 ]
+[2025-07-12 21:47:08] [[32minfo[m] Registers per thread:       30
+[2025-07-12 21:47:08] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-12 21:47:08] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-12 21:47:08] [[32minfo[m] Kernel domain size [X/Y]:   [ 24000 / 2998 ]
+
+[2025-07-12 21:47:08] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 188 / 256 ]
+[2025-07-12 21:47:08] [[32minfo[m] Registers per thread:       36
+[2025-07-12 21:47:08] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-12 21:47:08] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-12 21:47:08] [[32minfo[m] Kernel domain size [X/Y]:   [ 24000 / 2 ]
+
+[2025-07-12 21:47:08] [[32minfo[m] Rank 0 -> creating directory exported/04/M...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 0 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 7 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 6 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 3 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 5 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 4 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 2 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 1 -> opening shared file exported/04/M/velocity_x_000000001.bin...
+[2025-07-12 21:47:08] [[32minfo[m] Rank 6 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 4 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 3 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 7 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 2 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 5 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 1 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 0 -> opened the file
+[2025-07-12 21:47:08] [[32minfo[m] Rank 3 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=9000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 2 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=6000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 6 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=18000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 5 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=15000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 1 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=3000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 7 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=21000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 4 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=12000 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 0 -> wrote to exported/04/M/velocity_x_000000001.bin at offset y=0 (24000x3000)
+[2025-07-12 21:47:09] [[32minfo[m] Rank 7 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 3 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 0 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 2 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 4 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 6 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 5 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 1 -> closed the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 0 -> creating directory exported/04/M...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 0 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 2 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 1 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 5 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 4 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 3 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 7 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 6 -> opening shared file exported/04/M/velocity_y_000000001.bin...
+[2025-07-12 21:47:09] [[32minfo[m] Rank 3 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 7 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 6 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 4 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 1 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 0 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 2 -> opened the file
+[2025-07-12 21:47:09] [[32minfo[m] Rank 5 -> opened the file
+[2025-07-12 21:47:10] [[32minfo[m] Rank 6 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=18000 (24000x3000)
+[2025-07-12 21:47:10] [[32minfo[m] Rank 4 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=12000 (24000x3000)
+[2025-07-12 21:47:10] [[32minfo[m] Rank 7 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=21000 (24000x3000)
+[2025-07-12 21:47:10] [[32minfo[m] Rank 1 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=3000 (24000x3000)
+[2025-07-12 21:47:10] [[32minfo[m] Rank 3 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=9000 (24000x3000)
+[2025-07-12 21:47:11] [[32minfo[m] Rank 5 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=15000 (24000x3000)
+[2025-07-12 21:47:11] [[32minfo[m] Rank 2 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=6000 (24000x3000)
+[2025-07-12 21:47:11] [[32minfo[m] Rank 0 -> wrote to exported/04/M/velocity_y_000000001.bin at offset y=0 (24000x3000)
+[2025-07-12 21:47:11] [[32minfo[m] Rank 7 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 3 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 6 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 0 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 5 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 1 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 4 -> closed the file
+[2025-07-12 21:47:11] [[32minfo[m] Rank 2 -> closed the file
+[21:47:11] [38;2;255;40;50m  0 %[0m
+[2025-07-12 21:58:58] [[32minfo[m] Rank 0 -> creating directory exported/04/M...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 0 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 3 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 6 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 1 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 4 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 2 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 7 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 5 -> opening shared file exported/04/M/velocity_x_000100000.bin...
+[2025-07-12 21:58:58] [[32minfo[m] Rank 1 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 4 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 2 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 7 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 5 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 3 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 6 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 0 -> opened the file
+[2025-07-12 21:58:58] [[32minfo[m] Rank 3 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=9000 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 4 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=12000 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 2 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=6000 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 6 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=18000 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 0 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=0 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 1 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=3000 (24000x3000)
+[2025-07-12 21:58:59] [[32minfo[m] Rank 7 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=21000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 5 -> wrote to exported/04/M/velocity_x_000100000.bin at offset y=15000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 5 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 2 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 4 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 7 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 0 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 6 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 3 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 1 -> closed the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 0 -> creating directory exported/04/M...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 2 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 4 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 5 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 7 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 1 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 0 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 3 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 6 -> opening shared file exported/04/M/velocity_y_000100000.bin...
+[2025-07-12 21:59:00] [[32minfo[m] Rank 3 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 6 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 1 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 2 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 5 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 0 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 4 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 7 -> opened the file
+[2025-07-12 21:59:00] [[32minfo[m] Rank 3 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=9000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 7 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=21000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 1 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=3000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 5 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=15000 (24000x3000)
+[2025-07-12 21:59:00] [[32minfo[m] Rank 2 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=6000 (24000x3000)
+[2025-07-12 21:59:01] [[32minfo[m] Rank 4 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=12000 (24000x3000)
+[2025-07-12 21:59:01] [[32minfo[m] Rank 0 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=0 (24000x3000)
+[2025-07-12 21:59:01] [[32minfo[m] Rank 6 -> wrote to exported/04/M/velocity_y_000100000.bin at offset y=18000 (24000x3000)
+[2025-07-12 21:59:01] [[32minfo[m] Rank 4 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 7 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 6 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 3 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 1 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 2 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 0 -> closed the file
+[2025-07-12 21:59:01] [[32minfo[m] Rank 5 -> closed the file
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n[907,915]
+Job ID: 719020
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: CANCELLED (exit code 0)
+Nodes: 2
+Cores per node: 128
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 2-08:49:04 core-walltime
+Job Wall-clock time: 00:13:19
+Memory Utilized: 4.92 GB
+Memory Efficiency: 0.96% of 512.00 GB (256.00 GB/node)

@@ -1,0 +1,17 @@
+ninja: Entering directory `buildDir'
+ninja: no work to do.
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n[907,915]
+Job ID: 722129
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: FAILED (exit code 1)
+Nodes: 2
+Cores per node: 128
+CPU Utilized: 00:00:03
+CPU Efficiency: 0.07% of 01:08:16 core-walltime
+Job Wall-clock time: 00:00:16
+Memory Utilized: 10.16 MB
+Memory Efficiency: 0.00% of 512.00 GB (256.00 GB/node)
