@@ -12,15 +12,15 @@ FP = np.float64 if "--FP64" in sys.argv else np.float32
 
 # ----- VISUALIZATION OF THE X/Y-VELOCITY AS A SHARED HEATMAP -----
 # simulation config
-N_X =   12000
-N_Y =   12000
-omega = 1.2
+N_X =   24000
+N_Y =   24000
+omega = 1.1
 u_lid = 0.1
 
 # step config
-step_start =    25_000
-step_end =      12_000_000
-step_stride =   25_000
+step_start =    100_000
+step_end =      56_400_000
+step_stride =   100_000
 steps = [1] + list(range(step_start, step_end + 1, step_stride))
 
 # output path config
@@ -28,7 +28,7 @@ dataType_A =        "velocity_x"
 dataType_B =        "velocity_y"
 outputDirName =     "output"
 versionDirName =    "04"
-subDirName =        "K"
+subDirName =        "M_FINAL"
 
 # formatting helper
 def format_step_suffix(step: int, width: int = 9) -> str:
@@ -47,7 +47,7 @@ def load_velocity_component(filename: str, dtype: np.dtype) -> np.ndarray:
 # misc
 outputDir = f"{outputDirName}/{versionDirName}/{subDirName}"
 os.makedirs(outputDir, exist_ok=True)
-stride_plot = 40
+stride_plot = 20
 
 # font sizes
 font_axes = 22
