@@ -1,0 +1,1471 @@
+5070 Ti FP32 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.349    14.571   100    100
+
+[2025-07-14 19:50:36] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-14 19:50:36] [info] Sub-domain size [X/Y/N]:    [ 100 / 100 / 10000 ] * 1
+[2025-07-14 19:50:36] [info] Halo cells per sub-domain:  2.00 %
+
+[2025-07-14 19:50:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 39 / 256 ]
+[2025-07-14 19:50:36] [info] Registers per thread:       63
+[2025-07-14 19:50:36] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:36] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:36] [info] Kernel domain size [X/Y]:   [ 100 / 98 ]
+
+[2025-07-14 19:50:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 1 / 256 ]
+[2025-07-14 19:50:36] [info] Registers per thread:       37
+[2025-07-14 19:50:36] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:36] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:36] [info] Kernel domain size [X/Y]:   [ 100 / 2 ]
+
+
+[2025-07-14 19:50:37] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-14 19:50:37] [info] Total execution time:       0.583 sec
+[2025-07-14 19:50:37] [info] Step execution time:        0.058 ms
+[2025-07-14 19:50:37] [info] BLUPS:                      0.172
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.351    14.569   200    200
+
+[2025-07-14 19:50:54] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-14 19:50:54] [info] Sub-domain size [X/Y/N]:    [ 200 / 200 / 10000 ] * 1
+[2025-07-14 19:50:54] [info] Halo cells per sub-domain:  1.00 %
+
+[2025-07-14 19:50:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 155 / 256 ]
+[2025-07-14 19:50:54] [info] Registers per thread:       63
+[2025-07-14 19:50:54] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:54] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:54] [info] Kernel domain size [X/Y]:   [ 200 / 198 ]
+
+[2025-07-14 19:50:54] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 2 / 256 ]
+[2025-07-14 19:50:54] [info] Registers per thread:       37
+[2025-07-14 19:50:54] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:54] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:54] [info] Kernel domain size [X/Y]:   [ 200 / 2 ]
+
+
+[2025-07-14 19:50:55] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-14 19:50:55] [info] Total execution time:       0.552 sec
+[2025-07-14 19:50:55] [info] Step execution time:        0.055 ms
+[2025-07-14 19:50:55] [info] BLUPS:                      0.724
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.357    14.563   300    300
+
+[2025-07-14 19:50:58] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-14 19:50:58] [info] Sub-domain size [X/Y/N]:    [ 300 / 300 / 10000 ] * 1
+[2025-07-14 19:50:58] [info] Halo cells per sub-domain:  0.67 %
+
+[2025-07-14 19:50:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 350 / 256 ]
+[2025-07-14 19:50:58] [info] Registers per thread:       63
+[2025-07-14 19:50:58] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:58] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:58] [info] Kernel domain size [X/Y]:   [ 300 / 298 ]
+
+[2025-07-14 19:50:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 3 / 256 ]
+[2025-07-14 19:50:58] [info] Registers per thread:       37
+[2025-07-14 19:50:58] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:50:58] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:50:58] [info] Kernel domain size [X/Y]:   [ 300 / 2 ]
+
+
+[2025-07-14 19:50:59] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-14 19:50:59] [info] Total execution time:       0.658 sec
+[2025-07-14 19:50:59] [info] Step execution time:        0.066 ms
+[2025-07-14 19:50:59] [info] BLUPS:                      1.369
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.361    14.560   400    400
+
+[2025-07-14 19:51:02] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-14 19:51:02] [info] Sub-domain size [X/Y/N]:    [ 400 / 400 / 10000 ] * 1
+[2025-07-14 19:51:02] [info] Halo cells per sub-domain:  0.50 %
+
+[2025-07-14 19:51:02] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 622 / 256 ]
+[2025-07-14 19:51:02] [info] Registers per thread:       63
+[2025-07-14 19:51:02] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:02] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:02] [info] Kernel domain size [X/Y]:   [ 400 / 398 ]
+
+[2025-07-14 19:51:02] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-14 19:51:02] [info] Registers per thread:       37
+[2025-07-14 19:51:02] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:02] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:02] [info] Kernel domain size [X/Y]:   [ 400 / 2 ]
+
+
+[2025-07-14 19:51:02] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-14 19:51:02] [info] Total execution time:       0.770 sec
+[2025-07-14 19:51:02] [info] Step execution time:        0.077 ms
+[2025-07-14 19:51:02] [info] BLUPS:                      2.079
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.369    14.552   500    500
+
+[2025-07-14 19:51:05] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-14 19:51:05] [info] Sub-domain size [X/Y/N]:    [ 500 / 500 / 10000 ] * 1
+[2025-07-14 19:51:05] [info] Halo cells per sub-domain:  0.40 %
+
+[2025-07-14 19:51:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 973 / 256 ]
+[2025-07-14 19:51:05] [info] Registers per thread:       63
+[2025-07-14 19:51:05] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:05] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:05] [info] Kernel domain size [X/Y]:   [ 500 / 498 ]
+
+[2025-07-14 19:51:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-14 19:51:05] [info] Registers per thread:       37
+[2025-07-14 19:51:05] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:05] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:05] [info] Kernel domain size [X/Y]:   [ 500 / 2 ]
+
+
+[2025-07-14 19:51:06] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-14 19:51:06] [info] Total execution time:       0.662 sec
+[2025-07-14 19:51:06] [info] Step execution time:        0.066 ms
+[2025-07-14 19:51:06] [info] BLUPS:                      3.778
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.431    14.489   1000   1000
+
+[2025-07-14 19:51:09] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-14 19:51:09] [info] Sub-domain size [X/Y/N]:    [ 1000 / 1000 / 10000 ] * 1
+[2025-07-14 19:51:09] [info] Halo cells per sub-domain:  0.20 %
+
+[2025-07-14 19:51:09] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 3899 / 256 ]
+[2025-07-14 19:51:09] [info] Registers per thread:       63
+[2025-07-14 19:51:09] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:09] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:09] [info] Kernel domain size [X/Y]:   [ 1000 / 998 ]
+
+[2025-07-14 19:51:09] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 8 / 256 ]
+[2025-07-14 19:51:09] [info] Registers per thread:       37
+[2025-07-14 19:51:09] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:09] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:09] [info] Kernel domain size [X/Y]:   [ 1000 / 2 ]
+
+
+[2025-07-14 19:51:11] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-14 19:51:11] [info] Total execution time:       1.506 sec
+[2025-07-14 19:51:11] [info] Step execution time:        0.151 ms
+[2025-07-14 19:51:11] [info] BLUPS:                      6.640
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.554    14.366   1500   1500
+
+[2025-07-14 19:51:13] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-14 19:51:13] [info] Sub-domain size [X/Y/N]:    [ 1500 / 1500 / 10000 ] * 1
+[2025-07-14 19:51:13] [info] Halo cells per sub-domain:  0.13 %
+
+[2025-07-14 19:51:13] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 8778 / 256 ]
+[2025-07-14 19:51:13] [info] Registers per thread:       63
+[2025-07-14 19:51:13] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:13] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:13] [info] Kernel domain size [X/Y]:   [ 1500 / 1498 ]
+
+[2025-07-14 19:51:13] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 12 / 256 ]
+[2025-07-14 19:51:13] [info] Registers per thread:       37
+[2025-07-14 19:51:13] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:13] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:13] [info] Kernel domain size [X/Y]:   [ 1500 / 2 ]
+
+
+[2025-07-14 19:51:16] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-14 19:51:16] [info] Total execution time:       2.833 sec
+[2025-07-14 19:51:16] [info] Step execution time:        0.283 ms
+[2025-07-14 19:51:16] [info] BLUPS:                      7.943
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.677    14.243   2000   2000
+
+[2025-07-14 19:51:19] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-14 19:51:19] [info] Sub-domain size [X/Y/N]:    [ 2000 / 2000 / 10000 ] * 1
+[2025-07-14 19:51:19] [info] Halo cells per sub-domain:  0.10 %
+
+[2025-07-14 19:51:19] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 15610 / 256 ]
+[2025-07-14 19:51:19] [info] Registers per thread:       63
+[2025-07-14 19:51:19] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:19] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:19] [info] Kernel domain size [X/Y]:   [ 2000 / 1998 ]
+
+[2025-07-14 19:51:19] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 16 / 256 ]
+[2025-07-14 19:51:19] [info] Registers per thread:       37
+[2025-07-14 19:51:19] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:19] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:19] [info] Kernel domain size [X/Y]:   [ 2000 / 2 ]
+
+
+[2025-07-14 19:51:23] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-14 19:51:23] [info] Total execution time:       4.642 sec
+[2025-07-14 19:51:23] [info] Step execution time:        0.464 ms
+[2025-07-14 19:51:23] [info] BLUPS:                      8.616
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    1.841    14.079   2500   2500
+
+[2025-07-14 19:51:26] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-14 19:51:26] [info] Sub-domain size [X/Y/N]:    [ 2500 / 2500 / 10000 ] * 1
+[2025-07-14 19:51:26] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-14 19:51:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 24395 / 256 ]
+[2025-07-14 19:51:26] [info] Registers per thread:       63
+[2025-07-14 19:51:26] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:26] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:26] [info] Kernel domain size [X/Y]:   [ 2500 / 2498 ]
+
+[2025-07-14 19:51:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 20 / 256 ]
+[2025-07-14 19:51:26] [info] Registers per thread:       37
+[2025-07-14 19:51:26] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:26] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:26] [info] Kernel domain size [X/Y]:   [ 2500 / 2 ]
+
+
+[2025-07-14 19:51:33] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-14 19:51:33] [info] Total execution time:       6.874 sec
+[2025-07-14 19:51:33] [info] Step execution time:        0.687 ms
+[2025-07-14 19:51:33] [info] BLUPS:                      9.093
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    2.087    13.833   3000   3000
+
+[2025-07-14 19:51:36] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-14 19:51:36] [info] Sub-domain size [X/Y/N]:    [ 3000 / 3000 / 10000 ] * 1
+[2025-07-14 19:51:36] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-14 19:51:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 35133 / 256 ]
+[2025-07-14 19:51:36] [info] Registers per thread:       63
+[2025-07-14 19:51:36] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:36] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:36] [info] Kernel domain size [X/Y]:   [ 3000 / 2998 ]
+
+[2025-07-14 19:51:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 24 / 256 ]
+[2025-07-14 19:51:36] [info] Registers per thread:       37
+[2025-07-14 19:51:36] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:51:36] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:51:36] [info] Kernel domain size [X/Y]:   [ 3000 / 2 ]
+
+
+[2025-07-14 19:51:46] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-14 19:51:46] [info] Total execution time:       9.691 sec
+[2025-07-14 19:51:46] [info] Step execution time:        0.969 ms
+[2025-07-14 19:51:46] [info] BLUPS:                      9.287
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    2.334    13.587   3500   3500
+
+[2025-07-14 19:53:03] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-14 19:53:03] [info] Sub-domain size [X/Y/N]:    [ 3500 / 3500 / 10000 ] * 1
+[2025-07-14 19:53:03] [info] Halo cells per sub-domain:  0.06 %
+
+[2025-07-14 19:53:03] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 47825 / 256 ]
+[2025-07-14 19:53:03] [info] Registers per thread:       63
+[2025-07-14 19:53:03] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:53:03] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:53:03] [info] Kernel domain size [X/Y]:   [ 3500 / 3498 ]
+
+[2025-07-14 19:53:03] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 28 / 256 ]
+[2025-07-14 19:53:03] [info] Registers per thread:       37
+[2025-07-14 19:53:03] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:53:03] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:53:03] [info] Kernel domain size [X/Y]:   [ 3500 / 2 ]
+
+
+[2025-07-14 19:53:16] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-14 19:53:16] [info] Total execution time:       12.820 sec
+[2025-07-14 19:53:16] [info] Step execution time:        1.282 ms
+[2025-07-14 19:53:16] [info] BLUPS:                      9.555
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    3.318    12.603   5000   5000
+
+[2025-07-14 19:53:42] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-14 19:53:42] [info] Sub-domain size [X/Y/N]:    [ 5000 / 5000 / 10000 ] * 1
+[2025-07-14 19:53:42] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-14 19:53:42] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 97618 / 256 ]
+[2025-07-14 19:53:42] [info] Registers per thread:       63
+[2025-07-14 19:53:42] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:53:42] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:53:42] [info] Kernel domain size [X/Y]:   [ 5000 / 4998 ]
+
+[2025-07-14 19:53:42] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 40 / 256 ]
+[2025-07-14 19:53:42] [info] Registers per thread:       37
+[2025-07-14 19:53:42] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:53:42] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:53:42] [info] Kernel domain size [X/Y]:   [ 5000 / 2 ]
+
+
+[2025-07-14 19:54:07] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-14 19:54:07] [info] Total execution time:       25.026 sec
+[2025-07-14 19:54:07] [info] Step execution time:        2.503 ms
+[2025-07-14 19:54:07] [info] BLUPS:                      9.990
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    5.205    10.716   7000   7000
+
+[2025-07-14 19:55:47] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-14 19:55:47] [info] Sub-domain size [X/Y/N]:    [ 7000 / 7000 / 10000 ] * 1
+[2025-07-14 19:55:47] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-14 19:55:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 191352 / 256 ]
+[2025-07-14 19:55:47] [info] Registers per thread:       63
+[2025-07-14 19:55:47] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:55:47] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:55:47] [info] Kernel domain size [X/Y]:   [ 7000 / 6998 ]
+
+[2025-07-14 19:55:47] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 55 / 256 ]
+[2025-07-14 19:55:47] [info] Registers per thread:       37
+[2025-07-14 19:55:47] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:55:47] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:55:47] [info] Kernel domain size [X/Y]:   [ 7000 / 2 ]
+
+
+[2025-07-14 19:56:36] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-14 19:56:36] [info] Total execution time:       48.404 sec
+[2025-07-14 19:56:36] [info] Step execution time:        4.840 ms
+[2025-07-14 19:56:36] [info] BLUPS:                      10.123
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    7.707    8.214    9000   9000
+
+[2025-07-14 19:57:53] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-14 19:57:53] [info] Sub-domain size [X/Y/N]:    [ 9000 / 9000 / 10000 ] * 1
+[2025-07-14 19:57:53] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-14 19:57:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 316336 / 256 ]
+[2025-07-14 19:57:53] [info] Registers per thread:       63
+[2025-07-14 19:57:53] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:57:53] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:57:53] [info] Kernel domain size [X/Y]:   [ 9000 / 8998 ]
+
+[2025-07-14 19:57:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 71 / 256 ]
+[2025-07-14 19:57:53] [info] Registers per thread:       37
+[2025-07-14 19:57:53] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:57:53] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:57:53] [info] Kernel domain size [X/Y]:   [ 9000 / 2 ]
+
+
+[2025-07-14 19:59:13] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-14 19:59:13] [info] Total execution time:       80.619 sec
+[2025-07-14 19:59:13] [info] Step execution time:        8.062 ms
+[2025-07-14 19:59:13] [info] BLUPS:                      10.047
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    10.824   5.097    11000  11000
+
+[2025-07-14 19:59:17] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-14 19:59:17] [info] Sub-domain size [X/Y/N]:    [ 11000 / 11000 / 10000 ] * 1
+[2025-07-14 19:59:17] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-14 19:59:17] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 472571 / 256 ]
+[2025-07-14 19:59:17] [info] Registers per thread:       63
+[2025-07-14 19:59:17] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:59:17] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:59:17] [info] Kernel domain size [X/Y]:   [ 11000 / 10998 ]
+
+[2025-07-14 19:59:17] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 86 / 256 ]
+[2025-07-14 19:59:17] [info] Registers per thread:       37
+[2025-07-14 19:59:17] [info] Shared memory per block:    9216 bytes
+[2025-07-14 19:59:17] [info] Local memory per thread:    0 bytes
+[2025-07-14 19:59:17] [info] Kernel domain size [X/Y]:   [ 11000 / 2 ]
+
+
+[2025-07-14 20:01:14] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-14 20:01:14] [info] Total execution time:       116.668 sec
+[2025-07-14 20:01:14] [info] Step execution time:        11.667 ms
+[2025-07-14 20:01:14] [info] BLUPS:                      10.371
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     Z890       NVIDIA GeForce RTX 5070 Ti         0   120  70   102400    15.920    15.186   0.735    13000  13000
+
+[2025-07-14 20:01:59] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-14 20:01:59] [info] Sub-domain size [X/Y/N]:    [ 13000 / 13000 / 10000 ] * 1
+[2025-07-14 20:01:59] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-14 20:02:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 660055 / 256 ]
+[2025-07-14 20:02:00] [info] Registers per thread:       63
+[2025-07-14 20:02:00] [info] Shared memory per block:    9216 bytes
+[2025-07-14 20:02:00] [info] Local memory per thread:    0 bytes
+[2025-07-14 20:02:00] [info] Kernel domain size [X/Y]:   [ 13000 / 12998 ]
+
+[2025-07-14 20:02:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 102 / 256 ]
+[2025-07-14 20:02:00] [info] Registers per thread:       37
+[2025-07-14 20:02:00] [info] Shared memory per block:    9216 bytes
+[2025-07-14 20:02:00] [info] Local memory per thread:    0 bytes
+[2025-07-14 20:02:00] [info] Kernel domain size [X/Y]:   [ 13000 / 2 ]
+
+
+[2025-07-14 20:04:59] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-14 20:04:59] [info] Total execution time:       179.546 sec
+[2025-07-14 20:04:59] [info] Step execution time:        17.955 ms
+[2025-07-14 20:04:59] [info] BLUPS:                      9.413
+
+
+
+A100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.441    78.811   100    100
+
+[2025-07-15 03:19:21] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-15 03:19:21] [info] Sub-domain size [X/Y/N]:    [ 100 / 100 / 10000 ] * 1
+[2025-07-15 03:19:21] [info] Halo cells per sub-domain:  2.00 %
+
+[2025-07-15 03:19:21] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 39 / 256 ]
+[2025-07-15 03:19:21] [info] Registers per thread:       30
+[2025-07-15 03:19:21] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:21] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:21] [info] Kernel domain size [X/Y]:   [ 100 / 98 ]
+
+[2025-07-15 03:19:21] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 1 / 256 ]
+[2025-07-15 03:19:21] [info] Registers per thread:       32
+[2025-07-15 03:19:21] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:21] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:21] [info] Kernel domain size [X/Y]:   [ 100 / 2 ]
+
+
+[2025-07-15 03:19:22] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-15 03:19:22] [info] Total execution time:       0.213 sec
+[2025-07-15 03:19:22] [info] Step execution time:        0.021 ms
+[2025-07-15 03:19:22] [info] BLUPS:                      0.469
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.443    78.809   200    200
+
+[2025-07-15 03:19:24] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-15 03:19:24] [info] Sub-domain size [X/Y/N]:    [ 200 / 200 / 10000 ] * 1
+[2025-07-15 03:19:24] [info] Halo cells per sub-domain:  1.00 %
+
+[2025-07-15 03:19:24] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 155 / 256 ]
+[2025-07-15 03:19:24] [info] Registers per thread:       30
+[2025-07-15 03:19:24] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:24] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:24] [info] Kernel domain size [X/Y]:   [ 200 / 198 ]
+
+[2025-07-15 03:19:24] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 2 / 256 ]
+[2025-07-15 03:19:24] [info] Registers per thread:       32
+[2025-07-15 03:19:24] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:24] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:24] [info] Kernel domain size [X/Y]:   [ 200 / 2 ]
+
+
+[2025-07-15 03:19:24] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-15 03:19:24] [info] Total execution time:       0.221 sec
+[2025-07-15 03:19:24] [info] Step execution time:        0.022 ms
+[2025-07-15 03:19:24] [info] BLUPS:                      1.813
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.449    78.803   300    300
+
+[2025-07-15 03:19:26] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-15 03:19:26] [info] Sub-domain size [X/Y/N]:    [ 300 / 300 / 10000 ] * 1
+[2025-07-15 03:19:26] [info] Halo cells per sub-domain:  0.67 %
+
+[2025-07-15 03:19:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 350 / 256 ]
+[2025-07-15 03:19:26] [info] Registers per thread:       30
+[2025-07-15 03:19:26] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:26] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:26] [info] Kernel domain size [X/Y]:   [ 300 / 298 ]
+
+[2025-07-15 03:19:26] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 3 / 256 ]
+[2025-07-15 03:19:26] [info] Registers per thread:       32
+[2025-07-15 03:19:26] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:26] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:26] [info] Kernel domain size [X/Y]:   [ 300 / 2 ]
+
+
+[2025-07-15 03:19:26] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-15 03:19:26] [info] Total execution time:       0.244 sec
+[2025-07-15 03:19:26] [info] Step execution time:        0.024 ms
+[2025-07-15 03:19:26] [info] BLUPS:                      3.696
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.452    78.799   400    400
+
+[2025-07-15 03:19:29] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-15 03:19:29] [info] Sub-domain size [X/Y/N]:    [ 400 / 400 / 10000 ] * 1
+[2025-07-15 03:19:29] [info] Halo cells per sub-domain:  0.50 %
+
+[2025-07-15 03:19:29] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 622 / 256 ]
+[2025-07-15 03:19:29] [info] Registers per thread:       30
+[2025-07-15 03:19:29] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:29] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:29] [info] Kernel domain size [X/Y]:   [ 400 / 398 ]
+
+[2025-07-15 03:19:29] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-15 03:19:29] [info] Registers per thread:       32
+[2025-07-15 03:19:29] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:29] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:29] [info] Kernel domain size [X/Y]:   [ 400 / 2 ]
+
+
+[2025-07-15 03:19:29] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-15 03:19:29] [info] Total execution time:       0.260 sec
+[2025-07-15 03:19:29] [info] Step execution time:        0.026 ms
+[2025-07-15 03:19:29] [info] BLUPS:                      6.155
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.460    78.791   500    500
+
+[2025-07-15 03:19:31] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-15 03:19:31] [info] Sub-domain size [X/Y/N]:    [ 500 / 500 / 10000 ] * 1
+[2025-07-15 03:19:31] [info] Halo cells per sub-domain:  0.40 %
+
+[2025-07-15 03:19:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 973 / 256 ]
+[2025-07-15 03:19:31] [info] Registers per thread:       30
+[2025-07-15 03:19:31] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:31] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:31] [info] Kernel domain size [X/Y]:   [ 500 / 498 ]
+
+[2025-07-15 03:19:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-15 03:19:31] [info] Registers per thread:       32
+[2025-07-15 03:19:31] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:31] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:31] [info] Kernel domain size [X/Y]:   [ 500 / 2 ]
+
+
+[2025-07-15 03:19:31] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-15 03:19:31] [info] Total execution time:       0.294 sec
+[2025-07-15 03:19:31] [info] Step execution time:        0.029 ms
+[2025-07-15 03:19:31] [info] BLUPS:                      8.498
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.523    78.729   1000   1000
+
+[2025-07-15 03:19:33] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-15 03:19:33] [info] Sub-domain size [X/Y/N]:    [ 1000 / 1000 / 10000 ] * 1
+[2025-07-15 03:19:33] [info] Halo cells per sub-domain:  0.20 %
+
+[2025-07-15 03:19:33] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 3899 / 256 ]
+[2025-07-15 03:19:33] [info] Registers per thread:       30
+[2025-07-15 03:19:33] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:33] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:33] [info] Kernel domain size [X/Y]:   [ 1000 / 998 ]
+
+[2025-07-15 03:19:33] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 8 / 256 ]
+[2025-07-15 03:19:33] [info] Registers per thread:       32
+[2025-07-15 03:19:33] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:33] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:33] [info] Kernel domain size [X/Y]:   [ 1000 / 2 ]
+
+
+[2025-07-15 03:19:34] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-15 03:19:34] [info] Total execution time:       0.725 sec
+[2025-07-15 03:19:34] [info] Step execution time:        0.073 ms
+[2025-07-15 03:19:34] [info] BLUPS:                      13.790
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.646    78.606   1500   1500
+
+[2025-07-15 03:19:36] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-15 03:19:36] [info] Sub-domain size [X/Y/N]:    [ 1500 / 1500 / 10000 ] * 1
+[2025-07-15 03:19:36] [info] Halo cells per sub-domain:  0.13 %
+
+[2025-07-15 03:19:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 8778 / 256 ]
+[2025-07-15 03:19:36] [info] Registers per thread:       30
+[2025-07-15 03:19:36] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:36] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:36] [info] Kernel domain size [X/Y]:   [ 1500 / 1498 ]
+
+[2025-07-15 03:19:36] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 12 / 256 ]
+[2025-07-15 03:19:36] [info] Registers per thread:       32
+[2025-07-15 03:19:36] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:36] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:36] [info] Kernel domain size [X/Y]:   [ 1500 / 2 ]
+
+
+[2025-07-15 03:19:38] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-15 03:19:38] [info] Total execution time:       1.281 sec
+[2025-07-15 03:19:38] [info] Step execution time:        0.128 ms
+[2025-07-15 03:19:38] [info] BLUPS:                      17.560
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.769    78.483   2000   2000
+
+[2025-07-15 03:19:40] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-15 03:19:40] [info] Sub-domain size [X/Y/N]:    [ 2000 / 2000 / 10000 ] * 1
+[2025-07-15 03:19:40] [info] Halo cells per sub-domain:  0.10 %
+
+[2025-07-15 03:19:40] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 15610 / 256 ]
+[2025-07-15 03:19:40] [info] Registers per thread:       30
+[2025-07-15 03:19:40] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:40] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:40] [info] Kernel domain size [X/Y]:   [ 2000 / 1998 ]
+
+[2025-07-15 03:19:40] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 16 / 256 ]
+[2025-07-15 03:19:40] [info] Registers per thread:       32
+[2025-07-15 03:19:40] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:40] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:40] [info] Kernel domain size [X/Y]:   [ 2000 / 2 ]
+
+
+[2025-07-15 03:19:42] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-15 03:19:42] [info] Total execution time:       2.153 sec
+[2025-07-15 03:19:42] [info] Step execution time:        0.215 ms
+[2025-07-15 03:19:42] [info] BLUPS:                      18.581
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    0.933    78.319   2500   2500
+
+[2025-07-15 03:19:44] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-15 03:19:44] [info] Sub-domain size [X/Y/N]:    [ 2500 / 2500 / 10000 ] * 1
+[2025-07-15 03:19:44] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-15 03:19:44] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 24395 / 256 ]
+[2025-07-15 03:19:44] [info] Registers per thread:       30
+[2025-07-15 03:19:44] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:44] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:44] [info] Kernel domain size [X/Y]:   [ 2500 / 2498 ]
+
+[2025-07-15 03:19:44] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 20 / 256 ]
+[2025-07-15 03:19:44] [info] Registers per thread:       32
+[2025-07-15 03:19:44] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:44] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:44] [info] Kernel domain size [X/Y]:   [ 2500 / 2 ]
+
+
+[2025-07-15 03:19:47] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-15 03:19:47] [info] Total execution time:       3.237 sec
+[2025-07-15 03:19:47] [info] Step execution time:        0.324 ms
+[2025-07-15 03:19:47] [info] BLUPS:                      19.307
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    1.179    78.073   3000   3000
+
+[2025-07-15 03:19:50] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-15 03:19:50] [info] Sub-domain size [X/Y/N]:    [ 3000 / 3000 / 10000 ] * 1
+[2025-07-15 03:19:50] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-15 03:19:50] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 35133 / 256 ]
+[2025-07-15 03:19:50] [info] Registers per thread:       30
+[2025-07-15 03:19:50] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:50] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:50] [info] Kernel domain size [X/Y]:   [ 3000 / 2998 ]
+
+[2025-07-15 03:19:50] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 24 / 256 ]
+[2025-07-15 03:19:50] [info] Registers per thread:       32
+[2025-07-15 03:19:50] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:50] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:50] [info] Kernel domain size [X/Y]:   [ 3000 / 2 ]
+
+
+[2025-07-15 03:19:54] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-15 03:19:54] [info] Total execution time:       4.584 sec
+[2025-07-15 03:19:54] [info] Step execution time:        0.458 ms
+[2025-07-15 03:19:54] [info] BLUPS:                      19.632
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    1.425    77.827   3500   3500
+
+[2025-07-15 03:19:56] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-15 03:19:56] [info] Sub-domain size [X/Y/N]:    [ 3500 / 3500 / 10000 ] * 1
+[2025-07-15 03:19:56] [info] Halo cells per sub-domain:  0.06 %
+
+[2025-07-15 03:19:56] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 47825 / 256 ]
+[2025-07-15 03:19:56] [info] Registers per thread:       30
+[2025-07-15 03:19:56] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:56] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:56] [info] Kernel domain size [X/Y]:   [ 3500 / 3498 ]
+
+[2025-07-15 03:19:56] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 28 / 256 ]
+[2025-07-15 03:19:56] [info] Registers per thread:       32
+[2025-07-15 03:19:56] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:19:56] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:19:56] [info] Kernel domain size [X/Y]:   [ 3500 / 2 ]
+
+
+[2025-07-15 03:20:03] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-15 03:20:03] [info] Total execution time:       6.211 sec
+[2025-07-15 03:20:03] [info] Step execution time:        0.621 ms
+[2025-07-15 03:20:03] [info] BLUPS:                      19.723
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    2.409    76.842   5000   5000
+
+[2025-07-15 03:20:05] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-15 03:20:05] [info] Sub-domain size [X/Y/N]:    [ 5000 / 5000 / 10000 ] * 1
+[2025-07-15 03:20:05] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-15 03:20:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 97618 / 256 ]
+[2025-07-15 03:20:05] [info] Registers per thread:       30
+[2025-07-15 03:20:05] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:05] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:05] [info] Kernel domain size [X/Y]:   [ 5000 / 4998 ]
+
+[2025-07-15 03:20:05] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 40 / 256 ]
+[2025-07-15 03:20:05] [info] Registers per thread:       32
+[2025-07-15 03:20:05] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:05] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:05] [info] Kernel domain size [X/Y]:   [ 5000 / 2 ]
+
+
+[2025-07-15 03:20:17] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-15 03:20:17] [info] Total execution time:       12.362 sec
+[2025-07-15 03:20:17] [info] Step execution time:        1.236 ms
+[2025-07-15 03:20:17] [info] BLUPS:                      20.224
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    4.296    74.956   7000   7000
+
+[2025-07-15 03:20:19] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-15 03:20:19] [info] Sub-domain size [X/Y/N]:    [ 7000 / 7000 / 10000 ] * 1
+[2025-07-15 03:20:19] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-15 03:20:19] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 191352 / 256 ]
+[2025-07-15 03:20:19] [info] Registers per thread:       30
+[2025-07-15 03:20:19] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:19] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:19] [info] Kernel domain size [X/Y]:   [ 7000 / 6998 ]
+
+[2025-07-15 03:20:19] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 55 / 256 ]
+[2025-07-15 03:20:19] [info] Registers per thread:       32
+[2025-07-15 03:20:19] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:19] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:19] [info] Kernel domain size [X/Y]:   [ 7000 / 2 ]
+
+
+[2025-07-15 03:20:43] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-15 03:20:43] [info] Total execution time:       23.850 sec
+[2025-07-15 03:20:43] [info] Step execution time:        2.385 ms
+[2025-07-15 03:20:43] [info] BLUPS:                      20.545
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    6.798    72.454   9000   9000
+
+[2025-07-15 03:20:45] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-15 03:20:45] [info] Sub-domain size [X/Y/N]:    [ 9000 / 9000 / 10000 ] * 1
+[2025-07-15 03:20:45] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 03:20:45] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 316336 / 256 ]
+[2025-07-15 03:20:45] [info] Registers per thread:       30
+[2025-07-15 03:20:45] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:45] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:45] [info] Kernel domain size [X/Y]:   [ 9000 / 8998 ]
+
+[2025-07-15 03:20:45] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 71 / 256 ]
+[2025-07-15 03:20:45] [info] Registers per thread:       32
+[2025-07-15 03:20:45] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:20:45] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:20:45] [info] Kernel domain size [X/Y]:   [ 9000 / 2 ]
+
+
+[2025-07-15 03:21:25] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-15 03:21:25] [info] Total execution time:       39.200 sec
+[2025-07-15 03:21:25] [info] Step execution time:        3.920 ms
+[2025-07-15 03:21:25] [info] BLUPS:                      20.663
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    9.915    69.336   11000  11000
+
+[2025-07-15 03:21:27] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-15 03:21:27] [info] Sub-domain size [X/Y/N]:    [ 11000 / 11000 / 10000 ] * 1
+[2025-07-15 03:21:27] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 03:21:27] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 472571 / 256 ]
+[2025-07-15 03:21:27] [info] Registers per thread:       30
+[2025-07-15 03:21:27] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:21:27] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:21:27] [info] Kernel domain size [X/Y]:   [ 11000 / 10998 ]
+
+[2025-07-15 03:21:27] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 86 / 256 ]
+[2025-07-15 03:21:27] [info] Registers per thread:       32
+[2025-07-15 03:21:27] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:21:27] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:21:27] [info] Kernel domain size [X/Y]:   [ 11000 / 2 ]
+
+
+[2025-07-15 03:22:25] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-15 03:22:25] [info] Total execution time:       58.510 sec
+[2025-07-15 03:22:25] [info] Step execution time:        5.851 ms
+[2025-07-15 03:22:25] [info] BLUPS:                      20.680
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    13.689   65.563   13000  13000
+
+[2025-07-15 03:22:28] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-15 03:22:28] [info] Sub-domain size [X/Y/N]:    [ 13000 / 13000 / 10000 ] * 1
+[2025-07-15 03:22:28] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 03:22:28] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 660055 / 256 ]
+[2025-07-15 03:22:28] [info] Registers per thread:       30
+[2025-07-15 03:22:28] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:22:28] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:22:28] [info] Kernel domain size [X/Y]:   [ 13000 / 12998 ]
+
+[2025-07-15 03:22:28] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 102 / 256 ]
+[2025-07-15 03:22:28] [info] Registers per thread:       32
+[2025-07-15 03:22:28] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:22:28] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:22:28] [info] Kernel domain size [X/Y]:   [ 13000 / 2 ]
+
+
+[2025-07-15 03:23:51] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-15 03:23:51] [info] Total execution time:       83.598 sec
+[2025-07-15 03:23:51] [info] Step execution time:        8.360 ms
+[2025-07-15 03:23:51] [info] BLUPS:                      20.216
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    18.077   61.174   15000  15000
+
+[2025-07-15 03:23:53] [info] Simulation size [X/Y/N]:    [ 15000 / 15000 / 10000 ]
+[2025-07-15 03:23:53] [info] Sub-domain size [X/Y/N]:    [ 15000 / 15000 / 10000 ] * 1
+[2025-07-15 03:23:53] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 03:23:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878790 / 256 ]
+[2025-07-15 03:23:53] [info] Registers per thread:       30
+[2025-07-15 03:23:53] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:23:53] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:23:53] [info] Kernel domain size [X/Y]:   [ 15000 / 14998 ]
+
+[2025-07-15 03:23:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-07-15 03:23:53] [info] Registers per thread:       32
+[2025-07-15 03:23:53] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:23:53] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:23:53] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+
+[2025-07-15 03:25:43] [info] Simulation size [X/Y/N]:    [ 15000 / 15000 / 10000 ]
+[2025-07-15 03:25:43] [info] Total execution time:       109.886 sec
+[2025-07-15 03:25:43] [info] Step execution time:        10.989 ms
+[2025-07-15 03:25:43] [info] BLUPS:                      20.476
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    31.736   47.516   20000  20000
+
+[2025-07-15 03:25:46] [info] Simulation size [X/Y/N]:    [ 20000 / 20000 / 10000 ]
+[2025-07-15 03:25:46] [info] Sub-domain size [X/Y/N]:    [ 20000 / 20000 / 10000 ] * 1
+[2025-07-15 03:25:46] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 03:25:46] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1562344 / 256 ]
+[2025-07-15 03:25:46] [info] Registers per thread:       30
+[2025-07-15 03:25:46] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:25:46] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:25:46] [info] Kernel domain size [X/Y]:   [ 20000 / 19998 ]
+
+[2025-07-15 03:25:46] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 157 / 256 ]
+[2025-07-15 03:25:46] [info] Registers per thread:       32
+[2025-07-15 03:25:46] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:25:46] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:25:46] [info] Kernel domain size [X/Y]:   [ 20000 / 2 ]
+
+
+[2025-07-15 03:28:56] [info] Simulation size [X/Y/N]:    [ 20000 / 20000 / 10000 ]
+[2025-07-15 03:28:56] [info] Total execution time:       190.133 sec
+[2025-07-15 03:28:56] [info] Step execution time:        19.013 ms
+[2025-07-15 03:28:56] [info] BLUPS:                      21.038
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    49.372   29.879   25000  25000
+
+[2025-07-15 03:28:58] [info] Simulation size [X/Y/N]:    [ 25000 / 25000 / 10000 ]
+[2025-07-15 03:28:58] [info] Sub-domain size [X/Y/N]:    [ 25000 / 25000 / 10000 ] * 1
+[2025-07-15 03:28:58] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 03:28:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 2441211 / 256 ]
+[2025-07-15 03:28:58] [info] Registers per thread:       30
+[2025-07-15 03:28:58] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:28:58] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:28:58] [info] Kernel domain size [X/Y]:   [ 25000 / 24998 ]
+
+[2025-07-15 03:28:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 196 / 256 ]
+[2025-07-15 03:28:58] [info] Registers per thread:       32
+[2025-07-15 03:28:58] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:28:58] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:28:58] [info] Kernel domain size [X/Y]:   [ 25000 / 2 ]
+
+
+[2025-07-15 03:34:00] [info] Simulation size [X/Y/N]:    [ 25000 / 25000 / 10000 ]
+[2025-07-15 03:34:00] [info] Total execution time:       301.561 sec
+[2025-07-15 03:34:00] [info] Step execution time:        30.156 ms
+[2025-07-15 03:34:00] [info] BLUPS:                      20.726
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n903.   NVIDIA A100 80GB PCIe              0   80   108  167936    79.252    70.865   8.387    30000  30000
+
+[2025-07-15 03:34:02] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 10000 ]
+[2025-07-15 03:34:02] [info] Sub-domain size [X/Y/N]:    [ 30000 / 30000 / 10000 ] * 1
+[2025-07-15 03:34:02] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 03:34:02] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 3515391 / 256 ]
+[2025-07-15 03:34:02] [info] Registers per thread:       30
+[2025-07-15 03:34:02] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:34:02] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:34:02] [info] Kernel domain size [X/Y]:   [ 30000 / 29998 ]
+
+[2025-07-15 03:34:02] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-15 03:34:02] [info] Registers per thread:       32
+[2025-07-15 03:34:02] [info] Shared memory per block:    9216 bytes
+[2025-07-15 03:34:02] [info] Local memory per thread:    0 bytes
+[2025-07-15 03:34:02] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+
+[2025-07-15 03:41:19] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 10000 ]
+[2025-07-15 03:41:19] [info] Total execution time:       436.821 sec
+[2025-07-15 03:41:19] [info] Step execution time:        43.682 ms
+[2025-07-15 03:41:19] [info] BLUPS:                      20.603
+
+
+
+H100 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.542    92.554   100    100
+
+[2025-07-15 01:40:53] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-15 01:40:53] [info] Sub-domain size [X/Y/N]:    [ 100 / 100 / 10000 ] * 1
+[2025-07-15 01:40:53] [info] Halo cells per sub-domain:  2.00 %
+
+[2025-07-15 01:40:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 39 / 256 ]
+[2025-07-15 01:40:53] [info] Registers per thread:       30
+[2025-07-15 01:40:53] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:40:53] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:40:53] [info] Kernel domain size [X/Y]:   [ 100 / 98 ]
+
+[2025-07-15 01:40:53] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 1 / 256 ]
+[2025-07-15 01:40:53] [info] Registers per thread:       36
+[2025-07-15 01:40:53] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:40:53] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:40:53] [info] Kernel domain size [X/Y]:   [ 100 / 2 ]
+
+
+[2025-07-15 01:40:53] [info] Simulation size [X/Y/N]:    [ 100 / 100 / 10000 ]
+[2025-07-15 01:40:53] [info] Total execution time:       0.190 sec
+[2025-07-15 01:40:53] [info] Step execution time:        0.019 ms
+[2025-07-15 01:40:53] [info] BLUPS:                      0.525
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.544    92.552   200    200
+
+[2025-07-15 01:40:57] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-15 01:40:57] [info] Sub-domain size [X/Y/N]:    [ 200 / 200 / 10000 ] * 1
+[2025-07-15 01:40:57] [info] Halo cells per sub-domain:  1.00 %
+
+[2025-07-15 01:40:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 155 / 256 ]
+[2025-07-15 01:40:57] [info] Registers per thread:       30
+[2025-07-15 01:40:57] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:40:57] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:40:57] [info] Kernel domain size [X/Y]:   [ 200 / 198 ]
+
+[2025-07-15 01:40:57] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 2 / 256 ]
+[2025-07-15 01:40:57] [info] Registers per thread:       36
+[2025-07-15 01:40:57] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:40:57] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:40:57] [info] Kernel domain size [X/Y]:   [ 200 / 2 ]
+
+
+[2025-07-15 01:40:57] [info] Simulation size [X/Y/N]:    [ 200 / 200 / 10000 ]
+[2025-07-15 01:40:57] [info] Total execution time:       0.193 sec
+[2025-07-15 01:40:57] [info] Step execution time:        0.019 ms
+[2025-07-15 01:40:57] [info] BLUPS:                      2.072
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.550    92.547   300    300
+
+[2025-07-15 01:41:00] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-15 01:41:00] [info] Sub-domain size [X/Y/N]:    [ 300 / 300 / 10000 ] * 1
+[2025-07-15 01:41:00] [info] Halo cells per sub-domain:  0.67 %
+
+[2025-07-15 01:41:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 350 / 256 ]
+[2025-07-15 01:41:00] [info] Registers per thread:       30
+[2025-07-15 01:41:00] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:00] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:00] [info] Kernel domain size [X/Y]:   [ 300 / 298 ]
+
+[2025-07-15 01:41:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 3 / 256 ]
+[2025-07-15 01:41:00] [info] Registers per thread:       36
+[2025-07-15 01:41:00] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:00] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:00] [info] Kernel domain size [X/Y]:   [ 300 / 2 ]
+
+
+[2025-07-15 01:41:01] [info] Simulation size [X/Y/N]:    [ 300 / 300 / 10000 ]
+[2025-07-15 01:41:01] [info] Total execution time:       0.197 sec
+[2025-07-15 01:41:01] [info] Step execution time:        0.020 ms
+[2025-07-15 01:41:01] [info] BLUPS:                      4.567
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.553    92.543   400    400
+
+[2025-07-15 01:41:04] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-15 01:41:04] [info] Sub-domain size [X/Y/N]:    [ 400 / 400 / 10000 ] * 1
+[2025-07-15 01:41:04] [info] Halo cells per sub-domain:  0.50 %
+
+[2025-07-15 01:41:04] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 622 / 256 ]
+[2025-07-15 01:41:04] [info] Registers per thread:       30
+[2025-07-15 01:41:04] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:04] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:04] [info] Kernel domain size [X/Y]:   [ 400 / 398 ]
+
+[2025-07-15 01:41:04] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-15 01:41:04] [info] Registers per thread:       36
+[2025-07-15 01:41:04] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:04] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:04] [info] Kernel domain size [X/Y]:   [ 400 / 2 ]
+
+
+[2025-07-15 01:41:04] [info] Simulation size [X/Y/N]:    [ 400 / 400 / 10000 ]
+[2025-07-15 01:41:04] [info] Total execution time:       0.210 sec
+[2025-07-15 01:41:04] [info] Step execution time:        0.021 ms
+[2025-07-15 01:41:04] [info] BLUPS:                      7.633
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.561    92.535   500    500
+
+[2025-07-15 01:41:08] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-15 01:41:08] [info] Sub-domain size [X/Y/N]:    [ 500 / 500 / 10000 ] * 1
+[2025-07-15 01:41:08] [info] Halo cells per sub-domain:  0.40 %
+
+[2025-07-15 01:41:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 973 / 256 ]
+[2025-07-15 01:41:08] [info] Registers per thread:       30
+[2025-07-15 01:41:08] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:08] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:08] [info] Kernel domain size [X/Y]:   [ 500 / 498 ]
+
+[2025-07-15 01:41:08] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 4 / 256 ]
+[2025-07-15 01:41:08] [info] Registers per thread:       36
+[2025-07-15 01:41:08] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:08] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:08] [info] Kernel domain size [X/Y]:   [ 500 / 2 ]
+
+
+[2025-07-15 01:41:08] [info] Simulation size [X/Y/N]:    [ 500 / 500 / 10000 ]
+[2025-07-15 01:41:08] [info] Total execution time:       0.230 sec
+[2025-07-15 01:41:08] [info] Step execution time:        0.023 ms
+[2025-07-15 01:41:08] [info] BLUPS:                      10.850
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.624    92.472   1000   1000
+
+[2025-07-15 01:41:11] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-15 01:41:11] [info] Sub-domain size [X/Y/N]:    [ 1000 / 1000 / 10000 ] * 1
+[2025-07-15 01:41:11] [info] Halo cells per sub-domain:  0.20 %
+
+[2025-07-15 01:41:11] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 3899 / 256 ]
+[2025-07-15 01:41:11] [info] Registers per thread:       30
+[2025-07-15 01:41:11] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:11] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:11] [info] Kernel domain size [X/Y]:   [ 1000 / 998 ]
+
+[2025-07-15 01:41:11] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 8 / 256 ]
+[2025-07-15 01:41:11] [info] Registers per thread:       36
+[2025-07-15 01:41:11] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:11] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:11] [info] Kernel domain size [X/Y]:   [ 1000 / 2 ]
+
+
+[2025-07-15 01:41:12] [info] Simulation size [X/Y/N]:    [ 1000 / 1000 / 10000 ]
+[2025-07-15 01:41:12] [info] Total execution time:       0.533 sec
+[2025-07-15 01:41:12] [info] Step execution time:        0.053 ms
+[2025-07-15 01:41:12] [info] BLUPS:                      18.748
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.747    92.349   1500   1500
+
+[2025-07-15 01:41:15] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-15 01:41:15] [info] Sub-domain size [X/Y/N]:    [ 1500 / 1500 / 10000 ] * 1
+[2025-07-15 01:41:15] [info] Halo cells per sub-domain:  0.13 %
+
+[2025-07-15 01:41:15] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 8778 / 256 ]
+[2025-07-15 01:41:15] [info] Registers per thread:       30
+[2025-07-15 01:41:15] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:15] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:15] [info] Kernel domain size [X/Y]:   [ 1500 / 1498 ]
+
+[2025-07-15 01:41:15] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 12 / 256 ]
+[2025-07-15 01:41:15] [info] Registers per thread:       36
+[2025-07-15 01:41:15] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:15] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:15] [info] Kernel domain size [X/Y]:   [ 1500 / 2 ]
+
+
+[2025-07-15 01:41:16] [info] Simulation size [X/Y/N]:    [ 1500 / 1500 / 10000 ]
+[2025-07-15 01:41:16] [info] Total execution time:       0.995 sec
+[2025-07-15 01:41:16] [info] Step execution time:        0.100 ms
+[2025-07-15 01:41:16] [info] BLUPS:                      22.612
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    0.870    92.226   2000   2000
+
+[2025-07-15 01:41:20] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-15 01:41:20] [info] Sub-domain size [X/Y/N]:    [ 2000 / 2000 / 10000 ] * 1
+[2025-07-15 01:41:20] [info] Halo cells per sub-domain:  0.10 %
+
+[2025-07-15 01:41:20] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 15610 / 256 ]
+[2025-07-15 01:41:20] [info] Registers per thread:       30
+[2025-07-15 01:41:20] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:20] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:20] [info] Kernel domain size [X/Y]:   [ 2000 / 1998 ]
+
+[2025-07-15 01:41:20] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 16 / 256 ]
+[2025-07-15 01:41:20] [info] Registers per thread:       36
+[2025-07-15 01:41:20] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:20] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:20] [info] Kernel domain size [X/Y]:   [ 2000 / 2 ]
+
+
+[2025-07-15 01:41:22] [info] Simulation size [X/Y/N]:    [ 2000 / 2000 / 10000 ]
+[2025-07-15 01:41:22] [info] Total execution time:       1.633 sec
+[2025-07-15 01:41:22] [info] Step execution time:        0.163 ms
+[2025-07-15 01:41:22] [info] BLUPS:                      24.492
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    1.034    92.062   2500   2500
+
+[2025-07-15 01:41:25] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-15 01:41:25] [info] Sub-domain size [X/Y/N]:    [ 2500 / 2500 / 10000 ] * 1
+[2025-07-15 01:41:25] [info] Halo cells per sub-domain:  0.08 %
+
+[2025-07-15 01:41:25] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 24395 / 256 ]
+[2025-07-15 01:41:25] [info] Registers per thread:       30
+[2025-07-15 01:41:25] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:25] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:25] [info] Kernel domain size [X/Y]:   [ 2500 / 2498 ]
+
+[2025-07-15 01:41:25] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 20 / 256 ]
+[2025-07-15 01:41:25] [info] Registers per thread:       36
+[2025-07-15 01:41:25] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:25] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:25] [info] Kernel domain size [X/Y]:   [ 2500 / 2 ]
+
+
+[2025-07-15 01:41:27] [info] Simulation size [X/Y/N]:    [ 2500 / 2500 / 10000 ]
+[2025-07-15 01:41:27] [info] Total execution time:       2.416 sec
+[2025-07-15 01:41:27] [info] Step execution time:        0.242 ms
+[2025-07-15 01:41:27] [info] BLUPS:                      25.871
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    1.280    91.816   3000   3000
+
+[2025-07-15 01:41:31] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-15 01:41:31] [info] Sub-domain size [X/Y/N]:    [ 3000 / 3000 / 10000 ] * 1
+[2025-07-15 01:41:31] [info] Halo cells per sub-domain:  0.07 %
+
+[2025-07-15 01:41:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 35133 / 256 ]
+[2025-07-15 01:41:31] [info] Registers per thread:       30
+[2025-07-15 01:41:31] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:31] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:31] [info] Kernel domain size [X/Y]:   [ 3000 / 2998 ]
+
+[2025-07-15 01:41:31] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 24 / 256 ]
+[2025-07-15 01:41:31] [info] Registers per thread:       36
+[2025-07-15 01:41:31] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:31] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:31] [info] Kernel domain size [X/Y]:   [ 3000 / 2 ]
+
+
+[2025-07-15 01:41:34] [info] Simulation size [X/Y/N]:    [ 3000 / 3000 / 10000 ]
+[2025-07-15 01:41:34] [info] Total execution time:       3.386 sec
+[2025-07-15 01:41:34] [info] Step execution time:        0.339 ms
+[2025-07-15 01:41:34] [info] BLUPS:                      26.580
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    1.526    91.570   3500   3500
+
+[2025-07-15 01:41:38] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-15 01:41:38] [info] Sub-domain size [X/Y/N]:    [ 3500 / 3500 / 10000 ] * 1
+[2025-07-15 01:41:38] [info] Halo cells per sub-domain:  0.06 %
+
+[2025-07-15 01:41:38] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 47825 / 256 ]
+[2025-07-15 01:41:38] [info] Registers per thread:       30
+[2025-07-15 01:41:38] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:38] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:38] [info] Kernel domain size [X/Y]:   [ 3500 / 3498 ]
+
+[2025-07-15 01:41:38] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 28 / 256 ]
+[2025-07-15 01:41:38] [info] Registers per thread:       36
+[2025-07-15 01:41:38] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:38] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:38] [info] Kernel domain size [X/Y]:   [ 3500 / 2 ]
+
+
+[2025-07-15 01:41:42] [info] Simulation size [X/Y/N]:    [ 3500 / 3500 / 10000 ]
+[2025-07-15 01:41:42] [info] Total execution time:       4.563 sec
+[2025-07-15 01:41:42] [info] Step execution time:        0.456 ms
+[2025-07-15 01:41:42] [info] BLUPS:                      26.847
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    2.510    90.586   5000   5000
+
+[2025-07-15 01:41:46] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-15 01:41:46] [info] Sub-domain size [X/Y/N]:    [ 5000 / 5000 / 10000 ] * 1
+[2025-07-15 01:41:46] [info] Halo cells per sub-domain:  0.04 %
+
+[2025-07-15 01:41:46] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 97618 / 256 ]
+[2025-07-15 01:41:46] [info] Registers per thread:       30
+[2025-07-15 01:41:46] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:46] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:46] [info] Kernel domain size [X/Y]:   [ 5000 / 4998 ]
+
+[2025-07-15 01:41:46] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 40 / 256 ]
+[2025-07-15 01:41:46] [info] Registers per thread:       36
+[2025-07-15 01:41:46] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:46] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:46] [info] Kernel domain size [X/Y]:   [ 5000 / 2 ]
+
+
+[2025-07-15 01:41:54] [info] Simulation size [X/Y/N]:    [ 5000 / 5000 / 10000 ]
+[2025-07-15 01:41:54] [info] Total execution time:       8.911 sec
+[2025-07-15 01:41:54] [info] Step execution time:        0.891 ms
+[2025-07-15 01:41:54] [info] BLUPS:                      28.056
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    4.397    88.699   7000   7000
+
+[2025-07-15 01:41:58] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-15 01:41:58] [info] Sub-domain size [X/Y/N]:    [ 7000 / 7000 / 10000 ] * 1
+[2025-07-15 01:41:58] [info] Halo cells per sub-domain:  0.03 %
+
+[2025-07-15 01:41:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 191352 / 256 ]
+[2025-07-15 01:41:58] [info] Registers per thread:       30
+[2025-07-15 01:41:58] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:58] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:58] [info] Kernel domain size [X/Y]:   [ 7000 / 6998 ]
+
+[2025-07-15 01:41:58] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 55 / 256 ]
+[2025-07-15 01:41:58] [info] Registers per thread:       36
+[2025-07-15 01:41:58] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:41:58] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:41:58] [info] Kernel domain size [X/Y]:   [ 7000 / 2 ]
+
+
+[2025-07-15 01:42:15] [info] Simulation size [X/Y/N]:    [ 7000 / 7000 / 10000 ]
+[2025-07-15 01:42:15] [info] Total execution time:       17.044 sec
+[2025-07-15 01:42:15] [info] Step execution time:        1.704 ms
+[2025-07-15 01:42:15] [info] BLUPS:                      28.749
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    6.899    86.197   9000   9000
+
+[2025-07-15 01:42:18] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-15 01:42:18] [info] Sub-domain size [X/Y/N]:    [ 9000 / 9000 / 10000 ] * 1
+[2025-07-15 01:42:18] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 01:42:18] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 316336 / 256 ]
+[2025-07-15 01:42:18] [info] Registers per thread:       30
+[2025-07-15 01:42:18] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:42:18] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:42:18] [info] Kernel domain size [X/Y]:   [ 9000 / 8998 ]
+
+[2025-07-15 01:42:18] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 71 / 256 ]
+[2025-07-15 01:42:18] [info] Registers per thread:       36
+[2025-07-15 01:42:18] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:42:18] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:42:18] [info] Kernel domain size [X/Y]:   [ 9000 / 2 ]
+
+
+[2025-07-15 01:42:46] [info] Simulation size [X/Y/N]:    [ 9000 / 9000 / 10000 ]
+[2025-07-15 01:42:46] [info] Total execution time:       28.129 sec
+[2025-07-15 01:42:46] [info] Step execution time:        2.813 ms
+[2025-07-15 01:42:46] [info] BLUPS:                      28.796
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    10.016   83.080   11000  11000
+
+[2025-07-15 01:42:50] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-15 01:42:50] [info] Sub-domain size [X/Y/N]:    [ 11000 / 11000 / 10000 ] * 1
+[2025-07-15 01:42:50] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 01:42:50] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 472571 / 256 ]
+[2025-07-15 01:42:50] [info] Registers per thread:       30
+[2025-07-15 01:42:50] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:42:50] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:42:50] [info] Kernel domain size [X/Y]:   [ 11000 / 10998 ]
+
+[2025-07-15 01:42:50] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 86 / 256 ]
+[2025-07-15 01:42:50] [info] Registers per thread:       36
+[2025-07-15 01:42:50] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:42:50] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:42:50] [info] Kernel domain size [X/Y]:   [ 11000 / 2 ]
+
+
+[2025-07-15 01:43:32] [info] Simulation size [X/Y/N]:    [ 11000 / 11000 / 10000 ]
+[2025-07-15 01:43:32] [info] Total execution time:       42.050 sec
+[2025-07-15 01:43:32] [info] Step execution time:        4.205 ms
+[2025-07-15 01:43:32] [info] BLUPS:                      28.775
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    13.790   79.306   13000  13000
+
+[2025-07-15 01:43:35] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-15 01:43:35] [info] Sub-domain size [X/Y/N]:    [ 13000 / 13000 / 10000 ] * 1
+[2025-07-15 01:43:35] [info] Halo cells per sub-domain:  0.02 %
+
+[2025-07-15 01:43:35] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 660055 / 256 ]
+[2025-07-15 01:43:35] [info] Registers per thread:       30
+[2025-07-15 01:43:35] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:43:35] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:43:35] [info] Kernel domain size [X/Y]:   [ 13000 / 12998 ]
+
+[2025-07-15 01:43:35] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 102 / 256 ]
+[2025-07-15 01:43:35] [info] Registers per thread:       36
+[2025-07-15 01:43:35] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:43:35] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:43:35] [info] Kernel domain size [X/Y]:   [ 13000 / 2 ]
+
+
+[2025-07-15 01:44:35] [info] Simulation size [X/Y/N]:    [ 13000 / 13000 / 10000 ]
+[2025-07-15 01:44:35] [info] Total execution time:       59.746 sec
+[2025-07-15 01:44:35] [info] Step execution time:        5.975 ms
+[2025-07-15 01:44:35] [info] BLUPS:                      28.286
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    18.178   74.918   15000  15000
+
+[2025-07-15 01:44:39] [info] Simulation size [X/Y/N]:    [ 15000 / 15000 / 10000 ]
+[2025-07-15 01:44:39] [info] Sub-domain size [X/Y/N]:    [ 15000 / 15000 / 10000 ] * 1
+[2025-07-15 01:44:39] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 01:44:39] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 878790 / 256 ]
+[2025-07-15 01:44:39] [info] Registers per thread:       30
+[2025-07-15 01:44:39] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:44:39] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:44:39] [info] Kernel domain size [X/Y]:   [ 15000 / 14998 ]
+
+[2025-07-15 01:44:39] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 118 / 256 ]
+[2025-07-15 01:44:39] [info] Registers per thread:       36
+[2025-07-15 01:44:39] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:44:39] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:44:39] [info] Kernel domain size [X/Y]:   [ 15000 / 2 ]
+
+
+[2025-07-15 01:45:57] [info] Simulation size [X/Y/N]:    [ 15000 / 15000 / 10000 ]
+[2025-07-15 01:45:57] [info] Total execution time:       78.200 sec
+[2025-07-15 01:45:57] [info] Step execution time:        7.820 ms
+[2025-07-15 01:45:57] [info] BLUPS:                      28.772
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    31.837   61.260   20000  20000
+
+[2025-07-15 01:46:00] [info] Simulation size [X/Y/N]:    [ 20000 / 20000 / 10000 ]
+[2025-07-15 01:46:00] [info] Sub-domain size [X/Y/N]:    [ 20000 / 20000 / 10000 ] * 1
+[2025-07-15 01:46:00] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 01:46:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1562344 / 256 ]
+[2025-07-15 01:46:00] [info] Registers per thread:       30
+[2025-07-15 01:46:00] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:46:00] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:46:00] [info] Kernel domain size [X/Y]:   [ 20000 / 19998 ]
+
+[2025-07-15 01:46:00] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 157 / 256 ]
+[2025-07-15 01:46:00] [info] Registers per thread:       36
+[2025-07-15 01:46:00] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:46:00] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:46:00] [info] Kernel domain size [X/Y]:   [ 20000 / 2 ]
+
+
+[2025-07-15 01:48:19] [info] Simulation size [X/Y/N]:    [ 20000 / 20000 / 10000 ]
+[2025-07-15 01:48:19] [info] Total execution time:       138.470 sec
+[2025-07-15 01:48:19] [info] Step execution time:        13.847 ms
+[2025-07-15 01:48:19] [info] BLUPS:                      28.887
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    49.473   43.623   25000  25000
+
+[2025-07-15 01:48:22] [info] Simulation size [X/Y/N]:    [ 25000 / 25000 / 10000 ]
+[2025-07-15 01:48:22] [info] Sub-domain size [X/Y/N]:    [ 25000 / 25000 / 10000 ] * 1
+[2025-07-15 01:48:22] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 01:48:22] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 2441211 / 256 ]
+[2025-07-15 01:48:22] [info] Registers per thread:       30
+[2025-07-15 01:48:22] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:48:22] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:48:22] [info] Kernel domain size [X/Y]:   [ 25000 / 24998 ]
+
+[2025-07-15 01:48:22] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 196 / 256 ]
+[2025-07-15 01:48:22] [info] Registers per thread:       36
+[2025-07-15 01:48:22] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:48:22] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:48:22] [info] Kernel domain size [X/Y]:   [ 25000 / 2 ]
+
+
+[2025-07-15 01:52:00] [info] Simulation size [X/Y/N]:    [ 25000 / 25000 / 10000 ]
+[2025-07-15 01:52:00] [info] Total execution time:       217.446 sec
+[2025-07-15 01:52:00] [info] Step execution time:        21.745 ms
+[2025-07-15 01:52:00] [info] BLUPS:                      28.743
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    70.966   22.131   30000  30000
+
+[2025-07-15 01:52:03] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 10000 ]
+[2025-07-15 01:52:03] [info] Sub-domain size [X/Y/N]:    [ 30000 / 30000 / 10000 ] * 1
+[2025-07-15 01:52:03] [info] Halo cells per sub-domain:  0.01 %
+
+[2025-07-15 01:52:03] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 3515391 / 256 ]
+[2025-07-15 01:52:03] [info] Registers per thread:       30
+[2025-07-15 01:52:03] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:52:03] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:52:03] [info] Kernel domain size [X/Y]:   [ 30000 / 29998 ]
+
+[2025-07-15 01:52:03] [info] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-15 01:52:03] [info] Registers per thread:       36
+[2025-07-15 01:52:03] [info] Shared memory per block:    9216 bytes
+[2025-07-15 01:52:03] [info] Local memory per thread:    0 bytes
+[2025-07-15 01:52:03] [info] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+
+[2025-07-15 01:57:17] [info] Simulation size [X/Y/N]:    [ 30000 / 30000 / 10000 ]
+[2025-07-15 01:57:17] [info] Total execution time:       313.695 sec
+[2025-07-15 01:57:17] [info] Step execution time:        31.369 ms
+[2025-07-15 01:57:17] [info] BLUPS:                      28.690
