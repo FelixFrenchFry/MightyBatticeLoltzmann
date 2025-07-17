@@ -1,0 +1,64 @@
+ninja: Entering directory `buildDir'
+ninja: no work to do.
+
+[2025-07-10 12:52:11] [[32minfo[m] Rank 0 loaded parameters from input_cavity_video_G.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 20000
+N_Y_TOTAL            = 20000
+N_STEPS              = 40000000
+omega                = 1.200
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 250000
+export_name          = G
+export_num           = 04
+export_rho           = false
+export_u_x           = true
+export_u_y           = true
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc2n916.   NVIDIA H100 PCIe                   0   90   114  233472    79.190    8.310    70.880   20000  5000  
+1     uc2n916.   NVIDIA H100 PCIe                   1   90   114  233472    79.190    8.310    70.880   20000  5000  
+2     uc2n916.   NVIDIA H100 PCIe                   2   90   114  233472    79.190    8.310    70.880   20000  5000  
+3     uc2n916.   NVIDIA H100 PCIe                   3   90   114  233472    79.190    8.310    70.880   20000  5000  
+
+[2025-07-10 12:52:11] [[32minfo[m] Simulation size [X/Y/N]:    [ 20000 / 20000 / 40000000 ]
+[2025-07-10 12:52:11] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 20000 / 5000 / 40000000 ] * 4
+[2025-07-10 12:52:11] [[32minfo[m] Halo cells per sub-domain:  0.04 %
+
+[2025-07-10 12:52:11] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 390469 / 256 ]
+[2025-07-10 12:52:11] [[32minfo[m] Registers per thread:       30
+[2025-07-10 12:52:11] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-10 12:52:11] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-10 12:52:11] [[32minfo[m] Kernel domain size [X/Y]:   [ 20000 / 4998 ]
+
+[2025-07-10 12:52:11] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 157 / 256 ]
+[2025-07-10 12:52:11] [[32minfo[m] Registers per thread:       36
+[2025-07-10 12:52:11] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-10 12:52:11] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-10 12:52:11] [[32minfo[m] Kernel domain size [X/Y]:   [ 20000 / 2 ]
+
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n916
+Job ID: 689761
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 128
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 15:25:52 core-walltime
+Job Wall-clock time: 00:07:14
+Memory Utilized: 827.70 MB
+Memory Efficiency: 0.32% of 256.00 GB (256.00 GB/node)

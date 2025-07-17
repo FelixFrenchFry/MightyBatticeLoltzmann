@@ -1,0 +1,15 @@
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n903
+Job ID: 737436
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: CANCELLED (exit code 0)
+Nodes: 1
+Cores per node: 8
+CPU Utilized: 00:00:00
+CPU Efficiency: 0.00% of 00:01:20 core-walltime
+Job Wall-clock time: 00:00:10
+Memory Utilized: 10.02 MB
+Memory Efficiency: 0.01% of 96.00 GB (96.00 GB/node)

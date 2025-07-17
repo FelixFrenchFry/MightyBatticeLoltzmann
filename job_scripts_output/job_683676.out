@@ -1,0 +1,2655 @@
+The Meson build system
+Version: 1.5.1
+Source dir: /pfs/data6/home/fr/fr_fr/fr_fl184/MightyBatticeLoltzmann
+Build dir: /pfs/data6/home/fr/fr_fr/fr_fl184/MightyBatticeLoltzmann/buildDir
+Build type: native build
+Project name: MightyBatticeLoltzmann
+Project version: 0.1
+C compiler for the host machine: gcc (gcc 11.4.1 "gcc (GCC) 11.4.1 20231218 (Red Hat 11.4.1-4)")
+C linker for the host machine: gcc ld.bfd 2.35.2-43
+C++ compiler for the host machine: g++ (gcc 11.4.1 "g++ (GCC) 11.4.1 20231218 (Red Hat 11.4.1-4)")
+C++ linker for the host machine: g++ ld.bfd 2.35.2-43
+Cuda compiler for the host machine: nvcc (nvcc 12.6.85
+Build cuda_12.6.r12.6/compiler.35059454_0)
+Cuda linker for the host machine: nvcc nvlink 12.6.85
+Build cuda_12.6.r12.6/compiler.35059454_0
+Host machine cpu family: x86_64
+Host machine cpu: x86_64
+Run-time dependency CUDA (modules: cudart_static) found: YES 12.6 (/software/bwhpc/common/toolkit/nvidia_hpc_sdk/25.1/Linux_x86_64/25.1/cuda)
+WARNING: You should add the boolean check kwarg to the run_command call.
+         It currently defaults to false,
+         but it will default to true in future releases of meson.
+         See also: https://github.com/mesonbuild/meson/issues/9300
+Found pkg-config: YES (/usr/bin/pkg-config) 1.7.3
+Found CMake: /usr/bin/cmake (3.26.5)
+Run-time dependency spdlog found: NO (tried pkgconfig and cmake)
+Looking for a fallback subproject for the dependency spdlog
+
+Executing subproject spdlog 
+
+spdlog| Project name: spdlog
+spdlog| Project version: 1.15.2
+spdlog| C++ compiler for the host machine: g++ (gcc 11.4.1 "g++ (GCC) 11.4.1 20231218 (Red Hat 11.4.1-4)")
+spdlog| C++ linker for the host machine: g++ ld.bfd 2.35.2-43
+spdlog| Run-time dependency threads found: YES
+spdlog| Header "format" has symbol "__cpp_lib_format" : NO
+spdlog| Run-time dependency fmt found: NO (tried pkgconfig and cmake)
+spdlog| Looking for a fallback subproject for the dependency fmt
+
+Executing subproject spdlog:fmt
+
+fmt| Project name: fmt
+fmt| Project version: 11.2.0
+fmt| C++ compiler for the host machine: g++ (gcc 11.4.1 "g++ (GCC) 11.4.1 20231218 (Red Hat 11.4.1-4)")
+fmt| C++ linker for the host machine: g++ ld.bfd 2.35.2-43
+fmt| Build targets in project: 1
+fmt| Subproject fmt finished.
+
+spdlog| Dependency fmt found: YES 11.2.0 (overridden)
+spdlog| Run-time dependency catch2-with-main found: NO (tried pkgconfig and cmake)
+spdlog| Message: Skipping tests since Catch2 was not found
+spdlog| Build targets in project: 2
+spdlog| Subproject spdlog finished.
+
+Dependency spdlog from subproject subprojects/spdlog-1.15.2 found: YES 1.15.2
+Message: MPI found
+WARNING: Build target lib has no sources. This was never supposed to be allowed but did because of a bug, support will be removed in a future release of Meson
+Run-time dependency GTest found: NO (tried pkgconfig and system)
+Looking for a fallback subproject for the dependency gtest
+
+Executing subproject gtest 
+
+gtest| Project name: gtest
+gtest| Project version: 1.15.2
+gtest| C++ compiler for the host machine: g++ (gcc 11.4.1 "g++ (GCC) 11.4.1 20231218 (Red Hat 11.4.1-4)")
+gtest| C++ linker for the host machine: g++ ld.bfd 2.35.2-43
+gtest| Dependency threads found: YES unknown (cached)
+gtest| Build targets in project: 36
+gtest| Subproject gtest finished.
+
+Dependency gtest from subproject subprojects/googletest-1.15.2 found: YES 1.15.2
+Build targets in project: 37
+
+MightyBatticeLoltzmann 0.1
+
+  Subprojects
+    fmt      : YES (from spdlog)
+    gtest    : YES
+    spdlog   : YES
+
+  User defined options
+    buildtype: release
+
+Found ninja-1.10.2 at /usr/bin/ninja
+ninja: Entering directory `buildDir'
+[1/18] Linking static target implementations/liblib.a
+[2/18] Compiling C++ object subprojects/fmt-11.2.0/libfmt.so.p/src_os.cc.o
+[3/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/cfg.cpp.o
+[4/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/async.cpp.o
+[5/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/file_sinks.cpp.o
+[6/18] Compiling C++ object implementations/cuda_mpi/cuda_mpi_03.p/tools_data_export.cpp.o
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportScalarFieldFromMPIDevices(const float*, SimulationData, MPI_Comm, const string&, const string&, const string&, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int)’:
+../implementations/cuda_mpi/tools/data_export.cpp:34:20: warning: unused parameter ‘N_X’ [-Wunused-parameter]
+   34 |     const uint32_t N_X, const uint32_t N_Y,
+      |     ~~~~~~~~~~~~~~~^~~
+../implementations/cuda_mpi/tools/data_export.cpp:34:40: warning: unused parameter ‘N_Y’ [-Wunused-parameter]
+   34 |     const uint32_t N_X, const uint32_t N_Y,
+      |                         ~~~~~~~~~~~~~~~^~~
+../implementations/cuda_mpi/tools/data_export.cpp:35:46: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+   35 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportSimulationData(const SimulationExportContext&, const SimulationData&, const string&, const string&, uint32_t)’:
+../implementations/cuda_mpi/tools/data_export.cpp:88:9: warning: unused variable ‘dvc_u_mag’ [-Wunused-variable]
+   88 |     FP* dvc_u_mag = nullptr;
+      |         ^~~~~~~~~
+[7/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/stdout_sinks.cpp.o
+[8/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/color_sinks.cpp.o
+[9/18] Compiling C++ object implementations/cuda_mpi/cuda_mpi_03.p/03_src_main.cpp.o
+In file included from ../implementations/cuda_mpi/03/src/main.cpp:16:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:309:16: warning: unused variable ‘misc_time’ [-Wunused-variable]
+  309 |         double misc_time = (acc_total_step_time - acc_communication_time
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:313:16: warning: unused variable ‘comm_pct’ [-Wunused-variable]
+  313 |         double comm_pct  = (100.0 * comm_time)  / step_time;
+      |                ^~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:314:16: warning: unused variable ‘inner_pct’ [-Wunused-variable]
+  314 |         double inner_pct = (100.0 * inner_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:315:16: warning: unused variable ‘outer_pct’ [-Wunused-variable]
+  315 |         double outer_pct = (100.0 * outer_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:285:10: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  285 |     bool extended = false,
+      |     ~~~~~^~~~~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/main.cpp: In function ‘int main(int, char**)’:
+../implementations/cuda_mpi/03/src/main.cpp:142:20: warning: unused variable ‘N_CELLS_TOTAL’ [-Wunused-variable]
+  142 |     const uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
+      |                    ^~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/main.cpp:179:20: warning: unused variable ‘Y_END’ [-Wunused-variable]
+  179 |     const uint32_t Y_END =          Y_START + N_Y - 1;
+      |                    ^~~~~
+[10/18] Compiling C++ object subprojects/fmt-11.2.0/libfmt.so.p/src_format.cc.o
+[11/18] Linking target subprojects/fmt-11.2.0/libfmt.so
+[12/18] Generating symbol file subprojects/fmt-11.2.0/libfmt.so.p/libfmt.so.symbols
+[13/18] Compiling C++ object subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/spdlog.cpp.o
+[14/18] Linking target subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2
+[15/18] Generating symbol file subprojects/spdlog-1.15.2/src/libspdlog.so.1.15.2.p/libspdlog.so.1.15.2.symbols
+[16/18] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_03.p/03_src_initialization.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+[17/18] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_03.p/03_src_simulation.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../implementations/cuda_mpi/03/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:285:1: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  284 |     const uint32_t N_STEPS,
+      |          ~~~~~~~~~~~~~~~~~~
+  285 |     bool extended = false,
+      | ^   ~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Inner(const float* const*, float* const*, float*, float*, float*, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/03/src/simulation.cu:340:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  339 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:340:27: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |            ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:341:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                                      ~~~~~~~~~~~~~~~~~~
+  341 |     const uint32_t N_STEPS,
+      | ^   ~~~
+../implementations/cuda_mpi/03/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Outer(const float* const*, float* const*, float* const*, float* const*, float*, float*, float*, float, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/03/src/simulation.cu:819:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  818 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  819 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:821:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  820 |     const uint32_t Y_START,
+      |          ~~~~~~~~~~~~~~~~~~
+  821 |     const uint32_t N_STEPS,
+      | ^   ~~~
+[18/18] Linking target implementations/cuda_mpi/cuda_mpi_03
+ninja: Entering directory `buildDir'
+[1/5] Compiling C++ object implementations/cuda_mpi/cuda_mpi_04.p/tools_data_export.cpp.o
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportScalarFieldFromMPIDevices(const float*, SimulationData, MPI_Comm, const string&, const string&, const string&, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int)’:
+../implementations/cuda_mpi/tools/data_export.cpp:34:20: warning: unused parameter ‘N_X’ [-Wunused-parameter]
+   34 |     const uint32_t N_X, const uint32_t N_Y,
+      |     ~~~~~~~~~~~~~~~^~~
+../implementations/cuda_mpi/tools/data_export.cpp:34:40: warning: unused parameter ‘N_Y’ [-Wunused-parameter]
+   34 |     const uint32_t N_X, const uint32_t N_Y,
+      |                         ~~~~~~~~~~~~~~~^~~
+../implementations/cuda_mpi/tools/data_export.cpp:35:46: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+   35 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportSimulationData(const SimulationExportContext&, const SimulationData&, const string&, const string&, uint32_t)’:
+../implementations/cuda_mpi/tools/data_export.cpp:88:9: warning: unused variable ‘dvc_u_mag’ [-Wunused-variable]
+   88 |     FP* dvc_u_mag = nullptr;
+      |         ^~~~~~~~~
+[2/5] Compiling C++ object implementations/cuda_mpi/cuda_mpi_04.p/04_src_main.cpp.o
+In file included from ../implementations/cuda_mpi/04/src/main.cpp:17:
+../implementations/cuda_mpi/04/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:309:16: warning: unused variable ‘misc_time’ [-Wunused-variable]
+  309 |         double misc_time = (acc_total_step_time - acc_communication_time
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:313:16: warning: unused variable ‘comm_pct’ [-Wunused-variable]
+  313 |         double comm_pct  = (100.0 * comm_time)  / step_time;
+      |                ^~~~~~~~
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:314:16: warning: unused variable ‘inner_pct’ [-Wunused-variable]
+  314 |         double inner_pct = (100.0 * inner_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:315:16: warning: unused variable ‘outer_pct’ [-Wunused-variable]
+  315 |         double outer_pct = (100.0 * outer_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:285:10: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  285 |     bool extended = false,
+      |     ~~~~~^~~~~~~~~~~~~~~~
+../implementations/cuda_mpi/04/src/main.cpp: In function ‘int main(int, char**)’:
+../implementations/cuda_mpi/04/src/main.cpp:143:20: warning: unused variable ‘N_CELLS_TOTAL’ [-Wunused-variable]
+  143 |     const uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
+      |                    ^~~~~~~~~~~~~
+../implementations/cuda_mpi/04/src/main.cpp:180:20: warning: unused variable ‘Y_END’ [-Wunused-variable]
+  180 |     const uint32_t Y_END =          Y_START + N_Y - 1;
+      |                    ^~~~~
+[3/5] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_04.p/04_src_initialization.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+[4/5] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_04.p/04_src_simulation.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../implementations/cuda_mpi/04/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/04/src/../../tools/utilities.h:285:1: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  284 |     const uint32_t N_STEPS,
+      |          ~~~~~~~~~~~~~~~~~~
+  285 |     bool extended = false,
+      | ^   ~~~~~~~~~~~~
+../implementations/cuda_mpi/04/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Inner(const float* const*, float* const*, float*, float*, float*, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/04/src/simulation.cu:340:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  339 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/04/src/simulation.cu:340:27: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |            ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/04/src/simulation.cu:341:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                                      ~~~~~~~~~~~~~~~~~~
+  341 |     const uint32_t N_STEPS,
+      | ^   ~~~
+../implementations/cuda_mpi/04/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Outer(const float* const*, float* const*, float* const*, float* const*, float*, float*, float*, float, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/04/src/simulation.cu:819:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  818 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  819 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/04/src/simulation.cu:821:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  820 |     const uint32_t Y_START,
+      |          ~~~~~~~~~~~~~~~~~~
+  821 |     const uint32_t N_STEPS,
+      | ^   ~~~
+[5/5] Linking target implementations/cuda_mpi/cuda_mpi_04
+
+[2025-07-09 16:28:06] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    32.372   60.724   40320  10080 
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    32.372   60.724   40320  10080 
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    32.372   60.724   40320  10080 
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    32.372   60.724   40320  10080 
+
+[2025-07-09 16:28:06] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:28:06] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 10080 / 5000 ] * 4
+[2025-07-09 16:28:06] [[32minfo[m] Halo cells per sub-domain:  0.02 %
+
+[2025-07-09 16:28:06] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1587285 / 256 ]
+[2025-07-09 16:28:06] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:28:06] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:28:06] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:28:06] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 10078 ]
+
+[2025-07-09 16:28:06] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:28:06] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:28:06] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:28:06] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:28:06] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:29:17] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:29:17] [[32minfo[m] Total execution time:       70.764 sec
+[2025-07-09 16:29:17] [[32minfo[m] Step execution time:        14.153 ms
+[2025-07-09 16:29:17] [[32minfo[m] BLUPS:                      114.868
+
+[2025-07-09 16:29:17] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:29:33] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:29:33] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:29:33] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:29:33] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:29:33] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    32.889   60.207   40320  5040  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    16.969   76.127   40320  5040  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    32.887   60.209   40320  5040  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    32.889   60.207   40320  5040  
+4     uc3n079.                                      4   0    0    0         93.096    16.970   76.127   40320  5040  
+5     uc3n079.                                      5   0    0    0         93.096    32.887   60.209   40320  5040  
+6     uc3n079.                                      6   0    0    0         93.096    16.969   76.127   40320  5040  
+7     uc3n079.                                      7   0    0    0         93.096    16.970   76.127   40320  5040  
+
+[2025-07-09 16:29:33] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:29:33] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 5040 / 5000 ] * 8
+[2025-07-09 16:29:33] [[32minfo[m] Halo cells per sub-domain:  0.04 %
+
+[2025-07-09 16:29:33] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 793485 / 256 ]
+[2025-07-09 16:29:33] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:29:33] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:29:33] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:29:33] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 5038 ]
+
+[2025-07-09 16:29:33] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:29:33] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:29:33] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:29:33] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:29:33] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:30:55] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:30:55] [[32minfo[m] Total execution time:       81.375 sec
+[2025-07-09 16:30:55] [[32minfo[m] Step execution time:        16.275 ms
+[2025-07-09 16:30:55] [[32minfo[m] BLUPS:                      99.890
+
+[2025-07-09 16:30:55] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:31:15] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:31:15] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    32.936   60.160   40320  3360  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    28.382   64.715   40320  3360  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    25.344   67.752   40320  3360  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    33.446   59.650   40320  3360  
+4     uc3n079.                                      4   0    0    0         93.096    25.849   67.248   40320  3360  
+5     uc3n079.                                      5   0    0    0         93.096    25.344   67.752   40320  3360  
+6     uc3n079.                                      6   0    0    0         93.096    23.827   69.269   40320  3360  
+7     uc3n079.                                      7   0    0    0         93.096    30.909   62.187   40320  3360  
+8     uc3n079.                                      8   0    0    0         93.096    33.442   59.654   40320  3360  
+9     uc3n079.                                      9   0    0    0         93.096    33.446   59.650   40320  3360  
+10    uc3n079.                                      10  0    0    0         93.096    33.440   59.656   40320  3360  
+11    uc3n079.                                      11  0    0    0         93.096    33.442   59.654   40320  3360  
+
+[2025-07-09 16:31:15] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:31:15] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 3360 / 5000 ] * 12
+[2025-07-09 16:31:15] [[32minfo[m] Halo cells per sub-domain:  0.06 %
+
+[2025-07-09 16:31:15] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 528885 / 256 ]
+[2025-07-09 16:31:15] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:31:15] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:31:15] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:31:15] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 3358 ]
+
+[2025-07-09 16:31:15] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:31:15] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:31:15] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:31:15] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:31:15] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:32:39] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:32:39] [[32minfo[m] Total execution time:       83.204 sec
+[2025-07-09 16:32:39] [[32minfo[m] Step execution time:        16.641 ms
+[2025-07-09 16:32:39] [[32minfo[m] BLUPS:                      97.694
+
+[2025-07-09 16:32:39] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:33:03] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:33:03] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    33.538   59.558   40320  2520  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    15.720   77.377   40320  2520  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    33.923   59.174   40320  2520  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    21.024   72.072   40320  2520  
+4     uc3n079.                                      4   0    0    0         93.096    33.917   59.179   40320  2520  
+5     uc3n079.                                      5   0    0    0         93.096    33.934   59.162   40320  2520  
+6     uc3n079.                                      6   0    0    0         93.096    32.397   60.699   40320  2520  
+7     uc3n079.                                      7   0    0    0         93.096    25.956   67.140   40320  2520  
+8     uc3n079.                                      8   0    0    0         93.096    31.640   61.457   40320  2520  
+9     uc3n079.                                      9   0    0    0         93.096    25.958   67.138   40320  2520  
+10    uc3n079.                                      10  0    0    0         93.096    32.780   60.316   40320  2520  
+11    uc3n079.                                      11  0    0    0         93.096    33.919   59.177   40320  2520  
+12    uc3n079.                                      12  0    0    0         93.096    10.036   83.060   40320  2520  
+13    uc3n079.                                      13  0    0    0         93.096    21.786   71.310   40320  2520  
+14    uc3n079.                                      14  0    0    0         93.096    10.036   83.060   40320  2520  
+15    uc3n079.                                      15  0    0    0         93.096    25.956   67.140   40320  2520  
+
+[2025-07-09 16:33:03] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:33:03] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 2520 / 5000 ] * 16
+[2025-07-09 16:33:03] [[32minfo[m] Halo cells per sub-domain:  0.08 %
+
+[2025-07-09 16:33:03] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 396585 / 256 ]
+[2025-07-09 16:33:03] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:33:03] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:33:03] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:33:03] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2518 ]
+
+[2025-07-09 16:33:03] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:33:03] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:33:03] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:33:03] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:33:03] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:34:25] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:34:25] [[32minfo[m] Total execution time:       81.878 sec
+[2025-07-09 16:34:25] [[32minfo[m] Step execution time:        16.376 ms
+[2025-07-09 16:34:25] [[32minfo[m] BLUPS:                      99.276
+
+[2025-07-09 16:34:25] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:34:53] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:34:53] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    33.690   59.406   40320  2016  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    19.350   73.746   40320  2016  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    28.192   64.904   40320  2016  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    28.198   64.898   40320  2016  
+4     uc3n079.                                      4   0    0    0         93.096    34.604   58.492   40320  2016  
+5     uc3n079.                                      5   0    0    0         93.096    34.614   58.482   40320  2016  
+6     uc3n079.                                      6   0    0    0         93.096    27.581   65.515   40320  2016  
+7     uc3n079.                                      7   0    0    0         93.096    19.351   73.746   40320  2016  
+8     uc3n079.                                      8   0    0    0         93.096    29.714   63.382   40320  2016  
+9     uc3n079.                                      9   0    0    0         93.096    24.538   68.558   40320  2016  
+10    uc3n079.                                      10  0    0    0         93.096    26.667   66.429   40320  2016  
+11    uc3n079.                                      11  0    0    0         93.096    34.616   58.480   40320  2016  
+12    uc3n079.                                      12  0    0    0         93.096    32.458   60.638   40320  2016  
+13    uc3n079.                                      13  0    0    0         93.096    33.698   59.398   40320  2016  
+14    uc3n079.                                      14  0    0    0         93.096    34.620   58.476   40320  2016  
+15    uc3n079.                                      15  0    0    0         93.096    34.616   58.480   40320  2016  
+16    uc3n079.                                      16  0    0    0         93.096    8.989    84.107   40320  2016  
+17    uc3n079.                                      17  0    0    0         93.096    20.266   72.830   40320  2016  
+18    uc3n079.                                      18  0    0    0         93.096    29.108   63.988   40320  2016  
+19    uc3n079.                                      19  0    0    0         93.096    19.962   73.134   40320  2016  
+
+[2025-07-09 16:34:53] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:34:53] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 2016 / 5000 ] * 20
+[2025-07-09 16:34:53] [[32minfo[m] Halo cells per sub-domain:  0.10 %
+
+[2025-07-09 16:34:53] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 317205 / 256 ]
+[2025-07-09 16:34:53] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:34:53] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:34:53] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:34:53] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2014 ]
+
+[2025-07-09 16:34:53] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:34:53] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:34:53] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:34:53] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:34:53] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:36:18] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:36:18] [[32minfo[m] Total execution time:       84.913 sec
+[2025-07-09 16:36:18] [[32minfo[m] Step execution time:        16.983 ms
+[2025-07-09 16:36:18] [[32minfo[m] BLUPS:                      95.727
+
+[2025-07-09 16:36:18] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:36:50] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:36:51] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    34.343   58.753   40320  1680  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    34.360   58.736   40320  1680  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    30.280   62.816   40320  1680  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    30.536   62.560   40320  1680  
+4     uc3n079.                                      4   0    0    0         93.096    35.112   57.984   40320  1680  
+5     uc3n079.                                      5   0    0    0         93.096    35.130   57.966   40320  1680  
+6     uc3n079.                                      6   0    0    0         93.096    34.102   58.994   40320  1680  
+7     uc3n079.                                      7   0    0    0         93.096    31.814   61.283   40320  1680  
+8     uc3n079.                                      8   0    0    0         93.096    28.243   64.853   40320  1680  
+9     uc3n079.                                      9   0    0    0         93.096    24.183   68.914   40320  1680  
+10    uc3n079.                                      10  0    0    0         93.096    27.737   65.359   40320  1680  
+11    uc3n079.                                      11  0    0    0         93.096    21.640   71.456   40320  1680  
+12    uc3n079.                                      12  0    0    0         93.096    33.579   59.517   40320  1680  
+13    uc3n079.                                      13  0    0    0         93.096    33.331   59.765   40320  1680  
+14    uc3n079.                                      14  0    0    0         93.096    35.143   57.953   40320  1680  
+15    uc3n079.                                      15  0    0    0         93.096    34.880   58.216   40320  1680  
+16    uc3n079.                                      16  0    0    0         93.096    21.892   71.205   40320  1680  
+17    uc3n079.                                      17  0    0    0         93.096    18.337   74.759   40320  1680  
+18    uc3n079.                                      18  0    0    0         93.096    21.384   71.712   40320  1680  
+19    uc3n079.                                      19  0    0    0         93.096    26.724   66.372   40320  1680  
+20    uc3n079.                                      20  0    0    0         93.096    34.597   58.499   40320  1680  
+21    uc3n079.                                      21  0    0    0         93.096    23.169   69.927   40320  1680  
+22    uc3n079.                                      22  0    0    0         93.096    29.009   64.087   40320  1680  
+23    uc3n079.                                      23  0    0    0         93.096    35.138   57.958   40320  1680  
+
+[2025-07-09 16:36:51] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:36:51] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 1680 / 5000 ] * 24
+[2025-07-09 16:36:51] [[32minfo[m] Halo cells per sub-domain:  0.12 %
+
+[2025-07-09 16:36:51] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 264285 / 256 ]
+[2025-07-09 16:36:51] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:36:51] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:36:51] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:36:51] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 1678 ]
+
+[2025-07-09 16:36:51] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:36:51] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:36:51] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:36:51] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:36:51] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:38:18] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:38:18] [[32minfo[m] Total execution time:       87.764 sec
+[2025-07-09 16:38:18] [[32minfo[m] Step execution time:        17.553 ms
+[2025-07-09 16:38:18] [[32minfo[m] BLUPS:                      92.618
+
+[2025-07-09 16:38:18] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:38:55] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:38:55] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    35.521   57.576   40320  1440  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    35.511   57.585   40320  1440  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    35.507   57.589   40320  1440  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    35.517   57.579   40320  1440  
+4     uc3n079.                                      4   0    0    0         93.096    33.980   59.117   40320  1440  
+5     uc3n079.                                      5   0    0    0         93.096    32.456   60.640   40320  1440  
+6     uc3n079.                                      6   0    0    0         93.096    35.507   57.589   40320  1440  
+7     uc3n079.                                      7   0    0    0         93.096    35.501   57.595   40320  1440  
+8     uc3n079.                                      8   0    0    0         93.096    35.286   57.810   40320  1440  
+9     uc3n079.                                      9   0    0    0         93.096    35.288   57.808   40320  1440  
+10    uc3n079.                                      10  0    0    0         93.096    35.507   57.589   40320  1440  
+11    uc3n079.                                      11  0    0    0         93.096    35.509   57.587   40320  1440  
+12    uc3n079.                                      12  0    0    0         93.096    34.413   58.683   40320  1440  
+13    uc3n079.                                      13  0    0    0         93.096    35.509   57.587   40320  1440  
+14    uc3n079.                                      14  0    0    0         93.096    32.456   60.640   40320  1440  
+15    uc3n079.                                      15  0    0    0         93.096    32.243   60.853   40320  1440  
+16    uc3n079.                                      16  0    0    0         93.096    32.675   60.421   40320  1440  
+17    uc3n079.                                      17  0    0    0         93.096    35.288   57.808   40320  1440  
+18    uc3n079.                                      18  0    0    0         93.096    34.198   58.898   40320  1440  
+19    uc3n079.                                      19  0    0    0         93.096    30.937   62.160   40320  1440  
+20    uc3n079.                                      20  0    0    0         93.096    35.064   58.033   40320  1440  
+21    uc3n079.                                      21  0    0    0         93.096    34.634   58.462   40320  1440  
+22    uc3n079.                                      22  0    0    0         93.096    34.636   58.460   40320  1440  
+23    uc3n079.                                      23  0    0    0         93.096    35.501   57.595   40320  1440  
+24    uc3n079.                                      24  0    0    0         93.096    34.630   58.466   40320  1440  
+25    uc3n079.                                      25  0    0    0         93.096    33.331   59.765   40320  1440  
+26    uc3n079.                                      26  0    0    0         93.096    34.853   58.244   40320  1440  
+27    uc3n079.                                      27  0    0    0         93.096    35.501   57.595   40320  1440  
+
+[2025-07-09 16:38:55] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:38:55] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 1440 / 5000 ] * 28
+[2025-07-09 16:38:55] [[32minfo[m] Halo cells per sub-domain:  0.14 %
+
+[2025-07-09 16:38:55] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 226485 / 256 ]
+[2025-07-09 16:38:55] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:38:55] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:38:55] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:38:55] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 1438 ]
+
+[2025-07-09 16:38:55] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:38:55] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:38:55] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:38:55] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:38:55] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:40:17] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:40:17] [[32minfo[m] Total execution time:       81.660 sec
+[2025-07-09 16:40:17] [[32minfo[m] Step execution time:        16.332 ms
+[2025-07-09 16:40:17] [[32minfo[m] BLUPS:                      99.541
+
+[2025-07-09 16:40:17] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:40:57] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:40:57] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    35.982   57.115   40320  1260  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    35.982   57.115   40320  1260  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    35.601   57.496   40320  1260  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    35.984   57.113   40320  1260  
+4     uc3n079.                                      4   0    0    0         93.096    35.788   57.308   40320  1260  
+5     uc3n079.                                      5   0    0    0         93.096    35.788   57.308   40320  1260  
+6     uc3n079.                                      6   0    0    0         93.096    35.982   57.115   40320  1260  
+7     uc3n079.                                      7   0    0    0         93.096    34.454   58.642   40320  1260  
+8     uc3n079.                                      8   0    0    0         93.096    35.982   57.115   40320  1260  
+9     uc3n079.                                      9   0    0    0         93.096    33.694   59.402   40320  1260  
+10    uc3n079.                                      10  0    0    0         93.096    35.790   57.306   40320  1260  
+11    uc3n079.                                      11  0    0    0         93.096    34.075   59.021   40320  1260  
+12    uc3n079.                                      12  0    0    0         93.096    33.499   59.597   40320  1260  
+13    uc3n079.                                      13  0    0    0         93.096    35.786   57.310   40320  1260  
+14    uc3n079.                                      14  0    0    0         93.096    31.415   61.681   40320  1260  
+15    uc3n079.                                      15  0    0    0         93.096    34.454   58.642   40320  1260  
+16    uc3n079.                                      16  0    0    0         93.096    35.788   57.308   40320  1260  
+17    uc3n079.                                      17  0    0    0         93.096    35.405   57.691   40320  1260  
+18    uc3n079.                                      18  0    0    0         93.096    30.087   63.009   40320  1260  
+19    uc3n079.                                      19  0    0    0         93.096    35.790   57.306   40320  1260  
+20    uc3n079.                                      20  0    0    0         93.096    32.552   60.544   40320  1260  
+21    uc3n079.                                      21  0    0    0         93.096    35.788   57.308   40320  1260  
+22    uc3n079.                                      22  0    0    0         93.096    34.640   58.456   40320  1260  
+23    uc3n079.                                      23  0    0    0         93.096    34.646   58.451   40320  1260  
+24    uc3n079.                                      24  0    0    0         93.096    35.595   57.501   40320  1260  
+25    uc3n079.                                      25  0    0    0         93.096    35.982   57.115   40320  1260  
+26    uc3n079.                                      26  0    0    0         93.096    33.124   59.972   40320  1260  
+27    uc3n079.                                      27  0    0    0         93.096    34.646   58.451   40320  1260  
+28    uc3n079.                                      28  0    0    0         93.096    33.499   59.597   40320  1260  
+29    uc3n079.                                      29  0    0    0         93.096    34.454   58.642   40320  1260  
+30    uc3n079.                                      30  0    0    0         93.096    34.837   58.259   40320  1260  
+31    uc3n079.                                      31  0    0    0         93.096    35.984   57.113   40320  1260  
+
+[2025-07-09 16:40:57] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:40:57] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 1260 / 5000 ] * 32
+[2025-07-09 16:40:57] [[32minfo[m] Halo cells per sub-domain:  0.16 %
+
+[2025-07-09 16:40:57] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 198135 / 256 ]
+[2025-07-09 16:40:57] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:40:57] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:40:57] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:40:57] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 1258 ]
+
+[2025-07-09 16:40:57] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:40:57] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:40:57] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:40:57] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:40:57] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:42:21] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:42:21] [[32minfo[m] Total execution time:       83.426 sec
+[2025-07-09 16:42:21] [[32minfo[m] Step execution time:        16.685 ms
+[2025-07-09 16:42:21] [[32minfo[m] BLUPS:                      97.434
+
+[2025-07-09 16:42:21] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:43:05] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:05] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:06] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:06] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:43:06] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    36.827   56.269   40320  1120  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    34.571   58.525   40320  1120  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    30.993   62.103   40320  1120  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    36.652   56.445   40320  1120  
+4     uc3n079.                                      4   0    0    0         93.096    23.503   69.593   40320  1120  
+5     uc3n079.                                      5   0    0    0         93.096    32.691   60.406   40320  1120  
+6     uc3n079.                                      6   0    0    0         93.096    32.355   60.742   40320  1120  
+7     uc3n079.                                      7   0    0    0         93.096    26.572   66.525   40320  1120  
+8     uc3n079.                                      8   0    0    0         93.096    23.503   69.593   40320  1120  
+9     uc3n079.                                      9   0    0    0         93.096    33.204   59.892   40320  1120  
+10    uc3n079.                                      10  0    0    0         93.096    30.308   62.788   40320  1120  
+11    uc3n079.                                      11  0    0    0         93.096    20.109   72.988   40320  1120  
+12    uc3n079.                                      12  0    0    0         93.096    36.814   56.282   40320  1120  
+13    uc3n079.                                      13  0    0    0         93.096    36.837   56.259   40320  1120  
+14    uc3n079.                                      14  0    0    0         93.096    36.816   56.281   40320  1120  
+15    uc3n079.                                      15  0    0    0         93.096    36.823   56.273   40320  1120  
+16    uc3n079.                                      16  0    0    0         93.096    27.585   65.511   40320  1120  
+17    uc3n079.                                      17  0    0    0         93.096    22.653   70.443   40320  1120  
+18    uc3n079.                                      18  0    0    0         93.096    30.308   62.788   40320  1120  
+19    uc3n079.                                      19  0    0    0         93.096    19.599   73.497   40320  1120  
+20    uc3n079.                                      20  0    0    0         93.096    35.247   57.849   40320  1120  
+21    uc3n079.                                      21  0    0    0         93.096    35.610   57.486   40320  1120  
+22    uc3n079.                                      22  0    0    0         93.096    27.757   65.339   40320  1120  
+23    uc3n079.                                      23  0    0    0         93.096    18.577   74.519   40320  1120  
+24    uc3n079.                                      24  0    0    0         93.096    35.077   58.019   40320  1120  
+25    uc3n079.                                      25  0    0    0         93.096    26.734   66.363   40320  1120  
+26    uc3n079.                                      26  0    0    0         93.096    34.911   58.185   40320  1120  
+27    uc3n079.                                      27  0    0    0         93.096    36.118   56.978   40320  1120  
+28    uc3n079.                                      28  0    0    0         93.096    30.818   62.279   40320  1120  
+29    uc3n079.                                      29  0    0    0         93.096    33.032   60.064   40320  1120  
+30    uc3n079.                                      30  0    0    0         93.096    35.597   57.499   40320  1120  
+31    uc3n079.                                      31  0    0    0         93.096    31.163   61.933   40320  1120  
+32    uc3n079.                                      32  0    0    0         93.096    35.077   58.019   40320  1120  
+33    uc3n079.                                      33  0    0    0         93.096    35.607   57.490   40320  1120  
+34    uc3n079.                                      34  0    0    0         93.096    36.816   56.281   40320  1120  
+35    uc3n079.                                      35  0    0    0         93.096    36.296   56.800   40320  1120  
+
+[2025-07-09 16:43:06] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:43:06] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 1120 / 5000 ] * 36
+[2025-07-09 16:43:06] [[32minfo[m] Halo cells per sub-domain:  0.18 %
+
+[2025-07-09 16:43:06] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 176085 / 256 ]
+[2025-07-09 16:43:06] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:43:06] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:43:06] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:43:06] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 1118 ]
+
+[2025-07-09 16:43:06] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:43:06] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:43:06] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:43:06] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:43:06] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:44:30] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:44:30] [[32minfo[m] Total execution time:       84.010 sec
+[2025-07-09 16:44:30] [[32minfo[m] Step execution time:        16.802 ms
+[2025-07-09 16:44:30] [[32minfo[m] BLUPS:                      96.756
+
+[2025-07-09 16:44:30] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:45:18] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:18] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:45:19] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    37.204   55.892   40320  1008  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    37.183   55.913   40320  1008  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    37.196   55.900   40320  1008  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    37.054   56.042   40320  1008  
+4     uc3n079.                                      4   0    0    0         93.096    35.181   57.915   40320  1008  
+5     uc3n079.                                      5   0    0    0         93.096    34.728   58.368   40320  1008  
+6     uc3n079.                                      6   0    0    0         93.096    37.175   55.921   40320  1008  
+7     uc3n079.                                      7   0    0    0         93.096    33.812   59.284   40320  1008  
+8     uc3n079.                                      8   0    0    0         93.096    34.876   58.220   40320  1008  
+9     uc3n079.                                      9   0    0    0         93.096    35.642   57.454   40320  1008  
+10    uc3n079.                                      10  0    0    0         93.096    30.445   62.652   40320  1008  
+11    uc3n079.                                      11  0    0    0         93.096    30.140   62.956   40320  1008  
+12    uc3n079.                                      12  0    0    0         93.096    34.876   58.220   40320  1008  
+13    uc3n079.                                      13  0    0    0         93.096    33.806   59.290   40320  1008  
+14    uc3n079.                                      14  0    0    0         93.096    35.030   58.066   40320  1008  
+15    uc3n079.                                      15  0    0    0         93.096    32.283   60.814   40320  1008  
+16    uc3n079.                                      16  0    0    0         93.096    35.181   57.915   40320  1008  
+17    uc3n079.                                      17  0    0    0         93.096    36.724   56.372   40320  1008  
+18    uc3n079.                                      18  0    0    0         93.096    37.177   55.919   40320  1008  
+19    uc3n079.                                      19  0    0    0         93.096    35.954   57.142   40320  1008  
+20    uc3n079.                                      20  0    0    0         93.096    37.185   55.911   40320  1008  
+21    uc3n079.                                      21  0    0    0         93.096    37.185   55.911   40320  1008  
+22    uc3n079.                                      22  0    0    0         93.096    35.030   58.066   40320  1008  
+23    uc3n079.                                      23  0    0    0         93.096    36.417   56.679   40320  1008  
+24    uc3n079.                                      24  0    0    0         93.096    35.181   57.915   40320  1008  
+25    uc3n079.                                      25  0    0    0         93.096    36.870   56.226   40320  1008  
+26    uc3n079.                                      26  0    0    0         93.096    37.177   55.919   40320  1008  
+27    uc3n079.                                      27  0    0    0         93.096    35.804   57.292   40320  1008  
+28    uc3n079.                                      28  0    0    0         93.096    36.251   56.845   40320  1008  
+29    uc3n079.                                      29  0    0    0         93.096    36.568   56.529   40320  1008  
+30    uc3n079.                                      30  0    0    0         93.096    36.562   56.534   40320  1008  
+31    uc3n079.                                      31  0    0    0         93.096    34.886   58.210   40320  1008  
+32    uc3n079.                                      32  0    0    0         93.096    37.185   55.911   40320  1008  
+33    uc3n079.                                      33  0    0    0         93.096    32.886   60.210   40320  1008  
+34    uc3n079.                                      34  0    0    0         93.096    31.513   61.583   40320  1008  
+35    uc3n079.                                      35  0    0    0         93.096    37.220   55.876   40320  1008  
+36    uc3n079.                                      36  0    0    0         93.096    29.222   63.874   40320  1008  
+37    uc3n079.                                      37  0    0    0         93.096    32.886   60.210   40320  1008  
+38    uc3n079.                                      38  0    0    0         93.096    35.030   58.066   40320  1008  
+39    uc3n079.                                      39  0    0    0         93.096    31.363   61.734   40320  1008  
+
+[2025-07-09 16:45:19] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:45:19] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 1008 / 5000 ] * 40
+[2025-07-09 16:45:19] [[32minfo[m] Halo cells per sub-domain:  0.20 %
+
+[2025-07-09 16:45:19] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 158445 / 256 ]
+[2025-07-09 16:45:19] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:45:19] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:45:19] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:45:19] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 1006 ]
+
+[2025-07-09 16:45:19] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:45:19] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:45:19] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:45:19] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:45:19] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[2025-07-09 16:46:45] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:46:45] [[32minfo[m] Total execution time:       85.522 sec
+[2025-07-09 16:46:45] [[32minfo[m] Step execution time:        17.104 ms
+[2025-07-09 16:46:45] [[32minfo[m] BLUPS:                      95.046
+
+[2025-07-09 16:46:45] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:47:03] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    32.372   60.724   40320  10080 
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    32.372   60.724   40320  10080 
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    32.372   60.724   40320  10080 
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    32.372   60.724   40320  10080 
+
+[2025-07-09 16:47:03] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:47:03] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 10080 / 5000 ] * 4
+[2025-07-09 16:47:03] [[32minfo[m] Halo cells per sub-domain:  0.02 %
+
+[2025-07-09 16:47:03] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 1587285 / 256 ]
+[2025-07-09 16:47:03] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:47:03] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:47:03] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:47:03] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 10078 ]
+
+[2025-07-09 16:47:03] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:47:03] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:47:03] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:47:03] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:47:03] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[16:47:03] [38;2;255;40;50m  0 %[0m
+[16:47:04] [38;2;255;40;50m  1 %[0m  (T-00:01:28) 50/5000 steps
+[16:47:04] [38;2;255;40;50m  2 %[0m  (T-00:01:09) 100/5000 steps
+[16:47:05] [38;2;255;40;50m  3 %[0m  (T-00:01:08) 150/5000 steps
+[16:47:06] [38;2;255;40;50m  4 %[0m  (T-00:01:07) 200/5000 steps
+[16:47:07] [38;2;255;40;50m  5 %[0m  (T-00:01:07) 250/5000 steps
+[16:47:07] [38;2;255;40;50m  6 %[0m  (T-00:01:06) 300/5000 steps
+[16:47:08] [38;2;255;40;50m  7 %[0m  (T-00:01:05) 350/5000 steps
+[16:47:09] [38;2;255;40;50m  8 %[0m  (T-00:01:05) 400/5000 steps
+[16:47:09] [38;2;255;40;50m  9 %[0m  (T-00:01:04) 450/5000 steps
+[16:47:10] [38;2;255;40;50m 10 %[0m  (T-00:01:03) 500/5000 steps
+[16:47:11] [38;2;255;40;50m 11 %[0m  (T-00:01:02) 550/5000 steps
+[16:47:12] [38;2;255;40;50m 12 %[0m  (T-00:01:02) 600/5000 steps
+[16:47:12] [38;2;255;40;50m 13 %[0m  (T-00:01:01) 650/5000 steps
+[16:47:13] [38;2;255;40;50m 14 %[0m  (T-00:01:00) 700/5000 steps
+[16:47:14] [38;2;255;40;50m 15 %[0m  (T-00:00:59) 750/5000 steps
+[16:47:14] [38;2;255;40;50m 16 %[0m  (T-00:00:59) 800/5000 steps
+[16:47:15] [38;2;255;40;50m 17 %[0m  (T-00:00:58) 850/5000 steps
+[16:47:16] [38;2;255;40;50m 18 %[0m  (T-00:00:57) 900/5000 steps
+[16:47:16] [38;2;255;40;50m 19 %[0m  (T-00:00:57) 950/5000 steps
+[16:47:17] [38;2;255;40;50m 20 %[0m  (T-00:00:56) 1000/5000 steps
+[16:47:18] [38;2;255;40;50m 21 %[0m  (T-00:00:55) 1050/5000 steps
+[16:47:19] [38;2;255;40;50m 22 %[0m  (T-00:00:55) 1100/5000 steps
+[16:47:19] [38;2;255;40;50m 23 %[0m  (T-00:00:54) 1150/5000 steps
+[16:47:20] [38;2;255;40;50m 24 %[0m  (T-00:00:53) 1200/5000 steps
+[16:47:21] [38;2;255;40;50m 25 %[0m  (T-00:00:52) 1250/5000 steps
+[16:47:21] [38;2;255;40;50m 26 %[0m  (T-00:00:52) 1300/5000 steps
+[16:47:22] [38;2;255;40;50m 27 %[0m  (T-00:00:51) 1350/5000 steps
+[16:47:23] [38;2;255;40;50m 28 %[0m  (T-00:00:50) 1400/5000 steps
+[16:47:24] [38;2;255;40;50m 29 %[0m  (T-00:00:50) 1450/5000 steps
+[16:47:24] [38;2;255;40;50m 30 %[0m  (T-00:00:49) 1500/5000 steps
+[16:47:25] [38;2;255;40;50m 31 %[0m  (T-00:00:48) 1550/5000 steps
+[16:47:26] [38;2;255;40;50m 32 %[0m  (T-00:00:47) 1600/5000 steps
+[16:47:26] [38;2;255;40;50m 33 %[0m  (T-00:00:47) 1650/5000 steps
+[16:47:27] [38;2;255;40;50m 34 %[0m  (T-00:00:46) 1700/5000 steps
+[16:47:28] [38;2;255;40;50m 35 %[0m  (T-00:00:45) 1750/5000 steps
+[16:47:28] [38;2;255;40;50m 36 %[0m  (T-00:00:45) 1800/5000 steps
+[16:47:29] [38;2;255;40;50m 37 %[0m  (T-00:00:44) 1850/5000 steps
+[16:47:30] [38;2;255;40;50m 38 %[0m  (T-00:00:43) 1900/5000 steps
+[16:47:31] [38;2;255;40;50m 39 %[0m  (T-00:00:43) 1950/5000 steps
+[16:47:31] [38;2;255;40;50m 40 %[0m  (T-00:00:42) 2000/5000 steps
+[16:47:32] [38;2;255;40;50m 41 %[0m  (T-00:00:41) 2050/5000 steps
+[16:47:33] [38;2;255;40;50m 42 %[0m  (T-00:00:40) 2100/5000 steps
+[16:47:33] [38;2;255;40;50m 43 %[0m  (T-00:00:40) 2150/5000 steps
+[16:47:34] [38;2;255;40;50m 44 %[0m  (T-00:00:39) 2200/5000 steps
+[16:47:35] [38;2;255;40;50m 45 %[0m  (T-00:00:38) 2250/5000 steps
+[16:47:35] [38;2;255;40;50m 46 %[0m  (T-00:00:38) 2300/5000 steps
+[16:47:36] [38;2;255;40;50m 47 %[0m  (T-00:00:37) 2350/5000 steps
+[16:47:37] [38;2;255;40;50m 48 %[0m  (T-00:00:36) 2400/5000 steps
+[16:47:38] [38;2;255;40;50m 49 %[0m  (T-00:00:35) 2450/5000 steps
+[16:47:38] [38;2;255;40;50m 50 %[0m  (T-00:00:35) 2500/5000 steps
+[16:47:39] [38;2;255;40;50m 51 %[0m  (T-00:00:34) 2550/5000 steps
+[16:47:40] [38;2;255;40;50m 52 %[0m  (T-00:00:33) 2600/5000 steps
+[16:47:40] [38;2;255;40;50m 53 %[0m  (T-00:00:33) 2651/5000 steps
+[16:47:41] [38;2;255;40;50m 54 %[0m  (T-00:00:31) 2700/5000 steps
+[16:47:42] [38;2;255;40;50m 55 %[0m  (T-00:00:31) 2750/5000 steps
+[16:47:43] [38;2;255;40;50m 56 %[0m  (T-00:00:31) 2800/5000 steps
+[16:47:43] [38;2;255;40;50m 57 %[0m  (T-00:00:30) 2850/5000 steps
+[16:47:44] [38;2;255;40;50m 58 %[0m  (T-00:00:29) 2900/5000 steps
+[16:47:45] [38;2;255;40;50m 59 %[0m  (T-00:00:29) 2951/5000 steps
+[16:47:45] [38;2;255;40;50m 60 %[0m  (T-00:00:27) 3000/5000 steps
+[16:47:46] [38;2;255;40;50m 61 %[0m  (T-00:00:27) 3050/5000 steps
+[16:47:47] [38;2;255;40;50m 62 %[0m  (T-00:00:26) 3100/5000 steps
+[16:47:47] [38;2;255;40;50m 63 %[0m  (T-00:00:26) 3150/5000 steps
+[16:47:48] [38;2;255;40;50m 64 %[0m  (T-00:00:25) 3200/5000 steps
+[16:47:49] [38;2;255;40;50m 65 %[0m  (T-00:00:24) 3250/5000 steps
+[16:47:50] [38;2;255;40;50m 66 %[0m  (T-00:00:23) 3300/5000 steps
+[16:47:50] [38;2;255;40;50m 67 %[0m  (T-00:00:23) 3350/5000 steps
+[16:47:51] [38;2;255;40;50m 68 %[0m  (T-00:00:22) 3400/5000 steps
+[16:47:52] [38;2;255;40;50m 69 %[0m  (T-00:00:21) 3450/5000 steps
+[16:47:52] [38;2;255;40;50m 70 %[0m  (T-00:00:21) 3500/5000 steps
+[16:47:53] [38;2;255;40;50m 71 %[0m  (T-00:00:20) 3550/5000 steps
+[16:47:54] [38;2;255;40;50m 72 %[0m  (T-00:00:19) 3600/5000 steps
+[16:47:55] [38;2;255;40;50m 73 %[0m  (T-00:00:19) 3650/5000 steps
+[16:47:55] [38;2;255;40;50m 74 %[0m  (T-00:00:18) 3700/5000 steps
+[16:47:56] [38;2;255;40;50m 75 %[0m  (T-00:00:17) 3750/5000 steps
+[16:47:57] [38;2;255;40;50m 76 %[0m  (T-00:00:16) 3800/5000 steps
+[16:47:57] [38;2;255;40;50m 77 %[0m  (T-00:00:16) 3850/5000 steps
+[16:47:58] [38;2;255;40;50m 78 %[0m  (T-00:00:15) 3900/5000 steps
+[16:47:59] [38;2;255;40;50m 79 %[0m  (T-00:00:14) 3950/5000 steps
+[16:47:59] [38;2;255;40;50m 80 %[0m  (T-00:00:14) 4000/5000 steps
+[16:48:00] [38;2;255;40;50m 81 %[0m  (T-00:00:13) 4050/5000 steps
+[16:48:01] [38;2;255;40;50m 82 %[0m  (T-00:00:12) 4100/5000 steps
+[16:48:02] [38;2;255;40;50m 83 %[0m  (T-00:00:11) 4150/5000 steps
+[16:48:02] [38;2;255;40;50m 84 %[0m  (T-00:00:11) 4200/5000 steps
+[16:48:03] [38;2;255;40;50m 85 %[0m  (T-00:00:10) 4250/5000 steps
+[16:48:04] [38;2;255;40;50m 86 %[0m  (T-00:00:09) 4300/5000 steps
+[16:48:04] [38;2;255;40;50m 87 %[0m  (T-00:00:09) 4350/5000 steps
+[16:48:05] [38;2;255;40;50m 88 %[0m  (T-00:00:08) 4400/5000 steps
+[16:48:06] [38;2;255;40;50m 89 %[0m  (T-00:00:07) 4450/5000 steps
+[16:48:07] [38;2;255;40;50m 90 %[0m  (T-00:00:07) 4500/5000 steps
+[16:48:07] [38;2;255;40;50m 91 %[0m  (T-00:00:06) 4550/5000 steps
+[16:48:08] [38;2;255;40;50m 92 %[0m  (T-00:00:05) 4600/5000 steps
+[16:48:09] [38;2;255;40;50m 93 %[0m  (T-00:00:04) 4650/5000 steps
+[16:48:09] [38;2;255;40;50m 94 %[0m  (T-00:00:04) 4700/5000 steps
+[16:48:10] [38;2;255;40;50m 95 %[0m  (T-00:00:03) 4750/5000 steps
+[16:48:11] [38;2;255;40;50m 96 %[0m  (T-00:00:02) 4800/5000 steps
+[16:48:11] [38;2;255;40;50m 97 %[0m  (T-00:00:02) 4850/5000 steps
+[16:48:12] [38;2;255;40;50m 98 %[0m  (T-00:00:01) 4900/5000 steps
+[16:48:13] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[16:48:14] [38;2;255;40;50m100 %[0m
+
+[2025-07-09 16:48:14] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:48:14] [[32minfo[m] Total execution time:       70.771 sec
+[2025-07-09 16:48:14] [[32minfo[m] Step execution time:        14.154 ms
+[2025-07-09 16:48:14] [[32minfo[m] BLUPS:                      114.856
+
+[2025-07-09 16:48:14] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:48:30] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:48:30] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:48:30] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:48:30] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:48:30] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    32.888   60.209   40320  5040  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    28.337   64.760   40320  5040  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    32.887   60.209   40320  5040  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    32.888   60.209   40320  5040  
+4     uc3n079.                                      4   0    0    0         93.096    29.095   64.002   40320  5040  
+5     uc3n079.                                      5   0    0    0         93.096    32.887   60.209   40320  5040  
+6     uc3n079.                                      6   0    0    0         93.096    29.852   63.244   40320  5040  
+7     uc3n079.                                      7   0    0    0         93.096    32.886   60.211   40320  5040  
+
+[2025-07-09 16:48:30] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:48:30] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 5040 / 5000 ] * 8
+[2025-07-09 16:48:30] [[32minfo[m] Halo cells per sub-domain:  0.04 %
+
+[2025-07-09 16:48:30] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 793485 / 256 ]
+[2025-07-09 16:48:30] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:48:30] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:48:30] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:48:30] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 5038 ]
+
+[2025-07-09 16:48:30] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:48:30] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:48:30] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:48:30] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:48:30] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[16:48:30] [38;2;255;40;50m  0 %[0m
+[16:48:32] [38;2;255;40;50m  1 %[0m  (T-00:01:54) 50/5000 steps
+[16:48:32] [38;2;255;40;50m  2 %[0m  (T-00:01:19) 100/5000 steps
+[16:48:33] [38;2;255;40;50m  3 %[0m  (T-00:01:18) 150/5000 steps
+[16:48:34] [38;2;255;40;50m  4 %[0m  (T-00:01:17) 200/5000 steps
+[16:48:35] [38;2;255;40;50m  5 %[0m  (T-00:01:17) 250/5000 steps
+[16:48:36] [38;2;255;40;50m  6 %[0m  (T-00:01:16) 300/5000 steps
+[16:48:36] [38;2;255;40;50m  7 %[0m  (T-00:01:15) 350/5000 steps
+[16:48:37] [38;2;255;40;50m  8 %[0m  (T-00:01:14) 400/5000 steps
+[16:48:38] [38;2;255;40;50m  9 %[0m  (T-00:01:14) 450/5000 steps
+[16:48:39] [38;2;255;40;50m 10 %[0m  (T-00:01:12) 500/5000 steps
+[16:48:40] [38;2;255;40;50m 11 %[0m  (T-00:01:12) 550/5000 steps
+[16:48:40] [38;2;255;40;50m 12 %[0m  (T-00:01:11) 600/5000 steps
+[16:48:41] [38;2;255;40;50m 13 %[0m  (T-00:01:10) 650/5000 steps
+[16:48:42] [38;2;255;40;50m 14 %[0m  (T-00:01:09) 700/5000 steps
+[16:48:43] [38;2;255;40;50m 15 %[0m  (T-00:01:08) 750/5000 steps
+[16:48:44] [38;2;255;40;50m 16 %[0m  (T-00:01:08) 800/5000 steps
+[16:48:45] [38;2;255;40;50m 17 %[0m  (T-00:01:07) 850/5000 steps
+[16:48:45] [38;2;255;40;50m 18 %[0m  (T-00:01:06) 900/5000 steps
+[16:48:46] [38;2;255;40;50m 19 %[0m  (T-00:01:05) 950/5000 steps
+[16:48:47] [38;2;255;40;50m 20 %[0m  (T-00:01:04) 1000/5000 steps
+[16:48:48] [38;2;255;40;50m 21 %[0m  (T-00:01:03) 1050/5000 steps
+[16:48:49] [38;2;255;40;50m 22 %[0m  (T-00:01:03) 1100/5000 steps
+[16:48:49] [38;2;255;40;50m 23 %[0m  (T-00:01:02) 1150/5000 steps
+[16:48:50] [38;2;255;40;50m 24 %[0m  (T-00:01:01) 1200/5000 steps
+[16:48:51] [38;2;255;40;50m 25 %[0m  (T-00:01:00) 1250/5000 steps
+[16:48:52] [38;2;255;40;50m 26 %[0m  (T-00:00:59) 1300/5000 steps
+[16:48:53] [38;2;255;40;50m 27 %[0m  (T-00:00:59) 1350/5000 steps
+[16:48:53] [38;2;255;40;50m 28 %[0m  (T-00:00:58) 1400/5000 steps
+[16:48:54] [38;2;255;40;50m 29 %[0m  (T-00:00:57) 1450/5000 steps
+[16:48:55] [38;2;255;40;50m 30 %[0m  (T-00:00:56) 1500/5000 steps
+[16:48:56] [38;2;255;40;50m 31 %[0m  (T-00:00:55) 1550/5000 steps
+[16:48:57] [38;2;255;40;50m 32 %[0m  (T-00:00:55) 1600/5000 steps
+[16:48:57] [38;2;255;40;50m 33 %[0m  (T-00:00:54) 1650/5000 steps
+[16:48:58] [38;2;255;40;50m 34 %[0m  (T-00:00:53) 1700/5000 steps
+[16:48:59] [38;2;255;40;50m 35 %[0m  (T-00:00:52) 1750/5000 steps
+[16:49:00] [38;2;255;40;50m 36 %[0m  (T-00:00:51) 1800/5000 steps
+[16:49:01] [38;2;255;40;50m 37 %[0m  (T-00:00:51) 1850/5000 steps
+[16:49:02] [38;2;255;40;50m 38 %[0m  (T-00:00:50) 1900/5000 steps
+[16:49:02] [38;2;255;40;50m 39 %[0m  (T-00:00:49) 1950/5000 steps
+[16:49:03] [38;2;255;40;50m 40 %[0m  (T-00:00:48) 2000/5000 steps
+[16:49:04] [38;2;255;40;50m 41 %[0m  (T-00:00:47) 2050/5000 steps
+[16:49:05] [38;2;255;40;50m 42 %[0m  (T-00:00:46) 2100/5000 steps
+[16:49:06] [38;2;255;40;50m 43 %[0m  (T-00:00:46) 2150/5000 steps
+[16:49:06] [38;2;255;40;50m 44 %[0m  (T-00:00:45) 2200/5000 steps
+[16:49:07] [38;2;255;40;50m 45 %[0m  (T-00:00:44) 2250/5000 steps
+[16:49:08] [38;2;255;40;50m 46 %[0m  (T-00:00:43) 2300/5000 steps
+[16:49:09] [38;2;255;40;50m 47 %[0m  (T-00:00:42) 2350/5000 steps
+[16:49:10] [38;2;255;40;50m 48 %[0m  (T-00:00:42) 2400/5000 steps
+[16:49:10] [38;2;255;40;50m 49 %[0m  (T-00:00:41) 2450/5000 steps
+[16:49:11] [38;2;255;40;50m 50 %[0m  (T-00:00:40) 2500/5000 steps
+[16:49:12] [38;2;255;40;50m 51 %[0m  (T-00:00:39) 2550/5000 steps
+[16:49:13] [38;2;255;40;50m 52 %[0m  (T-00:00:38) 2600/5000 steps
+[16:49:14] [38;2;255;40;50m 53 %[0m  (T-00:00:38) 2651/5000 steps
+[16:49:14] [38;2;255;40;50m 54 %[0m  (T-00:00:36) 2700/5000 steps
+[16:49:15] [38;2;255;40;50m 55 %[0m  (T-00:00:36) 2750/5000 steps
+[16:49:16] [38;2;255;40;50m 56 %[0m  (T-00:00:35) 2800/5000 steps
+[16:49:17] [38;2;255;40;50m 57 %[0m  (T-00:00:34) 2850/5000 steps
+[16:49:18] [38;2;255;40;50m 58 %[0m  (T-00:00:34) 2900/5000 steps
+[16:49:19] [38;2;255;40;50m 59 %[0m  (T-00:00:33) 2951/5000 steps
+[16:49:19] [38;2;255;40;50m 60 %[0m  (T-00:00:31) 3000/5000 steps
+[16:49:20] [38;2;255;40;50m 61 %[0m  (T-00:00:31) 3050/5000 steps
+[16:49:21] [38;2;255;40;50m 62 %[0m  (T-00:00:30) 3100/5000 steps
+[16:49:22] [38;2;255;40;50m 63 %[0m  (T-00:00:29) 3150/5000 steps
+[16:49:23] [38;2;255;40;50m 64 %[0m  (T-00:00:29) 3200/5000 steps
+[16:49:23] [38;2;255;40;50m 65 %[0m  (T-00:00:28) 3250/5000 steps
+[16:49:24] [38;2;255;40;50m 66 %[0m  (T-00:00:27) 3300/5000 steps
+[16:49:25] [38;2;255;40;50m 67 %[0m  (T-00:00:26) 3350/5000 steps
+[16:49:26] [38;2;255;40;50m 68 %[0m  (T-00:00:25) 3400/5000 steps
+[16:49:27] [38;2;255;40;50m 69 %[0m  (T-00:00:25) 3450/5000 steps
+[16:49:27] [38;2;255;40;50m 70 %[0m  (T-00:00:24) 3500/5000 steps
+[16:49:28] [38;2;255;40;50m 71 %[0m  (T-00:00:23) 3550/5000 steps
+[16:49:29] [38;2;255;40;50m 72 %[0m  (T-00:00:22) 3600/5000 steps
+[16:49:30] [38;2;255;40;50m 73 %[0m  (T-00:00:21) 3650/5000 steps
+[16:49:31] [38;2;255;40;50m 74 %[0m  (T-00:00:21) 3700/5000 steps
+[16:49:31] [38;2;255;40;50m 75 %[0m  (T-00:00:20) 3750/5000 steps
+[16:49:32] [38;2;255;40;50m 76 %[0m  (T-00:00:19) 3800/5000 steps
+[16:49:33] [38;2;255;40;50m 77 %[0m  (T-00:00:18) 3850/5000 steps
+[16:49:34] [38;2;255;40;50m 78 %[0m  (T-00:00:17) 3900/5000 steps
+[16:49:35] [38;2;255;40;50m 79 %[0m  (T-00:00:17) 3950/5000 steps
+[16:49:36] [38;2;255;40;50m 80 %[0m  (T-00:00:16) 4000/5000 steps
+[16:49:36] [38;2;255;40;50m 81 %[0m  (T-00:00:15) 4050/5000 steps
+[16:49:37] [38;2;255;40;50m 82 %[0m  (T-00:00:14) 4100/5000 steps
+[16:49:38] [38;2;255;40;50m 83 %[0m  (T-00:00:13) 4150/5000 steps
+[16:49:39] [38;2;255;40;50m 84 %[0m  (T-00:00:12) 4200/5000 steps
+[16:49:40] [38;2;255;40;50m 85 %[0m  (T-00:00:12) 4250/5000 steps
+[16:49:40] [38;2;255;40;50m 86 %[0m  (T-00:00:11) 4300/5000 steps
+[16:49:41] [38;2;255;40;50m 87 %[0m  (T-00:00:10) 4350/5000 steps
+[16:49:42] [38;2;255;40;50m 88 %[0m  (T-00:00:09) 4400/5000 steps
+[16:49:43] [38;2;255;40;50m 89 %[0m  (T-00:00:08) 4450/5000 steps
+[16:49:44] [38;2;255;40;50m 90 %[0m  (T-00:00:08) 4500/5000 steps
+[16:49:44] [38;2;255;40;50m 91 %[0m  (T-00:00:07) 4550/5000 steps
+[16:49:45] [38;2;255;40;50m 92 %[0m  (T-00:00:06) 4600/5000 steps
+[16:49:46] [38;2;255;40;50m 93 %[0m  (T-00:00:05) 4650/5000 steps
+[16:49:47] [38;2;255;40;50m 94 %[0m  (T-00:00:04) 4700/5000 steps
+[16:49:48] [38;2;255;40;50m 95 %[0m  (T-00:00:04) 4750/5000 steps
+[16:49:49] [38;2;255;40;50m 96 %[0m  (T-00:00:03) 4800/5000 steps
+[16:49:49] [38;2;255;40;50m 97 %[0m  (T-00:00:02) 4850/5000 steps
+[16:49:50] [38;2;255;40;50m 98 %[0m  (T-00:00:01) 4900/5000 steps
+[16:49:51] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[16:49:52] [38;2;255;40;50m100 %[0m
+
+[2025-07-09 16:49:52] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:49:52] [[32minfo[m] Total execution time:       81.378 sec
+[2025-07-09 16:49:52] [[32minfo[m] Step execution time:        16.276 ms
+[2025-07-09 16:49:52] [[32minfo[m] BLUPS:                      99.886
+
+[2025-07-09 16:49:52] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:50:12] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:12] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:13] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:50:13] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    33.448   59.648   40320  3360  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    30.405   62.691   40320  3360  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    12.190   80.906   40320  3360  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    33.454   59.642   40320  3360  
+4     uc3n079.                                      4   0    0    0         93.096    33.444   59.652   40320  3360  
+5     uc3n079.                                      5   0    0    0         93.096    33.452   59.644   40320  3360  
+6     uc3n079.                                      6   0    0    0         93.096    33.442   59.654   40320  3360  
+7     uc3n079.                                      7   0    0    0         93.096    12.190   80.906   40320  3360  
+8     uc3n079.                                      8   0    0    0         93.096    15.731   77.365   40320  3360  
+9     uc3n079.                                      9   0    0    0         93.096    25.850   67.246   40320  3360  
+10    uc3n079.                                      10  0    0    0         93.096    32.934   60.162   40320  3360  
+11    uc3n079.                                      11  0    0    0         93.096    25.852   67.244   40320  3360  
+
+[2025-07-09 16:50:13] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:50:13] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 3360 / 5000 ] * 12
+[2025-07-09 16:50:13] [[32minfo[m] Halo cells per sub-domain:  0.06 %
+
+[2025-07-09 16:50:13] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 528885 / 256 ]
+[2025-07-09 16:50:13] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:50:13] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:50:13] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:50:13] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 3358 ]
+
+[2025-07-09 16:50:13] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:50:13] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:50:13] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:50:13] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:50:13] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[16:50:13] [38;2;255;40;50m  0 %[0m
+[16:50:14] [38;2;255;40;50m  1 %[0m  (T-00:01:40) 50/5000 steps
+[16:50:15] [38;2;255;40;50m  2 %[0m  (T-00:01:21) 100/5000 steps
+[16:50:15] [38;2;255;40;50m  3 %[0m  (T-00:01:20) 150/5000 steps
+[16:50:16] [38;2;255;40;50m  4 %[0m  (T-00:01:19) 200/5000 steps
+[16:50:17] [38;2;255;40;50m  5 %[0m  (T-00:01:18) 250/5000 steps
+[16:50:18] [38;2;255;40;50m  6 %[0m  (T-00:01:17) 300/5000 steps
+[16:50:19] [38;2;255;40;50m  7 %[0m  (T-00:01:16) 350/5000 steps
+[16:50:20] [38;2;255;40;50m  8 %[0m  (T-00:01:16) 400/5000 steps
+[16:50:20] [38;2;255;40;50m  9 %[0m  (T-00:01:15) 450/5000 steps
+[16:50:21] [38;2;255;40;50m 10 %[0m  (T-00:01:14) 500/5000 steps
+[16:50:22] [38;2;255;40;50m 11 %[0m  (T-00:01:13) 550/5000 steps
+[16:50:23] [38;2;255;40;50m 12 %[0m  (T-00:01:12) 600/5000 steps
+[16:50:24] [38;2;255;40;50m 13 %[0m  (T-00:01:12) 650/5000 steps
+[16:50:25] [38;2;255;40;50m 14 %[0m  (T-00:01:11) 700/5000 steps
+[16:50:25] [38;2;255;40;50m 15 %[0m  (T-00:01:10) 750/5000 steps
+[16:50:26] [38;2;255;40;50m 16 %[0m  (T-00:01:09) 800/5000 steps
+[16:50:27] [38;2;255;40;50m 17 %[0m  (T-00:01:08) 850/5000 steps
+[16:50:28] [38;2;255;40;50m 18 %[0m  (T-00:01:07) 900/5000 steps
+[16:50:29] [38;2;255;40;50m 19 %[0m  (T-00:01:07) 950/5000 steps
+[16:50:30] [38;2;255;40;50m 20 %[0m  (T-00:01:06) 1000/5000 steps
+[16:50:30] [38;2;255;40;50m 21 %[0m  (T-00:01:05) 1050/5000 steps
+[16:50:31] [38;2;255;40;50m 22 %[0m  (T-00:01:04) 1100/5000 steps
+[16:50:32] [38;2;255;40;50m 23 %[0m  (T-00:01:03) 1150/5000 steps
+[16:50:33] [38;2;255;40;50m 24 %[0m  (T-00:01:02) 1200/5000 steps
+[16:50:34] [38;2;255;40;50m 25 %[0m  (T-00:01:02) 1250/5000 steps
+[16:50:35] [38;2;255;40;50m 26 %[0m  (T-00:01:01) 1300/5000 steps
+[16:50:35] [38;2;255;40;50m 27 %[0m  (T-00:01:00) 1350/5000 steps
+[16:50:36] [38;2;255;40;50m 28 %[0m  (T-00:00:59) 1400/5000 steps
+[16:50:37] [38;2;255;40;50m 29 %[0m  (T-00:00:58) 1450/5000 steps
+[16:50:38] [38;2;255;40;50m 30 %[0m  (T-00:00:57) 1500/5000 steps
+[16:50:39] [38;2;255;40;50m 31 %[0m  (T-00:00:57) 1550/5000 steps
+[16:50:39] [38;2;255;40;50m 32 %[0m  (T-00:00:56) 1600/5000 steps
+[16:50:40] [38;2;255;40;50m 33 %[0m  (T-00:00:55) 1650/5000 steps
+[16:50:41] [38;2;255;40;50m 34 %[0m  (T-00:00:54) 1700/5000 steps
+[16:50:42] [38;2;255;40;50m 35 %[0m  (T-00:00:53) 1750/5000 steps
+[16:50:43] [38;2;255;40;50m 36 %[0m  (T-00:00:53) 1800/5000 steps
+[16:50:44] [38;2;255;40;50m 37 %[0m  (T-00:00:52) 1850/5000 steps
+[16:50:44] [38;2;255;40;50m 38 %[0m  (T-00:00:51) 1900/5000 steps
+[16:50:45] [38;2;255;40;50m 39 %[0m  (T-00:00:50) 1950/5000 steps
+[16:50:46] [38;2;255;40;50m 40 %[0m  (T-00:00:49) 2000/5000 steps
+[16:50:47] [38;2;255;40;50m 41 %[0m  (T-00:00:48) 2050/5000 steps
+[16:50:48] [38;2;255;40;50m 42 %[0m  (T-00:00:48) 2100/5000 steps
+[16:50:49] [38;2;255;40;50m 43 %[0m  (T-00:00:47) 2150/5000 steps
+[16:50:49] [38;2;255;40;50m 44 %[0m  (T-00:00:46) 2200/5000 steps
+[16:50:50] [38;2;255;40;50m 45 %[0m  (T-00:00:45) 2250/5000 steps
+[16:50:51] [38;2;255;40;50m 46 %[0m  (T-00:00:44) 2300/5000 steps
+[16:50:52] [38;2;255;40;50m 47 %[0m  (T-00:00:43) 2350/5000 steps
+[16:50:53] [38;2;255;40;50m 48 %[0m  (T-00:00:43) 2400/5000 steps
+[16:50:54] [38;2;255;40;50m 49 %[0m  (T-00:00:42) 2450/5000 steps
+[16:50:54] [38;2;255;40;50m 50 %[0m  (T-00:00:41) 2500/5000 steps
+[16:50:55] [38;2;255;40;50m 51 %[0m  (T-00:00:40) 2550/5000 steps
+[16:50:56] [38;2;255;40;50m 52 %[0m  (T-00:00:39) 2600/5000 steps
+[16:50:57] [38;2;255;40;50m 53 %[0m  (T-00:00:39) 2651/5000 steps
+[16:50:58] [38;2;255;40;50m 54 %[0m  (T-00:00:37) 2700/5000 steps
+[16:50:59] [38;2;255;40;50m 55 %[0m  (T-00:00:37) 2750/5000 steps
+[16:50:59] [38;2;255;40;50m 56 %[0m  (T-00:00:36) 2800/5000 steps
+[16:51:00] [38;2;255;40;50m 57 %[0m  (T-00:00:35) 2850/5000 steps
+[16:51:01] [38;2;255;40;50m 58 %[0m  (T-00:00:34) 2900/5000 steps
+[16:51:02] [38;2;255;40;50m 59 %[0m  (T-00:00:34) 2951/5000 steps
+[16:51:03] [38;2;255;40;50m 60 %[0m  (T-00:00:32) 3000/5000 steps
+[16:51:04] [38;2;255;40;50m 61 %[0m  (T-00:00:32) 3050/5000 steps
+[16:51:04] [38;2;255;40;50m 62 %[0m  (T-00:00:31) 3100/5000 steps
+[16:51:05] [38;2;255;40;50m 63 %[0m  (T-00:00:30) 3150/5000 steps
+[16:51:06] [38;2;255;40;50m 64 %[0m  (T-00:00:29) 3200/5000 steps
+[16:51:07] [38;2;255;40;50m 65 %[0m  (T-00:00:28) 3250/5000 steps
+[16:51:08] [38;2;255;40;50m 66 %[0m  (T-00:00:28) 3300/5000 steps
+[16:51:08] [38;2;255;40;50m 67 %[0m  (T-00:00:27) 3350/5000 steps
+[16:51:09] [38;2;255;40;50m 68 %[0m  (T-00:00:26) 3400/5000 steps
+[16:51:10] [38;2;255;40;50m 69 %[0m  (T-00:00:25) 3450/5000 steps
+[16:51:11] [38;2;255;40;50m 70 %[0m  (T-00:00:24) 3500/5000 steps
+[16:51:12] [38;2;255;40;50m 71 %[0m  (T-00:00:24) 3550/5000 steps
+[16:51:13] [38;2;255;40;50m 72 %[0m  (T-00:00:23) 3600/5000 steps
+[16:51:13] [38;2;255;40;50m 73 %[0m  (T-00:00:22) 3650/5000 steps
+[16:51:14] [38;2;255;40;50m 74 %[0m  (T-00:00:21) 3700/5000 steps
+[16:51:15] [38;2;255;40;50m 75 %[0m  (T-00:00:20) 3750/5000 steps
+[16:51:16] [38;2;255;40;50m 76 %[0m  (T-00:00:19) 3800/5000 steps
+[16:51:17] [38;2;255;40;50m 77 %[0m  (T-00:00:19) 3850/5000 steps
+[16:51:18] [38;2;255;40;50m 78 %[0m  (T-00:00:18) 3900/5000 steps
+[16:51:18] [38;2;255;40;50m 79 %[0m  (T-00:00:17) 3950/5000 steps
+[16:51:19] [38;2;255;40;50m 80 %[0m  (T-00:00:16) 4000/5000 steps
+[16:51:20] [38;2;255;40;50m 81 %[0m  (T-00:00:15) 4050/5000 steps
+[16:51:21] [38;2;255;40;50m 82 %[0m  (T-00:00:14) 4100/5000 steps
+[16:51:22] [38;2;255;40;50m 83 %[0m  (T-00:00:14) 4150/5000 steps
+[16:51:23] [38;2;255;40;50m 84 %[0m  (T-00:00:13) 4200/5000 steps
+[16:51:23] [38;2;255;40;50m 85 %[0m  (T-00:00:12) 4250/5000 steps
+[16:51:24] [38;2;255;40;50m 86 %[0m  (T-00:00:11) 4300/5000 steps
+[16:51:25] [38;2;255;40;50m 87 %[0m  (T-00:00:10) 4350/5000 steps
+[16:51:26] [38;2;255;40;50m 88 %[0m  (T-00:00:09) 4400/5000 steps
+[16:51:27] [38;2;255;40;50m 89 %[0m  (T-00:00:09) 4450/5000 steps
+[16:51:28] [38;2;255;40;50m 90 %[0m  (T-00:00:08) 4500/5000 steps
+[16:51:28] [38;2;255;40;50m 91 %[0m  (T-00:00:07) 4550/5000 steps
+[16:51:29] [38;2;255;40;50m 92 %[0m  (T-00:00:06) 4600/5000 steps
+[16:51:30] [38;2;255;40;50m 93 %[0m  (T-00:00:05) 4650/5000 steps
+[16:51:31] [38;2;255;40;50m 94 %[0m  (T-00:00:04) 4700/5000 steps
+[16:51:32] [38;2;255;40;50m 95 %[0m  (T-00:00:04) 4750/5000 steps
+[16:51:33] [38;2;255;40;50m 96 %[0m  (T-00:00:03) 4800/5000 steps
+[16:51:33] [38;2;255;40;50m 97 %[0m  (T-00:00:02) 4850/5000 steps
+[16:51:34] [38;2;255;40;50m 98 %[0m  (T-00:00:01) 4900/5000 steps
+[16:51:35] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[16:51:36] [38;2;255;40;50m100 %[0m
+
+[2025-07-09 16:51:36] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:51:36] [[32minfo[m] Total execution time:       83.049 sec
+[2025-07-09 16:51:36] [[32minfo[m] Step execution time:        16.610 ms
+[2025-07-09 16:51:36] [[32minfo[m] BLUPS:                      97.876
+
+[2025-07-09 16:51:36] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:52:00] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:52:00] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    14.583   78.513   40320  2520  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    33.919   59.177   40320  2520  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    22.163   70.933   40320  2520  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    25.954   67.142   40320  2520  
+4     uc3n079.                                      4   0    0    0         93.096    30.120   62.976   40320  2520  
+5     uc3n079.                                      5   0    0    0         93.096    33.917   59.179   40320  2520  
+6     uc3n079.                                      6   0    0    0         93.096    12.688   80.408   40320  2520  
+7     uc3n079.                                      7   0    0    0         93.096    31.263   61.834   40320  2520  
+8     uc3n079.                                      8   0    0    0         93.096    33.915   59.181   40320  2520  
+9     uc3n079.                                      9   0    0    0         93.096    33.157   59.939   40320  2520  
+10    uc3n079.                                      10  0    0    0         93.096    33.159   59.937   40320  2520  
+11    uc3n079.                                      11  0    0    0         93.096    33.919   59.177   40320  2520  
+12    uc3n079.                                      12  0    0    0         93.096    33.536   59.560   40320  2520  
+13    uc3n079.                                      13  0    0    0         93.096    29.362   63.734   40320  2520  
+14    uc3n079.                                      14  0    0    0         93.096    33.917   59.179   40320  2520  
+15    uc3n079.                                      15  0    0    0         93.096    13.446   79.650   40320  2520  
+
+[2025-07-09 16:52:00] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:52:00] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 2520 / 5000 ] * 16
+[2025-07-09 16:52:00] [[32minfo[m] Halo cells per sub-domain:  0.08 %
+
+[2025-07-09 16:52:00] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 396585 / 256 ]
+[2025-07-09 16:52:00] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:52:00] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:52:00] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:52:00] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2518 ]
+
+[2025-07-09 16:52:00] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:52:00] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:52:00] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:52:00] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:52:00] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[16:52:00] [38;2;255;40;50m  0 %[0m
+[16:52:01] [38;2;255;40;50m  1 %[0m  (T-00:02:06) 50/5000 steps
+[16:52:02] [38;2;255;40;50m  2 %[0m  (T-00:01:22) 100/5000 steps
+[16:52:03] [38;2;255;40;50m  3 %[0m  (T-00:01:19) 150/5000 steps
+[16:52:04] [38;2;255;40;50m  4 %[0m  (T-00:01:18) 200/5000 steps
+[16:52:05] [38;2;255;40;50m  5 %[0m  (T-00:01:17) 250/5000 steps
+[16:52:06] [38;2;255;40;50m  6 %[0m  (T-00:01:16) 300/5000 steps
+[16:52:06] [38;2;255;40;50m  7 %[0m  (T-00:01:15) 350/5000 steps
+[16:52:07] [38;2;255;40;50m  8 %[0m  (T-00:01:15) 400/5000 steps
+[16:52:08] [38;2;255;40;50m  9 %[0m  (T-00:01:14) 450/5000 steps
+[16:52:09] [38;2;255;40;50m 10 %[0m  (T-00:01:13) 500/5000 steps
+[16:52:10] [38;2;255;40;50m 11 %[0m  (T-00:01:12) 550/5000 steps
+[16:52:10] [38;2;255;40;50m 12 %[0m  (T-00:01:11) 600/5000 steps
+[16:52:11] [38;2;255;40;50m 13 %[0m  (T-00:01:11) 650/5000 steps
+[16:52:12] [38;2;255;40;50m 14 %[0m  (T-00:01:10) 700/5000 steps
+[16:52:13] [38;2;255;40;50m 15 %[0m  (T-00:01:09) 750/5000 steps
+[16:52:14] [38;2;255;40;50m 16 %[0m  (T-00:01:08) 800/5000 steps
+[16:52:14] [38;2;255;40;50m 17 %[0m  (T-00:01:07) 850/5000 steps
+[16:52:15] [38;2;255;40;50m 18 %[0m  (T-00:01:06) 900/5000 steps
+[16:52:16] [38;2;255;40;50m 19 %[0m  (T-00:01:06) 950/5000 steps
+[16:52:17] [38;2;255;40;50m 20 %[0m  (T-00:01:05) 1000/5000 steps
+[16:52:18] [38;2;255;40;50m 21 %[0m  (T-00:01:04) 1050/5000 steps
+[16:52:19] [38;2;255;40;50m 22 %[0m  (T-00:01:03) 1100/5000 steps
+[16:52:19] [38;2;255;40;50m 23 %[0m  (T-00:01:02) 1150/5000 steps
+[16:52:20] [38;2;255;40;50m 24 %[0m  (T-00:01:02) 1200/5000 steps
+[16:52:21] [38;2;255;40;50m 25 %[0m  (T-00:01:01) 1250/5000 steps
+[16:52:22] [38;2;255;40;50m 26 %[0m  (T-00:01:00) 1300/5000 steps
+[16:52:23] [38;2;255;40;50m 27 %[0m  (T-00:00:59) 1350/5000 steps
+[16:52:23] [38;2;255;40;50m 28 %[0m  (T-00:00:58) 1400/5000 steps
+[16:52:24] [38;2;255;40;50m 29 %[0m  (T-00:00:58) 1450/5000 steps
+[16:52:25] [38;2;255;40;50m 30 %[0m  (T-00:00:57) 1500/5000 steps
+[16:52:26] [38;2;255;40;50m 31 %[0m  (T-00:00:56) 1550/5000 steps
+[16:52:27] [38;2;255;40;50m 32 %[0m  (T-00:00:55) 1600/5000 steps
+[16:52:28] [38;2;255;40;50m 33 %[0m  (T-00:00:54) 1650/5000 steps
+[16:52:28] [38;2;255;40;50m 34 %[0m  (T-00:00:53) 1700/5000 steps
+[16:52:29] [38;2;255;40;50m 35 %[0m  (T-00:00:53) 1750/5000 steps
+[16:52:30] [38;2;255;40;50m 36 %[0m  (T-00:00:52) 1800/5000 steps
+[16:52:31] [38;2;255;40;50m 37 %[0m  (T-00:00:51) 1850/5000 steps
+[16:52:32] [38;2;255;40;50m 38 %[0m  (T-00:00:50) 1900/5000 steps
+[16:52:32] [38;2;255;40;50m 39 %[0m  (T-00:00:49) 1950/5000 steps
+[16:52:33] [38;2;255;40;50m 40 %[0m  (T-00:00:49) 2000/5000 steps
+[16:52:34] [38;2;255;40;50m 41 %[0m  (T-00:00:48) 2050/5000 steps
+[16:52:35] [38;2;255;40;50m 42 %[0m  (T-00:00:47) 2100/5000 steps
+[16:52:36] [38;2;255;40;50m 43 %[0m  (T-00:00:46) 2150/5000 steps
+[16:52:37] [38;2;255;40;50m 44 %[0m  (T-00:00:45) 2200/5000 steps
+[16:52:37] [38;2;255;40;50m 45 %[0m  (T-00:00:44) 2250/5000 steps
+[16:52:38] [38;2;255;40;50m 46 %[0m  (T-00:00:44) 2300/5000 steps
+[16:52:39] [38;2;255;40;50m 47 %[0m  (T-00:00:43) 2350/5000 steps
+[16:52:40] [38;2;255;40;50m 48 %[0m  (T-00:00:42) 2400/5000 steps
+[16:52:41] [38;2;255;40;50m 49 %[0m  (T-00:00:41) 2450/5000 steps
+[16:52:41] [38;2;255;40;50m 50 %[0m  (T-00:00:40) 2500/5000 steps
+[16:52:42] [38;2;255;40;50m 51 %[0m  (T-00:00:40) 2550/5000 steps
+[16:52:43] [38;2;255;40;50m 52 %[0m  (T-00:00:39) 2600/5000 steps
+[16:52:44] [38;2;255;40;50m 53 %[0m  (T-00:00:39) 2651/5000 steps
+[16:52:45] [38;2;255;40;50m 54 %[0m  (T-00:00:36) 2700/5000 steps
+[16:52:46] [38;2;255;40;50m 55 %[0m  (T-00:00:36) 2750/5000 steps
+[16:52:46] [38;2;255;40;50m 56 %[0m  (T-00:00:35) 2800/5000 steps
+[16:52:47] [38;2;255;40;50m 57 %[0m  (T-00:00:35) 2850/5000 steps
+[16:52:48] [38;2;255;40;50m 58 %[0m  (T-00:00:34) 2900/5000 steps
+[16:52:49] [38;2;255;40;50m 59 %[0m  (T-00:00:34) 2951/5000 steps
+[16:52:50] [38;2;255;40;50m 60 %[0m  (T-00:00:32) 3000/5000 steps
+[16:52:50] [38;2;255;40;50m 61 %[0m  (T-00:00:31) 3050/5000 steps
+[16:52:51] [38;2;255;40;50m 62 %[0m  (T-00:00:31) 3100/5000 steps
+[16:52:52] [38;2;255;40;50m 63 %[0m  (T-00:00:30) 3150/5000 steps
+[16:52:53] [38;2;255;40;50m 64 %[0m  (T-00:00:29) 3200/5000 steps
+[16:52:54] [38;2;255;40;50m 65 %[0m  (T-00:00:28) 3250/5000 steps
+[16:52:55] [38;2;255;40;50m 66 %[0m  (T-00:00:27) 3300/5000 steps
+[16:52:55] [38;2;255;40;50m 67 %[0m  (T-00:00:26) 3350/5000 steps
+[16:52:56] [38;2;255;40;50m 68 %[0m  (T-00:00:26) 3400/5000 steps
+[16:52:57] [38;2;255;40;50m 69 %[0m  (T-00:00:25) 3450/5000 steps
+[16:52:58] [38;2;255;40;50m 70 %[0m  (T-00:00:24) 3500/5000 steps
+[16:52:59] [38;2;255;40;50m 71 %[0m  (T-00:00:23) 3550/5000 steps
+[16:52:59] [38;2;255;40;50m 72 %[0m  (T-00:00:22) 3600/5000 steps
+[16:53:00] [38;2;255;40;50m 73 %[0m  (T-00:00:22) 3650/5000 steps
+[16:53:01] [38;2;255;40;50m 74 %[0m  (T-00:00:21) 3700/5000 steps
+[16:53:02] [38;2;255;40;50m 75 %[0m  (T-00:00:20) 3750/5000 steps
+[16:53:03] [38;2;255;40;50m 76 %[0m  (T-00:00:19) 3800/5000 steps
+[16:53:04] [38;2;255;40;50m 77 %[0m  (T-00:00:18) 3850/5000 steps
+[16:53:04] [38;2;255;40;50m 78 %[0m  (T-00:00:17) 3900/5000 steps
+[16:53:05] [38;2;255;40;50m 79 %[0m  (T-00:00:17) 3950/5000 steps
+[16:53:06] [38;2;255;40;50m 80 %[0m  (T-00:00:16) 4000/5000 steps
+[16:53:07] [38;2;255;40;50m 81 %[0m  (T-00:00:15) 4050/5000 steps
+[16:53:08] [38;2;255;40;50m 82 %[0m  (T-00:00:14) 4100/5000 steps
+[16:53:08] [38;2;255;40;50m 83 %[0m  (T-00:00:13) 4150/5000 steps
+[16:53:09] [38;2;255;40;50m 84 %[0m  (T-00:00:13) 4200/5000 steps
+[16:53:10] [38;2;255;40;50m 85 %[0m  (T-00:00:12) 4250/5000 steps
+[16:53:11] [38;2;255;40;50m 86 %[0m  (T-00:00:11) 4300/5000 steps
+[16:53:12] [38;2;255;40;50m 87 %[0m  (T-00:00:10) 4350/5000 steps
+[16:53:12] [38;2;255;40;50m 88 %[0m  (T-00:00:09) 4400/5000 steps
+[16:53:13] [38;2;255;40;50m 89 %[0m  (T-00:00:08) 4450/5000 steps
+[16:53:14] [38;2;255;40;50m 90 %[0m  (T-00:00:08) 4500/5000 steps
+[16:53:15] [38;2;255;40;50m 91 %[0m  (T-00:00:07) 4550/5000 steps
+[16:53:16] [38;2;255;40;50m 92 %[0m  (T-00:00:06) 4600/5000 steps
+[16:53:17] [38;2;255;40;50m 93 %[0m  (T-00:00:05) 4650/5000 steps
+[16:53:17] [38;2;255;40;50m 94 %[0m  (T-00:00:04) 4700/5000 steps
+[16:53:18] [38;2;255;40;50m 95 %[0m  (T-00:00:04) 4750/5000 steps
+[16:53:19] [38;2;255;40;50m 96 %[0m  (T-00:00:03) 4800/5000 steps
+[16:53:20] [38;2;255;40;50m 97 %[0m  (T-00:00:02) 4850/5000 steps
+[16:53:21] [38;2;255;40;50m 98 %[0m  (T-00:00:01) 4900/5000 steps
+[16:53:21] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[16:53:22] [38;2;255;40;50m100 %[0m
+
+[2025-07-09 16:53:22] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:53:22] [[32minfo[m] Total execution time:       82.206 sec
+[2025-07-09 16:53:22] [[32minfo[m] Step execution time:        16.441 ms
+[2025-07-09 16:53:22] [[32minfo[m] BLUPS:                      98.879
+
+[2025-07-09 16:53:22] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-09 16:53:50] [[32minfo[m] Rank 0 loaded parameters from input_04.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 40320
+N_Y_TOTAL            = 40320
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+[2025-07-09 16:53:50] [utilities.h:177] [[31m[1merror[m] CUDA error: invalid device ordinal
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    34.593   58.503   40320  2016  
+1     uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    34.599   58.498   40320  2016  
+2     uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    34.600   58.496   40320  2016  
+3     uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    34.599   58.498   40320  2016  
+4     uc3n079.                                      4   0    0    0         93.096    26.966   66.130   40320  2016  
+5     uc3n079.                                      5   0    0    0         93.096    33.374   59.722   40320  2016  
+6     uc3n079.                                      6   0    0    0         93.096    32.763   60.334   40320  2016  
+7     uc3n079.                                      7   0    0    0         93.096    33.679   59.417   40320  2016  
+8     uc3n079.                                      8   0    0    0         93.096    33.372   59.724   40320  2016  
+9     uc3n079.                                      9   0    0    0         93.096    33.067   60.029   40320  2016  
+10    uc3n079.                                      10  0    0    0         93.096    34.593   58.504   40320  2016  
+11    uc3n079.                                      11  0    0    0         93.096    32.458   60.638   40320  2016  
+12    uc3n079.                                      12  0    0    0         93.096    33.372   59.724   40320  2016  
+13    uc3n079.                                      13  0    0    0         93.096    34.597   58.500   40320  2016  
+14    uc3n079.                                      14  0    0    0         93.096    34.595   58.502   40320  2016  
+15    uc3n079.                                      15  0    0    0         93.096    33.679   59.417   40320  2016  
+16    uc3n079.                                      16  0    0    0         93.096    34.593   58.503   40320  2016  
+17    uc3n079.                                      17  0    0    0         93.096    33.985   59.111   40320  2016  
+18    uc3n079.                                      18  0    0    0         93.096    34.595   58.502   40320  2016  
+19    uc3n079.                                      19  0    0    0         93.096    34.597   58.500   40320  2016  
+
+[2025-07-09 16:53:50] [[32minfo[m] Simulation size [X/Y/N]:    [ 40320 / 40320 / 5000 ]
+[2025-07-09 16:53:50] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 40320 / 2016 / 5000 ] * 20
+[2025-07-09 16:53:50] [[32minfo[m] Halo cells per sub-domain:  0.10 %
+
+[2025-07-09 16:53:50] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 317205 / 256 ]
+[2025-07-09 16:53:50] [[32minfo[m] Registers per thread:       30
+[2025-07-09 16:53:50] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:53:50] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:53:50] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2014 ]
+
+[2025-07-09 16:53:50] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 315 / 256 ]
+[2025-07-09 16:53:50] [[32minfo[m] Registers per thread:       36
+[2025-07-09 16:53:50] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-09 16:53:50] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-09 16:53:50] [[32minfo[m] Kernel domain size [X/Y]:   [ 40320 / 2 ]
+
+[16:53:50] [38;2;255;40;50m  0 %[0m
+[16:53:52] [38;2;255;40;50m  1 %[0m  (T-00:02:27) 50/5000 steps
+[16:53:53] [38;2;255;40;50m  2 %[0m  (T-00:01:23) 100/5000 steps
+[16:53:54] [38;2;255;40;50m  3 %[0m  (T-00:01:22) 150/5000 steps
+[16:53:54] [38;2;255;40;50m  4 %[0m  (T-00:01:22) 200/5000 steps
+[16:53:55] [38;2;255;40;50m  5 %[0m  (T-00:01:19) 250/5000 steps
+[16:53:56] [38;2;255;40;50m  6 %[0m  (T-00:01:19) 300/5000 steps
+[16:53:57] [38;2;255;40;50m  7 %[0m  (T-00:01:18) 350/5000 steps
+[16:53:58] [38;2;255;40;50m  8 %[0m  (T-00:01:17) 400/5000 steps
+[16:53:59] [38;2;255;40;50m  9 %[0m  (T-00:01:16) 450/5000 steps
+[16:54:00] [38;2;255;40;50m 10 %[0m  (T-00:01:15) 500/5000 steps
+[16:54:00] [38;2;255;40;50m 11 %[0m  (T-00:01:15) 550/5000 steps
+[16:54:01] [38;2;255;40;50m 12 %[0m  (T-00:01:14) 600/5000 steps
+[16:54:02] [38;2;255;40;50m 13 %[0m  (T-00:01:13) 650/5000 steps
+[16:54:03] [38;2;255;40;50m 14 %[0m  (T-00:01:12) 700/5000 steps
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc3n079
+Job ID: 683676
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: TIMEOUT (exit code 0)
+Nodes: 1
+Cores per node: 80
+CPU Utilized: 06:28:10
+CPU Efficiency: 17.06% of 1-13:54:40 core-walltime
+Job Wall-clock time: 00:28:26
+Memory Utilized: 16.69 GB
+Memory Efficiency: 6.52% of 256.00 GB (256.00 GB/node)
