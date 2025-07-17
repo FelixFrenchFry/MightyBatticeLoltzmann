@@ -81,11 +81,6 @@ __global__ void ComputeFullyFusedOperations_K(
     u_x /= rho;
     u_y /= rho;
 
-    // write final field values back to global memory
-    dvc_rho[idx] = rho;
-    dvc_u_x[idx] = u_x;
-    dvc_u_y[idx] = u_y;
-
     // pre-compute squared velocity and cell coordinates for this thread
     float u_sq = u_x * u_x + u_y * u_y;
     uint32_t src_x = idx % N_X;
@@ -139,7 +134,7 @@ void Launch_FullyFusedOperationsComputation(
     {
         DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
             fmt::format("ComputeFullyFusedOperations_K"),
-            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_STEPS);
+            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y);
 
         kernelAttributesDisplayed = true;
     }

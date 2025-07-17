@@ -34,9 +34,9 @@ int main(int argc, char* argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    10000,
+        .N_X_TOTAL =    15000,
         .N_Y_TOTAL =    10000,
-        .N_STEPS =      10000,
+        .N_STEPS =      1000,
 
         // parameters
         .omega =        1.2,

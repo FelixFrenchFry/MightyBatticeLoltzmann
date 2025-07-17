@@ -77,8 +77,8 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
 
-    DisplayDeviceModel();
-    DisplayDeviceMemoryUsage();
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, N_X, N_Y);
 
     // ----- LBM SIMULATION LOOP -----
 

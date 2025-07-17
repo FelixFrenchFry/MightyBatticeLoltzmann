@@ -1,3 +1,0 @@
-+ module load toolkit/nvidia-hpc-sdk/25.1
-++ /opt/bwhpc/common/admin/modules/module-wrapper/modulecmd bash load toolkit/nvidia-hpc-sdk/25.1
-slurmstepd: error: *** JOB 737436 ON uc2n903 CANCELLED AT 2025-07-15T05:59:50 ***

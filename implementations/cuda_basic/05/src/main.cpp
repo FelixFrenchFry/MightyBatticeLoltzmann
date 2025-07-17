@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  1;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -92,6 +92,9 @@ int main(int argc, char* argv[])
     context.dvc_u_y = dvc_u_y;
     context.N_X = N_X;
     context.N_Y = N_Y;
+
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, N_X, N_Y);
 
     // ----- LBM SIMULATION LOOP -----
 

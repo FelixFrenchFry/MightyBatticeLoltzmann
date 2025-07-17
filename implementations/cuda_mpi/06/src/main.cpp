@@ -69,9 +69,9 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    1'000,
-        .N_Y_TOTAL =    1'000,
-        .N_STEPS =      200'000,
+        .N_X_TOTAL =    15'000,
+        .N_Y_TOTAL =    10'000,
+        .N_STEPS =      1'000,
 
         // parameters
         .omega =        1.7,
@@ -85,8 +85,8 @@ int main(int argc, char *argv[])
         .export_name =      "B",
         .export_num =       "06",
         .export_rho =       false,
-        .export_u_x =       true,
-        .export_u_y =       true,
+        .export_u_x =       false,
+        .export_u_y =       false,
         .export_u_mag =     false,
 
         // mode

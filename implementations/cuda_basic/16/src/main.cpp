@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
     // (84 bytes per cell -> 15,000 * 10,000 cells use ~12GB of VRAM)
     uint32_t N_X =      15000;
     uint32_t N_Y =      10000;
-    uint32_t N_STEPS =  10000;
+    uint32_t N_STEPS =  1000;
     uint32_t N_CELLS =  N_X * N_Y;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -43,8 +43,8 @@ int main(int argc, char* argv[])
 
     // data export settings
     bool write_rho =    false;
-    bool write_u_x =    true;
-    bool write_u_y =    true;
+    bool write_u_x =    false;
+    bool write_u_y =    false;
 
     // simulation settings
     bool shear_wave_decay =     true;
@@ -93,8 +93,8 @@ int main(int argc, char* argv[])
     context.N_X = N_X;
     context.N_Y = N_Y;
 
-    DisplayDeviceModel();
-    DisplayDeviceMemoryUsage();
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, N_X, N_Y);
 
     if (shear_wave_decay)
     {

@@ -6,6 +6,8 @@
 
 
 
+bool kernelAttributesDisplayed = false;
+
 // more GPU-efficient replacement for modulo operator
 __device__ __forceinline__ int wrap(int val, int max)
 {
@@ -213,7 +215,7 @@ void Launch_FullyFusedOperationsComputation(
     {
         DisplayKernelAttributes(ComputeFullyFusedOperations_K<N_DIR, N_BLOCKSIZE>,
             fmt::format("ComputeFullyFusedOperations_K"),
-            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_STEPS);
+            N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y);
 
         kernelAttributesDisplayed = true;
     }

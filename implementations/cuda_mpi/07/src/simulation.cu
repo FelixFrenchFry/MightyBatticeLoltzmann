@@ -6,16 +6,30 @@
 
 
 
-// load opposite direction vectors for bounce-back, reversed direction mapping vectors
+
+__constant__ int CON_c_x[9];
+__constant__ int CON_c_y[9];
+
+void InitializeConstants()
+{
+    int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
+    int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
+    cudaMemcpyToSymbol(CON_c_x, c_x, sizeof(int) * 9);
+    cudaMemcpyToSymbol(CON_c_y, c_y, sizeof(int) * 9);
+}
+
+
+
+// load opposite direction vectors for bounce-back, direction mapping vectors
 // for halo arrays, velocity direction vectors, and weight vectors into constant memory
 // (fast, global, read-only lookup table identical for all threads)
 // TODO: figure out how to safely use same constant memory across all .cu files
-__constant__ int con_opp_dir[9];
-__constant__ int con_rev_dir_map_halo_top[9];
-__constant__ int con_rev_dir_map_halo_bot[9];
-__constant__ int con_c_x[9];
-__constant__ int con_c_y[9];
-__constant__ float con_w[9];
+__constant__ int CON_opp_dir[9];
+__constant__ int CON_map_dir_top[9];
+__constant__ int CON_map_dir_bot[9];
+__constant__ int CON_c_x[9];
+__constant__ int CON_c_y[9];
+__constant__ float CON_w[9];
 bool constantsInitialized = false;
 bool kernelAttributesDisplayed_inner = false;
 bool kernelAttributesDisplayed_outer = false;
@@ -42,20 +56,20 @@ void InitializeConstants()
 
     // initialize opposite direction, velocity direction, and weight vectors
     int opp_dir[9] = { 0, 3, 4, 1, 2, 7, 8, 5, 6 };
-    int rev_map_dir_halo_top[9] = { 42, 42, 0, 42, 42, 1, 2, 42, 42 }; // map 2, 5, 6 to 0, 1, 2
-    int rev_map_dir_halo_bot[9] = { 42, 42, 42, 42, 0, 42, 42, 1, 2 }; // map 4, 7, 8 to 0, 1, 2
+    int map_dir_top[9] = { 42, 42, 0, 42, 42, 1, 2, 42, 42 }; // map 2, 5, 6 to 0, 1, 2
+    int map_dir_bot[9] = { 42, 42, 42, 42, 0, 42, 42, 1, 2 }; // map 4, 7, 8 to 0, 1, 2
     int c_x[9] = { 0,  1,  0, -1,  0,  1, -1, -1,  1 };
     int c_y[9] = { 0,  0,  1,  0, -1,  1,  1, -1, -1 };
     float w[9] = { 4.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0, 1.0/9.0,
                    1.0/36.0, 1.0/36.0, 1.0/36.0, 1.0/36.0 };
 
     // copy them into constant memory on the device
-    cudaMemcpyToSymbol(con_opp_dir, opp_dir, 9 * sizeof(int));
-    cudaMemcpyToSymbol(con_rev_dir_map_halo_top, rev_map_dir_halo_top, 9 * sizeof(int));
-    cudaMemcpyToSymbol(con_rev_dir_map_halo_bot, rev_map_dir_halo_bot, 9 * sizeof(int));
-    cudaMemcpyToSymbol(con_c_x, c_x, 9 * sizeof(int));
-    cudaMemcpyToSymbol(con_c_y, c_y, 9 * sizeof(int));
-    cudaMemcpyToSymbol(con_w, w, 9 * sizeof(float));
+    cudaMemcpyToSymbol(CON_opp_dir, opp_dir, 9 * sizeof(int));
+    cudaMemcpyToSymbol(CON_map_dir_top, map_dir_top, 9 * sizeof(int));
+    cudaMemcpyToSymbol(CON_map_dir_bot, map_dir_bot, 9 * sizeof(int));
+    cudaMemcpyToSymbol(CON_c_x, c_x, 9 * sizeof(int));
+    cudaMemcpyToSymbol(CON_c_y, c_y, 9 * sizeof(int));
+    cudaMemcpyToSymbol(CON_w, w, 9 * sizeof(float));
 
     cudaDeviceSynchronize();
     constantsInitialized = true;
@@ -77,34 +91,32 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
     const bool save_rho,
     const bool save_u_x,
     const bool save_u_y)
+}
+
+__global__ void Kernel_InnerCells(...)
 {
     // thread index
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
     if (idx >= N_CELLS_INNER) { return; }
 
-    // determine (x, y) coordinates of cell processed by this thread
     int cell_x = idx % N_X;
-    int cell_y = idx / N_X + 1; // skip bottom row
+    int cell_y = idx / N_X + 1;
     idx += N_X; // translate into cell index
 
-    // temp accumulators
-    float rho = 0.0f;
-    float u_x = 0.0f;
-    float u_y = 0.0f;
+    float rho = 0.0f, u_x = 0.0f, u_y = 0.0f;
 
     for (int i = 0; i < 9; i++)
     {
-        // fully coalesced load from global memory
+        // load from global memory
         float df_val = dvc_df[i][idx];
-
         rho += df_val;
-        u_x += df_val * con_c_x[i];
-        u_y += df_val * con_c_y[i];
+        u_x += df_val * CON_c_x[i];
+        u_y += df_val * CON_c_y[i];
     }
-
-    // finalize velocities
     u_x /= rho;
     u_y /= rho;
+
+    ...
 
     // write final field values to global device memory
     if (save_rho) { dvc_rho[idx] = rho; }
@@ -116,31 +128,44 @@ __global__ void FFLU_LidDrivenCavity_Push_Inner_K(
 
     for (int i = 0; i < 9; i++)
     {
-        // dot product of c_i * u
-        float cu = con_c_x[i] * u_x + con_c_y[i] * u_y;
+        // dot product
+        float cu = CON_c_x[i] * u_x + CON_c_y[i] * u_y;
 
-        // equilibrium value for direction i
-        float df_eq_i = con_w[i] * rho
-                      * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
+        // equilibrium value
+        float df_eq_i = CON_w[i] * rho * (1.0f
+                      + 3.0f * cu 
+                      + 4.5f * cu * cu 
+                      - 1.5f * u_sq);
 
-        // relax towards equilibrium
-        float df_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
+        // relax towards equilibrium (-> new DF value)
+        float df_new_i = dvc_df[i][idx] - omega 
+                       * (dvc_df[i][idx] - f_eq_i);
+        
+        ...
+        ...
+        ...
+    }
 
-        // check if streaming into a boundary
-        if ((con_c_x[i] == -1 && cell_x == 0) ||     // left boundary
-            (con_c_x[i] ==  1 && cell_x == N_X - 1)) // right boundary
+    for (int i = 0; i < 9; i++)
+    {
+        ...
+        ...
+        ...
+        
+        // check if streaming into boundary
+        if ((CON_c_x[i] == -1 && cell_x == 0) ||     // left
+            (CON_c_x[i] ==  1 && cell_x == N_X - 1)) // right
         {
-            // bounce-back stream into same cell, but opposite direction
-            dvc_df_new[con_opp_dir[i]][cell_y * N_X + cell_x] = f_new_i;
+            // stream to same cell (bounce-back)
+            int dir = CON_opp_dir[i];
+            dvc_df_new[dir][idx] = f_new_i;
         }
         else
         {
-            // destination coordiantes
-            int dst_x = cell_x + con_c_x[i];
-            int dst_y = cell_y + con_c_y[i];
-
-            // stream to destination cell in direction i
-            dvc_df_new[i][cell_y * N_X + cell_x] = f_new_i;
+            int dst_x = cell_x + CON_c_x[i];
+            int dst_y = cell_y + CON_c_y[i];
+            // stream to destination cell
+            dvc_df_new[i][dst_y * N_X + dst_x] = f_new_i;
         }
     }
 }
@@ -253,8 +278,8 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
         float df_val = dvc_df[i][idx];
 
         rho += df_val;
-        u_x += df_val * con_c_x[i];
-        u_y += df_val * con_c_y[i];
+        u_x += df_val * CON_c_x[i];
+        u_y += df_val * CON_c_y[i];
     }
 
     // finalize velocities
@@ -272,47 +297,44 @@ __global__ void FFLU_LidDrivenCavity_Push_Outer_K(
     for (int i = 0; i < 9; i++)
     {
         // dot product of c_i * u
-        float cu = con_c_x[i] * u_x + con_c_y[i] * u_y;
+        float cu = CON_c_x[i] * u_x + CON_c_y[i] * u_y;
 
         // equilibrium value for direction i
-        float df_eq_i = con_w[i] * rho
+        float df_eq_i = CON_w[i] * rho
                       * (1.0f + 3.0f * cu + 4.5f * cu * cu - 1.5f * u_sq);
 
         // relax towards equilibrium
         float df_new_i = dvc_df[i][idx] - omega * (dvc_df[i][idx] - f_eq_i);
 
         // check if streaming into a boundary
-        if ((con_c_x[i] == -1 && cell_x == 0) ||                  // left boundary
-            (con_c_x[i] ==  1 && cell_x == N_X - 1) ||            // right boundary
-            (con_c_y[i] == -1 && cell_y_global == 0) ||           // bottom boundary
-            (con_c_y[i] ==  1 && cell_y_global == N_Y_TOTAL - 1)) // top boundary
+        if ((CON_c_x[i] == -1 && cell_x == 0) ||                  // left
+            (CON_c_x[i] ==  1 && cell_x == N_X - 1) ||            // right
+            (CON_c_y[i] == -1 && cell_y_global == 0) ||           // bottom
+            (CON_c_y[i] ==  1 && cell_y_global == N_Y_TOTAL - 1)) // top
         {
             // top boundary? inject lid velocity
-            if (con_c_y[i] == 1 && cell_y_global == N_Y_TOTAL - 1)
+            if (CON_c_y[i] == 1 && cell_y_global == N_Y_TOTAL - 1)
             {
-                f_new_i -= 6.0f * con_w[i] * rho * con_c_x[i] * u_lid;
+                f_new_i -= 6.0f * CON_w[i] * rho * CON_c_x[i] * u_lid;
             }
 
             // bounce-back stream into same cell, but opposite direction
-            dvc_df_new[con_opp_dir[i]][cell_y * N_X + cell_x] = f_new_i;
+            dvc_df_new[CON_opp_dir[i]][cell_y * N_X + cell_x] = f_new_i;
         }
         else // (possibly outside of the sub-domain)
         {
-            // destination coordiantes
-            int dst_x = cell_x + con_c_x[i];
-            int dst_y = cell_y + con_c_y[i];
+            int dst_x = cell_x + CON_c_x[i];
+            int dst_y = cell_y + CON_c_y[i];
 
             if (dst_y == -1) // below domain -> stream into bottom halo
             {
-                // map 4, 7, 8 to 0, 1, 2
-                dvc_df_halo_bot[con_rev_dir_map_halo_bot[i]][dst_x] = f_new_i;
+                dvc_df_halo_bot[i][dst_x] = f_new_i;
             }
             else if (dst_y == N_Y) // above domain -> stream into top halo
             {
-                // map 2, 5, 6 to 0, 1, 2
-                dvc_df_halo_top[con_rev_dir_map_halo_top[i]][dst_x] = f_new_i;
+                dvc_df_halo_top[i][dst_x] = f_new_i;
             }
-            else // within domain -> stream to destination cell in direction i
+            else // within domain -> stream to destination cell
             {
                 dvc_df_new[i][dst_y * N_X + dst_x] = f_new_i;
             }

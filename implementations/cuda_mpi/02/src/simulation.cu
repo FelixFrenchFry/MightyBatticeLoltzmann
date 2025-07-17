@@ -381,13 +381,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Inner(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y - 2, RANK);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Inner_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Inner_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y - 2, RANK);
         }
 
         kernelAttributesDisplayed_inner = true;
@@ -691,13 +691,13 @@ void Launch_FullyFusedLatticeUpdate_Push_Outer(
         {
             DisplayKernelAttributes(FFLU_ShearWaveDecay_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_ShearWaveDecay_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, 2, RANK);
         }
         else if (lid_driven_cavity)
         {
             DisplayKernelAttributes(FFLU_LidDrivenCavity_Push_Outer_K<N_DIR, N_BLOCKSIZE>,
                 fmt::format("FFLU_LidDrivenCavity_Push_Outer_K"),
-                N_GRIDSIZE, N_BLOCKSIZE, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_PROCESSES);
+                N_GRIDSIZE, N_BLOCKSIZE, N_X, 2, RANK);
         }
 
         kernelAttributesDisplayed_outer = true;

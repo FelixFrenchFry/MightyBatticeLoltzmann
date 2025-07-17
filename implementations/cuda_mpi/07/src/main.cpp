@@ -25,6 +25,62 @@
 
 
 
+int main()
+{
+    Kokkos::initialize();
+    {
+        int N = 2000;
+
+        Kokkos::View<float*> a("a", N);
+        Kokkos::View<float*> b("b", N);
+        Kokkos::View<float*> c("c", N);
+
+        // (initialize arrays...)
+
+        Kokkos::parallel_for(N, KOKKOS_LAMBDA(int i)
+        {
+            c(i) = a(i) + b(i);
+        });
+    }
+    Kokkos::finalize();
+    return 0;
+}
+
+__global__ void VecAdd(float* a, float* b, float* c, int N);
+
+int main()
+{
+    int N = 2000;
+
+    float *a, *b, *c;
+    cudaMalloc(&a, sizeof(float) * N);
+    cudaMalloc(&b, sizeof(float) * N);
+    cudaMalloc(&c, sizeof(float) * N);
+
+    // (initialize arrays...)
+
+    VecAdd<<<8, 256>>>(a, b, c, N);
+    cudaDeviceSynchronize();
+
+    cudaFree(a); cudaFree(b); cudaFree(c);
+    return 0;
+}
+
+__global__ void VecAdd(float* a, float* b, float* c, int N)
+{
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= N) { return; } 
+    c[i] = a[i] + b[i];
+}
+
+
+
+
+
+
+
+
+
 int main(int argc, char *argv[])
 {
     // logging message format: [year-month-day hour:min:sec] [type] [message]
@@ -192,6 +248,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    /*
     // =========================================================================
     // data structures and CUDA stuff
     // =========================================================================
@@ -215,19 +272,20 @@ int main(int argc, char *argv[])
     // | 3 0 1 |
     // | 7 4 8 |
     // ---------
-    float* df_halo_top[3]; // dirs 2, 5, 6 map to indices 0, 1, 2 in the array
-    float* df_halo_bot[3]; // dirs 4, 7, 8 map to indices 0, 1, 2 in the array
+    // TODO: extend this to 9 arrays, but use placeholders for irrelevant ones
+    float* df_halo_top[9]; // indices 2, 5, 6 correspond to the relevant dirs
+    float* df_halo_bot[9]; // indices 4, 7, 8 correspond to the relevant dirs
 
     // for each halo-relevant dir i, allocate 1D array of size N_X on the device
     // and store pointer to it
-    for (uint32_t i = 0; i < 3; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         // (halo df arrays)
         cudaMalloc(&df_halo_top[i], N_X * sizeof(float));
         cudaMalloc(&df_halo_bot[i], N_X * sizeof(float));
     }
 
-    // device-side arrays of 9 (3 for halos) pointers to device-side df arrays
+    // device-side arrays of 9 pointers to device-side df arrays
     // (same as the df[9] pointer array, but now located on the device and used
     // as a device-side handle for the SoA data used in compute kernels)
     float** dvc_df;
@@ -237,16 +295,114 @@ int main(int argc, char *argv[])
     // (halo df arrays)
     float** dvc_df_halo_top;
     float** dvc_df_halo_bot;
-    cudaMalloc(&dvc_df_halo_top, 3 * sizeof(float*));
-    cudaMalloc(&dvc_df_halo_bot, 3 * sizeof(float*));
+    cudaMalloc(&dvc_df_halo_top, 9 * sizeof(float*));
+    cudaMalloc(&dvc_df_halo_bot, 9 * sizeof(float*));
 
     // copy the contents of the host-side handles to the device-side handles
     // (because CUDA does not support directly passing an array of pointers?)
     cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
     cudaMemcpy(dvc_df_new, df_new, 9 * sizeof(float*), cudaMemcpyHostToDevice);
     // (halo df arrays)
-    cudaMemcpy(dvc_df_halo_top, df_halo_top, 3 * sizeof(float*), cudaMemcpyHostToDevice);
-    cudaMemcpy(dvc_df_halo_bot, df_halo_bot, 3 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_top, df_halo_top, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_bot, df_halo_bot, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+
+    // pointers to the device-side density and velocity arrays
+    float* dvc_rho;
+    float* dvc_u_x;
+    float* dvc_u_y;
+    cudaMalloc(&dvc_rho, N_CELLS * sizeof(float));
+    cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
+    cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
+    */
+
+    // TODO: DATA STRUCTURES SECTION FOR PRESENTATION SCREENSHOTS
+    // TODO: NON-FUNCTIONAL
+
+    // array of pointers to the 9 df arrays in GPU memory
+    float* df[9];
+    for (int i = 0; i < 9; i++)
+    {
+        cudaMalloc(&df[i], sizeof(float) * N_C);
+    }
+
+    // mirrored on the GPU, pointers copied into it
+    float** dvc_df;
+    cudaMalloc(&dvc_df, sizeof(float*) * 9);
+    cudaMemcpy(dvc_df, df, sizeof(float*) * 9,
+               cudaMemcpyHostToDevice);
+
+    // "_new" versions for writing
+    float* df_new[9];
+    ...
+
+    float** dvc_df_new;
+    ...
+
+
+    // pointers to density and velocity arrays on the GPU
+    float* dvc_rho;
+    float* dvc_u_x;
+    float* dvc_u_y;
+    cudaMalloc(&dvc_rho, sizeof(float) * N_C);
+    cudaMalloc(&dvc_u_x, sizeof(float) * N_C);
+    cudaMalloc(&dvc_u_y, sizeof(float) * N_C);
+
+    // =========================================================================
+    // data structures and CUDA stuff
+    // =========================================================================
+    // host-side arrays of 9 pointers to device-side df arrays
+    // h_df = [ pointer -> dvc array for dir 0, ..., pointer -> dvc array for dir 8 ]
+    float* df[9];
+    float* df_new[9];
+
+    // for each dir i, allocate 1D array of size N_CELLS on the device
+    // and store pointer to it
+    for (uint32_t i = 0; i < 9; i++)
+    {
+        // (regular df arrays)
+        cudaMalloc(&df[i], N_CELLS * sizeof(float));
+        cudaMalloc(&df_new[i], N_CELLS * sizeof(float));
+    }
+
+    // domain decomposition-specific df arrays for the halo cells
+    // ---------
+    // | 6 2 5 |
+    // | 3 0 1 |
+    // | 7 4 8 |
+    // ---------
+    // TODO: extend this to 9 arrays, but use placeholders for irrelevant ones
+    float* df_halo_top[9]; // indices 2, 5, 6 correspond to the relevant dirs
+    float* df_halo_bot[9]; // indices 4, 7, 8 correspond to the relevant dirs
+
+    // for each halo-relevant dir i, allocate 1D array of size N_X on the device
+    // and store pointer to it
+    for (uint32_t i = 0; i < 9; i++)
+    {
+        // (halo df arrays)
+        cudaMalloc(&df_halo_top[i], N_X * sizeof(float));
+        cudaMalloc(&df_halo_bot[i], N_X * sizeof(float));
+    }
+
+    // device-side arrays of 9 pointers to device-side df arrays
+    // (same as the df[9] pointer array, but now located on the device and used
+    // as a device-side handle for the SoA data used in compute kernels)
+    float** dvc_df;
+    float** dvc_df_new;
+    cudaMalloc(&dvc_df, 9 * sizeof(float*));
+    cudaMalloc(&dvc_df_new, 9 * sizeof(float*));
+    // (halo df arrays)
+    float** dvc_df_halo_top;
+    float** dvc_df_halo_bot;
+    cudaMalloc(&dvc_df_halo_top, 9 * sizeof(float*));
+    cudaMalloc(&dvc_df_halo_bot, 9 * sizeof(float*));
+
+    // copy the contents of the host-side handles to the device-side handles
+    // (because CUDA does not support directly passing an array of pointers?)
+    cudaMemcpy(dvc_df, df, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_new, df_new, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    // (halo df arrays)
+    cudaMemcpy(dvc_df_halo_top, df_halo_top, 9 * sizeof(float*), cudaMemcpyHostToDevice);
+    cudaMemcpy(dvc_df_halo_bot, df_halo_bot, 9 * sizeof(float*), cudaMemcpyHostToDevice);
 
     // pointers to the device-side density and velocity arrays
     float* dvc_rho;
@@ -310,6 +466,31 @@ int main(int argc, char *argv[])
             dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0, N_CELLS);
     }
 
+    // TODO: SIMULATION LOOP FOR PRESENTATION PURPOSES
+    // TODO: NON-FUNCTIONAL
+
+    int N_BLOCKS_INNER = (N_CELLS_INNER + 255) / 256;
+    int N_BLOCKS_OUTER = (N_CELLS_OUTER + 255) / 256;
+
+    for (int step = 0; step < N_STEPS; step++)
+    {
+        // exchange halo cells asynchronously
+        if (step > 0) { AsyncMPICommunication(...); }
+
+        Kernel_InnerCells<<<N_BLOCKS_INNER, 256>>>(...);
+
+        // wait for halo exchange to finish
+        MPI_Waitall(...);
+
+        Kernel_OuterCells<<<N_BLOCKS_OUTER, 256>>>(...);
+
+        cudaDeviceSynchronize();
+
+        // swap pointers for old/new DF data
+        std::swap(dvc_df, dvc_df_new);
+        std::swap(df, df_new);
+    }
+
     // =========================================================================
     // main simulation loop
     // =========================================================================
@@ -335,6 +516,34 @@ int main(int argc, char *argv[])
         // | 3 0 1 |
         // | 7 4 8 |
         // ---------
+
+        // TODO: USE THIS FOR PRESENTATION SCREENSHOTS ONLY
+        // TODO: THIS IS NON-FUNCTIONAL
+        if (not IS_TOP_RANK)
+        {
+            // send top halo to the rank above
+            MPI_Isend(df_halo_top[2], N_X,
+                      MPI_FLOAT, RANK_ABOVE, 2,
+                      MPI_COMM_WORLD, &max_requests[req_idx++]);
+
+            // receive bottom halo from the rank above, into the own top row
+            MPI_Irecv(df[4] + (N_Y - 1) * N_X, N_X,
+                      MPI_FLOAT, RANK_ABOVE, 4,
+                      MPI_COMM_WORLD, &max_requests[req_idx++]);
+        }
+        if (not IS_BOTTOM_RANK)
+        {
+            // send bottom halo to the rank below
+            MPI_Isend(df_halo_bot[4], N_X,
+                      MPI_FLOAT, RANK_BELOW, 4,
+                      MPI_COMM_WORLD, &max_requests[req_idx++]);
+
+            // receive the top halo from the rank below, into the own bottom row
+            MPI_Irecv(df[2], N_X,
+                      MPI_FLOAT, RANK_BELOW, 2,
+                      MPI_COMM_WORLD, &max_requests[req_idx++]);
+        }
+
         constexpr int dir_map_halo_top[3] = { 2, 5, 6 };
         constexpr int dir_map_halo_bot[3] = { 4, 7, 8 };
 
@@ -414,19 +623,20 @@ int main(int argc, char *argv[])
         }
 
         // only process inner cells that don't stream to halo arrays
-        // shear wave decay with pbc -> [1, ..., N_Y - 2] * N_X
-        // lid driven cavity with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
+        // LDC with bbbc -> [1, ..., N_Y - 1] * N_X or [0, ..., N_Y - 2] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Inner(
             dvc_df, dvc_df_new, dvc_rho, dvc_u_x, dvc_u_y, omega, N_X, N_Y,
             N_X_TOTAL, N_Y_TOTAL, N_STEPS, N_CELLS_INNER, RANK, is_SWD, is_LDC,
             save_rho, save_u_x, save_u_y);
 
+        // TODO: do this here instead of the launcher
+        cudaDeviceSynchronize();
+
         // wait for async MPI halo exchanges to finish, before outer cells can start compute
         MPI_Waitall(req_idx, max_requests, MPI_STATUSES_IGNORE);
 
-        // only process outer cells that stream to halo arrays for 3 out of 9 directions
-        // shear wave decay with pbc -> [0, N_Y - 1] * N_X
-        // lid driven cavity with bbbc -> [0] * N_X or [0, N_Y - 1] * N_X
+        // only process outer cells that stream to halo arrays
+        // LDC with bbbc -> [0] * N_X or [0, N_Y - 1] * N_X
         Launch_FullyFusedLatticeUpdate_Push_Outer(
             dvc_df, dvc_df_new, dvc_df_halo_top, dvc_df_halo_bot, dvc_rho,
             dvc_u_x, dvc_u_y, omega, u_lid, N_X, N_Y, N_X_TOTAL, N_Y_TOTAL,

@@ -48,6 +48,9 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_velocityField_x, num_cells * sizeof(float));
     cudaMalloc(&dvc_velocityField_y, num_cells * sizeof(float));
 
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, grid_width, grid_height);
+
     // launch kernel for initializing the distribution function
     Launch_InitializeDistributionFunction_K(
         dvc_distributionFunc, 1.0f, num_cells * num_dirs);

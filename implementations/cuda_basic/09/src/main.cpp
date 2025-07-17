@@ -83,6 +83,9 @@ int main(int argc, char* argv[])
     cudaMalloc(&dvc_u_x, N_CELLS * sizeof(float));
     cudaMalloc(&dvc_u_y, N_CELLS * sizeof(float));
 
+    GPUInfo myInfo = GetDeviceInfos();
+    DisplayDeviceInfos(myInfo, N_X, N_Y);
+
     // ----- LBM SIMULATION LOOP -----
 
     Launch_ApplyShearWaveCondition_K(dvc_df, dvc_rho, dvc_u_x, dvc_u_y, rho_0,

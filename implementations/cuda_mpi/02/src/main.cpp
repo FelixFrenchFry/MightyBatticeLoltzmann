@@ -32,9 +32,9 @@ int main(int argc, char *argv[])
     // general parameters
     // =========================================================================
     // simulation domain width, height, and number of cells before decomposition
-    constexpr uint32_t N_X_TOTAL =      1000;
-    constexpr uint32_t N_Y_TOTAL =      1000;
-    constexpr uint32_t N_STEPS =        200000;
+    constexpr uint32_t N_X_TOTAL =      15000;
+    constexpr uint32_t N_Y_TOTAL =      10000;
+    constexpr uint32_t N_STEPS =        1000;
     constexpr uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
 
     // relaxation factor, rest density, max velocity, number of sine periods,
@@ -51,8 +51,8 @@ int main(int argc, char *argv[])
     std::string export_name = "B";
     std::string export_num = "02";
     constexpr bool export_rho =   false;
-    constexpr bool export_u_x =   true;
-    constexpr bool export_u_y =   true;
+    constexpr bool export_u_x =   false;
+    constexpr bool export_u_y =   false;
     constexpr bool export_u_mag = false;
 
     // simulation settings

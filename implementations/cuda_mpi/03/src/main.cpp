@@ -69,9 +69,9 @@ int main(int argc, char *argv[])
     SimulationParameters parameters
     {
         // scale
-        .N_X_TOTAL =    30'000,
-        .N_Y_TOTAL =    30'000,
-        .N_STEPS =      1'000'000,
+        .N_X_TOTAL =    15'000,
+        .N_Y_TOTAL =    10'000,
+        .N_STEPS =      1'000,
 
         // parameters
         .omega =        1.2,
