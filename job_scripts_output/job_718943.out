@@ -1,0 +1,1277 @@
+ninja: Entering directory `buildDir'
+[1/5] Compiling C++ object implementations/cuda_mpi/cuda_mpi_03.p/tools_data_export.cpp.o
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportScalarFieldFromMPIDevices(const float*, SimulationData, MPI_Comm, const string&, const string&, const string&, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int)’:
+../implementations/cuda_mpi/tools/data_export.cpp:35:46: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+   35 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                               ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/tools/data_export.cpp: In function ‘void ExportSimulationData(const SimulationExportContext&, const SimulationData&, const string&, const string&, uint32_t)’:
+../implementations/cuda_mpi/tools/data_export.cpp:107:9: warning: unused variable ‘dvc_u_mag’ [-Wunused-variable]
+  107 |     FP* dvc_u_mag = nullptr;
+      |         ^~~~~~~~~
+[2/5] Compiling C++ object implementations/cuda_mpi/cuda_mpi_03.p/03_src_main.cpp.o
+In file included from ../implementations/cuda_mpi/03/src/main.cpp:16:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:309:16: warning: unused variable ‘misc_time’ [-Wunused-variable]
+  309 |         double misc_time = (acc_total_step_time - acc_communication_time
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:313:16: warning: unused variable ‘comm_pct’ [-Wunused-variable]
+  313 |         double comm_pct  = (100.0 * comm_time)  / step_time;
+      |                ^~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:314:16: warning: unused variable ‘inner_pct’ [-Wunused-variable]
+  314 |         double inner_pct = (100.0 * inner_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:315:16: warning: unused variable ‘outer_pct’ [-Wunused-variable]
+  315 |         double outer_pct = (100.0 * outer_time) / step_time;
+      |                ^~~~~~~~~
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:285:10: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  285 |     bool extended = false,
+      |     ~~~~~^~~~~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/main.cpp: In function ‘int main(int, char**)’:
+../implementations/cuda_mpi/03/src/main.cpp:142:20: warning: unused variable ‘N_CELLS_TOTAL’ [-Wunused-variable]
+  142 |     const uint64_t N_CELLS_TOTAL =  N_X_TOTAL * N_Y_TOTAL;
+      |                    ^~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/main.cpp:179:20: warning: unused variable ‘Y_END’ [-Wunused-variable]
+  179 |     const uint32_t Y_END =          Y_START + N_Y - 1;
+      |                    ^~~~~
+[3/5] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_03.p/03_src_initialization.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+[4/5] Compiling Cuda object implementations/cuda_mpi/cuda_mpi_03.p/03_src_simulation.cu.o
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../subprojects/fmt-11.2.0/include/fmt/base.h(473): warning #128-D: loop is not reachable
+    for (; n != 0; ++s1, ++s2, --n) {
+    ^
+          detected during:
+            instantiation of "auto fmt::v11::detail::compare(const Char *, const Char *, std::size_t)->int [with Char=char]" at line 591
+            instantiation of "auto fmt::v11::basic_string_view<Char>::compare(fmt::v11::basic_string_view<Char>) const->int [with Char=char]" at line 598
+            instantiation of class "fmt::v11::basic_string_view<Char> [with Char=char]" at line 2642
+            instantiation of "auto fmt::v11::basic_format_args<Context>::get_id(fmt::v11::basic_string_view<Char>) const->int [with Context=fmt::v11::context, Char=char]" at line 2685
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+../subprojects/fmt-11.2.0/include/fmt/format.h(2597): warning #2417-D: constexpr constructor calls non-constexpr function "fmt::v11::basic_memory_buffer<T, SIZE, Allocator>::basic_memory_buffer(const Allocator &) [with T=fmt::v11::detail::bigint::bigit, SIZE=32UL, Allocator=fmt::v11::detail::allocator<fmt::v11::detail::bigint::bigit>]"
+    constexpr bigint() : exp_(0) {}
+                                 ^
+
+../implementations/cuda_mpi/03/src/../../tools/utilities.h: In function ‘int DisplayProgressBar(uint32_t, uint32_t, bool, double, double, double, double)’:
+../implementations/cuda_mpi/03/src/../../tools/utilities.h:285:1: warning: unused parameter ‘extended’ [-Wunused-parameter]
+  284 |     const uint32_t N_STEPS,
+      |          ~~~~~~~~~~~~~~~~~~
+  285 |     bool extended = false,
+      | ^   ~~~~~~~~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Inner(const float* const*, float* const*, float*, float*, float*, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/03/src/simulation.cu:340:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  339 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:340:27: warning: unused parameter ‘N_Y_TOTAL’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |            ~~~~~~~~~~~~~~~^~~~~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:341:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  340 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      |                                      ~~~~~~~~~~~~~~~~~~
+  341 |     const uint32_t N_STEPS,
+      | ^   ~~~
+../implementations/cuda_mpi/03/src/simulation.cu: In function ‘void Launch_FullyFusedLatticeUpdate_Push_Outer(const float* const*, float* const*, float* const*, float* const*, float*, float*, float*, float, float, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, int, bool, bool, bool, bool, bool, bool)’:
+../implementations/cuda_mpi/03/src/simulation.cu:819:1: warning: unused parameter ‘N_X_TOTAL’ [-Wunused-parameter]
+  818 |     const uint32_t N_X, const uint32_t N_Y,
+      |                          ~~~~~~~~~~~~~~~~~~
+  819 |     const uint32_t N_X_TOTAL, const uint32_t N_Y_TOTAL,
+      | ^   ~~~~~
+../implementations/cuda_mpi/03/src/simulation.cu:821:1: warning: unused parameter ‘N_STEPS’ [-Wunused-parameter]
+  820 |     const uint32_t Y_START,
+      |          ~~~~~~~~~~~~~~~~~~
+  821 |     const uint32_t N_STEPS,
+      | ^   ~~~
+[5/5] Linking target implementations/cuda_mpi/cuda_mpi_03
+ninja: Entering directory `buildDir'
+ninja: no work to do.
+
+[2025-07-17 07:21:22] [[32minfo[m] Rank 0 loaded parameters from input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n071.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+1     uc3n071.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+2     uc3n071.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+3     uc3n071.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+4     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+5     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+6     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+7     uc3n072.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+8     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+9     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+10    uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+11    uc3n073.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+12    uc3n074.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+13    uc3n074.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+14    uc3n074.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+15    uc3n074.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+16    uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+17    uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+18    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+19    uc3n075.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+20    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+21    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+22    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+23    uc3n076.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+24    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+25    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+26    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+27    uc3n077.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+28    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+29    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+30    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+31    uc3n078.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+32    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+33    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+34    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+35    uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+36    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+37    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+38    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+39    uc3n080.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+
+[2025-07-17 07:21:22] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:21:22] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 60000 / 1500 / 5000 ] * 40
+[2025-07-17 07:21:22] [[32minfo[m] Halo cells per sub-domain:  0.13 %
+
+[2025-07-17 07:21:22] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 351094 / 256 ]
+[2025-07-17 07:21:22] [[32minfo[m] Registers per thread:       30
+[2025-07-17 07:21:22] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:21:22] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:21:22] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 1498 ]
+
+[2025-07-17 07:21:22] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-17 07:21:22] [[32minfo[m] Registers per thread:       36
+[2025-07-17 07:21:22] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:21:22] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:21:22] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[07:21:22] [38;2;255;40;50m  0 %[0m
+[07:21:23] [38;2;255;40;50m  1 %[0m  (T-00:00:43) 50/5000 steps
+[07:21:23] [38;2;255;40;50m  2 %[0m  (T-00:00:15) 100/5000 steps
+[07:21:23] [38;2;255;40;50m  3 %[0m  (T-00:00:15) 150/5000 steps
+[07:21:23] [38;2;255;40;50m  4 %[0m  (T-00:00:15) 200/5000 steps
+[07:21:23] [38;2;255;40;50m  5 %[0m  (T-00:00:15) 250/5000 steps
+[07:21:23] [38;2;255;40;50m  6 %[0m  (T-00:00:15) 300/5000 steps
+[07:21:24] [38;2;255;40;50m  7 %[0m  (T-00:00:15) 350/5000 steps
+[07:21:24] [38;2;255;40;50m  8 %[0m  (T-00:00:14) 400/5000 steps
+[07:21:24] [38;2;255;40;50m  9 %[0m  (T-00:00:14) 450/5000 steps
+[07:21:24] [38;2;255;40;50m 10 %[0m  (T-00:00:14) 500/5000 steps
+[07:21:24] [38;2;255;40;50m 11 %[0m  (T-00:00:14) 550/5000 steps
+[07:21:24] [38;2;255;40;50m 12 %[0m  (T-00:00:14) 600/5000 steps
+[07:21:25] [38;2;255;40;50m 13 %[0m  (T-00:00:14) 650/5000 steps
+[07:21:25] [38;2;255;40;50m 14 %[0m  (T-00:00:13) 700/5000 steps
+[07:21:25] [38;2;255;40;50m 15 %[0m  (T-00:00:13) 750/5000 steps
+[07:21:25] [38;2;255;40;50m 16 %[0m  (T-00:00:13) 800/5000 steps
+[07:21:25] [38;2;255;40;50m 17 %[0m  (T-00:00:13) 850/5000 steps
+[07:21:25] [38;2;255;40;50m 18 %[0m  (T-00:00:13) 900/5000 steps
+[07:21:26] [38;2;255;40;50m 19 %[0m  (T-00:00:13) 950/5000 steps
+[07:21:26] [38;2;255;40;50m 20 %[0m  (T-00:00:13) 1000/5000 steps
+[07:21:26] [38;2;255;40;50m 21 %[0m  (T-00:00:12) 1050/5000 steps
+[07:21:26] [38;2;255;40;50m 22 %[0m  (T-00:00:12) 1100/5000 steps
+[07:21:26] [38;2;255;40;50m 23 %[0m  (T-00:00:12) 1150/5000 steps
+[07:21:26] [38;2;255;40;50m 24 %[0m  (T-00:00:12) 1200/5000 steps
+[07:21:27] [38;2;255;40;50m 25 %[0m  (T-00:00:12) 1250/5000 steps
+[07:21:27] [38;2;255;40;50m 26 %[0m  (T-00:00:11) 1300/5000 steps
+[07:21:27] [38;2;255;40;50m 27 %[0m  (T-00:00:11) 1350/5000 steps
+[07:21:27] [38;2;255;40;50m 28 %[0m  (T-00:00:11) 1400/5000 steps
+[07:21:27] [38;2;255;40;50m 29 %[0m  (T-00:00:11) 1450/5000 steps
+[07:21:27] [38;2;255;40;50m 30 %[0m  (T-00:00:11) 1500/5000 steps
+[07:21:28] [38;2;255;40;50m 31 %[0m  (T-00:00:11) 1550/5000 steps
+[07:21:28] [38;2;255;40;50m 32 %[0m  (T-00:00:10) 1600/5000 steps
+[07:21:28] [38;2;255;40;50m 33 %[0m  (T-00:00:10) 1650/5000 steps
+[07:21:28] [38;2;255;40;50m 34 %[0m  (T-00:00:10) 1700/5000 steps
+[07:21:28] [38;2;255;40;50m 35 %[0m  (T-00:00:10) 1750/5000 steps
+[07:21:28] [38;2;255;40;50m 36 %[0m  (T-00:00:10) 1800/5000 steps
+[07:21:28] [38;2;255;40;50m 37 %[0m  (T-00:00:10) 1850/5000 steps
+[07:21:29] [38;2;255;40;50m 38 %[0m  (T-00:00:09) 1900/5000 steps
+[07:21:29] [38;2;255;40;50m 39 %[0m  (T-00:00:09) 1950/5000 steps
+[07:21:29] [38;2;255;40;50m 40 %[0m  (T-00:00:09) 2000/5000 steps
+[07:21:29] [38;2;255;40;50m 41 %[0m  (T-00:00:09) 2050/5000 steps
+[07:21:29] [38;2;255;40;50m 42 %[0m  (T-00:00:09) 2100/5000 steps
+[07:21:29] [38;2;255;40;50m 43 %[0m  (T-00:00:09) 2150/5000 steps
+[07:21:30] [38;2;255;40;50m 44 %[0m  (T-00:00:08) 2200/5000 steps
+[07:21:30] [38;2;255;40;50m 45 %[0m  (T-00:00:08) 2250/5000 steps
+[07:21:30] [38;2;255;40;50m 46 %[0m  (T-00:00:08) 2300/5000 steps
+[07:21:30] [38;2;255;40;50m 47 %[0m  (T-00:00:08) 2350/5000 steps
+[07:21:30] [38;2;255;40;50m 48 %[0m  (T-00:00:08) 2400/5000 steps
+[07:21:30] [38;2;255;40;50m 49 %[0m  (T-00:00:08) 2450/5000 steps
+[07:21:31] [38;2;255;40;50m 50 %[0m  (T-00:00:08) 2500/5000 steps
+[07:21:31] [38;2;255;40;50m 51 %[0m  (T-00:00:07) 2550/5000 steps
+[07:21:31] [38;2;255;40;50m 52 %[0m  (T-00:00:07) 2600/5000 steps
+[07:21:31] [38;2;255;40;50m 53 %[0m  (T-00:00:07) 2651/5000 steps
+[07:21:31] [38;2;255;40;50m 54 %[0m  (T-00:00:07) 2700/5000 steps
+[07:21:31] [38;2;255;40;50m 55 %[0m  (T-00:00:07) 2750/5000 steps
+[07:21:32] [38;2;255;40;50m 56 %[0m  (T-00:00:07) 2800/5000 steps
+[07:21:32] [38;2;255;40;50m 57 %[0m  (T-00:00:06) 2850/5000 steps
+[07:21:32] [38;2;255;40;50m 58 %[0m  (T-00:00:06) 2900/5000 steps
+[07:21:32] [38;2;255;40;50m 59 %[0m  (T-00:00:06) 2951/5000 steps
+[07:21:32] [38;2;255;40;50m 60 %[0m  (T-00:00:06) 3000/5000 steps
+[07:21:32] [38;2;255;40;50m 61 %[0m  (T-00:00:06) 3050/5000 steps
+[07:21:32] [38;2;255;40;50m 62 %[0m  (T-00:00:06) 3100/5000 steps
+[07:21:33] [38;2;255;40;50m 63 %[0m  (T-00:00:05) 3150/5000 steps
+[07:21:33] [38;2;255;40;50m 64 %[0m  (T-00:00:05) 3200/5000 steps
+[07:21:33] [38;2;255;40;50m 65 %[0m  (T-00:00:05) 3250/5000 steps
+[07:21:33] [38;2;255;40;50m 66 %[0m  (T-00:00:05) 3300/5000 steps
+[07:21:33] [38;2;255;40;50m 67 %[0m  (T-00:00:05) 3350/5000 steps
+[07:21:33] [38;2;255;40;50m 68 %[0m  (T-00:00:05) 3400/5000 steps
+[07:21:34] [38;2;255;40;50m 69 %[0m  (T-00:00:04) 3450/5000 steps
+[07:21:34] [38;2;255;40;50m 70 %[0m  (T-00:00:04) 3500/5000 steps
+[07:21:34] [38;2;255;40;50m 71 %[0m  (T-00:00:04) 3550/5000 steps
+[07:21:34] [38;2;255;40;50m 72 %[0m  (T-00:00:04) 3600/5000 steps
+[07:21:34] [38;2;255;40;50m 73 %[0m  (T-00:00:04) 3650/5000 steps
+[07:21:34] [38;2;255;40;50m 74 %[0m  (T-00:00:04) 3700/5000 steps
+[07:21:35] [38;2;255;40;50m 75 %[0m  (T-00:00:04) 3750/5000 steps
+[07:21:35] [38;2;255;40;50m 76 %[0m  (T-00:00:03) 3800/5000 steps
+[07:21:35] [38;2;255;40;50m 77 %[0m  (T-00:00:03) 3850/5000 steps
+[07:21:35] [38;2;255;40;50m 78 %[0m  (T-00:00:03) 3900/5000 steps
+[07:21:35] [38;2;255;40;50m 79 %[0m  (T-00:00:03) 3950/5000 steps
+[07:21:35] [38;2;255;40;50m 80 %[0m  (T-00:00:03) 4000/5000 steps
+[07:21:36] [38;2;255;40;50m 81 %[0m  (T-00:00:03) 4050/5000 steps
+[07:21:36] [38;2;255;40;50m 82 %[0m  (T-00:00:02) 4100/5000 steps
+[07:21:36] [38;2;255;40;50m 83 %[0m  (T-00:00:02) 4150/5000 steps
+[07:21:36] [38;2;255;40;50m 84 %[0m  (T-00:00:02) 4200/5000 steps
+[07:21:36] [38;2;255;40;50m 85 %[0m  (T-00:00:02) 4250/5000 steps
+[07:21:36] [38;2;255;40;50m 86 %[0m  (T-00:00:02) 4300/5000 steps
+[07:21:36] [38;2;255;40;50m 87 %[0m  (T-00:00:02) 4350/5000 steps
+[07:21:37] [38;2;255;40;50m 88 %[0m  (T-00:00:01) 4400/5000 steps
+[07:21:37] [38;2;255;40;50m 89 %[0m  (T-00:00:01) 4450/5000 steps
+[07:21:37] [38;2;255;40;50m 90 %[0m  (T-00:00:01) 4500/5000 steps
+[07:21:37] [38;2;255;40;50m 91 %[0m  (T-00:00:01) 4550/5000 steps
+[07:21:37] [38;2;255;40;50m 92 %[0m  (T-00:00:01) 4600/5000 steps
+[07:21:37] [38;2;255;40;50m 93 %[0m  (T-00:00:01) 4650/5000 steps
+[07:21:38] [38;2;255;40;50m 94 %[0m  (T-00:00:00) 4700/5000 steps
+[07:21:38] [38;2;255;40;50m 95 %[0m  (T-00:00:00) 4750/5000 steps
+[07:21:38] [38;2;255;40;50m 96 %[0m  (T-00:00:00) 4800/5000 steps
+[07:21:38] [38;2;255;40;50m 97 %[0m  (T-00:00:00) 4850/5000 steps
+[07:21:38] [38;2;255;40;50m 98 %[0m  (T-00:00:00) 4900/5000 steps
+[07:21:38] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[07:21:39] [38;2;255;40;50m100 %[0m
+
+[2025-07-17 07:21:39] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:21:39] [[32minfo[m] Total execution time:       16.345 sec
+[2025-07-17 07:21:39] [[32minfo[m] Step execution time:        3.269 ms
+[2025-07-17 07:21:39] [[32minfo[m] BLUPS:                      1101.236
+
+[2025-07-17 07:21:39] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-17 07:21:53] [[32minfo[m] Rank 0 loaded parameters from input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n071.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+1     uc3n071.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+2     uc3n071.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+3     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+4     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+5     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+6     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+7     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+8     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+9     uc3n074.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+10    uc3n074.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+11    uc3n074.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+12    uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+13    uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+14    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+15    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+16    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+17    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+18    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+19    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+20    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+21    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+22    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+23    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+24    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+25    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+26    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+27    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    9.936    83.160   60000  2000  
+28    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    9.936    83.160   60000  2000  
+29    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    9.936    83.160   60000  2000  
+
+[2025-07-17 07:21:53] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:21:53] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 60000 / 2000 / 5000 ] * 30
+[2025-07-17 07:21:53] [[32minfo[m] Halo cells per sub-domain:  0.10 %
+
+[2025-07-17 07:21:53] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 468282 / 256 ]
+[2025-07-17 07:21:53] [[32minfo[m] Registers per thread:       30
+[2025-07-17 07:21:53] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:21:53] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:21:53] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 1998 ]
+
+[2025-07-17 07:21:53] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-17 07:21:53] [[32minfo[m] Registers per thread:       36
+[2025-07-17 07:21:53] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:21:53] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:21:53] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[07:21:53] [38;2;255;40;50m  0 %[0m
+[07:21:53] [38;2;255;40;50m  1 %[0m  (T-00:00:40) 50/5000 steps
+[07:21:54] [38;2;255;40;50m  2 %[0m  (T-00:00:20) 100/5000 steps
+[07:21:54] [38;2;255;40;50m  3 %[0m  (T-00:00:20) 150/5000 steps
+[07:21:54] [38;2;255;40;50m  4 %[0m  (T-00:00:20) 200/5000 steps
+[07:21:54] [38;2;255;40;50m  5 %[0m  (T-00:00:20) 250/5000 steps
+[07:21:54] [38;2;255;40;50m  6 %[0m  (T-00:00:20) 300/5000 steps
+[07:21:55] [38;2;255;40;50m  7 %[0m  (T-00:00:19) 350/5000 steps
+[07:21:55] [38;2;255;40;50m  8 %[0m  (T-00:00:19) 400/5000 steps
+[07:21:55] [38;2;255;40;50m  9 %[0m  (T-00:00:19) 450/5000 steps
+[07:21:55] [38;2;255;40;50m 10 %[0m  (T-00:00:19) 500/5000 steps
+[07:21:56] [38;2;255;40;50m 11 %[0m  (T-00:00:18) 550/5000 steps
+[07:21:56] [38;2;255;40;50m 12 %[0m  (T-00:00:18) 600/5000 steps
+[07:21:56] [38;2;255;40;50m 13 %[0m  (T-00:00:18) 650/5000 steps
+[07:21:56] [38;2;255;40;50m 14 %[0m  (T-00:00:18) 700/5000 steps
+[07:21:56] [38;2;255;40;50m 15 %[0m  (T-00:00:18) 750/5000 steps
+[07:21:57] [38;2;255;40;50m 16 %[0m  (T-00:00:17) 800/5000 steps
+[07:21:57] [38;2;255;40;50m 17 %[0m  (T-00:00:17) 850/5000 steps
+[07:21:57] [38;2;255;40;50m 18 %[0m  (T-00:00:17) 900/5000 steps
+[07:21:57] [38;2;255;40;50m 19 %[0m  (T-00:00:17) 950/5000 steps
+[07:21:57] [38;2;255;40;50m 20 %[0m  (T-00:00:16) 1000/5000 steps
+[07:21:58] [38;2;255;40;50m 21 %[0m  (T-00:00:16) 1050/5000 steps
+[07:21:58] [38;2;255;40;50m 22 %[0m  (T-00:00:16) 1100/5000 steps
+[07:21:58] [38;2;255;40;50m 23 %[0m  (T-00:00:16) 1150/5000 steps
+[07:21:58] [38;2;255;40;50m 24 %[0m  (T-00:00:16) 1200/5000 steps
+[07:21:59] [38;2;255;40;50m 25 %[0m  (T-00:00:15) 1250/5000 steps
+[07:21:59] [38;2;255;40;50m 26 %[0m  (T-00:00:15) 1300/5000 steps
+[07:21:59] [38;2;255;40;50m 27 %[0m  (T-00:00:15) 1350/5000 steps
+[07:21:59] [38;2;255;40;50m 28 %[0m  (T-00:00:15) 1400/5000 steps
+[07:21:59] [38;2;255;40;50m 29 %[0m  (T-00:00:15) 1450/5000 steps
+[07:22:00] [38;2;255;40;50m 30 %[0m  (T-00:00:14) 1500/5000 steps
+[07:22:00] [38;2;255;40;50m 31 %[0m  (T-00:00:14) 1550/5000 steps
+[07:22:00] [38;2;255;40;50m 32 %[0m  (T-00:00:14) 1600/5000 steps
+[07:22:00] [38;2;255;40;50m 33 %[0m  (T-00:00:14) 1650/5000 steps
+[07:22:00] [38;2;255;40;50m 34 %[0m  (T-00:00:13) 1700/5000 steps
+[07:22:01] [38;2;255;40;50m 35 %[0m  (T-00:00:13) 1750/5000 steps
+[07:22:01] [38;2;255;40;50m 36 %[0m  (T-00:00:13) 1800/5000 steps
+[07:22:01] [38;2;255;40;50m 37 %[0m  (T-00:00:13) 1850/5000 steps
+[07:22:01] [38;2;255;40;50m 38 %[0m  (T-00:00:13) 1900/5000 steps
+[07:22:01] [38;2;255;40;50m 39 %[0m  (T-00:00:13) 1950/5000 steps
+[07:22:02] [38;2;255;40;50m 40 %[0m  (T-00:00:12) 2000/5000 steps
+[07:22:02] [38;2;255;40;50m 41 %[0m  (T-00:00:12) 2050/5000 steps
+[07:22:02] [38;2;255;40;50m 42 %[0m  (T-00:00:12) 2100/5000 steps
+[07:22:02] [38;2;255;40;50m 43 %[0m  (T-00:00:12) 2150/5000 steps
+[07:22:03] [38;2;255;40;50m 44 %[0m  (T-00:00:11) 2200/5000 steps
+[07:22:03] [38;2;255;40;50m 45 %[0m  (T-00:00:11) 2250/5000 steps
+[07:22:03] [38;2;255;40;50m 46 %[0m  (T-00:00:11) 2300/5000 steps
+[07:22:03] [38;2;255;40;50m 47 %[0m  (T-00:00:11) 2350/5000 steps
+[07:22:03] [38;2;255;40;50m 48 %[0m  (T-00:00:11) 2400/5000 steps
+[07:22:04] [38;2;255;40;50m 49 %[0m  (T-00:00:10) 2450/5000 steps
+[07:22:04] [38;2;255;40;50m 50 %[0m  (T-00:00:10) 2500/5000 steps
+[07:22:04] [38;2;255;40;50m 51 %[0m  (T-00:00:10) 2550/5000 steps
+[07:22:04] [38;2;255;40;50m 52 %[0m  (T-00:00:10) 2600/5000 steps
+[07:22:04] [38;2;255;40;50m 53 %[0m  (T-00:00:10) 2651/5000 steps
+[07:22:05] [38;2;255;40;50m 54 %[0m  (T-00:00:09) 2700/5000 steps
+[07:22:05] [38;2;255;40;50m 55 %[0m  (T-00:00:09) 2750/5000 steps
+[07:22:05] [38;2;255;40;50m 56 %[0m  (T-00:00:09) 2800/5000 steps
+[07:22:05] [38;2;255;40;50m 57 %[0m  (T-00:00:09) 2850/5000 steps
+[07:22:05] [38;2;255;40;50m 58 %[0m  (T-00:00:08) 2900/5000 steps
+[07:22:06] [38;2;255;40;50m 59 %[0m  (T-00:00:08) 2951/5000 steps
+[07:22:06] [38;2;255;40;50m 60 %[0m  (T-00:00:08) 3000/5000 steps
+[07:22:06] [38;2;255;40;50m 61 %[0m  (T-00:00:08) 3050/5000 steps
+[07:22:06] [38;2;255;40;50m 62 %[0m  (T-00:00:08) 3100/5000 steps
+[07:22:07] [38;2;255;40;50m 63 %[0m  (T-00:00:07) 3150/5000 steps
+[07:22:07] [38;2;255;40;50m 64 %[0m  (T-00:00:07) 3200/5000 steps
+[07:22:07] [38;2;255;40;50m 65 %[0m  (T-00:00:07) 3250/5000 steps
+[07:22:07] [38;2;255;40;50m 66 %[0m  (T-00:00:07) 3300/5000 steps
+[07:22:07] [38;2;255;40;50m 67 %[0m  (T-00:00:07) 3350/5000 steps
+[07:22:08] [38;2;255;40;50m 68 %[0m  (T-00:00:06) 3400/5000 steps
+[07:22:08] [38;2;255;40;50m 69 %[0m  (T-00:00:06) 3450/5000 steps
+[07:22:08] [38;2;255;40;50m 70 %[0m  (T-00:00:06) 3500/5000 steps
+[07:22:08] [38;2;255;40;50m 71 %[0m  (T-00:00:06) 3550/5000 steps
+[07:22:08] [38;2;255;40;50m 72 %[0m  (T-00:00:05) 3600/5000 steps
+[07:22:09] [38;2;255;40;50m 73 %[0m  (T-00:00:05) 3650/5000 steps
+[07:22:09] [38;2;255;40;50m 74 %[0m  (T-00:00:05) 3700/5000 steps
+[07:22:09] [38;2;255;40;50m 75 %[0m  (T-00:00:05) 3750/5000 steps
+[07:22:09] [38;2;255;40;50m 76 %[0m  (T-00:00:05) 3800/5000 steps
+[07:22:10] [38;2;255;40;50m 77 %[0m  (T-00:00:04) 3850/5000 steps
+[07:22:10] [38;2;255;40;50m 78 %[0m  (T-00:00:04) 3900/5000 steps
+[07:22:10] [38;2;255;40;50m 79 %[0m  (T-00:00:04) 3950/5000 steps
+[07:22:10] [38;2;255;40;50m 80 %[0m  (T-00:00:04) 4000/5000 steps
+[07:22:10] [38;2;255;40;50m 81 %[0m  (T-00:00:04) 4050/5000 steps
+[07:22:11] [38;2;255;40;50m 82 %[0m  (T-00:00:03) 4100/5000 steps
+[07:22:11] [38;2;255;40;50m 83 %[0m  (T-00:00:03) 4150/5000 steps
+[07:22:11] [38;2;255;40;50m 84 %[0m  (T-00:00:03) 4200/5000 steps
+[07:22:11] [38;2;255;40;50m 85 %[0m  (T-00:00:03) 4250/5000 steps
+[07:22:11] [38;2;255;40;50m 86 %[0m  (T-00:00:02) 4300/5000 steps
+[07:22:12] [38;2;255;40;50m 87 %[0m  (T-00:00:02) 4350/5000 steps
+[07:22:12] [38;2;255;40;50m 88 %[0m  (T-00:00:02) 4400/5000 steps
+[07:22:12] [38;2;255;40;50m 89 %[0m  (T-00:00:02) 4450/5000 steps
+[07:22:12] [38;2;255;40;50m 90 %[0m  (T-00:00:02) 4500/5000 steps
+[07:22:12] [38;2;255;40;50m 91 %[0m  (T-00:00:01) 4550/5000 steps
+[07:22:13] [38;2;255;40;50m 92 %[0m  (T-00:00:01) 4600/5000 steps
+[07:22:13] [38;2;255;40;50m 93 %[0m  (T-00:00:01) 4650/5000 steps
+[07:22:13] [38;2;255;40;50m 94 %[0m  (T-00:00:01) 4700/5000 steps
+[07:22:13] [38;2;255;40;50m 95 %[0m  (T-00:00:01) 4750/5000 steps
+[07:22:14] [38;2;255;40;50m 96 %[0m  (T-00:00:00) 4800/5000 steps
+[07:22:14] [38;2;255;40;50m 97 %[0m  (T-00:00:00) 4850/5000 steps
+[07:22:14] [38;2;255;40;50m 98 %[0m  (T-00:00:00) 4900/5000 steps
+[07:22:14] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[07:22:14] [38;2;255;40;50m100 %[0m
+
+[2025-07-17 07:22:14] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:22:14] [[32minfo[m] Total execution time:       21.411 sec
+[2025-07-17 07:22:14] [[32minfo[m] Step execution time:        4.282 ms
+[2025-07-17 07:22:14] [[32minfo[m] BLUPS:                      840.699
+
+[2025-07-17 07:22:14] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-17 07:22:30] [[32minfo[m] Rank 0 loaded parameters from input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n071.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+1     uc3n071.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+2     uc3n071.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+3     uc3n071.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+4     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+5     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+6     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+7     uc3n072.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+8     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+9     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+10    uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+11    uc3n073.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+12    uc3n074.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+13    uc3n074.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+14    uc3n074.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+15    uc3n074.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+16    uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+17    uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+18    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+19    uc3n075.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+20    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+21    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+22    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+23    uc3n076.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+24    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+25    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+26    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+27    uc3n077.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+28    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+29    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+30    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+31    uc3n078.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+32    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+33    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+34    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+35    uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+36    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    2.307    90.789   30000  750   
+37    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    2.307    90.789   30000  750   
+38    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    2.307    90.789   30000  750   
+39    uc3n080.   NVIDIA H100                        3   90   132  233472    93.096    2.307    90.789   30000  750   
+
+[2025-07-17 07:22:30] [[32minfo[m] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-17 07:22:30] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 30000 / 750 / 5000 ] * 40
+[2025-07-17 07:22:30] [[32minfo[m] Halo cells per sub-domain:  0.27 %
+
+[2025-07-17 07:22:30] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 87657 / 256 ]
+[2025-07-17 07:22:30] [[32minfo[m] Registers per thread:       30
+[2025-07-17 07:22:30] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:22:30] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:22:30] [[32minfo[m] Kernel domain size [X/Y]:   [ 30000 / 748 ]
+
+[2025-07-17 07:22:30] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-17 07:22:30] [[32minfo[m] Registers per thread:       36
+[2025-07-17 07:22:30] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:22:30] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:22:30] [[32minfo[m] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[07:22:30] [38;2;255;40;50m  0 %[0m
+[07:22:30] [38;2;255;40;50m  1 %[0m  (T-00:00:27) 50/5000 steps
+[07:22:30] [38;2;255;40;50m  2 %[0m  (T-00:00:04) 100/5000 steps
+[07:22:30] [38;2;255;40;50m  3 %[0m  (T-00:00:04) 150/5000 steps
+[07:22:30] [38;2;255;40;50m  4 %[0m  (T-00:00:04) 200/5000 steps
+[07:22:30] [38;2;255;40;50m  5 %[0m  (T-00:00:04) 250/5000 steps
+[07:22:30] [38;2;255;40;50m  6 %[0m  (T-00:00:03) 300/5000 steps
+[07:22:30] [38;2;255;40;50m  7 %[0m  (T-00:00:03) 350/5000 steps
+[07:22:30] [38;2;255;40;50m  8 %[0m  (T-00:00:04) 400/5000 steps
+[07:22:30] [38;2;255;40;50m  9 %[0m  (T-00:00:04) 450/5000 steps
+[07:22:30] [38;2;255;40;50m 10 %[0m  (T-00:00:03) 500/5000 steps
+[07:22:30] [38;2;255;40;50m 11 %[0m  (T-00:00:03) 550/5000 steps
+[07:22:30] [38;2;255;40;50m 12 %[0m  (T-00:00:03) 600/5000 steps
+[07:22:31] [38;2;255;40;50m 13 %[0m  (T-00:00:03) 650/5000 steps
+[07:22:31] [38;2;255;40;50m 14 %[0m  (T-00:00:03) 700/5000 steps
+[07:22:31] [38;2;255;40;50m 15 %[0m  (T-00:00:04) 750/5000 steps
+[07:22:31] [38;2;255;40;50m 16 %[0m  (T-00:00:03) 800/5000 steps
+[07:22:31] [38;2;255;40;50m 17 %[0m  (T-00:00:03) 850/5000 steps
+[07:22:31] [38;2;255;40;50m 18 %[0m  (T-00:00:03) 900/5000 steps
+[07:22:31] [38;2;255;40;50m 19 %[0m  (T-00:00:03) 950/5000 steps
+[07:22:31] [38;2;255;40;50m 20 %[0m  (T-00:00:03) 1000/5000 steps
+[07:22:31] [38;2;255;40;50m 21 %[0m  (T-00:00:03) 1050/5000 steps
+[07:22:31] [38;2;255;40;50m 22 %[0m  (T-00:00:03) 1100/5000 steps
+[07:22:31] [38;2;255;40;50m 23 %[0m  (T-00:00:03) 1150/5000 steps
+[07:22:31] [38;2;255;40;50m 24 %[0m  (T-00:00:03) 1200/5000 steps
+[07:22:31] [38;2;255;40;50m 25 %[0m  (T-00:00:03) 1250/5000 steps
+[07:22:31] [38;2;255;40;50m 26 %[0m  (T-00:00:03) 1300/5000 steps
+[07:22:31] [38;2;255;40;50m 27 %[0m  (T-00:00:03) 1350/5000 steps
+[07:22:31] [38;2;255;40;50m 28 %[0m  (T-00:00:03) 1400/5000 steps
+[07:22:31] [38;2;255;40;50m 29 %[0m  (T-00:00:02) 1450/5000 steps
+[07:22:31] [38;2;255;40;50m 30 %[0m  (T-00:00:02) 1500/5000 steps
+[07:22:31] [38;2;255;40;50m 31 %[0m  (T-00:00:03) 1550/5000 steps
+[07:22:31] [38;2;255;40;50m 32 %[0m  (T-00:00:02) 1600/5000 steps
+[07:22:31] [38;2;255;40;50m 33 %[0m  (T-00:00:02) 1650/5000 steps
+[07:22:31] [38;2;255;40;50m 34 %[0m  (T-00:00:02) 1700/5000 steps
+[07:22:31] [38;2;255;40;50m 35 %[0m  (T-00:00:02) 1750/5000 steps
+[07:22:32] [38;2;255;40;50m 36 %[0m  (T-00:00:02) 1800/5000 steps
+[07:22:32] [38;2;255;40;50m 37 %[0m  (T-00:00:02) 1850/5000 steps
+[07:22:32] [38;2;255;40;50m 38 %[0m  (T-00:00:02) 1900/5000 steps
+[07:22:32] [38;2;255;40;50m 39 %[0m  (T-00:00:02) 1950/5000 steps
+[07:22:32] [38;2;255;40;50m 40 %[0m  (T-00:00:02) 2000/5000 steps
+[07:22:32] [38;2;255;40;50m 41 %[0m  (T-00:00:02) 2050/5000 steps
+[07:22:32] [38;2;255;40;50m 42 %[0m  (T-00:00:02) 2100/5000 steps
+[07:22:32] [38;2;255;40;50m 43 %[0m  (T-00:00:02) 2150/5000 steps
+[07:22:32] [38;2;255;40;50m 44 %[0m  (T-00:00:02) 2200/5000 steps
+[07:22:32] [38;2;255;40;50m 45 %[0m  (T-00:00:02) 2250/5000 steps
+[07:22:32] [38;2;255;40;50m 46 %[0m  (T-00:00:02) 2300/5000 steps
+[07:22:32] [38;2;255;40;50m 47 %[0m  (T-00:00:02) 2350/5000 steps
+[07:22:32] [38;2;255;40;50m 48 %[0m  (T-00:00:02) 2400/5000 steps
+[07:22:32] [38;2;255;40;50m 49 %[0m  (T-00:00:02) 2450/5000 steps
+[07:22:32] [38;2;255;40;50m 50 %[0m  (T-00:00:02) 2500/5000 steps
+[07:22:32] [38;2;255;40;50m 51 %[0m  (T-00:00:02) 2550/5000 steps
+[07:22:32] [38;2;255;40;50m 52 %[0m  (T-00:00:02) 2600/5000 steps
+[07:22:32] [38;2;255;40;50m 53 %[0m  (T-00:00:02) 2651/5000 steps
+[07:22:32] [38;2;255;40;50m 54 %[0m  (T-00:00:01) 2700/5000 steps
+[07:22:32] [38;2;255;40;50m 55 %[0m  (T-00:00:01) 2750/5000 steps
+[07:22:32] [38;2;255;40;50m 56 %[0m  (T-00:00:01) 2800/5000 steps
+[07:22:32] [38;2;255;40;50m 57 %[0m  (T-00:00:01) 2850/5000 steps
+[07:22:32] [38;2;255;40;50m 58 %[0m  (T-00:00:01) 2900/5000 steps
+[07:22:32] [38;2;255;40;50m 59 %[0m  (T-00:00:01) 2951/5000 steps
+[07:22:33] [38;2;255;40;50m 60 %[0m  (T-00:00:01) 3000/5000 steps
+[07:22:33] [38;2;255;40;50m 61 %[0m  (T-00:00:01) 3050/5000 steps
+[07:22:33] [38;2;255;40;50m 62 %[0m  (T-00:00:01) 3100/5000 steps
+[07:22:33] [38;2;255;40;50m 63 %[0m  (T-00:00:01) 3150/5000 steps
+[07:22:33] [38;2;255;40;50m 64 %[0m  (T-00:00:01) 3200/5000 steps
+[07:22:33] [38;2;255;40;50m 65 %[0m  (T-00:00:01) 3250/5000 steps
+[07:22:33] [38;2;255;40;50m 66 %[0m  (T-00:00:01) 3300/5000 steps
+[07:22:33] [38;2;255;40;50m 67 %[0m  (T-00:00:01) 3350/5000 steps
+[07:22:33] [38;2;255;40;50m 68 %[0m  (T-00:00:01) 3400/5000 steps
+[07:22:33] [38;2;255;40;50m 69 %[0m  (T-00:00:01) 3450/5000 steps
+[07:22:33] [38;2;255;40;50m 70 %[0m  (T-00:00:01) 3500/5000 steps
+[07:22:33] [38;2;255;40;50m 71 %[0m  (T-00:00:01) 3550/5000 steps
+[07:22:33] [38;2;255;40;50m 72 %[0m  (T-00:00:01) 3600/5000 steps
+[07:22:33] [38;2;255;40;50m 73 %[0m  (T-00:00:01) 3650/5000 steps
+[07:22:33] [38;2;255;40;50m 74 %[0m  (T-00:00:01) 3700/5000 steps
+[07:22:33] [38;2;255;40;50m 75 %[0m  (T-00:00:01) 3750/5000 steps
+[07:22:33] [38;2;255;40;50m 76 %[0m  (T-00:00:01) 3800/5000 steps
+[07:22:33] [38;2;255;40;50m 77 %[0m  (T-00:00:00) 3850/5000 steps
+[07:22:33] [38;2;255;40;50m 78 %[0m  (T-00:00:00) 3900/5000 steps
+[07:22:33] [38;2;255;40;50m 79 %[0m  (T-00:00:00) 3950/5000 steps
+[07:22:33] [38;2;255;40;50m 80 %[0m  (T-00:00:00) 4000/5000 steps
+[07:22:33] [38;2;255;40;50m 81 %[0m  (T-00:00:00) 4050/5000 steps
+[07:22:33] [38;2;255;40;50m 82 %[0m  (T-00:00:00) 4100/5000 steps
+[07:22:34] [38;2;255;40;50m 83 %[0m  (T-00:00:00) 4150/5000 steps
+[07:22:34] [38;2;255;40;50m 84 %[0m  (T-00:00:00) 4200/5000 steps
+[07:22:34] [38;2;255;40;50m 85 %[0m  (T-00:00:00) 4250/5000 steps
+[07:22:34] [38;2;255;40;50m 86 %[0m  (T-00:00:00) 4300/5000 steps
+[07:22:34] [38;2;255;40;50m 87 %[0m  (T-00:00:00) 4350/5000 steps
+[07:22:34] [38;2;255;40;50m 88 %[0m  (T-00:00:00) 4400/5000 steps
+[07:22:34] [38;2;255;40;50m 89 %[0m  (T-00:00:00) 4450/5000 steps
+[07:22:34] [38;2;255;40;50m 90 %[0m  (T-00:00:00) 4500/5000 steps
+[07:22:34] [38;2;255;40;50m 91 %[0m  (T-00:00:00) 4550/5000 steps
+[07:22:34] [38;2;255;40;50m 92 %[0m  (T-00:00:00) 4600/5000 steps
+[07:22:34] [38;2;255;40;50m 93 %[0m  (T-00:00:00) 4650/5000 steps
+[07:22:34] [38;2;255;40;50m 94 %[0m  (T-00:00:00) 4700/5000 steps
+[07:22:34] [38;2;255;40;50m 95 %[0m  (T-00:00:00) 4750/5000 steps
+[07:22:34] [38;2;255;40;50m 96 %[0m  (T-00:00:00) 4800/5000 steps
+[07:22:34] [38;2;255;40;50m 97 %[0m  (T-00:00:00) 4850/5000 steps
+[07:22:34] [38;2;255;40;50m 98 %[0m  (T-00:00:00) 4900/5000 steps
+[07:22:34] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[07:22:34] [38;2;255;40;50m100 %[0m
+
+[2025-07-17 07:22:34] [[32minfo[m] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-17 07:22:34] [[32minfo[m] Total execution time:       4.507 sec
+[2025-07-17 07:22:34] [[32minfo[m] Step execution time:        0.901 ms
+[2025-07-17 07:22:34] [[32minfo[m] BLUPS:                      998.429
+
+[2025-07-17 07:22:34] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-17 07:22:49] [[32minfo[m] Rank 0 loaded parameters from input_02.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 30000
+N_Y_TOTAL            = 30000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n071.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+1     uc3n071.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+2     uc3n071.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+3     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    2.923    90.174   30000  1000  
+4     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+5     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    2.923    90.174   30000  1000  
+6     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+7     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+8     uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+9     uc3n074.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+10    uc3n074.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+11    uc3n074.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+12    uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    2.923    90.174   30000  1000  
+13    uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+14    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+15    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+16    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    2.923    90.174   30000  1000  
+17    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    2.923    90.174   30000  1000  
+18    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+19    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+20    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+21    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+22    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+23    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+24    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    2.923    90.174   30000  1000  
+25    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+26    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+27    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    2.922    90.174   30000  1000  
+28    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    2.922    90.174   30000  1000  
+29    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    2.922    90.174   30000  1000  
+
+[2025-07-17 07:22:49] [[32minfo[m] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-17 07:22:49] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 30000 / 1000 / 5000 ] * 30
+[2025-07-17 07:22:49] [[32minfo[m] Halo cells per sub-domain:  0.20 %
+
+[2025-07-17 07:22:49] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 116954 / 256 ]
+[2025-07-17 07:22:49] [[32minfo[m] Registers per thread:       30
+[2025-07-17 07:22:49] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:22:49] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:22:49] [[32minfo[m] Kernel domain size [X/Y]:   [ 30000 / 998 ]
+
+[2025-07-17 07:22:49] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 235 / 256 ]
+[2025-07-17 07:22:49] [[32minfo[m] Registers per thread:       36
+[2025-07-17 07:22:49] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:22:49] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:22:49] [[32minfo[m] Kernel domain size [X/Y]:   [ 30000 / 2 ]
+
+[07:22:49] [38;2;255;40;50m  0 %[0m
+[07:22:49] [38;2;255;40;50m  1 %[0m  (T-00:00:20) 50/5000 steps
+[07:22:49] [38;2;255;40;50m  2 %[0m  (T-00:00:05) 100/5000 steps
+[07:22:49] [38;2;255;40;50m  3 %[0m  (T-00:00:05) 150/5000 steps
+[07:22:49] [38;2;255;40;50m  4 %[0m  (T-00:00:05) 200/5000 steps
+[07:22:49] [38;2;255;40;50m  5 %[0m  (T-00:00:05) 250/5000 steps
+[07:22:49] [38;2;255;40;50m  6 %[0m  (T-00:00:05) 300/5000 steps
+[07:22:49] [38;2;255;40;50m  7 %[0m  (T-00:00:05) 350/5000 steps
+[07:22:49] [38;2;255;40;50m  8 %[0m  (T-00:00:05) 400/5000 steps
+[07:22:49] [38;2;255;40;50m  9 %[0m  (T-00:00:05) 450/5000 steps
+[07:22:50] [38;2;255;40;50m 10 %[0m  (T-00:00:05) 500/5000 steps
+[07:22:50] [38;2;255;40;50m 11 %[0m  (T-00:00:05) 550/5000 steps
+[07:22:50] [38;2;255;40;50m 12 %[0m  (T-00:00:04) 600/5000 steps
+[07:22:50] [38;2;255;40;50m 13 %[0m  (T-00:00:04) 650/5000 steps
+[07:22:50] [38;2;255;40;50m 14 %[0m  (T-00:00:05) 700/5000 steps
+[07:22:50] [38;2;255;40;50m 15 %[0m  (T-00:00:04) 750/5000 steps
+[07:22:50] [38;2;255;40;50m 16 %[0m  (T-00:00:04) 800/5000 steps
+[07:22:50] [38;2;255;40;50m 17 %[0m  (T-00:00:04) 850/5000 steps
+[07:22:50] [38;2;255;40;50m 18 %[0m  (T-00:00:04) 900/5000 steps
+[07:22:50] [38;2;255;40;50m 19 %[0m  (T-00:00:04) 950/5000 steps
+[07:22:50] [38;2;255;40;50m 20 %[0m  (T-00:00:04) 1000/5000 steps
+[07:22:50] [38;2;255;40;50m 21 %[0m  (T-00:00:04) 1050/5000 steps
+[07:22:50] [38;2;255;40;50m 22 %[0m  (T-00:00:04) 1100/5000 steps
+[07:22:50] [38;2;255;40;50m 23 %[0m  (T-00:00:04) 1150/5000 steps
+[07:22:50] [38;2;255;40;50m 24 %[0m  (T-00:00:04) 1200/5000 steps
+[07:22:50] [38;2;255;40;50m 25 %[0m  (T-00:00:04) 1250/5000 steps
+[07:22:50] [38;2;255;40;50m 26 %[0m  (T-00:00:04) 1300/5000 steps
+[07:22:50] [38;2;255;40;50m 27 %[0m  (T-00:00:04) 1350/5000 steps
+[07:22:51] [38;2;255;40;50m 28 %[0m  (T-00:00:03) 1400/5000 steps
+[07:22:51] [38;2;255;40;50m 29 %[0m  (T-00:00:03) 1450/5000 steps
+[07:22:51] [38;2;255;40;50m 30 %[0m  (T-00:00:03) 1500/5000 steps
+[07:22:51] [38;2;255;40;50m 31 %[0m  (T-00:00:03) 1550/5000 steps
+[07:22:51] [38;2;255;40;50m 32 %[0m  (T-00:00:03) 1600/5000 steps
+[07:22:51] [38;2;255;40;50m 33 %[0m  (T-00:00:03) 1650/5000 steps
+[07:22:51] [38;2;255;40;50m 34 %[0m  (T-00:00:03) 1700/5000 steps
+[07:22:51] [38;2;255;40;50m 35 %[0m  (T-00:00:03) 1750/5000 steps
+[07:22:51] [38;2;255;40;50m 36 %[0m  (T-00:00:03) 1800/5000 steps
+[07:22:51] [38;2;255;40;50m 37 %[0m  (T-00:00:03) 1850/5000 steps
+[07:22:51] [38;2;255;40;50m 38 %[0m  (T-00:00:03) 1900/5000 steps
+[07:22:51] [38;2;255;40;50m 39 %[0m  (T-00:00:03) 1950/5000 steps
+[07:22:51] [38;2;255;40;50m 40 %[0m  (T-00:00:03) 2000/5000 steps
+[07:22:51] [38;2;255;40;50m 41 %[0m  (T-00:00:03) 2050/5000 steps
+[07:22:51] [38;2;255;40;50m 42 %[0m  (T-00:00:03) 2100/5000 steps
+[07:22:51] [38;2;255;40;50m 43 %[0m  (T-00:00:03) 2150/5000 steps
+[07:22:51] [38;2;255;40;50m 44 %[0m  (T-00:00:03) 2200/5000 steps
+[07:22:51] [38;2;255;40;50m 45 %[0m  (T-00:00:03) 2250/5000 steps
+[07:22:52] [38;2;255;40;50m 46 %[0m  (T-00:00:02) 2300/5000 steps
+[07:22:52] [38;2;255;40;50m 47 %[0m  (T-00:00:02) 2350/5000 steps
+[07:22:52] [38;2;255;40;50m 48 %[0m  (T-00:00:02) 2400/5000 steps
+[07:22:52] [38;2;255;40;50m 49 %[0m  (T-00:00:02) 2450/5000 steps
+[07:22:52] [38;2;255;40;50m 50 %[0m  (T-00:00:02) 2500/5000 steps
+[07:22:52] [38;2;255;40;50m 51 %[0m  (T-00:00:02) 2550/5000 steps
+[07:22:52] [38;2;255;40;50m 52 %[0m  (T-00:00:02) 2600/5000 steps
+[07:22:52] [38;2;255;40;50m 53 %[0m  (T-00:00:02) 2651/5000 steps
+[07:22:52] [38;2;255;40;50m 54 %[0m  (T-00:00:02) 2700/5000 steps
+[07:22:52] [38;2;255;40;50m 55 %[0m  (T-00:00:02) 2750/5000 steps
+[07:22:52] [38;2;255;40;50m 56 %[0m  (T-00:00:02) 2800/5000 steps
+[07:22:52] [38;2;255;40;50m 57 %[0m  (T-00:00:02) 2850/5000 steps
+[07:22:52] [38;2;255;40;50m 58 %[0m  (T-00:00:02) 2900/5000 steps
+[07:22:52] [38;2;255;40;50m 59 %[0m  (T-00:00:02) 2951/5000 steps
+[07:22:52] [38;2;255;40;50m 60 %[0m  (T-00:00:02) 3000/5000 steps
+[07:22:52] [38;2;255;40;50m 61 %[0m  (T-00:00:02) 3050/5000 steps
+[07:22:52] [38;2;255;40;50m 62 %[0m  (T-00:00:02) 3100/5000 steps
+[07:22:52] [38;2;255;40;50m 63 %[0m  (T-00:00:02) 3150/5000 steps
+[07:22:53] [38;2;255;40;50m 64 %[0m  (T-00:00:01) 3200/5000 steps
+[07:22:53] [38;2;255;40;50m 65 %[0m  (T-00:00:01) 3250/5000 steps
+[07:22:53] [38;2;255;40;50m 66 %[0m  (T-00:00:01) 3300/5000 steps
+[07:22:53] [38;2;255;40;50m 67 %[0m  (T-00:00:01) 3350/5000 steps
+[07:22:53] [38;2;255;40;50m 68 %[0m  (T-00:00:01) 3400/5000 steps
+[07:22:53] [38;2;255;40;50m 69 %[0m  (T-00:00:01) 3450/5000 steps
+[07:22:53] [38;2;255;40;50m 70 %[0m  (T-00:00:01) 3500/5000 steps
+[07:22:53] [38;2;255;40;50m 71 %[0m  (T-00:00:01) 3550/5000 steps
+[07:22:53] [38;2;255;40;50m 72 %[0m  (T-00:00:01) 3600/5000 steps
+[07:22:53] [38;2;255;40;50m 73 %[0m  (T-00:00:01) 3650/5000 steps
+[07:22:53] [38;2;255;40;50m 74 %[0m  (T-00:00:01) 3700/5000 steps
+[07:22:53] [38;2;255;40;50m 75 %[0m  (T-00:00:01) 3750/5000 steps
+[07:22:53] [38;2;255;40;50m 76 %[0m  (T-00:00:01) 3800/5000 steps
+[07:22:53] [38;2;255;40;50m 77 %[0m  (T-00:00:01) 3850/5000 steps
+[07:22:53] [38;2;255;40;50m 78 %[0m  (T-00:00:01) 3900/5000 steps
+[07:22:53] [38;2;255;40;50m 79 %[0m  (T-00:00:01) 3950/5000 steps
+[07:22:53] [38;2;255;40;50m 80 %[0m  (T-00:00:01) 4000/5000 steps
+[07:22:53] [38;2;255;40;50m 81 %[0m  (T-00:00:01) 4050/5000 steps
+[07:22:54] [38;2;255;40;50m 82 %[0m  (T-00:00:00) 4100/5000 steps
+[07:22:54] [38;2;255;40;50m 83 %[0m  (T-00:00:00) 4150/5000 steps
+[07:22:54] [38;2;255;40;50m 84 %[0m  (T-00:00:00) 4200/5000 steps
+[07:22:54] [38;2;255;40;50m 85 %[0m  (T-00:00:00) 4250/5000 steps
+[07:22:54] [38;2;255;40;50m 86 %[0m  (T-00:00:00) 4300/5000 steps
+[07:22:54] [38;2;255;40;50m 87 %[0m  (T-00:00:00) 4350/5000 steps
+[07:22:54] [38;2;255;40;50m 88 %[0m  (T-00:00:00) 4400/5000 steps
+[07:22:54] [38;2;255;40;50m 89 %[0m  (T-00:00:00) 4450/5000 steps
+[07:22:54] [38;2;255;40;50m 90 %[0m  (T-00:00:00) 4500/5000 steps
+[07:22:54] [38;2;255;40;50m 91 %[0m  (T-00:00:00) 4550/5000 steps
+[07:22:54] [38;2;255;40;50m 92 %[0m  (T-00:00:00) 4600/5000 steps
+[07:22:54] [38;2;255;40;50m 93 %[0m  (T-00:00:00) 4650/5000 steps
+[07:22:54] [38;2;255;40;50m 94 %[0m  (T-00:00:00) 4700/5000 steps
+[07:22:54] [38;2;255;40;50m 95 %[0m  (T-00:00:00) 4750/5000 steps
+[07:22:54] [38;2;255;40;50m 96 %[0m  (T-00:00:00) 4800/5000 steps
+[07:22:54] [38;2;255;40;50m 97 %[0m  (T-00:00:00) 4850/5000 steps
+[07:22:54] [38;2;255;40;50m 98 %[0m  (T-00:00:00) 4900/5000 steps
+[07:22:54] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[07:22:55] [38;2;255;40;50m100 %[0m
+
+[2025-07-17 07:22:55] [[32minfo[m] Simulation size [X/Y/N]:    [ 30000 / 30000 / 5000 ]
+[2025-07-17 07:22:55] [[32minfo[m] Total execution time:       5.709 sec
+[2025-07-17 07:22:55] [[32minfo[m] Step execution time:        1.142 ms
+[2025-07-17 07:22:55] [[32minfo[m] BLUPS:                      788.239
+
+[2025-07-17 07:22:55] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+[2025-07-17 07:23:10] [[32minfo[m] Rank 0 loaded parameters from input_03.txt
+
+Parameters
+------------------------------
+N_X_TOTAL            = 60000
+N_Y_TOTAL            = 60000
+N_STEPS              = 5000
+omega                = 1.700
+rho_0                = 1.000
+u_max                = 0.100
+u_lid                = 0.100
+n_sin                = 2.000
+export_interval      = 5000
+export_name          = C
+export_num           = 04
+export_rho           = false
+export_u_x           = false
+export_u_y           = false
+export_u_mag         = false
+shear_wave_decay     = false
+lid_driven_cavity    = true
+branchless           = false
+
+Rank  Node       GPU Model                          #   CC   SMs  ShMem/SM  Total GB  Used GB  Free GB  Sub-X  Sub-Y 
+--------------------------------------------------------------------------------------------------------------------
+0     uc3n071.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+1     uc3n071.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+2     uc3n071.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+3     uc3n071.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+4     uc3n072.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+5     uc3n072.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+6     uc3n072.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+7     uc3n072.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+8     uc3n073.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+9     uc3n073.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+10    uc3n073.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+11    uc3n073.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+12    uc3n074.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+13    uc3n074.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+14    uc3n074.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+15    uc3n074.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+16    uc3n075.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+17    uc3n075.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+18    uc3n075.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+19    uc3n075.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+20    uc3n076.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+21    uc3n076.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+22    uc3n076.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+23    uc3n076.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+24    uc3n077.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+25    uc3n077.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+26    uc3n077.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+27    uc3n077.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+28    uc3n078.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+29    uc3n078.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+30    uc3n078.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+31    uc3n078.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+32    uc3n079.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+33    uc3n079.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+34    uc3n079.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+35    uc3n079.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+36    uc3n080.   NVIDIA H100                        0   90   132  233472    93.096    7.598    85.498   60000  1500  
+37    uc3n080.   NVIDIA H100                        1   90   132  233472    93.096    7.598    85.498   60000  1500  
+38    uc3n080.   NVIDIA H100                        2   90   132  233472    93.096    7.598    85.498   60000  1500  
+39    uc3n080.   NVIDIA H100                        3   90   132  233472    93.096    7.598    85.498   60000  1500  
+
+[2025-07-17 07:23:10] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:23:10] [[32minfo[m] Sub-domain size [X/Y/N]:    [ 60000 / 1500 / 5000 ] * 40
+[2025-07-17 07:23:10] [[32minfo[m] Halo cells per sub-domain:  0.13 %
+
+[2025-07-17 07:23:10] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Inner_K / 351094 / 256 ]
+[2025-07-17 07:23:10] [[32minfo[m] Registers per thread:       30
+[2025-07-17 07:23:10] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:23:10] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:23:10] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 1498 ]
+
+[2025-07-17 07:23:10] [[32minfo[m] Kernel [name/grid/block]:   [ FFLU_LidDrivenCavity_Push_Outer_K / 469 / 256 ]
+[2025-07-17 07:23:10] [[32minfo[m] Registers per thread:       36
+[2025-07-17 07:23:10] [[32minfo[m] Shared memory per block:    9216 bytes
+[2025-07-17 07:23:10] [[32minfo[m] Local memory per thread:    0 bytes
+[2025-07-17 07:23:10] [[32minfo[m] Kernel domain size [X/Y]:   [ 60000 / 2 ]
+
+[07:23:10] [38;2;255;40;50m  0 %[0m
+[07:23:10] [38;2;255;40;50m  1 %[0m  (T-00:00:42) 50/5000 steps
+[07:23:10] [38;2;255;40;50m  2 %[0m  (T-00:00:16) 100/5000 steps
+[07:23:11] [38;2;255;40;50m  3 %[0m  (T-00:00:16) 150/5000 steps
+[07:23:11] [38;2;255;40;50m  4 %[0m  (T-00:00:15) 200/5000 steps
+[07:23:11] [38;2;255;40;50m  5 %[0m  (T-00:00:15) 250/5000 steps
+[07:23:11] [38;2;255;40;50m  6 %[0m  (T-00:00:15) 300/5000 steps
+[07:23:11] [38;2;255;40;50m  7 %[0m  (T-00:00:15) 350/5000 steps
+[07:23:11] [38;2;255;40;50m  8 %[0m  (T-00:00:14) 400/5000 steps
+[07:23:12] [38;2;255;40;50m  9 %[0m  (T-00:00:14) 450/5000 steps
+[07:23:12] [38;2;255;40;50m 10 %[0m  (T-00:00:14) 500/5000 steps
+[07:23:12] [38;2;255;40;50m 11 %[0m  (T-00:00:14) 550/5000 steps
+[07:23:12] [38;2;255;40;50m 12 %[0m  (T-00:00:14) 600/5000 steps
+[07:23:12] [38;2;255;40;50m 13 %[0m  (T-00:00:14) 650/5000 steps
+[07:23:12] [38;2;255;40;50m 14 %[0m  (T-00:00:13) 700/5000 steps
+[07:23:13] [38;2;255;40;50m 15 %[0m  (T-00:00:13) 750/5000 steps
+[07:23:13] [38;2;255;40;50m 16 %[0m  (T-00:00:13) 800/5000 steps
+[07:23:13] [38;2;255;40;50m 17 %[0m  (T-00:00:13) 850/5000 steps
+[07:23:13] [38;2;255;40;50m 18 %[0m  (T-00:00:13) 900/5000 steps
+[07:23:13] [38;2;255;40;50m 19 %[0m  (T-00:00:13) 950/5000 steps
+[07:23:13] [38;2;255;40;50m 20 %[0m  (T-00:00:13) 1000/5000 steps
+[07:23:14] [38;2;255;40;50m 21 %[0m  (T-00:00:12) 1050/5000 steps
+[07:23:14] [38;2;255;40;50m 22 %[0m  (T-00:00:12) 1100/5000 steps
+[07:23:14] [38;2;255;40;50m 23 %[0m  (T-00:00:12) 1150/5000 steps
+[07:23:14] [38;2;255;40;50m 24 %[0m  (T-00:00:12) 1200/5000 steps
+[07:23:14] [38;2;255;40;50m 25 %[0m  (T-00:00:12) 1250/5000 steps
+[07:23:14] [38;2;255;40;50m 26 %[0m  (T-00:00:11) 1300/5000 steps
+[07:23:14] [38;2;255;40;50m 27 %[0m  (T-00:00:11) 1350/5000 steps
+[07:23:15] [38;2;255;40;50m 28 %[0m  (T-00:00:11) 1400/5000 steps
+[07:23:15] [38;2;255;40;50m 29 %[0m  (T-00:00:11) 1450/5000 steps
+[07:23:15] [38;2;255;40;50m 30 %[0m  (T-00:00:11) 1500/5000 steps
+[07:23:15] [38;2;255;40;50m 31 %[0m  (T-00:00:11) 1550/5000 steps
+[07:23:15] [38;2;255;40;50m 32 %[0m  (T-00:00:10) 1600/5000 steps
+[07:23:15] [38;2;255;40;50m 33 %[0m  (T-00:00:10) 1650/5000 steps
+[07:23:16] [38;2;255;40;50m 34 %[0m  (T-00:00:10) 1700/5000 steps
+[07:23:16] [38;2;255;40;50m 35 %[0m  (T-00:00:10) 1750/5000 steps
+[07:23:16] [38;2;255;40;50m 36 %[0m  (T-00:00:10) 1800/5000 steps
+[07:23:16] [38;2;255;40;50m 37 %[0m  (T-00:00:10) 1850/5000 steps
+[07:23:16] [38;2;255;40;50m 38 %[0m  (T-00:00:10) 1900/5000 steps
+[07:23:16] [38;2;255;40;50m 39 %[0m  (T-00:00:09) 1950/5000 steps
+[07:23:17] [38;2;255;40;50m 40 %[0m  (T-00:00:09) 2000/5000 steps
+[07:23:17] [38;2;255;40;50m 41 %[0m  (T-00:00:09) 2050/5000 steps
+[07:23:17] [38;2;255;40;50m 42 %[0m  (T-00:00:09) 2100/5000 steps
+[07:23:17] [38;2;255;40;50m 43 %[0m  (T-00:00:09) 2150/5000 steps
+[07:23:17] [38;2;255;40;50m 44 %[0m  (T-00:00:08) 2200/5000 steps
+[07:23:17] [38;2;255;40;50m 45 %[0m  (T-00:00:08) 2250/5000 steps
+[07:23:18] [38;2;255;40;50m 46 %[0m  (T-00:00:08) 2300/5000 steps
+[07:23:18] [38;2;255;40;50m 47 %[0m  (T-00:00:08) 2350/5000 steps
+[07:23:18] [38;2;255;40;50m 48 %[0m  (T-00:00:08) 2400/5000 steps
+[07:23:18] [38;2;255;40;50m 49 %[0m  (T-00:00:08) 2450/5000 steps
+[07:23:18] [38;2;255;40;50m 50 %[0m  (T-00:00:07) 2500/5000 steps
+[07:23:18] [38;2;255;40;50m 51 %[0m  (T-00:00:08) 2550/5000 steps
+[07:23:18] [38;2;255;40;50m 52 %[0m  (T-00:00:07) 2600/5000 steps
+[07:23:19] [38;2;255;40;50m 53 %[0m  (T-00:00:07) 2651/5000 steps
+[07:23:19] [38;2;255;40;50m 54 %[0m  (T-00:00:07) 2700/5000 steps
+[07:23:19] [38;2;255;40;50m 55 %[0m  (T-00:00:07) 2750/5000 steps
+[07:23:19] [38;2;255;40;50m 56 %[0m  (T-00:00:07) 2800/5000 steps
+[07:23:19] [38;2;255;40;50m 57 %[0m  (T-00:00:06) 2850/5000 steps
+[07:23:19] [38;2;255;40;50m 58 %[0m  (T-00:00:06) 2900/5000 steps
+[07:23:20] [38;2;255;40;50m 59 %[0m  (T-00:00:06) 2951/5000 steps
+[07:23:20] [38;2;255;40;50m 60 %[0m  (T-00:00:06) 3000/5000 steps
+[07:23:20] [38;2;255;40;50m 61 %[0m  (T-00:00:06) 3050/5000 steps
+[07:23:20] [38;2;255;40;50m 62 %[0m  (T-00:00:06) 3100/5000 steps
+[07:23:20] [38;2;255;40;50m 63 %[0m  (T-00:00:05) 3150/5000 steps
+[07:23:20] [38;2;255;40;50m 64 %[0m  (T-00:00:05) 3200/5000 steps
+[07:23:21] [38;2;255;40;50m 65 %[0m  (T-00:00:05) 3250/5000 steps
+[07:23:21] [38;2;255;40;50m 66 %[0m  (T-00:00:05) 3300/5000 steps
+[07:23:21] [38;2;255;40;50m 67 %[0m  (T-00:00:05) 3350/5000 steps
+[07:23:21] [38;2;255;40;50m 68 %[0m  (T-00:00:05) 3400/5000 steps
+[07:23:21] [38;2;255;40;50m 69 %[0m  (T-00:00:05) 3450/5000 steps
+[07:23:21] [38;2;255;40;50m 70 %[0m  (T-00:00:04) 3500/5000 steps
+[07:23:22] [38;2;255;40;50m 71 %[0m  (T-00:00:04) 3550/5000 steps
+[07:23:22] [38;2;255;40;50m 72 %[0m  (T-00:00:04) 3600/5000 steps
+[07:23:22] [38;2;255;40;50m 73 %[0m  (T-00:00:04) 3650/5000 steps
+[07:23:22] [38;2;255;40;50m 74 %[0m  (T-00:00:04) 3700/5000 steps
+[07:23:22] [38;2;255;40;50m 75 %[0m  (T-00:00:04) 3750/5000 steps
+[07:23:22] [38;2;255;40;50m 76 %[0m  (T-00:00:03) 3800/5000 steps
+[07:23:23] [38;2;255;40;50m 77 %[0m  (T-00:00:03) 3850/5000 steps
+[07:23:23] [38;2;255;40;50m 78 %[0m  (T-00:00:03) 3900/5000 steps
+[07:23:23] [38;2;255;40;50m 79 %[0m  (T-00:00:03) 3950/5000 steps
+[07:23:23] [38;2;255;40;50m 80 %[0m  (T-00:00:03) 4000/5000 steps
+[07:23:23] [38;2;255;40;50m 81 %[0m  (T-00:00:03) 4050/5000 steps
+[07:23:23] [38;2;255;40;50m 82 %[0m  (T-00:00:02) 4100/5000 steps
+[07:23:23] [38;2;255;40;50m 83 %[0m  (T-00:00:02) 4150/5000 steps
+[07:23:24] [38;2;255;40;50m 84 %[0m  (T-00:00:02) 4200/5000 steps
+[07:23:24] [38;2;255;40;50m 85 %[0m  (T-00:00:02) 4250/5000 steps
+[07:23:24] [38;2;255;40;50m 86 %[0m  (T-00:00:02) 4300/5000 steps
+[07:23:24] [38;2;255;40;50m 87 %[0m  (T-00:00:02) 4350/5000 steps
+[07:23:24] [38;2;255;40;50m 88 %[0m  (T-00:00:01) 4400/5000 steps
+[07:23:24] [38;2;255;40;50m 89 %[0m  (T-00:00:01) 4450/5000 steps
+[07:23:25] [38;2;255;40;50m 90 %[0m  (T-00:00:01) 4500/5000 steps
+[07:23:25] [38;2;255;40;50m 91 %[0m  (T-00:00:01) 4550/5000 steps
+[07:23:25] [38;2;255;40;50m 92 %[0m  (T-00:00:01) 4600/5000 steps
+[07:23:25] [38;2;255;40;50m 93 %[0m  (T-00:00:01) 4650/5000 steps
+[07:23:25] [38;2;255;40;50m 94 %[0m  (T-00:00:00) 4700/5000 steps
+[07:23:25] [38;2;255;40;50m 95 %[0m  (T-00:00:00) 4750/5000 steps
+[07:23:26] [38;2;255;40;50m 96 %[0m  (T-00:00:00) 4800/5000 steps
+[07:23:26] [38;2;255;40;50m 97 %[0m  (T-00:00:00) 4850/5000 steps
+[07:23:26] [38;2;255;40;50m 98 %[0m  (T-00:00:00) 4900/5000 steps
+[07:23:26] [38;2;255;40;50m 99 %[0m  (T-00:00:00) 4950/5000 steps
+[07:23:26] [38;2;255;40;50m100 %[0m
+
+[2025-07-17 07:23:26] [[32minfo[m] Simulation size [X/Y/N]:    [ 60000 / 60000 / 5000 ]
+[2025-07-17 07:23:26] [[32minfo[m] Total execution time:       16.359 sec
+[2025-07-17 07:23:26] [[32minfo[m] Step execution time:        3.272 ms
+[2025-07-17 07:23:26] [[32minfo[m] BLUPS:                      1100.321
+
+[2025-07-17 07:23:26] [[32minfo[m] ------------------------------------------------------
+
+
+
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc3n[071-080]
+Job ID: 718943
+Cluster: uc3
+User/Group: fr_fl184/fr_fr
+State: TIMEOUT (exit code 0)
+Nodes: 10
+Cores per node: 32
+CPU Utilized: 00:53:47
+CPU Efficiency: 5.45% of 16:26:40 core-walltime
+Job Wall-clock time: 00:03:05
+Memory Utilized: 40.37 GB
+Memory Efficiency: 1.58% of 2.50 TB (256.00 GB/node)
+The task which had the largest memory consumption differs by 109.91% from the average task max memory consumption
