@@ -6,7 +6,7 @@ I approached the problem in 2 phases:
 2. Introduce MPI and domain decomposition to implement LBM for multiple GPUs, and iteratively optimize until there is no motivation left. The results can be found in `/implementations/cuda_mpi/...`
 
 Version `18` is the most important artifact of phase 1 and a variety of benchmarks (different domain sizes, GPU models, etc...) can be found in its sub-folder.<br><br>
-Version `04` is the most important artifact of phase 2 and a variety of benchmarks can be found in its sub-folder. Peak performance of 1101 BLUPS across 40 H100 GPUs (97% of ideal value assuming linear scaling).<br><br>
+Version `04` is the most important artifact of phase 2 and a variety of benchmarks can be found in its sub-folder. Peak performance of 1101 BLUPS across 40 H100 GPUs (96% of ideal value assuming linear scaling with 28.6 BLUPS per H100).<br><br>
 The output (.out/.err) of various job scripts for the HPC cluster can be found in `/job_scripts_output`. The most notable results are summarized in the benchmark files in the respective implementations' sub-folders.<br><br>
 Plotted simulation results can be found in `/implementations/cuda_basic/tools/output/...` and `/implementations/cuda_mpi/tools/output/...` for some of the single- and multi-GPU implementations, respectively.
 
